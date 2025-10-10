@@ -1,0 +1,17 @@
+[0.430s] Invoking command in '/home/kendell/retail_assistant_ws/build/retail_assistant_bringup': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/kendell/retail_assistant_ws/build/retail_assistant_bringup/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/kendell/retail_assistant_ws/build/retail_assistant_bringup/build --no-deps symlink_data
+[0.601s] running develop
+[0.697s] running egg_info
+[0.706s] writing retail_assistant_bringup.egg-info/PKG-INFO
+[0.707s] writing dependency_links to retail_assistant_bringup.egg-info/dependency_links.txt
+[0.707s] writing requirements to retail_assistant_bringup.egg-info/requires.txt
+[0.707s] writing top-level names to retail_assistant_bringup.egg-info/top_level.txt
+[0.726s] reading manifest file 'retail_assistant_bringup.egg-info/SOURCES.txt'
+[0.726s] writing manifest file 'retail_assistant_bringup.egg-info/SOURCES.txt'
+[0.736s] running build_ext
+[0.736s] Creating /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/python3.12/site-packages/retail-assistant-bringup.egg-link (link to .)
+[0.737s] 
+[0.737s] Installed /home/kendell/retail_assistant_ws/build/retail_assistant_bringup
+[0.737s] running symlink_data
+[0.737s] symbolically linking /home/kendell/retail_assistant_ws/build/retail_assistant_bringup/description/robot.urdf.xacro -> /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/share/retail_assistant_bringup/description
+[0.737s] error: [Errno 17] File exists: '/home/kendell/retail_assistant_ws/build/retail_assistant_bringup/description/robot.urdf.xacro' -> '/home/kendell/retail_assistant_ws/install/retail_assistant_bringup/share/retail_assistant_bringup/description/robot.urdf.xacro'
+[0.756s] Invoked command in '/home/kendell/retail_assistant_ws/build/retail_assistant_bringup' returned '1': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/kendell/retail_assistant_ws/build/retail_assistant_bringup/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/kendell/retail_assistant_ws/build/retail_assistant_bringup/build --no-deps symlink_data

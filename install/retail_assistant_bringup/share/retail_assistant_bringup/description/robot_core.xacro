@@ -1,0 +1,103 @@
+<?xml version ="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+    <xacro:include filename="inertial_macros.xacro"/>
+
+    <material name="white">
+        <color rgba="1 1 1 1"/>
+    </material>
+
+    <material name="orange">    
+        <color rgba="1 0.647 0 1"/>
+    </material>
+
+    <material name="blue">  
+        <color rgba="0 0 1 1"/>
+    </material>
+
+    <material name="black">  
+        <color rgba="0 0 0 1"/>
+    </material>
+    <!--  Base LINk  -->
+    <link name="base_link">
+    
+    </link>
+    
+    <joint name="chassis_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="chassis"/>
+        <origin xyz="0 0 0"/>
+    </joint>
+<!--   Chassis    -->
+    <link name="chassis">
+        <visual>
+            <origin xyz="0 0 0.1524"/>
+            <geometry>
+                <box size="0.3302 0.4572 0.3048"/>
+            </geometry>
+            <material name="blue"/>
+        </visual>
+         <collision>
+            <origin xyz="0 0 0.1524"/>
+            <geometry>
+                <box size="0.3302 0.4572 0.3048"/>
+            </geometry>
+        </collision>
+        <xacro:inertial_box mass="4.5" x="0.3302" y="0.4572" z="0.3048">
+            <origin xyz="0 0 0.1524"/>
+        </xacro:inertial_box>
+    </link>
+    <!-- Left tread -->
+<link name="left_tread">
+  <visual>
+    <origin xyz="0 0.1651 0.0635"/>
+    <geometry>
+      <box size="0.4572 0.05 0.127"/>
+    </geometry>
+    <material name="black"/>
+  </visual>
+  <collision>
+    <origin xyz="0 0.1651 0.0635"/>
+    <geometry>
+      <box size="0.4572 0.05 0.127"/>
+    </geometry>
+  </collision>
+  <xacro:inertial_box mass="1.0" x="0.4572" y="0.05" z="0.127">
+    <origin xyz="0 0.1651 0.0635"/>
+  </xacro:inertial_box>
+</link>
+
+<joint name="left_tread_joint" type="fixed">
+  <parent link="chassis"/>
+  <child link="left_tread"/>
+  <origin xyz="0 0.10 0"/>
+</joint>
+
+<!-- Right tread -->
+<link name="right_tread">
+  <visual>
+    <origin xyz="0 -0.1651 0.0635"/>
+    <geometry>
+      <box size="0.4572 0.05 0.127"/>
+    </geometry>
+    <material name="black"/>
+  </visual>
+  <collision>
+    <origin xyz="0 -0.1651 0.0635"/>
+    <geometry>
+      <box size="0.4572 0.05 0.127"/>
+    </geometry>
+  </collision>
+  <xacro:inertial_box mass="1.0" x="0.4572" y="0.05" z="0.127">
+    <origin xyz="0 -0.1651 0.0635"/>
+  </xacro:inertial_box>
+</link>
+
+<joint name="right_tread_joint" type="fixed">
+  <parent link="chassis"/>
+  <child link="right_tread"/>
+  <origin xyz="0 -0.10 0"/>
+</joint>
+
+
+</robot>

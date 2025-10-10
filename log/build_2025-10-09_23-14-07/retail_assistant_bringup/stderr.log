@@ -1,0 +1,1 @@
+error: [Errno 17] File exists: '/home/kendell/retail_assistant_ws/build/retail_assistant_bringup/description/robot.urdf.xacro' -> '/home/kendell/retail_assistant_ws/install/retail_assistant_bringup/share/retail_assistant_bringup/description/robot.urdf.xacro'

@@ -1,0 +1,16 @@
+[0.586s] Invoking command in '/home/kendell/retail_assistant_ws/build/retail_assistant_bringup': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/kendell/retail_assistant_ws/build/retail_assistant_bringup/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/kendell/retail_assistant_ws/build/retail_assistant_bringup/build --no-deps symlink_data
+[0.814s] running develop
+[0.936s] running egg_info
+[0.947s] writing retail_assistant_bringup.egg-info/PKG-INFO
+[0.947s] writing dependency_links to retail_assistant_bringup.egg-info/dependency_links.txt
+[0.947s] writing requirements to retail_assistant_bringup.egg-info/requires.txt
+[0.947s] writing top-level names to retail_assistant_bringup.egg-info/top_level.txt
+[0.977s] reading manifest file 'retail_assistant_bringup.egg-info/SOURCES.txt'
+[0.978s] writing manifest file 'retail_assistant_bringup.egg-info/SOURCES.txt'
+[0.991s] running build_ext
+[0.991s] Creating /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/python3.12/site-packages/retail-assistant-bringup.egg-link (link to .)
+[0.991s] 
+[0.991s] Installed /home/kendell/retail_assistant_ws/build/retail_assistant_bringup
+[0.992s] running symlink_data
+[0.992s] symbolically linking /home/kendell/retail_assistant_ws/build/retail_assistant_bringup/launch/gazebo_sim.launch.py -> /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/share/retail_assistant_bringup/launch
+[1.023s] Invoked command in '/home/kendell/retail_assistant_ws/build/retail_assistant_bringup' returned '0': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/kendell/retail_assistant_ws/build/retail_assistant_bringup/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/kendell/retail_assistant_ws/build/retail_assistant_bringup/build --no-deps symlink_data

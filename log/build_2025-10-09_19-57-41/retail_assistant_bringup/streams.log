@@ -1,0 +1,20 @@
+[5.126s] Invoking command in '/home/kendell/retail_assistant_ws/src/retail_assistant_bringup': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/kendell/retail_assistant_ws/build/retail_assistant_bringup/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/retail_assistant_bringup build --build-base /home/kendell/retail_assistant_ws/build/retail_assistant_bringup/build install --record /home/kendell/retail_assistant_ws/build/retail_assistant_bringup/install.log --single-version-externally-managed install_data
+[5.503s] running egg_info
+[5.524s] writing ../../build/retail_assistant_bringup/retail_assistant_bringup.egg-info/PKG-INFO
+[5.525s] writing dependency_links to ../../build/retail_assistant_bringup/retail_assistant_bringup.egg-info/dependency_links.txt
+[5.525s] writing requirements to ../../build/retail_assistant_bringup/retail_assistant_bringup.egg-info/requires.txt
+[5.526s] writing top-level names to ../../build/retail_assistant_bringup/retail_assistant_bringup.egg-info/top_level.txt
+[5.571s] reading manifest file '../../build/retail_assistant_bringup/retail_assistant_bringup.egg-info/SOURCES.txt'
+[5.585s] writing manifest file '../../build/retail_assistant_bringup/retail_assistant_bringup.egg-info/SOURCES.txt'
+[5.585s] running build
+[5.585s] running build_py
+[5.586s] running install
+[5.595s] running install_lib
+[5.617s] running install_data
+[5.618s] copying description/robot_core.xacro -> /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/share/retail_assistant_bringup/description
+[5.618s] running install_egg_info
+[5.643s] removing '/home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/python3.12/site-packages/retail_assistant_bringup-0.0.0-py3.12.egg-info' (and everything under it)
+[5.644s] Copying ../../build/retail_assistant_bringup/retail_assistant_bringup.egg-info to /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/python3.12/site-packages/retail_assistant_bringup-0.0.0-py3.12.egg-info
+[5.656s] running install_scripts
+[5.816s] writing list of installed files to '/home/kendell/retail_assistant_ws/build/retail_assistant_bringup/install.log'
+[5.900s] Invoked command in '/home/kendell/retail_assistant_ws/src/retail_assistant_bringup' returned '0': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/kendell/retail_assistant_ws/build/retail_assistant_bringup/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/retail_assistant_bringup build --build-base /home/kendell/retail_assistant_ws/build/retail_assistant_bringup/build install --record /home/kendell/retail_assistant_ws/build/retail_assistant_bringup/install.log --single-version-externally-managed install_data

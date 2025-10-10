@@ -1,0 +1,1 @@
+/home/kendell/retail_assistant_ws/src/retail_assistant_bringup/launch/gazebo_sim.launch.py
