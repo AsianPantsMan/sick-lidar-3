@@ -1,7 +1,7 @@
 import os
 
 from ament_index_python.packages import get_package_share_directory
-from launch.actions import IncludeLaunchDescription, ExecuteProcess
+
 
 from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription
@@ -17,7 +17,7 @@ def generate_launch_description():
     # Include the robot_state_publisher launch file, provided by our own package. Force sim time to be enabled
     # !!! MAKE SURE YOU SET THE PACKAGE NAME CORRECTLY !!!
 
-    package_name='retail_assistant_bringup' #<--- Package name
+    package_name='retail_assistant_bringup' #<--- CHANGE ME
 
     rsp = IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([os.path.join(
@@ -26,12 +26,13 @@ def generate_launch_description():
     )
 
     # Include the Gazebo launch file, provided by the gazebo_ros package
-    gazebo = ExecuteProcess(
-        cmd=['gz', 'sim', '-r', '-v', '4', 'empty.sdf'],
-        output='screen'
-    )
+    gazebo = IncludeLaunchDescription(
+                PythonLaunchDescriptionSource([os.path.join(
+                    get_package_share_directory('gazebo_ros'), 'launch', 'gazebo.launch.py')]),
+             )
+
     # Run the spawner node from the gazebo_ros package. The entity name doesn't really matter if you only have a single robot.
-    spawn_entity = Node(package='ros_gz_sim', executable='create',
+    spawn_entity = Node(package='gazebo_ros', executable='spawn_entity.py',
                         arguments=['-topic', 'robot_description',
                                    '-entity', 'retail_assistant'],
                         output='screen')

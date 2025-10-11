@@ -1,40 +1,31 @@
 <?xml version="1.0"?>
-<robot xmlns:xacro="http://ros.org/wiki/xacro" name="retail_assistant">
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-  <!--
-    This plugin loads ros2_control inside Gazebo (gz sim).
-    It reads your controller configuration from the YAML file below.
-  -->
-  <gazebo>
-    <plugin name="gz_ros2_control" filename="libgz_ros2_control-system.so">
-      <parameters>$(find retail_assistant_bringup)/config/ros2_control.yaml</parameters>
-    </plugin>
-  </gazebo>
+    <gazebo>
+        <plugin name="diff_drive" filename="libgazebo_ros_diff_drive.so">
 
-  <!--
-    Define transmissions for each wheel joint so ros2_control
-    can command their velocities through Gazebo.
-  -->
-  <transmission name="left_wheel_transmission">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="left_wheel_rear_joint">
-      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
-    </joint>
-    <actuator name="left_motor">
-      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
-      <mechanicalReduction>1</mechanicalReduction>
-    </actuator>
-  </transmission>
+            <!-- Wheel Information -->
+            <left_joint>left_wheel_rear_joint</left_joint>
+            <right_joint>right_wheel_rear_joint</right_joint>
+            <wheel_separation>0.5</wheel_separation>
+            <wheel_diameter>0.1</wheel_diameter>
 
-  <transmission name="right_wheel_transmission">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="right_wheel_rear_joint">
-      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
-    </joint>
-    <actuator name="right_motor">
-      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
-      <mechanicalReduction>1</mechanicalReduction>
-    </actuator>
-  </transmission>
+
+            <!-- Limits -->
+            <max_wheel_torque>200</max_wheel_torque>
+            <max_wheel_acceleration>10.0</max_wheel_acceleration>
+
+            
+            <!-- Output -->
+            <odometry_frame>odom</odometry_frame>
+            <robot_base_frame>base_link</robot_base_frame>
+
+            <publish_odom>true</publish_odom>
+            <publish_odom_tf>true</publish_odom_tf>
+            <publish_wheel_tf>true</publish_wheel_tf>
+
+        </plugin>
+    </gazebo>
+
 
 </robot>
