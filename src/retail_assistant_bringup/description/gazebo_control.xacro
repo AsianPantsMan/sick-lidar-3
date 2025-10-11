@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="retail_assistant">
+
+  <!--
+    This plugin loads ros2_control inside Gazebo (gz sim).
+    It reads your controller configuration from the YAML file below.
+  -->
+  <gazebo>
+    <plugin name="gz_ros2_control" filename="libgz_ros2_control-system.so">
+      <parameters>$(find retail_assistant_bringup)/config/ros2_control.yaml</parameters>
+    </plugin>
+  </gazebo>
+
+  <!--
+    Define transmissions for each wheel joint so ros2_control
+    can command their velocities through Gazebo.
+  -->
+  <transmission name="left_wheel_transmission">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="left_wheel_rear_joint">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="left_motor">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="right_wheel_transmission">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="right_wheel_rear_joint">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="right_motor">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+</robot>

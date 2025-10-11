@@ -7,7 +7,9 @@ setup.py
 ../../build/retail_assistant_bringup/retail_assistant_bringup.egg-info/requires.txt
 ../../build/retail_assistant_bringup/retail_assistant_bringup.egg-info/top_level.txt
 ../../build/retail_assistant_bringup/retail_assistant_bringup.egg-info/zip-safe
+description/gazebo_control.xacro
 description/inertial_macros.xacro
+description/notes
 description/robot.urdf.xacro
 description/robot_core.xacro
 launch/gazebo_sim.launch.py

@@ -26,78 +26,106 @@
     <joint name="chassis_joint" type="fixed">
         <parent link="base_link"/>
         <child link="chassis"/>
-        <origin xyz="0 0 0"/>
+        <origin xyz="-0.1 0 0"/>
     </joint>
 <!--   Chassis    -->
     <link name="chassis">
         <visual>
-            <origin xyz="0 0 0.1524"/>
+            <origin xyz="0.165 0 0.2"/>
             <geometry>
                 <box size="0.3302 0.4572 0.3048"/>
             </geometry>
             <material name="blue"/>
         </visual>
          <collision>
-            <origin xyz="0 0 0.1524"/>
+           <origin xyz="0.165 0 0.1524"/>
             <geometry>
                 <box size="0.3302 0.4572 0.3048"/>
             </geometry>
         </collision>
         <xacro:inertial_box mass="4.5" x="0.3302" y="0.4572" z="0.3048">
-            <origin xyz="0 0 0.1524"/>
+            <origin xyz="0.165 0 0.1524" rpy="0 0 0"/>
         </xacro:inertial_box>
     </link>
     <!-- Left tread -->
-<link name="left_tread">
-  <visual>
-    <origin xyz="0 0.1651 0.0635"/>
-    <geometry>
-      <box size="0.4572 0.05 0.127"/>
-    </geometry>
-    <material name="black"/>
-  </visual>
-  <collision>
-    <origin xyz="0 0.1651 0.0635"/>
-    <geometry>
-      <box size="0.4572 0.05 0.127"/>
-    </geometry>
-  </collision>
-  <xacro:inertial_box mass="1.0" x="0.4572" y="0.05" z="0.127">
-    <origin xyz="0 0.1651 0.0635"/>
-  </xacro:inertial_box>
-</link>
 
-<joint name="left_tread_joint" type="fixed">
-  <parent link="chassis"/>
-  <child link="left_tread"/>
-  <origin xyz="0 0.10 0"/>
+
+<!-- Left invisble wheel to  actually drive do not add collision-->
+<joint name="left_wheel_rear_joint" type="continuous">
+  <parent link="base_link"/>
+  <child link="left_rear_wheel"/>
+  <origin xyz="0.025 0.25 0.05" rpy="-${pi/2} 0 0"/>
+  <axis xyz="0 0 1"/>
 </joint>
 
+<link name="left_rear_wheel">
+  <visual>
+    <geometry>
+      <cylinder radius="0.05" length="0.04"/>
+    </geometry>
+    <material name="orange"/>
+  </visual>
+  <collision>
+    <geometry>
+      <cylinder radius="0.05" length="0.04"/>
+    </geometry>
+  </collision>
+  <xacro:inertial_cylinder mass="0.2" length="0.04" radius="0.05">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </xacro:inertial_cylinder>
+</link>
+  
 <!-- Right tread -->
-<link name="right_tread">
+
+
+<!-- Right invisble wheel to  actually drive do not add collision-->
+
+<joint name="right_wheel_rear_joint" type="continuous">
+  <parent link="base_link"/>
+  <child link="right_rear_wheel"/>
+  <origin xyz="0.025 -0.25 0.05" rpy="${pi/2} 0 0"/>
+  <axis xyz="0 0 -1"/>
+</joint>
+
+<link name="right_rear_wheel">
   <visual>
-    <origin xyz="0 -0.1651 0.0635"/>
     <geometry>
-      <box size="0.4572 0.05 0.127"/>
+      <cylinder radius="0.05" length="0.04"/>
+    </geometry>
+    <material name="orange"/>
+  </visual>
+    <collision>
+    <geometry>
+      <cylinder radius="0.05" length="0.04"/>
+    </geometry>
+  </collision>
+  <xacro:inertial_cylinder mass="0.2" length="0.04" radius="0.05">
+    <origin xyz="0 0 0" rpy=" 0 0 0"/>
+  </xacro:inertial_cylinder>
+</link>
+<!-- Right invisble wheel to  actually drive do not add collision-->
+
+<!-- caster wheel-->
+<joint name="caster_wheel_joint" type="continuous">
+  <parent link="chassis"/>
+  <child link="caster_wheel"/>
+  <origin xyz="0.25 0 0.05" />
+</joint>S
+
+<link name="caster_wheel">
+  <visual>
+    <geometry>
+      <sphere radius="0.05"/>
     </geometry>
     <material name="black"/>
   </visual>
   <collision>
-    <origin xyz="0 -0.1651 0.0635"/>
     <geometry>
-      <box size="0.4572 0.05 0.127"/>
+      <sphere radius="0.05"/>
     </geometry>
   </collision>
-  <xacro:inertial_box mass="1.0" x="0.4572" y="0.05" z="0.127">
-    <origin xyz="0 -0.1651 0.0635"/>
-  </xacro:inertial_box>
+  <xacro:inertial_sphere mass="0.2" radius="0.05">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </xacro:inertial_sphere>
 </link>
-
-<joint name="right_tread_joint" type="fixed">
-  <parent link="chassis"/>
-  <child link="right_tread"/>
-  <origin xyz="0 -0.10 0"/>
-</joint>
-
-
 </robot>

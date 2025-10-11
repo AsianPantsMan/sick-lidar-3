@@ -7,6 +7,8 @@
 /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/share/retail_assistant_bringup/launch/slam_launch.py
 /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/share/retail_assistant_bringup/description/robot_core.xacro
 /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/share/retail_assistant_bringup/description/robot.urdf.xacro
+/home/kendell/retail_assistant_ws/install/retail_assistant_bringup/share/retail_assistant_bringup/description/notes
+/home/kendell/retail_assistant_ws/install/retail_assistant_bringup/share/retail_assistant_bringup/description/gazebo_control.xacro
 /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/share/retail_assistant_bringup/description/inertial_macros.xacro
 /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/share/retail_assistant_bringup/rviz
 /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/python3.12/site-packages/retail_assistant_bringup-0.0.0-py3.12.egg-info/dependency_links.txt
