@@ -16,6 +16,7 @@ description/notes
 description/robot.urdf.xacro
 description/robot_core.xacro
 launch/gazebo_sim.launch.py
+launch/gazebo_sim_slam.launch.py
 launch/rsp.py
 launch/slam_launch.py
 resource/retail_assistant_bringup
