@@ -1,0 +1,74 @@
+{
+  "products": {
+    "prod_001": {
+      "productName": "Bananas",
+      "productCategory": "Produce",
+      "price": 2.99,
+      "aisleLocation": "A1",
+      "image": "https://images.heb.com/is/image/HEBGrocery/000377497-1?hei=360&wid=360"
+    },
+    "prod_002": {
+      "productName": "Whole Milk",
+      "productCategory": "Dairy",
+      "price": 3.49,
+      "aisleLocation": "B3",
+      "image": "https://images.heb.com/is/image/HEBGrocery/000540143-1?hei=360&wid=360"
+    },
+    "prod_003": {
+      "productName": "Sourdough",
+      "productCategory": "Bakery",
+      "price": 4.29,
+      "aisleLocation": "C2",
+      "image": "https://images.heb.com/is/image/HEBGrocery/002058534-1?hei=360&wid=360"
+    },
+    "prod_004": {
+      "productName": "Ground Beef",
+      "productCategory": "Meat",
+      "price": 6.99,
+      "aisleLocation": "D1",
+      "image": "https://images.heb.com/is/image/HEBGrocery/000312956-1?hei=360&wid=360"
+    },
+    "prod_005": {
+      "productName": "Cheerios",
+      "productCategory": "Breakfast",
+      "price": 5.49,
+      "aisleLocation": "E4",
+      "image": "https://images.heb.com/is/image/HEBGrocery/000032021-1?hei=360&wid=360"
+    },
+    "prod_006": {
+      "productName": "Tomatoes",
+      "productCategory": "Produce",
+      "price": 1.99,
+      "aisleLocation": "A2",
+      "image": "https://images.heb.com/is/image/HEBGrocery/prd-small/015141532.jpg?v=1"
+    },
+    "prod_007": {
+      "productName": "Vanilla Ice Cream",
+      "productCategory": "Frozen",
+      "price": 4.99,
+      "aisleLocation": "F1",
+      "image": "https://images.heb.com/is/image/HEBGrocery/000313590-1?hei=360&wid=360"
+    },
+    "prod_008": {
+      "productName": "Olive Oil",
+      "productCategory": "Pantry",
+      "price": 8.99,
+      "aisleLocation": "G3",
+      "image": "https://images.heb.com/is/image/HEBGrocery/001902616-1?hei=360&wid=360"
+    },
+    "prod_009": {
+      "productName": "Greek Yogurt",
+      "productCategory": "Dairy",
+      "price": 5.99,
+      "aisleLocation": "B2",
+      "image": "https://images.heb.com/is/image/HEBGrocery/012016560-1?hei=360&wid=360"
+    },
+    "prod_010": {
+      "productName": "Tide Laundry Detergent",
+      "productCategory": "Household",
+      "price": 12.99,
+      "aisleLocation": "H1",
+      "image": "https://images.heb.com/is/image/HEBGrocery/prd-small/001027068.jpg?v=1"
+    }
+  }
+}
