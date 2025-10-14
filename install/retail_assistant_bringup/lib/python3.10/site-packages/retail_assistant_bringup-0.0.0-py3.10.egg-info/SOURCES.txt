@@ -10,6 +10,7 @@ setup.py
 ../../build/retail_assistant_bringup/retail_assistant_bringup.egg-info/zip-safe
 description/example.xacro
 description/gazebo_control.xacro
+description/imu.xacro
 description/inertial_macros.xacro
 description/lidar.xacro
 description/notes

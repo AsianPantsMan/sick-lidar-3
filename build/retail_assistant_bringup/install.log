@@ -12,6 +12,7 @@
 /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/share/retail_assistant_bringup/description/lidar.xacro
 /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/share/retail_assistant_bringup/description/robot_core.xacro
 /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/share/retail_assistant_bringup/description/gazebo_control.xacro
+/home/kendell/retail_assistant_ws/install/retail_assistant_bringup/share/retail_assistant_bringup/description/imu.xacro
 /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/share/retail_assistant_bringup/description/robot.urdf.xacro
 /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/share/retail_assistant_bringup/rviz
 /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup-0.0.0-py3.10.egg-info/requires.txt
