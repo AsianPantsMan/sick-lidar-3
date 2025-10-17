@@ -14,10 +14,7 @@ from launch_ros.actions import Node
 def generate_launch_description():
 
 
-    # Include the robot_state_publisher launch file, provided by our own package. Force sim time to be enabled
-    # !!! MAKE SURE YOU SET THE PACKAGE NAME CORRECTLY !!!
-
-    package_name='retail_assistant_bringup' #<--- CHANGE ME
+    package_name='retail_assistant_bringup' 
 
     rsp = IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([os.path.join(
@@ -29,7 +26,7 @@ def generate_launch_description():
     gazebo = IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([os.path.join(
                     get_package_share_directory('gazebo_ros'),'launch','gazebo.launch.py')]),
-                    launch_arguments={'world': './src/retail_assistant_bringup/worlds/fake_store_layout'}.items()#os.path.join(get_package_share_directory(package_name),'worlds','fake_store_layout')
+                    launch_arguments={'world': '/home/kendell/retail_assistant_ws/src/retail_assistant_bringup/worlds/fake_store_layout.world'}.items()#os.path.join(get_package_share_directory(package_name),'worlds','fake_store_layout')
              )
 
     # Run the spawner node from the gazebo_ros package. The entity name doesn't really matter if you only have a single robot.
@@ -40,7 +37,7 @@ def generate_launch_description():
 
     slam = IncludeLaunchDescription(
             PythonLaunchDescriptionSource([os.path.join
-                                           (get_package_share_directory('slam_toolbox'),'launch','online_async_launch.py')]),
+                                           (get_package_share_directory('slam_toolbox'),'launch','online_async_launch.py')]),# fix _local later
                                           launch_arguments={'params_file': os.path.join(get_package_share_directory(package_name),'config','mapper_params_online_async.yaml')}.items())
                                           
     # Launch them all!

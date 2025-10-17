@@ -16,7 +16,9 @@ description/lidar.xacro
 description/notes
 description/robot.urdf.xacro
 description/robot_core.xacro
+launch/auto_drive.py
 launch/gazebo_sim.launch.py
+launch/gazebo_sim_local.launch.py
 launch/gazebo_sim_slam.launch.py
 launch/rsp.py
 launch/slam_launch.py

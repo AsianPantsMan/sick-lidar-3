@@ -28,7 +28,8 @@ def generate_launch_description():
     # Include the Gazebo launch file, provided by the gazebo_ros package
     gazebo = IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([os.path.join(
-                    get_package_share_directory('gazebo_ros'), 'launch', 'gazebo.launch.py')]),
+                    get_package_share_directory('gazebo_ros'),'launch','gazebo.launch.py')]),
+                    launch_arguments={'world': '/home/kendell/retail_assistant_ws/src/retail_assistant_bringup/worlds/fake_store_layout.world'}.items()#os.path.join(get_package_share_directory(package_name),'worlds','fake_store_layout')
              )
 
     # Run the spawner node from the gazebo_ros package. The entity name doesn't really matter if you only have a single robot.
