@@ -39,13 +39,13 @@ class MyMapNode(Node):
         found_frontier=False
         for i in range(msg.info.height):
             for j in range(msg.info.width):
-                if map_data[i][j]==0:# free space cant travel to unknown}
-                    neighborhood = map_data[i-1:i+2, j-1:j+2]
+                if map_data[i][j]==0:# free space can travel to unknown}
+                    neighborhood = map_data[i-1:i+2, j-1:j+2]#check this
                     if -1 in neighborhood:# free space has frontier near it
                         physical_location=self.physical_location(i,j,msg.info.resolution,(msg.info.origin.position.x,msg.info.origin.position.y))# compute physical map cell coordinate
                         dist=mt.sqrt((physical_location[0]-origin_x)**2+(physical_location[1]-origin_y)**2)# compute distance from origin
-                                            # round it to skip over .00000 differences
-                        if dist > 1.5 and (distance == -1 or distance > dist) and (physical_location[0],physical_location[1]) not in self.visited_frontiers:# distance is sufficient far from origin and shortest and the hasent been to this frontier
+                                            # round it to skip over .00000 differences may not need dist>1.5
+                        if (physical_location[0],physical_location[1]) not in self.visited_frontiers:# distance is sufficient far from origin and shortest and the hasent been to this frontier
                             too_close=False
                             if last_x is not None:# has been to a frontier before
                                 for (vistied_x, visited_y)in self.visited_frontiers:
@@ -54,14 +54,17 @@ class MyMapNode(Node):
                                         break
                             if too_close:
                                 continue# skip frontier too close
-                            distance=dist# instead of using robot position using slam map use phyical position instead cause that will not change
+                                # REMOVE instead of using robot position using slam map use phyical position instead cause that will not change
                             x=physical_location[0]# store the x and y of the frontier
                             y=physical_location[1]
                             self.visited_frontiers.add(physical_location)
                             found_frontier=True
+            if found_frontier:
+                break
 
 
         if found_frontier:# if nav2 fails some reason will send new coordinate
+            self.goal_in_progress=True
             self.get_logger().info(f"Sending ({x:.2f}, {y:.2f})")
             self.send_nav_goal(x,y)
         else:
