@@ -1,1 +1,0 @@
-/home/kendell/retail_assistant_ws/src/retail_assistant_bringup/setup.py

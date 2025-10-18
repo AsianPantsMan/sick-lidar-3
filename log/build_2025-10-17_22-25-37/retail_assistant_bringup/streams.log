@@ -1,0 +1,17 @@
+[1.190s] Invoking command in '/home/kendell/retail_assistant_ws/build/retail_assistant_bringup': PYTHONPATH=/home/kendell/retail_assistant_ws/build/retail_assistant_bringup/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/kendell/retail_assistant_ws/build/retail_assistant_bringup/build --no-deps symlink_data
+[1.342s] running develop
+[1.425s] running egg_info
+[1.425s] writing retail_assistant_bringup.egg-info/PKG-INFO
+[1.425s] writing dependency_links to retail_assistant_bringup.egg-info/dependency_links.txt
+[1.426s] writing entry points to retail_assistant_bringup.egg-info/entry_points.txt
+[1.426s] writing requirements to retail_assistant_bringup.egg-info/requires.txt
+[1.426s] writing top-level names to retail_assistant_bringup.egg-info/top_level.txt
+[1.427s] reading manifest file 'retail_assistant_bringup.egg-info/SOURCES.txt'
+[1.428s] writing manifest file 'retail_assistant_bringup.egg-info/SOURCES.txt'
+[1.428s] running build_ext
+[1.428s] Creating /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/python3.10/site-packages/retail-assistant-bringup.egg-link (link to .)
+[1.429s] Installing auto_drive script to /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/retail_assistant_bringup
+[1.429s] 
+[1.429s] Installed /home/kendell/retail_assistant_ws/build/retail_assistant_bringup
+[1.429s] running symlink_data
+[1.711s] Invoked command in '/home/kendell/retail_assistant_ws/build/retail_assistant_bringup' returned '0': PYTHONPATH=/home/kendell/retail_assistant_ws/build/retail_assistant_bringup/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/kendell/retail_assistant_ws/build/retail_assistant_bringup/build --no-deps symlink_data

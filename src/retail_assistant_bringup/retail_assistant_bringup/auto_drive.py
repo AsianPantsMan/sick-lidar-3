@@ -35,7 +35,7 @@ class MyMapNode(Node):
             last_x, last_y = (None, None)#get last visited for threshold distance
         #Need to find frontiers to explore
         # get robot position from the map message
-        distance=-1 # used to find shortest distance or closest frontier start at neg one to ensure first value is taken
+        # used to find shortest distance or closest frontier start at neg one to ensure first value is taken
         found_frontier=False
         for i in range(msg.info.height):
             for j in range(msg.info.width):
@@ -43,7 +43,7 @@ class MyMapNode(Node):
                     neighborhood = map_data[i-1:i+2, j-1:j+2]#check this
                     if -1 in neighborhood:# free space has frontier near it
                         physical_location=self.physical_location(i,j,msg.info.resolution,(msg.info.origin.position.x,msg.info.origin.position.y))# compute physical map cell coordinate
-                        dist=mt.sqrt((physical_location[0]-origin_x)**2+(physical_location[1]-origin_y)**2)# compute distance from origin
+                        # compute distance from origin
                                             # round it to skip over .00000 differences may not need dist>1.5
                         if (physical_location[0],physical_location[1]) not in self.visited_frontiers:# distance is sufficient far from origin and shortest and the hasent been to this frontier
                             too_close=False

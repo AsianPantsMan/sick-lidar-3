@@ -1,1 +1,42 @@
-/home/kendell/retail_assistant_ws/build/retail_assistant_bringup/description/imu.xacro
+<?xml version ="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="retail_assistant">
+
+  <joint name="imu_joint" type="fixed">
+    <parent link="chassis"/>
+    <child link="imu_frame"/>
+    <origin xyz="0.275 0 0.3625" rpy="0 0 0"/>
+</joint>
+
+<link name="imu_frame">
+        <visual>
+            <geometry>
+                <box size= "0.021 0.016 0.005"/><!--0.021 × 0.016 × 0.005-->
+            </geometry>
+            <material name="white"/>
+        </visual>
+        <collision>
+            <geometry>
+               <box size= "0.021 0.016 0.005"/>
+            </geometry>
+        </collision>
+        <xacro:inertial_box mass="0.1" x ="0.021" y="0.016" z="0.005">
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </xacro:inertial_box>
+    </link>
+
+    <gazebo reference="imu_frame"><!--Where to attach plugin in this case the link named imu_frame-->
+        <material>Gazebo/White</material>
+        <sensor name="imu_sensor" type="imu"><!--cretaes IMU sensor to simulate-->
+            <always_on>true</always_on><!--IMU is always on-->
+            <update_rate>30.0</update_rate><!-- How often IMU updates-->
+            <visualize>true</visualize><!--Whether to visualize in rviz-->
+            <plugin name="gazebo_ros_imu_sensor" filename="libgazebo_ros_imu_sensor.so"><!--Plugin connects gazebo and ros2-->
+                <ros>
+                    <namespace>/imu</namespace>
+                    <remapping>~/out:=data</remapping><!--Remaps output topic to /imu/data-->
+                </ros>
+                <gaussianNoise>0.0002</gaussianNoise>
+            </plugin><!--Adds noise to the IMU data to simulate real world-->
+        </sensor>
+    </gazebo>
+</robot>

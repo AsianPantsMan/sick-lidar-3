@@ -1,1 +1,12 @@
-/home/kendell/retail_assistant_ws/build/retail_assistant_bringup/description/robot.urdf.xacro
+<?xml version ="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="retail_assistant">
+
+    <xacro:include filename= "robot_core.xacro"/>
+
+    <xacro:include filename="gazebo_control.xacro"/> 
+
+    <xacro:include filename="lidar.xacro"/>
+
+    <xacro:include filename="imu.xacro"/>
+
+</robot>
