@@ -1,0 +1,1 @@
+/home/kendell/retail_assistant_ws/build/retail_assistant_bringup/launch/gazebo_sim_auto_mapping.launch.py

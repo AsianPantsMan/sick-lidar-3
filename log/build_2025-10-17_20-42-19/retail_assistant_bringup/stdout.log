@@ -1,0 +1,15 @@
+running develop
+running egg_info
+writing retail_assistant_bringup.egg-info/PKG-INFO
+writing dependency_links to retail_assistant_bringup.egg-info/dependency_links.txt
+writing entry points to retail_assistant_bringup.egg-info/entry_points.txt
+writing requirements to retail_assistant_bringup.egg-info/requires.txt
+writing top-level names to retail_assistant_bringup.egg-info/top_level.txt
+reading manifest file 'retail_assistant_bringup.egg-info/SOURCES.txt'
+writing manifest file 'retail_assistant_bringup.egg-info/SOURCES.txt'
+running build_ext
+Creating /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/python3.10/site-packages/retail-assistant-bringup.egg-link (link to .)
+Installing auto_drive script to /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/retail_assistant_bringup
+
+Installed /home/kendell/retail_assistant_ws/build/retail_assistant_bringup
+running symlink_data

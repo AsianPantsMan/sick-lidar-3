@@ -15,6 +15,8 @@ setup(
         (os.path.join('share', package_name, 'description'),
             glob('description/*')),
         # Install RViz configs (optional)
+        (os.path.join('share', package_name, 'worlds'), glob('worlds/*.world')),
+        (os.path.join('share', package_name, 'config'), glob('config/*')),
         (os.path.join('share', package_name, 'rviz'),
             glob('rviz/*')),
     ],
@@ -30,7 +32,7 @@ setup(
         ],
     },
     entry_points={
-        'console_scripts': [
+        'console_scripts': ['auto_drive = retail_assistant_bringup.auto_drive:main',
         ],
     },
 )
