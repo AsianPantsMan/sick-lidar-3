@@ -10,7 +10,6 @@ function App() {
   const [category, setCategory] = useState("All");
   const products = useProducts(); // returns full list (mock/fetch)
 
-  // filter locally for snappy touch UX
   const visible = products.filter((p) => {
     const matchesCategory = category === "All" || p.productCategory === category;
     const matchesQuery = query.trim() === "" || p.productName.toLowerCase().includes(query.toLowerCase());
