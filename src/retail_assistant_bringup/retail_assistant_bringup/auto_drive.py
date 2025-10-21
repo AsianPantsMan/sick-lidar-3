@@ -4,7 +4,7 @@ from rclpy.node import Node
 from nav_msgs.msg import OccupancyGrid
 import numpy as np
 from rclpy.action import ActionClient
-from nav2_msgs.action import NavigateToPose
+from nav2_msgs.action import NavigateToPose             #ADD CLAMP TO PREVENT BAD COORDINATES OUTSIDE OF THE MAP
 from geometry_msgs.msg import PoseStamped
 #node + subsscriber initalization
 class MyMapNode(Node):
