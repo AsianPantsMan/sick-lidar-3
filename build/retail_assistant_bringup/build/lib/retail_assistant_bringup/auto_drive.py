@@ -33,9 +33,6 @@ class MyMapNode(Node):
             last_x, last_y = list(self.visited_frontiers)[-1]
         else:  # no last goal yet
             last_x, last_y = (None, None)#get last visited for threshold distance
-        #Need to find frontiers to explore
-        # get robot position from the map message
-        # used to find shortest distance or closest frontier start at neg one to ensure first value is taken
         found_frontier=False
         for i in range(msg.info.height):
             for j in range(msg.info.width):
@@ -101,7 +98,7 @@ class MyMapNode(Node):
         result_future.add_done_callback(self.goal_result_callback)
     def goal_result_callback(self,future):
         result=future.result().result
-        self.get_logger().info(f"Gaol completed with result: {result}")
+        self.get_logger().info(f"Goal completed with result: {result}")
         self.goal_in_progress=False # so next frontier can begin
     
 def main():

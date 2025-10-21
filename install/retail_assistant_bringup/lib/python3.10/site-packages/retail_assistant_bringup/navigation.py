@@ -9,13 +9,19 @@ class AutoNav(Node):
     def __init__(self):
         super().__init__('auto_nav')
         self.nav_client = ActionClient(self, NavigateToPose, 'navigate_to_pose')
-        self.goal_dict= {"Coordinate1":(4.94 ,0.138),"Coordinate2":(-1.83,0.13),"Coordinate3":(-10.68,-0.136),
-                         "Coordinate4":(4.92,5.00), "Coordinate5":(-1.61,4.59), "Coordinate6": (-10.43,4.59),
-                         "Coordinate7":(4.91,9.66), "Coordinate8":(-1.84,9.01), "Coordinate9":(-9.30,9.30)}# len for size
+        self.goals= ((4.94 ,0.138),(-1.83,0.13),(-10.68,-0.136),
+                    (4.92,5.00),(-1.61,4.59),(-10.43,4.59),
+                    (4.91,9.66),(-1.84,9.01),(-9.30,9.30))# len for size
+        self.goal_in_progress=False
+        self.goal_index=0
         self.cycle()
         
     def cycle(self):
-        for key, (x,y) in self.goal_dict.items():
+        if self.goal_index==len(self.goals-1):
+            self.goal_index=0   
+        if not self.goal_in_progress:
+            x=self.goals[self.goal_index][0]
+            y=self.goals[self.goal_index][1]
             print(f"about to send {x} and {y}")
             self.send_nav_goal(x,y)
 
@@ -39,12 +45,16 @@ class AutoNav(Node):
             self.goal_in_progress=False
             return
         self.get_logger().info("Goal accepted navigating")
+        self.goal_in_progress=True
         result_future=goal_handle.get_result_async()
         result_future.add_done_callback(self.goal_result_callback)
 
     def goal_result_callback(self,future):
         result=future.result().result# waits for nav2 to complete goal
         self.get_logger().info(f"Goal completed with result: {result}")
+        self.goal_index+=1
+        self.goal_in_progress=False
+        self.send_nav_goal()
 
 def main():
     rclpy.init()

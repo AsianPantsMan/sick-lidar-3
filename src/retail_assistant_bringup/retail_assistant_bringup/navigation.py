@@ -16,7 +16,9 @@ class AutoNav(Node):
         self.goal_index=0
         self.cycle()
         
-    def cycle(self):    
+    def cycle(self):
+        if self.goal_index==len(self.goals)-1:
+            self.goal_index=0   
         if not self.goal_in_progress:
             x=self.goals[self.goal_index][0]
             y=self.goals[self.goal_index][1]
@@ -50,8 +52,9 @@ class AutoNav(Node):
     def goal_result_callback(self,future):
         result=future.result().result# waits for nav2 to complete goal
         self.get_logger().info(f"Goal completed with result: {result}")
+        self.goal_index+=1
         self.goal_in_progress=False
-        self.send_nav_goal()
+        self.cycle()
 
 def main():
     rclpy.init()
