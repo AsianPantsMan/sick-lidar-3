@@ -38,11 +38,19 @@ def generate_launch_description():
             PythonLaunchDescriptionSource([os.path.join
                                            (get_package_share_directory('slam_toolbox'),'launch','online_async_launch.py')]),# fix _local later
                                           launch_arguments={'slam_params_file': os.path.join(get_package_share_directory(package_name),'config','mapper_params_online_async_local.yaml')}.items())
-                                          
-    # Launch them all!
+    nav2=IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([os.path.join
+                                       (get_package_share_directory('nav2_bringup'),'launch','navigation_launch.py')])
+                                       ,launch_arguments={'use_sim_time': 'true',
+                                                          'params_file': os.path.join(
+                                                             get_package_share_directory('nav2_bringup'),
+                                                             'params',
+                                                             'nav2_params.yaml'
+                                                                )}.items())                              
     return LaunchDescription([
         rsp,
         gazebo,
         spawn_entity,
         slam,
+        nav2
     ])

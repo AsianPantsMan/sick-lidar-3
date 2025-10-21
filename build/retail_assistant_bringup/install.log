@@ -1,7 +1,11 @@
 /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup/auto_drive.py
+/home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup/navigation.py
 /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup/__init__.py
+/home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup/test.py
 /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup/__pycache__/auto_drive.cpython-310.pyc
+/home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup/__pycache__/navigation.cpython-310.pyc
 /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup/__pycache__/__init__.cpython-310.pyc
+/home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup/__pycache__/test.cpython-310.pyc
 /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/share/ament_index/resource_index/packages/retail_assistant_bringup
 /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/share/retail_assistant_bringup/package.xml
 /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/share/retail_assistant_bringup/launch/gazebo_sim_slam.launch.py

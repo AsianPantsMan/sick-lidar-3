@@ -69,6 +69,7 @@ class MyMapNode(Node):
             self.send_nav_goal(x,y)
         else:
             self.get_logger().info("No frontiers found — stopping map processing.")
+            # ADD MAP SAVING TO SPECIFIED DIRECTORY
             raise SystemExit
 
     def physical_location(self,i,j,map_resolution,map_origin):
@@ -104,20 +105,14 @@ class MyMapNode(Node):
         self.goal_in_progress=False # so next frontier can begin
     
 def main():
-    rclpy.init()
-    node = MyMapNode()
+    rclpy.init()## initialize rclpy which sets up all the ros communication stuff
+    node = MyMapNode()# create map node object
     try:
-        rclpy.spin(node)
+        rclpy.spin(node)# keep listening for new values
     except KeyboardInterrupt:
         pass
-    node.destroy_node()
+    node.destroy_node()# once finish clean things up 
     rclpy.shutdown()
 
 if __name__ == "__main__":
     main()
-    
-## initialize rclpy which sets up all the ros communication stuff
-# create map node object
-# keep listening for new values
-# once finish clean things up 
-#need to add space between not free space 
