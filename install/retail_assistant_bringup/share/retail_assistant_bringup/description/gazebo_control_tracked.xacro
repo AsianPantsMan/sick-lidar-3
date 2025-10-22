@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <gazebo>
+        <plugin name="simple_tracked_vehicle" filename="libSimpleTrackedVehiclePlugin.so">
+            <body>chassis</body>
+            <left_track>left_track</left_track>
+            <right_track>right_track</right_track>
+        </plugin>
+    </gazebo>
+</robot>

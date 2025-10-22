@@ -14,12 +14,14 @@ config/mapper_params_online_async_local.yaml
 config/test_slam.rviz
 description/example.xacro
 description/gazebo_control.xacro
+description/gazebo_control_tracked.xacro
 description/imu.xacro
 description/inertial_macros.xacro
 description/lidar.xacro
 description/notes
 description/robot.urdf.xacro
 description/robot_core.xacro
+description/robot_core_treads.xacro
 launch/gazebo_sim.launch.py
 launch/gazebo_sim_auto_mapping.launch.py
 launch/gazebo_sim_local.launch.py

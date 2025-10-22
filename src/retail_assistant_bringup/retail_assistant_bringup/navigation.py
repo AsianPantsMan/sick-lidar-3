@@ -4,7 +4,9 @@ from nav_msgs.msg import OccupancyGrid
 from rclpy.action import ActionClient
 from nav2_msgs.action import NavigateToPose             
 from geometry_msgs.msg import PoseStamped
-
+# NEED FILE PROCESSING 
+#NEED to edit config file to have higher tolerances for avoiding stuff
+# NEED edit orientation to make navigation smoother
 class AutoNav(Node):
     def __init__(self):
         super().__init__('auto_nav')
@@ -15,7 +17,7 @@ class AutoNav(Node):
         self.goal_in_progress=False
         self.goal_index=0
         self.cycle()
-        
+        self.orientation=1.0
     def cycle(self):
         if self.goal_index==len(self.goals)-1:
             self.goal_index=0   
