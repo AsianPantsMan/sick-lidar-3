@@ -11,6 +11,7 @@ setup.py
 config/ekf.yaml
 config/mapper_params_online_async.yaml
 config/mapper_params_online_async_local.yaml
+config/nav2_params.yaml
 config/test_slam.rviz
 description/example.xacro
 description/gazebo_control.xacro
@@ -19,6 +20,7 @@ description/imu.xacro
 description/inertial_macros.xacro
 description/lidar.xacro
 description/notes
+description/proximity.xacro
 description/robot.urdf.xacro
 description/robot_core.xacro
 description/robot_core_treads.xacro
