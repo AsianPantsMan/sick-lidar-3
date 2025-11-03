@@ -9,7 +9,6 @@ setup.py
 ../../build/retail_assistant_bringup/retail_assistant_bringup.egg-info/top_level.txt
 ../../build/retail_assistant_bringup/retail_assistant_bringup.egg-info/zip-safe
 config/ekf.yaml
-config/ignition_bridge.yaml
 config/mapper_params_online_async.yaml
 config/mapper_params_online_async_local.yaml
 config/nav2_params.yaml
