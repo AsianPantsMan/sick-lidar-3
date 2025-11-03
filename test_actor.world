@@ -1,0 +1,7 @@
+<sdf version="1.6">
+  <world name="default">
+    <include>
+      <uri>model://walking_person</uri>
+    </include>
+  </world>
+</sdf>

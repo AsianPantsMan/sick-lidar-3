@@ -1,0 +1,35 @@
+#clock for gazebo simulation
+- ros_topic_name: "clock"
+  ign_topic_name: "clock"
+  ros_type_name: "rosgraph_msgs/msg/Clock"
+  ign_type_name: "ignition.msgs.Clock"
+  direction: IGN_TO_ROS
+#ign topic published  by lidar plugin
+- ros_topic_name: "scan"
+  ign_topic_name: "scan"
+  ros_type_name: "sensor_msgs/msg/LaserScan"
+  ign_type_name: "ignition.msgs.LaserScan"
+  direction: IGN_TO_ROS
+#diff drive odom bridge
+- ros_topic_name: "odom"
+  ign_topic_name: "odom"
+  ros_type_name: "nav_msgs/msg/Odometry"
+  ign_type_name: "ignition.msgs.Odometry"
+  direction: IGN_TO_ROS
+#diff drive tf bridge
+- ros_topic_name: "tf"
+  ign_topic_name: "tf"
+  ros_type_name: "tf2_msgs/msg/TFMessage"
+  ign_type_name: "ignition.msgs.Pose_V"
+  direction: IGN_TO_ROS
+#cmd_vel bridge to diff drive
+- ros_topic_name: "diff_cont/cmd_vel_unstamped"
+  ign_topic_name: "cmd_vel"
+  ign_type_name: "ignition.msgs.Twist"
+  direction: ROS_TO_IGN
+#joint state bridge
+- ros_topic_name: "joint_states"
+  ign_topic_name: "joint_states"
+  ros_type_name: "sensor_msgs/msg/JointState"
+  ign_type_name: "ignition.msgs.Model"
+  direction: IGN_TO_ROS
