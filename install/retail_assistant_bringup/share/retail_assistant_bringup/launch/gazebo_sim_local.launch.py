@@ -46,11 +46,13 @@ def generate_launch_description():
                                                              get_package_share_directory('nav2_bringup'),
                                                              'params',
                                                              'nav2_params.yaml'
-                                                                )}.items())                              
+                                                                )}.items())     
+    #aisle_navigation= Node(package='retail_assistant_bringup',executable='navigation',output='screen')                 
     return LaunchDescription([
         rsp,
         gazebo,
         spawn_entity,
         slam,
-        nav2
+        nav2,
+        #aisle_navigation TODO Look into time sync issues
     ])

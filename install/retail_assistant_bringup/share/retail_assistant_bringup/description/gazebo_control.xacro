@@ -4,19 +4,18 @@
     <gazebo>
         <plugin name="diff_drive" filename="libgazebo_ros_diff_drive.so">
 
-            <!-- Wheel Information -->
+            
             <left_joint>left_wheel_rear_joint</left_joint>
             <right_joint>right_wheel_rear_joint</right_joint>
             <wheel_separation>0.5</wheel_separation>
             <wheel_diameter>0.1</wheel_diameter>
 
 
-            <!-- Limits -->
+            
             <max_wheel_torque>200</max_wheel_torque>
             <max_wheel_acceleration>10.0</max_wheel_acceleration>
 
             
-            <!-- Output -->
             <odometry_frame>odom</odometry_frame>
             <robot_base_frame>base_link</robot_base_frame>
 

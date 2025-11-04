@@ -33,6 +33,7 @@ setup(
     },
     entry_points={
         'console_scripts': ['auto_drive = retail_assistant_bringup.auto_drive:main',
+                            'navigation = retail_assistant_bringup.navigation:main',
         ],
     },
 )
