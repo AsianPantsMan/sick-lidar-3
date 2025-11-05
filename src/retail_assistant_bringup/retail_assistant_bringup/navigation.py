@@ -20,14 +20,16 @@ class AutoNav(Node):
                     (4.92,5.00),(-1.61,4.59),(-10.43,4.59),
                     (4.91,9.66),(-1.84,9.01),(-9.30,9.30))# len for size
         self.goal_in_progress=False
-        self.goal_index=0
-        self.cycle()
+        self.goal_index=0 # keeps track of where to go next
         self.orientation=1.0
         self.interaction=False
         self.paused=False
         self.goal_handle = None
+        self.distance_to_goal=0
+        self.cycle()# loop function
+
     def cycle(self):
-        if self.goal_index==len(self.goals)-1:
+        if self.goal_index==len(self.goals)-1: # reset goal index
             self.goal_index=0   
         if not self.goal_in_progress:
             x=self.goals[self.goal_index][0]
@@ -45,9 +47,15 @@ class AutoNav(Node):
         goal.pose.pose.orientation.w = 1.0
         print(f"Sending nav2 a goal {x},{y}")
         self.nav_client.wait_for_server()# wait until the action server is available
-        send_future=self.nav_client.send_goal_async(goal)# send the goal
-        send_future.add_done_callback(self.goal_response_callback)
+        send_future=self.nav_client.send_goal_async(goal,feedback_callback=self.feedback)# send the goal
+        send_future.add_done_callback(self.goal_response_callback)#when this future finishes, call this function
 
+    def feedback(self,goal_handle,feedback):
+        feedback.distance_remaining=self.distance_to_goal
+        if(self.distance_to_goal>10):#TODO come up with better threshold distance
+            #add goal cancellation here and send a goal and increment goal index
+            print("Place holder")
+            
     def goal_response_callback(self,future):
         self.goal_handle =future.result()
         if not self.goal_handle.accepted:
@@ -73,7 +81,7 @@ class AutoNav(Node):
 
     def proximity_callback(self,sensor): # make proximity for interaction detetection a foot away from robot for now
         direction=sensor.header.frame_id
-        if sensor.range< 0.3048 and not self.paused:
+        if sensor.range< 0.5 and not self.paused:
             self.goal_in_progress=False     # consider a cooldown timer to prevent infinite triggers 
             self.paused=True
             self.get_logger().info(f"Person detected close to {direction}")
@@ -90,12 +98,13 @@ class AutoNav(Node):
         else:
             self.get_logger().info("No interaction continue navigation")
             self.send_nav_goal(self.goals[self.goal_index][0],self.goals[self.goal_index][1])
-            self.prox_wait_timer=self.create_timer(5.0,self.enable_proximity)
+            self.prox_wait_timer=self.create_timer(10.0,self.enable_proximity)# Allow robot to move for a little before resuming proximity detection
 
     def enable_proximity(self):
         self.prox_wait_timer.cancel()# cancel timer this  prevents from staying stuck due to proximity sensor
         self.paused=False
         self.get_logger().info("Resuming proximity detection")
+
 def main():
     rclpy.init()
     nav_node = AutoNav()
