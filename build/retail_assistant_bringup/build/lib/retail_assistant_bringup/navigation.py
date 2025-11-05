@@ -24,6 +24,8 @@ class AutoNav(Node):
         self.cycle()
         self.orientation=1.0
         self.interaction=False
+        self.paused=False
+        self.goal_handle = None
     def cycle(self):
         if self.goal_index==len(self.goals)-1:
             self.goal_index=0   
@@ -47,18 +49,22 @@ class AutoNav(Node):
         send_future.add_done_callback(self.goal_response_callback)
 
     def goal_response_callback(self,future):
-        goal_handle =future.result()
-        if not goal_handle.accepted:
+        self.goal_handle =future.result()
+        if not self.goal_handle.accepted:
             self.get_logger().warn("goal rejected by nav2")
             self.goal_in_progress=False
             return
         self.get_logger().info("Goal accepted navigating")
         self.goal_in_progress=True
-        result_future=goal_handle.get_result_async()
+        result_future=self.goal_handle.get_result_async()
+        print("Future Result", result_future)
         result_future.add_done_callback(self.goal_result_callback)
 
     def goal_result_callback(self,future):
         result=future.result().result# waits for nav2 to complete goal
+        if self.paused:# goal_result_callback runs anytime a goal is updated including cancellations prevents spam of goals when prox detect
+            self.get_logger().warn("Goal finished but robot is paused — waiting before continuing.")
+            return
         self.get_logger().info(f"Goal completed with result: {result}")
         self.goal_index+=1
         self.goal_in_progress=False
@@ -67,12 +73,14 @@ class AutoNav(Node):
 
     def proximity_callback(self,sensor): # make proximity for interaction detetection a foot away from robot for now
         direction=sensor.header.frame_id
-        if sensor.range< 0.3048:
-            self.goal_in_progress=False
+        if sensor.range< 0.3048 and not self.paused:
+            self.goal_in_progress=False     # consider a cooldown timer to prevent infinite triggers 
+            self.paused=True
             self.get_logger().info(f"Person detected close to {direction}")
             self.get_logger().info("Cancelling nav2 destination and waiting for interaction")
-            cancel_future=self.nav_client.cancel_goal_async(self._goal_handle)
+            cancel_future=self.nav_client._cancel_goal_async(self.goal_handle)
             self.get_logger().info("Waiting for customer to finish interaction")
+
             self.resume_timer = self.create_timer(5.0, self.resume_navigation) # wait for interaction and is non blocking
 
     def resume_navigation(self):
@@ -82,6 +90,12 @@ class AutoNav(Node):
         else:
             self.get_logger().info("No interaction continue navigation")
             self.send_nav_goal(self.goals[self.goal_index][0],self.goals[self.goal_index][1])
+            self.prox_wait_timer=self.create_timer(5.0,self.enable_proximity)
+
+    def enable_proximity(self):
+        self.prox_wait_timer.cancel()# cancel timer this  prevents from staying stuck due to proximity sensor
+        self.paused=False
+        self.get_logger().info("Resuming proximity detection")
 def main():
     rclpy.init()
     nav_node = AutoNav()
