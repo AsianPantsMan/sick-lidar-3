@@ -16,9 +16,9 @@ class AutoNav(Node):
         self.nav_client = ActionClient(self, NavigateToPose, 'navigate_to_pose')
         self.prox_front=self.create_subscription(Range,'/ultrasonic/front',self.proximity_callback,10)#msg type , topic, callback function,10)
         self.prox_back=self.create_subscription(Range,'/ultrasonic/back',self.proximity_callback,10)
-        self.goals= ((4.94 ,0.138),(-1.83,0.13),(-10.68,-0.136),
-                    (4.92,5.00),(-1.61,4.59),(-10.43,4.59),
-                    (4.91,9.66),(-1.84,9.01),(-9.30,9.30))# len for size
+        self.goals= ([(4.94 ,0.138),(-1.83,0.13),(-10.68,-0.136)],
+                    [(4.92,5.00),(-1.61,4.59),(-10.43,4.59)],
+                    [(4.91,9.66),(-1.84,9.01),(-9.30,9.30)])# len for size
         self.goal_in_progress=False
         self.goal_index=0 # keeps track of where to go next
         self.orientation=1.0
@@ -26,16 +26,19 @@ class AutoNav(Node):
         self.paused=False
         self.goal_handle = None
         self.distance_to_goal=0
+        self.aisle_index=0
+        self.hold_index=False
         self.cycle()# loop function
 
-    def cycle(self):
-        if self.goal_index==len(self.goals)-1: # reset goal index
-            self.goal_index=0   
+    def cycle(self): 
+        if self.aisle_index==len(self.goals)-1:# reset aisle index
+            self.aisle_index=0
         if not self.goal_in_progress:
-            x=self.goals[self.goal_index][0]
-            y=self.goals[self.goal_index][1]
+            x=self.goals[self.aisle_index][self.goal_index][0]
+            y=self.goals[self.aisle_index][self.goal_index][1]
             print(f"about to send {x} and {y}")
             self.send_nav_goal(x,y)
+
 
     def send_nav_goal(self,x, y):
         # goal creation 
@@ -44,17 +47,23 @@ class AutoNav(Node):
         goal.pose.header.stamp = self.get_clock().now().to_msg()
         goal.pose.pose.position.x =x
         goal.pose.pose.position.y =y
-        goal.pose.pose.orientation.w = 1.0
+        goal.pose.pose.orientation.w = self.orientation
+        if(self.hold_index):
+            self.aisle_index+=1
         print(f"Sending nav2 a goal {x},{y}")
         self.nav_client.wait_for_server()# wait until the action server is available
-        send_future=self.nav_client.send_goal_async(goal,feedback_callback=self.feedback)# send the goal
+        send_future=self.nav_client.send_goal_async(goal)#,feedback_callback=self.feedback)# send the goal
         send_future.add_done_callback(self.goal_response_callback)#when this future finishes, call this function
 
-    def feedback(self,goal_handle,feedback):
-        feedback.distance_remaining=self.distance_to_goal
-        if(self.distance_to_goal>10):#TODO come up with better threshold distance
+    #def feedback(self,goal_handle,feedback):
+       # feedback.distance_remaining=self.distance_to_goal
+        #if(self.distance_to_goal>10):#TODO come up with better threshold distance
             #add goal cancellation here and send a goal and increment goal index
-            print("Place holder")
+            #self.get_logger().info("Cancelling nav2 destination to prevent routing through another aisle")
+            #cancel_future=self.nav_client._cancel_goal_async(self.goal_handle)# cancel current goal
+        #if()# add different goal selection logic upon goal being blocked and needing to re-route
+            #goal selection
+            #print("Place holder")
             
     def goal_response_callback(self,future):
         self.goal_handle =future.result()
@@ -74,8 +83,20 @@ class AutoNav(Node):
             self.get_logger().warn("Goal finished but robot is paused — waiting before continuing.")
             return
         self.get_logger().info(f"Goal completed with result: {result}")
-        self.goal_index+=1
         self.goal_in_progress=False
+        if self.hold_index:# repeate ends
+            self.hold_index=False
+        else:
+            if self.aisle_index%2==0:
+                self.goal_index+=1
+                self.orientation=1.0
+                if self.goal_index==len(self.goals[self.aisle_index])-1:#reaches end of aisle
+                    self.hold_index=True
+            else:
+                self.goal_index-=1
+                self.orientation=-1.0
+                if self.goal_index==0:# at beginning of aisle
+                    self.hold_index=True
         self.cycle()
 
 
@@ -97,7 +118,7 @@ class AutoNav(Node):
             self.get_logger().info("Waiting for customer to finish interaction")
         else:
             self.get_logger().info("No interaction continue navigation")
-            self.send_nav_goal(self.goals[self.goal_index][0],self.goals[self.goal_index][1])
+            self.send_nav_goal(self.goals[self.aisle_index][self.goal_index][0],self.goals[self.aisle_index][self.goal_index][1])
             self.prox_wait_timer=self.create_timer(10.0,self.enable_proximity)# Allow robot to move for a little before resuming proximity detection
 
     def enable_proximity(self):
