@@ -1,2 +1,4 @@
-goal_dict={"Coordinate1":(15.64 ,20),"Coordinate2": (20,15.64)}
-print(f"Coordinate1 {goal_dict['Coordinate1'][0]},{goal_dict['Coordinate2'][1]}")
+goals= ([(4.94 ,0.138),(-1.83,0.13),(-10.68,-0.136),(0,0)],
+                    [(4.92,5.00),(-1.61,4.59),(-10.43,4.59)],
+                    [(4.91,9.66),(-1.84,9.01),(-9.30,9.30)])
+print(f"goal length {len(goals[0])}")

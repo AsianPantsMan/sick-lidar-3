@@ -31,7 +31,7 @@ class AutoNav(Node):
         self.cycle()# loop function
 
     def cycle(self): 
-        if self.aisle_index==len(self.goals)-1:# reset aisle index
+        if self.aisle_index==len(self.goals):# reset aisle index
             self.aisle_index=0
         if not self.goal_in_progress:
             x=self.goals[self.aisle_index][self.goal_index][0]
@@ -48,22 +48,44 @@ class AutoNav(Node):
         goal.pose.pose.position.x =x
         goal.pose.pose.position.y =y
         goal.pose.pose.orientation.w = self.orientation
-        if(self.hold_index):
+        if(self.hold_index):# increase aisle on the hold index becuase when aisles change
             self.aisle_index+=1
         print(f"Sending nav2 a goal {x},{y}")
         self.nav_client.wait_for_server()# wait until the action server is available
-        send_future=self.nav_client.send_goal_async(goal)#,feedback_callback=self.feedback)# send the goal
+        send_future=self.nav_client.send_goal_async(goal,feedback_callback=self.feedback)# send the goal
         send_future.add_done_callback(self.goal_response_callback)#when this future finishes, call this function
 
-    #def feedback(self,goal_handle,feedback):
-       # feedback.distance_remaining=self.distance_to_goal
-        #if(self.distance_to_goal>10):#TODO come up with better threshold distance
+    def feedback(self,goal_handle,feedback):
+        feedback.distance_remaining=self.distance_to_goal
+        if(self.distance_to_goal>16):#TODO come up with better threshold distance
             #add goal cancellation here and send a goal and increment goal index
-            #self.get_logger().info("Cancelling nav2 destination to prevent routing through another aisle")
-            #cancel_future=self.nav_client._cancel_goal_async(self.goal_handle)# cancel current goal
-        #if()# add different goal selection logic upon goal being blocked and needing to re-route
-            #goal selection
-            #print("Place holder")
+            self.get_logger().info("Cancelling nav2 destination to prevent routing through another aisle")
+            cancel_future=self.nav_client._cancel_goal_async(self.goal_handle)# cancel current goal
+        if(self.goal_index==0):# begining of aisle is blocked
+            if(self.aisle_index==len(self.goals)-1):
+                aisle_index-=1
+                self.logger().warn("Beginning of aisle is blocked, moving to previous aisle")
+            else:
+               aisle_index+=1
+               self.logger().warn("Beginning of aisle is blocked, moving to next aisle")
+        elif(len(self.goals[self.aisle_index])-1):# end of aisle is blocked
+            if(self.aisle_index==len(self.goals)-1):
+                aisle_index-=1
+                self.logger().warn("End of aisle is blocked, moving to previous aisle")
+            else:
+                aisle_index+=1
+                self.logger().warn("End of aisle is blocked, moving to next aisle")
+        else: # middle of the aisle
+            if(self.aisle_index==len(self.goals)-1):
+                aisle_index-=1
+                self.goal_index=0
+                self.logger().warn("Middle of aisle is blocked, moving to the beginning of previous aisle")
+            else:
+                aisle_index+=1
+                self.goal_index=0
+                self.logger().warn("Middle of aisle is blocked, moving to the beginning of next aisle")
+        self.cycle()# start from new points effectively skipping the blocked aisle
+    
             
     def goal_response_callback(self,future):
         self.goal_handle =future.result()
@@ -84,17 +106,16 @@ class AutoNav(Node):
             return
         self.get_logger().info(f"Goal completed with result: {result}")
         self.goal_in_progress=False
-        if self.hold_index:# repeate ends
+        if self.hold_index:# repeat goal_index when reach ends
             self.hold_index=False
-        else:
-            if self.aisle_index%2==0:
+            self.orientation*=-1.0# change orientation when changing aisles
+        else:# if not changing aisles update goal index
+            if self.orientation>0:# even aisle go forward
                 self.goal_index+=1
-                self.orientation=1.0
                 if self.goal_index==len(self.goals[self.aisle_index])-1:#reaches end of aisle
                     self.hold_index=True
-            else:
+            else:# odd aisle go backward
                 self.goal_index-=1
-                self.orientation=-1.0
                 if self.goal_index==0:# at beginning of aisle
                     self.hold_index=True
         self.cycle()
