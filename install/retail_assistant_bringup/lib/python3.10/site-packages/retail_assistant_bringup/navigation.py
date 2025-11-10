@@ -55,30 +55,36 @@ class AutoNav(Node):
         send_future=self.nav_client.send_goal_async(goal,feedback_callback=self.feedback)# send the goal
         send_future.add_done_callback(self.goal_response_callback)#when this future finishes, call this function
 
-    #def feedback(self,goal_handle,feedback):
-        #feedback.distance_remaining=self.distance_to_goal
-        #if(self.distance_to_goal>10):#TODO come up with better threshold distance
+    def feedback(self,goal_handle,feedback):
+        feedback.distance_remaining=self.distance_to_goal
+        if(self.distance_to_goal>16):#TODO come up with better threshold distance
             #add goal cancellation here and send a goal and increment goal index
-            #self.get_logger().info("Cancelling nav2 destination to prevent routing through another aisle")
-            #cancel_future=self.nav_client._cancel_goal_async(self.goal_handle)# cancel current goal
-        #if(self.goal_index==0):# begining of aisle is blocked
-            #if(self.aisle_index==len(self.goals)-1):
-                #aisle_index-=1
-            #else:
-               # aisle_index+=1
-       # elif(len(self.goals[self.aisle_index])-1):# end of aisle is blocked
-            #if(self.aisle_index==len(self.goals)-1):
-                #aisle_index-=1
-            #else:
-                #aisle_index+=1
-        #else: # middle of the aisle
-            #if(self.aisle_index==len(self.goals)-1):
-                #aisle_index-=1
-               # self.goal_index=0
-            #else:
-                #aisle_index+=1
-                #self.goal_index=0
-        #self.cycle()# start from new points effectively skipping the blocked aisle
+            self.get_logger().info("Cancelling nav2 destination to prevent routing through another aisle")
+            cancel_future=self.nav_client._cancel_goal_async(self.goal_handle)# cancel current goal
+        if(self.goal_index==0):# begining of aisle is blocked
+            if(self.aisle_index==len(self.goals)-1):
+                aisle_index-=1
+                self.logger().warn("Beginning of aisle is blocked, moving to previous aisle")
+            else:
+               aisle_index+=1
+               self.logger().warn("Beginning of aisle is blocked, moving to next aisle")
+        elif(len(self.goals[self.aisle_index])-1):# end of aisle is blocked
+            if(self.aisle_index==len(self.goals)-1):
+                aisle_index-=1
+                self.logger().warn("End of aisle is blocked, moving to previous aisle")
+            else:
+                aisle_index+=1
+                self.logger().warn("End of aisle is blocked, moving to next aisle")
+        else: # middle of the aisle
+            if(self.aisle_index==len(self.goals)-1):
+                aisle_index-=1
+                self.goal_index=0
+                self.logger().warn("Middle of aisle is blocked, moving to the beginning of previous aisle")
+            else:
+                aisle_index+=1
+                self.goal_index=0
+                self.logger().warn("Middle of aisle is blocked, moving to the beginning of next aisle")
+        self.cycle()# start from new points effectively skipping the blocked aisle
     
             
     def goal_response_callback(self,future):

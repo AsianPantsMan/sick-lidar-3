@@ -16,6 +16,8 @@ class MyMapNode(Node):
         self.goal_in_progress = False
             # prevent cycling through same points
         self.visited_frontiers = set()
+        self.points_to_score=set()
+        self.high_socre=0
     #function subscribed and using pose topic made by slam toolbox to get robot position
 
     def map_callback(self, msg):
@@ -37,32 +39,31 @@ class MyMapNode(Node):
         for i in range(msg.info.height):
             for j in range(msg.info.width):
                 if map_data[i][j]==0:# free space can travel to unknown}
-                    neighborhood = map_data[i-1:i+2, j-1:j+2]#check this
+                    neighborhood = map_data[max(0,i-1):min(i+2,msg.info.height), max(0,j-1):min(j+2,msg.info.width)]#check this
                     if -1 in neighborhood:# free space has frontier near it
                         physical_location=self.physical_location(i,j,msg.info.resolution,(msg.info.origin.position.x,msg.info.origin.position.y))# compute physical map cell coordinate
-                        # compute distance from origin
-                                            # round it to skip over .00000 differences may not need dist>1.5
-                        if (physical_location[0],physical_location[1]) not in self.visited_frontiers:# distance is sufficient far from origin and shortest and the hasent been to this frontier
-                            too_close=False
-                            if last_x is not None:# has been to a frontier before
-                                for (vistied_x, visited_y)in self.visited_frontiers:
-                                    if mt.sqrt((vistied_x-physical_location[0])**2+(visited_y-physical_location[1])**2)<1.5:# prevent from sending points so close
-                                        too_close=True
-                                        break
-                            if too_close:
-                                continue# skip frontier too close
-                                # REMOVE instead of using robot position using slam map use phyical position instead cause that will not change
-                            x=physical_location[0]# store the x and y of the frontier
-                            y=physical_location[1]
-                            self.visited_frontiers.add(physical_location)
-                            found_frontier=True
-            if found_frontier:
+                        if (physical_location[0],physical_location[1]) not in self.visited_frontiers:# distance is sufficient far from origin and shortest and the hasent been to this frontie
+                           if(len(self.points_to_score)<min(max(int(len(map_data) * .05), 100), 2000)):#takes 5 % of map points up to 2000 points to score
+                            result=self.points_to_score.add(i,j,msg)
+                            if result[2]>self.high_socre:
+                                x=result[0]
+                                y=result[1]
+                                self.high_socre=result[2] 
+                            continue
+                          
+                        physical_location=self.physical_location(x,y,msg.info.resolution,(msg.info.origin.position.x,msg.info.origin.position.y))# convert highest scoring point to real coordinates
+                        x=physical_location[0]# store the x and y of the frontier
+                        y=physical_location[1]
+                        self.visited_frontiers.add(physical_location)
+                        found_frontier=True
+            if found_frontier:##################### CHECK out of bounds conditions ALSO add scoring mechanism for better point selectionm
                 break
 
 
         if found_frontier:# if nav2 fails some reason will send new coordinate
             self.goal_in_progress=True
             self.get_logger().info(f"Sending ({x:.2f}, {y:.2f})")
+            self.edge_prevention(x,y,msg)
             self.send_nav_goal(x,y)
         else:
             self.get_logger().info("No frontiers found — stopping map processing.")
@@ -73,6 +74,30 @@ class MyMapNode(Node):
         x=j*map_resolution+map_origin[0]
         y=i*map_resolution+map_origin[1]
         return (x,y)
+    
+
+    def scoring(self,i,j,msg): # Scoring function to select best frontier or a good enough frontier to limit back point selection
+        score=0
+        # if last_x is not none this is if it has anything in previous frontiers
+        map_data=np.reshape(np.array(msg.data),(msg.info.height,msg.info.width))
+        neighborhood = map_data[max(0,i-5):min(i+6,msg.info.height), max(0,j-5):min(j+6,msg.info.width)]# neighborhood 11x11
+        for neighborhood_x in range(neighborhood.shape[0]):
+            for neighborhood_y in range(neighborhood.shape[1]):
+                if neighborhood[x][y]==0:# scoring how reachable/connected to free space
+                    score+=1
+                if neighborhood[x][y]==-1:# scoring on information gain
+                    score+=2
+                if self.visited_frontiers: #penalty for too close to previous fronti
+                    print("placeholder")
+                elif self.visited_frontiers:
+                    print("placeholder")
+
+            # add score from how close it is to wall blocked objects
+            # include a timer/delay to allow slam to update occupancy grid
+        return x,y,score
+
+        #Score based on 
+            
 
     def send_nav_goal(self,x, y):
         # goal creation 

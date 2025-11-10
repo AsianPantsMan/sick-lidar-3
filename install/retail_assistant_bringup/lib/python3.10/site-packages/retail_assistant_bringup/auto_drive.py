@@ -56,7 +56,7 @@ class MyMapNode(Node):
                             y=physical_location[1]
                             self.visited_frontiers.add(physical_location)
                             found_frontier=True
-            if found_frontier:
+            if found_frontier:##################### CHECK out of bounds conditions ALSO add scoring mechanism for better point selectionm
                 break
 
 
