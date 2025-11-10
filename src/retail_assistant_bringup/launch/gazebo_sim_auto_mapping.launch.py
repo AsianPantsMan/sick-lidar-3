@@ -50,8 +50,8 @@ def generate_launch_description():
                                                                 )}.items())  
 
 
-    auto_drive = Node(package='retail_assistant_bringup',executable='auto_drive',
-    output='screen')                       
+   # auto_drive = Node(package='retail_assistant_bringup',executable='auto_drive',
+    #output='screen')                       
     #Launch all files with order given
     return LaunchDescription([
         rsp,
@@ -59,5 +59,5 @@ def generate_launch_description():
         spawn_entity,
         slam,
         nav2,
-        auto_drive
+       # auto_drive
     ])

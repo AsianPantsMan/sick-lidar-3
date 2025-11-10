@@ -4,7 +4,7 @@ from rclpy.node import Node
 from nav_msgs.msg import OccupancyGrid
 import numpy as np
 from rclpy.action import ActionClient
-from nav2_msgs.action import NavigateToPose             #ADD CLAMP TO PREVENT BAD COORDINATES OUTSIDE OF THE MAP
+from nav2_msgs.action import NavigateToPose             
 from geometry_msgs.msg import PoseStamped
 #node + subsscriber initalization
 class MyMapNode(Node):
@@ -15,7 +15,8 @@ class MyMapNode(Node):
         self.nav_client = ActionClient(self, NavigateToPose, 'navigate_to_pose')# client for nav2 locations?
         self.goal_in_progress = False
             # prevent cycling through same points
-        self.visited_frontiers = set()
+        self.visited_frontiers= set()
+        self.points_to_score=set()
     #function subscribed and using pose topic made by slam toolbox to get robot position
 
     def map_callback(self, msg):
@@ -24,45 +25,41 @@ class MyMapNode(Node):
            # return## exit mapcallback early to go to next iteration
         if self.goal_in_progress:### prevent spamming goals
             return
-        
+        high_score= -9999
         map_data=np.reshape(np.array(msg.data),(msg.info.height,msg.info.width))# update array to 2d array with current height and width 
         self.get_logger().info(f"This is the map dimesnsions {map_data.shape}")
-        origin_x=msg.info.origin.position.x
-        origin_y=msg.info.origin.position.y
-        if self.visited_frontiers:
-            last_x, last_y = list(self.visited_frontiers)[-1]
-        else:  # no last goal yet
-            last_x, last_y = (None, None)#get last visited for threshold distance
+        loop_counter=(map_data.shape[0]*map_data.shape[1])*.05
         found_frontier=False
         for i in range(msg.info.height):
             for j in range(msg.info.width):
                 if map_data[i][j]==0:# free space can travel to unknown}
-                    neighborhood = map_data[i-1:i+2, j-1:j+2]#check this
+                    neighborhood = map_data[max(0,i-1):min(i+2,msg.info.height), max(0,j-1):min(j+2,msg.info.width)]#check this
                     if -1 in neighborhood:# free space has frontier near it
                         physical_location=self.physical_location(i,j,msg.info.resolution,(msg.info.origin.position.x,msg.info.origin.position.y))# compute physical map cell coordinate
-                        # compute distance from origin
-                                            # round it to skip over .00000 differences may not need dist>1.5
-                        if (physical_location[0],physical_location[1]) not in self.visited_frontiers:# distance is sufficient far from origin and shortest and the hasent been to this frontier
-                            too_close=False
-                            if last_x is not None:# has been to a frontier before
-                                for (vistied_x, visited_y)in self.visited_frontiers:
-                                    if mt.sqrt((vistied_x-physical_location[0])**2+(visited_y-physical_location[1])**2)<1.5:# prevent from sending points so close
-                                        too_close=True
-                                        break
-                            if too_close:
-                                continue# skip frontier too close
-                                # REMOVE instead of using robot position using slam map use phyical position instead cause that will not change
+                        if (physical_location[0],physical_location[1]) not in self.visited_frontiers:# distance is sufficient far from origin and shortest and the hasent been to this frontie
+                            if(loop_counter>0 ):#takes 5 % of map points up to 2000 points to score
+                                loop_counter-=1
+                                self.points_to_score.add(physical_location)
+                                result=self.scoring(i,j,map_data,msg)
+                                if result[2]>high_score:
+                                    x=result[0]
+                                    y=result[1]
+                                    self.high_socre=result[2] 
+                                continue
+                        if len(self.points_to_score)>0:  
+                            physical_location=self.physical_location(x,y,msg.info.resolution,(msg.info.origin.position.x,msg.info.origin.position.y))# convert highest scoring point to real coordinates
                             x=physical_location[0]# store the x and y of the frontier
                             y=physical_location[1]
                             self.visited_frontiers.add(physical_location)
                             found_frontier=True
-            if found_frontier:##################### CHECK out of bounds conditions ALSO add scoring mechanism for better point selectionm
-                break
+                            self.get_logger().info(f'Selected frontier at map cell ({i}, {j}) with score {high_score} compared agasint {len(self.points_to_score)} points to score')
+                            self.points_to_score.clear()
 
 
         if found_frontier:# if nav2 fails some reason will send new coordinate
             self.goal_in_progress=True
             self.get_logger().info(f"Sending ({x:.2f}, {y:.2f})")
+            self.edge_prevention(x,y,msg)
             self.send_nav_goal(x,y)
         else:
             self.get_logger().info("No frontiers found — stopping map processing.")
@@ -73,6 +70,46 @@ class MyMapNode(Node):
         x=j*map_resolution+map_origin[0]
         y=i*map_resolution+map_origin[1]
         return (x,y)
+    
+
+    def scoring(self,i,j,map_data,msg): # Scoring function to select best frontier or a good enough frontier to limit back point selection
+        score=0
+        free=0
+        occupied=0
+        frontier=0
+        base_radius = int(0.5 / msg.info.resolution)  # about 0.5m window
+        if self.visited_frontiers is not None:
+            previous_location=list(self.visited_frontiers)[-1]
+        else:
+            previous_location=(0,0)
+        physical_location=self.physical_location(i,j,msg.info.resolution,(msg.info.origin.position.x,msg.info.origin.position.y))# compute physical map cell coordinate
+        distance=mt.sqrt((physical_location[0]-previous_location[0])**2+(physical_location[1]-previous_location[1])**2) 
+        neighborhood = map_data[max(0,i-base_radius):min(i+(base_radius+1),msg.info.height), max(0,j-base_radius):min(j+(1+base_radius),msg.info.width)]# neighborhood 11x11
+        for x in range(neighborhood.shape[0]):
+            for y in range(neighborhood.shape[1]):
+                if neighborhood[x][y]==0:
+                    free+=1
+                if neighborhood[x][y]==-1:# gathering context of the point to score it
+                    frontier+=1
+                if neighborhood[x][y]==100:
+                    occupied+=1
+        #scoring logic
+        free_ratio=free/(neighborhood.shape[0]*neighborhood.shape[1])
+        frontier_ratio=frontier/(neighborhood.shape[0]*neighborhood.shape[1])
+        occupied_ratio=occupied/(neighborhood.shape[0]*neighborhood.shape[1])
+        score-=occupied_ratio*10 # penalize occupied space
+        if free_ratio>0.75 or free_ratio<0.3:# information gain to low
+            score-=10
+        else:
+            score+=frontier_ratio*10 # encourage information gain
+        if distance<1.0 or distance>8.0: # too close or too far from last point
+            score-=10
+        if frontier_ratio<0.25:
+            score-=10 # not enough information gain
+        return i,j,score
+
+        #Score based on 
+            
 
     def send_nav_goal(self,x, y):
         # goal creation 
