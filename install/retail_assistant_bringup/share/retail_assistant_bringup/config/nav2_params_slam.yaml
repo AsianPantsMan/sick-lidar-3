@@ -136,8 +136,8 @@ controller_server:
       stateful: True
       plugin: "nav2_controller::SimpleGoalChecker"
       xy_goal_tolerance: 0.25
-      yaw_goal_tolerance: 6.28 # to ignore orientation
-    # Regulated Pure pursuit tl
+      yaw_goal_tolerance: 0.25
+    # DWB parameters
     FollowPath:
       plugin: "nav2_regulated_pure_pursuit_controller::RegulatedPurePursuitController"
       #Path tracking and lookahead
@@ -168,7 +168,7 @@ controller_server:
       rotate_to_heading_min_angle: 0.785
       max_angular_accel: 3.2
       max_robot_pose_search_dist: 10.0
-      min_distance_to_obstacle: 0.2
+      min_distance_to_obstacle: 0.1
       stateful: true
 
 local_costmap:

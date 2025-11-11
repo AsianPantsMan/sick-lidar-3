@@ -18,7 +18,7 @@ class AutoNav(Node):
         self.prox_back=self.create_subscription(Range,'/ultrasonic/back',self.proximity_callback,10)
         self.goals= ([(4.94 ,0.138),(-1.83,0.13),(-10.68,-0.136)],
                     [(4.92,5.00),(-1.61,4.59),(-10.43,4.59)],
-                    [(4.91,9.66),(-1.84,9.01),(-9.30,9.30)])# len for size
+                    [(4.91,9.66),(-1.84,9.01),(-9.30,9.30)])
         self.goal_in_progress=False
         self.goal_index=0 # keeps track of where to go next
         self.orientation=1.0
@@ -52,7 +52,7 @@ class AutoNav(Node):
             self.aisle_index+=1
         print(f"Sending nav2 a goal {x},{y}")
         self.nav_client.wait_for_server()# wait until the action server is available
-        send_future=self.nav_client.send_goal_async(goal,feedback_callback=self.feedback)# send the goal
+        send_future=self.nav_client.send_goal_async(goal)#,feedback_callback=self.feedback)# send the goal
         send_future.add_done_callback(self.goal_response_callback)#when this future finishes, call this function
 
     def feedback(self,goal_handle,feedback):
@@ -110,7 +110,7 @@ class AutoNav(Node):
             self.hold_index=False
             self.orientation*=-1.0# change orientation when changing aisles
         else:# if not changing aisles update goal index
-            if self.orientation>0:# even aisle go forward
+            if self.orientation>0:
                 self.goal_index+=1
                 if self.goal_index==len(self.goals[self.aisle_index])-1:#reaches end of aisle
                     self.hold_index=True
@@ -121,9 +121,9 @@ class AutoNav(Node):
         self.cycle()
 
 
-    def proximity_callback(self,sensor): # make proximity for interaction detetection a foot away from robot for now
+    def proximity_callback(self,sensor): # Human interaction detection
         direction=sensor.header.frame_id
-        if sensor.range< 0.5 and not self.paused:
+        if sensor.range < 0.5 and not self.paused:
             self.goal_in_progress=False     # consider a cooldown timer to prevent infinite triggers 
             self.paused=True
             self.get_logger().info(f"Person detected close to {direction}")

@@ -21,12 +21,10 @@ class MyMapNode(Node):
     #function subscribed and using pose topic made by slam toolbox to get robot position
 
     def map_callback(self, msg):
-        #if self.robot_position == [0.0, 0.0]:
-           # self.get_logger().warn("Waiting for valid robot pose before processing map...")
-           # return## exit mapcallback early to go to next iteration
         if self.goal_in_progress:### prevent spamming goals
             return
-        high_score= -9999
+        
+        high_score= -9999 
         map_data=np.reshape(np.array(msg.data),(msg.info.height,msg.info.width))# update array to 2d array with current height and width 
         self.get_logger().info(f"This is the map dimesnsions {map_data.shape}")
         loop_counter=int((map_data.shape[0]*map_data.shape[1])*.05)
@@ -37,7 +35,7 @@ class MyMapNode(Node):
                     if (neighborhood == -1).any():# free space has frontier near it
                         physical_location=self.physical_location(i,j,msg.info.resolution,(msg.info.origin.position.x,msg.info.origin.position.y))# compute physical map cell coordinate
                         if (physical_location[0],physical_location[1]) not in self.visited_frontiers:# distance is sufficient far from origin and shortest and the hasent been to this frontie
-                            if(loop_counter>0 ):#takes 5 % of map points up to 2000 points to score
+                            if(loop_counter>0 ):#takes 5 % of map point
                                 loop_counter-=1
                                 self.points_to_score.append(physical_location)
                                 result=self.scoring(i,j,map_data,msg)
@@ -106,7 +104,7 @@ class MyMapNode(Node):
         else:
             score+=frontier_ratio*10 # encourage information gain
         if distance<1.0 or distance>8.0: # too close or too far from last point
-            score-=40 #need to penalize higher
+            score-=40 
         if frontier_ratio<0.25:
             score-=10 # not enough information gain
         return i,j,score
