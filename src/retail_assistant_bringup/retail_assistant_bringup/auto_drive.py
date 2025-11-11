@@ -6,6 +6,7 @@ import numpy as np
 from rclpy.action import ActionClient
 from nav2_msgs.action import NavigateToPose             
 from geometry_msgs.msg import PoseStamped
+from rclpy.timer import Timer
 #node + subsscriber initalization
 class MyMapNode(Node):
     def __init__(self):
@@ -15,8 +16,8 @@ class MyMapNode(Node):
         self.nav_client = ActionClient(self, NavigateToPose, 'navigate_to_pose')# client for nav2 locations?
         self.goal_in_progress = False
             # prevent cycling through same points
-        self.visited_frontiers= set()
-        self.points_to_score=set()
+        self.visited_frontiers= []
+        self.points_to_score=[]
     #function subscribed and using pose topic made by slam toolbox to get robot position
 
     def map_callback(self, msg):
@@ -38,7 +39,7 @@ class MyMapNode(Node):
                         if (physical_location[0],physical_location[1]) not in self.visited_frontiers:# distance is sufficient far from origin and shortest and the hasent been to this frontie
                             if(loop_counter>0 ):#takes 5 % of map points up to 2000 points to score
                                 loop_counter-=1
-                                self.points_to_score.add(physical_location)
+                                self.points_to_score.append(physical_location)
                                 result=self.scoring(i,j,map_data,msg)
                                 if result[2]>high_score:
                                     x=result[0]
@@ -50,7 +51,7 @@ class MyMapNode(Node):
             physical_location=self.physical_location(x,y,msg.info.resolution,(msg.info.origin.position.x,msg.info.origin.position.y))# convert highest scoring point to real coordinates
             x=physical_location[0]# store the x and y of the frontier
             y=physical_location[1]
-            self.visited_frontiers.add(physical_location)
+            self.visited_frontiers.append(physical_location)
             self.get_logger().info(f'Selected frontier at map cell ({i}, {j}) with score {high_score} compared agasint {len(self.points_to_score)} points to score')
             self.points_to_score.clear()
             self.goal_in_progress=True
@@ -72,9 +73,10 @@ class MyMapNode(Node):
         free=0
         occupied=0
         frontier=0
+        distance_to_wall=10
         base_radius = int(0.5 / msg.info.resolution)  # about 0.5m window
         if self.visited_frontiers:# sim world lenght between aisles and height =20m
-            previous_location=list(self.visited_frontiers)[-1]
+            previous_location=self.visited_frontiers[-1]
         else:
             previous_location=(0,0)
         physical_location=self.physical_location(i,j,msg.info.resolution,(msg.info.origin.position.x,msg.info.origin.position.y))# compute physical map cell coordinate
@@ -87,12 +89,18 @@ class MyMapNode(Node):
                 if neighborhood[x][y]==-1:# gathering context of the point to score it
                     frontier+=1
                 if neighborhood[x][y]==100:
+                    occupied_physical_location=self.physical_location(i-base_radius+x,j-base_radius+y,msg.info.resolution,(msg.info.origin.position.x,msg.info.origin.position.y))
+                    d=mt.sqrt((physical_location[0]-occupied_physical_location[0])**2+(physical_location[1]-occupied_physical_location[1])**2)
+                    distance_to_wall=min(d,distance_to_wall)
                     occupied+=1
         #scoring logic
         free_ratio=free/(neighborhood.shape[0]*neighborhood.shape[1])
         frontier_ratio=frontier/(neighborhood.shape[0]*neighborhood.shape[1])
         occupied_ratio=occupied/(neighborhood.shape[0]*neighborhood.shape[1])
         score-=occupied_ratio*10 # penalize occupied space
+        if distance_to_wall<0.2:#frontier inside wall
+            self.points_to_score.pop()
+            return 0,0,-99999#inside wall 
         if free_ratio>0.75 or free_ratio<0.3:# information gain to low
             score-=10
         else:
@@ -128,12 +136,17 @@ class MyMapNode(Node):
         self.get_logger().info("Goal accepted navigating")
         result_future=goal_handle.get_result_async()
         result_future.add_done_callback(self.goal_result_callback)
+
     def goal_result_callback(self,future):
         result=future.result().result
         self.get_logger().info(f"Goal completed with result: {result}")
-        self.prox_wait_timer=self.create_timer(10.0,self.enable_proximity)#non blocking 
-        self.goal_in_progress=False # so next frontier can begin
+        self.wait_timer=self.create_timer(3.0,self.wait_then_send_goal)#non blocking 
+         # so next frontier can begin
     
+    def wait_then_send_goal(self):
+        self.wait_timer.cancel()
+        self.goal_in_progress=False
+
 def main():
     rclpy.init()## initialize rclpy which sets up all the ros communication stuff
     node = MyMapNode()# create map node object
