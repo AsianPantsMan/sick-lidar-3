@@ -28,8 +28,7 @@ class MyMapNode(Node):
         high_score= -9999
         map_data=np.reshape(np.array(msg.data),(msg.info.height,msg.info.width))# update array to 2d array with current height and width 
         self.get_logger().info(f"This is the map dimesnsions {map_data.shape}")
-        loop_counter=(map_data.shape[0]*map_data.shape[1])*.05
-        found_frontier=False
+        loop_counter=int((map_data.shape[0]*map_data.shape[1])*.05)
         for i in range(msg.info.height):
             for j in range(msg.info.width):
                 if map_data[i][j]==0:# free space can travel to unknown}
@@ -44,22 +43,18 @@ class MyMapNode(Node):
                                 if result[2]>high_score:
                                     x=result[0]
                                     y=result[1]
-                                    self.high_score=result[2] 
+                                    high_score=result[2] 
                                 continue
-                        
-                        physical_location=self.physical_location(x,y,msg.info.resolution,(msg.info.origin.position.x,msg.info.origin.position.y))# convert highest scoring point to real coordinates
-                        x=physical_location[0]# store the x and y of the frontier
-                        y=physical_location[1]
-                        self.visited_frontiers.add(physical_location)
-                        found_frontier=True
-                        self.get_logger().info(f'Selected frontier at map cell ({i}, {j}) with score {high_score} compared agasint {len(self.points_to_score)} points to score')
-                        self.points_to_score.clear()
-
-
-        if found_frontier:# if nav2 fails some reason will send new coordinate
+                                            
+        if len(self.points_to_score)>0:# if nav2 fails some reason will send new coordinate
+            physical_location=self.physical_location(x,y,msg.info.resolution,(msg.info.origin.position.x,msg.info.origin.position.y))# convert highest scoring point to real coordinates
+            x=physical_location[0]# store the x and y of the frontier
+            y=physical_location[1]
+            self.visited_frontiers.add(physical_location)
+            self.get_logger().info(f'Selected frontier at map cell ({i}, {j}) with score {high_score} compared agasint {len(self.points_to_score)} points to score')
+            self.points_to_score.clear()
             self.goal_in_progress=True
             self.get_logger().info(f"Sending ({x:.2f}, {y:.2f})")
-            self.edge_prevention(x,y,msg)
             self.send_nav_goal(x,y)
         else:
             self.get_logger().info("No frontiers found — stopping map processing.")
@@ -78,7 +73,7 @@ class MyMapNode(Node):
         occupied=0
         frontier=0
         base_radius = int(0.5 / msg.info.resolution)  # about 0.5m window
-        if self.visited_frontiers:
+        if self.visited_frontiers:# sim world lenght between aisles and height =20m
             previous_location=list(self.visited_frontiers)[-1]
         else:
             previous_location=(0,0)
@@ -103,7 +98,7 @@ class MyMapNode(Node):
         else:
             score+=frontier_ratio*10 # encourage information gain
         if distance<1.0 or distance>8.0: # too close or too far from last point
-            score-=10
+            score-=40 #need to penalize higher
         if frontier_ratio<0.25:
             score-=10 # not enough information gain
         return i,j,score
@@ -136,6 +131,7 @@ class MyMapNode(Node):
     def goal_result_callback(self,future):
         result=future.result().result
         self.get_logger().info(f"Goal completed with result: {result}")
+        self.prox_wait_timer=self.create_timer(10.0,self.enable_proximity)#non blocking 
         self.goal_in_progress=False # so next frontier can begin
     
 def main():
