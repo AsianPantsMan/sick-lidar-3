@@ -46,7 +46,7 @@ def generate_launch_description():
                                                           'params_file': os.path.join(
                                                              get_package_share_directory(package_name),
                                                              'config',
-                                                             'nav2_params.yaml'
+                                                             'nav2_params_slam.yaml'
                                                                 )}.items())  
 
 

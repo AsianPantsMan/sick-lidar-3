@@ -18,6 +18,7 @@ class MyMapNode(Node):
             # prevent cycling through same points
         self.visited_frontiers= []
         self.points_to_score=[]
+        self.points_scored=0
     #function subscribed and using pose topic made by slam toolbox to get robot position
 
     def map_callback(self, msg):
@@ -37,7 +38,7 @@ class MyMapNode(Node):
                         if (physical_location[0],physical_location[1]) not in self.visited_frontiers:# distance is sufficient far from origin and shortest and the hasent been to this frontie
                             if(loop_counter>0 ):#takes 5 % of map point
                                 loop_counter-=1
-                                self.points_to_score.append(physical_location)
+                                self.points_scored+=1 # maybe opt for counter for increased efficiency
                                 result=self.scoring(i,j,map_data,msg)
                                 if result[2]>high_score:
                                     x=result[0]
@@ -45,13 +46,13 @@ class MyMapNode(Node):
                                     high_score=result[2] 
                                 continue
                                             
-        if len(self.points_to_score)>0:# if nav2 fails some reason will send new coordinate
+        if self.points_scored>0:# if nav2 fails some reason will send new coordinate
             physical_location=self.physical_location(x,y,msg.info.resolution,(msg.info.origin.position.x,msg.info.origin.position.y))# convert highest scoring point to real coordinates
             x=physical_location[0]# store the x and y of the frontier
             y=physical_location[1]
             self.visited_frontiers.append(physical_location)
-            self.get_logger().info(f'Selected frontier at map cell ({i}, {j}) with score {high_score} compared agasint {len(self.points_to_score)} points to score')
-            self.points_to_score.clear()
+            self.get_logger().info(f'Selected frontier at map cell ({i}, {j}) with score {high_score} compared agasint {self.points_scored} points to score')
+            self.points_scored=0
             self.goal_in_progress=True
             self.get_logger().info(f"Sending ({x:.2f}, {y:.2f})")
             self.send_nav_goal(x,y)
@@ -86,7 +87,7 @@ class MyMapNode(Node):
                     free+=1
                 if neighborhood[x][y]==-1:# gathering context of the point to score it
                     frontier+=1
-                if neighborhood[x][y]==100:
+                if neighborhood[x][y]==100: # m
                     occupied_physical_location=self.physical_location(i-base_radius+x,j-base_radius+y,msg.info.resolution,(msg.info.origin.position.x,msg.info.origin.position.y))
                     d=mt.sqrt((physical_location[0]-occupied_physical_location[0])**2+(physical_location[1]-occupied_physical_location[1])**2)
                     distance_to_wall=min(d,distance_to_wall)
@@ -97,7 +98,7 @@ class MyMapNode(Node):
         occupied_ratio=occupied/(neighborhood.shape[0]*neighborhood.shape[1])
         score-=occupied_ratio*10 # penalize occupied space
         if distance_to_wall<0.2:#frontier inside wall
-            self.points_to_score.pop()
+            self.points_scored-=1
             return 0,0,-99999#inside wall 
         if free_ratio>0.75 or free_ratio<0.3:# information gain to low
             score-=10
