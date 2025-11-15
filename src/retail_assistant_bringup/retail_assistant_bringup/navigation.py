@@ -20,19 +20,17 @@ class AutoNav(Node):
                     [(4.92,5.00),(-1.61,4.59),(-10.43,4.59)],
                     [(4.91,9.66),(-1.84,9.01),(-9.30,9.30)])
         self.goal_in_progress=False
-        self.goal_index=0 # keeps track of where to go next
+        self.goal_index=2 # keeps track of where to go next
         self.orientation=1.0
         self.interaction=False
         self.paused=False
         self.goal_handle = None
         self.distance_to_goal=0
-        self.aisle_index=0
+        self.aisle_index=2
         self.hold_index=False
         self.cycle()# loop function
 
     def cycle(self): 
-        if self.aisle_index==len(self.goals):# reset aisle index
-            self.aisle_index=0
         if not self.goal_in_progress:
             x=self.goals[self.aisle_index][self.goal_index][0]
             y=self.goals[self.aisle_index][self.goal_index][1]
@@ -49,7 +47,8 @@ class AutoNav(Node):
         goal.pose.pose.position.y =y
         goal.pose.pose.orientation.w = self.orientation
         if(self.hold_index):# increase aisle on the hold index becuase when aisles change
-            self.aisle_index+=1
+            if(self.aisle_index<=len(self.goals)-1):
+                self.aisle_index+=1
         print(f"Sending nav2 a goal {x},{y}")
         self.nav_client.wait_for_server()# wait until the action server is available
         send_future=self.nav_client.send_goal_async(goal)#,feedback_callback=self.feedback)# send the goal
@@ -107,6 +106,8 @@ class AutoNav(Node):
         self.get_logger().info(f"Goal completed with result: {result}")
         self.goal_in_progress=False
         if self.hold_index:# repeat goal_index when reach ends
+            if self.aisle_index>=len(self.goals):# reset aisle index
+                self.aisle_index=0
             self.hold_index=False
             self.orientation*=-1.0# change orientation when changing aisles
         else:# if not changing aisles update goal index
@@ -127,8 +128,11 @@ class AutoNav(Node):
             self.goal_in_progress=False     # consider a cooldown timer to prevent infinite triggers 
             self.paused=True
             self.get_logger().info(f"Person detected close to {direction}")
-            self.get_logger().info("Cancelling nav2 destination and waiting for interaction")
-            cancel_future=self.nav_client._cancel_goal_async(self.goal_handle)
+            if self.goal_handle is not None:
+                self.get_logger().info("Cancelling nav2 destination and waiting for interaction")
+                cancel_future=self.nav_client._cancel_goal_async(self.goal_handle)
+            else:
+                self.get_logger().warn("Proximity triggered but NO active Nav2 goal exists yet — skipping cancel.")
             self.get_logger().info("Waiting for customer to finish interaction")
 
             self.resume_timer = self.create_timer(5.0, self.resume_navigation) # wait for interaction and is non blocking
