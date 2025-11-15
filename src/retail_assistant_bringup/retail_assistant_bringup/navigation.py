@@ -20,13 +20,13 @@ class AutoNav(Node):
                     [(4.92,5.00),(-1.61,4.59),(-10.43,4.59)],
                     [(4.91,9.66),(-1.84,9.01),(-9.30,9.30)])
         self.goal_in_progress=False
-        self.goal_index=2 # keeps track of where to go next
+        self.goal_index=0 # keeps track of where to go next
         self.orientation=1.0
         self.interaction=False
         self.paused=False
         self.goal_handle = None
         self.distance_to_goal=0
-        self.aisle_index=2
+        self.aisle_index=0
         self.hold_index=False
         self.cycle()# loop function
 
