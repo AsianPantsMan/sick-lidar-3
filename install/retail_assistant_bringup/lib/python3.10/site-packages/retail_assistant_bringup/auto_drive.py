@@ -30,9 +30,11 @@ class MyMapNode(Node):
         self.get_logger().info(f"This is the map dimesnsions {map_data.shape}")
         loop_counter=int((map_data.shape[0]*map_data.shape[1])*.05)
         for i in range(msg.info.height):
-            if loop_counter<0:
+            if loop_counter<=0:
                 break
             for j in range(msg.info.width):
+                if loop_counter<=0:
+                    break
                 if map_data[i][j]==0:# free space can travel to unknown}
                     neighborhood = map_data[max(0,i-1):min(i+2,msg.info.height), max(0,j-1):min(j+2,msg.info.width)]#check this
                     if (neighborhood == -1).any():# free space has frontier near it
