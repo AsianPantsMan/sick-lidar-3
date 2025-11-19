@@ -6,6 +6,7 @@ from nav2_msgs.action import NavigateToPose
 from geometry_msgs.msg import PoseStamped
 from sensor_msgs.msg import Range
 from rclpy.timer import Timer
+import math as mt
 from time import sleep
 # NEED FILE PROCESSING 
 #NEED to edit config file to have higher tolerances for avoiding stuff
@@ -28,62 +29,82 @@ class AutoNav(Node):
         self.distance_to_goal=0
         self.aisle_index=0
         self.hold_index=False
+        self.previous_waypoint=None
+        self.current_goal=None
+        self.skip_counter=0
         self.cycle()# loop function
 
-    def cycle(self): 
+    def cycle(self):
+        if(self.skip_counter==2):
+            self.get_logger.warn('STUCK IN A AISLE WAITING FOR ASSISTANCE')
+            self.assistance_timer = self.create_timer(15.0, self.assisted) 
         if not self.goal_in_progress:
             x=self.goals[self.aisle_index][self.goal_index][0]
             y=self.goals[self.aisle_index][self.goal_index][1]
+            self.current_goal=(x,y)
             print(f"about to send {x} and {y}")
+            print(f"Goal_index= {self.goal_index} Aisle_index= {self.aisle_index}")
             self.send_nav_goal(x,y)
 
 
-    def send_nav_goal(self,x, y):
+    def send_nav_goal(self,x,y):
         # goal creation 
         goal = NavigateToPose.Goal()
         goal.pose.header.frame_id = 'map'
         goal.pose.header.stamp = self.get_clock().now().to_msg()
-        goal.pose.pose.position.x =x
-        goal.pose.pose.position.y =y
+        goal.pose.pose.position.x=x
+        goal.pose.pose.position.y=y
         goal.pose.pose.orientation.w = self.orientation
+        self.previous_aisle_index=self.aisle_index
         if(self.hold_index):# increase aisle on the hold index becuase when aisles change
             if(self.aisle_index<=len(self.goals)-1):
                 self.aisle_index+=1
         print(f"Sending nav2 a goal {x},{y}")
         self.nav_client.wait_for_server()# wait until the action server is available
-        send_future=self.nav_client.send_goal_async(goal)#,feedback_callback=self.feedback)# send the goal
+        send_future=self.nav_client.send_goal_async(goal)#,feedback_callback=self.aisle_skip_callback)# send the goal
         send_future.add_done_callback(self.goal_response_callback)#when this future finishes, call this function
 
-    def feedback(self,goal_handle,feedback):
-        feedback.distance_remaining=self.distance_to_goal
-        if(self.distance_to_goal>16):#TODO come up with better threshold distance
-            #add goal cancellation here and send a goal and increment goal index
-            self.get_logger().info("Cancelling nav2 destination to prevent routing through another aisle")
-            cancel_future=self.nav_client._cancel_goal_async(self.goal_handle)# cancel current goal
-        if(self.goal_index==0):# begining of aisle is blocked
-            if(self.aisle_index==len(self.goals)-1):
-                aisle_index-=1
-                self.logger().warn("Beginning of aisle is blocked, moving to previous aisle")
-            else:
-               aisle_index+=1
-               self.logger().warn("Beginning of aisle is blocked, moving to next aisle")
-        elif(len(self.goals[self.aisle_index])-1):# end of aisle is blocked
-            if(self.aisle_index==len(self.goals)-1):
-                aisle_index-=1
-                self.logger().warn("End of aisle is blocked, moving to previous aisle")
-            else:
-                aisle_index+=1
-                self.logger().warn("End of aisle is blocked, moving to next aisle")
-        else: # middle of the aisle
-            if(self.aisle_index==len(self.goals)-1):
-                aisle_index-=1
-                self.goal_index=0
-                self.logger().warn("Middle of aisle is blocked, moving to the beginning of previous aisle")
-            else:
-                aisle_index+=1
-                self.goal_index=0
-                self.logger().warn("Middle of aisle is blocked, moving to the beginning of next aisle")
-        self.cycle()# start from new points effectively skipping the blocked aisle
+    def aisle_skip_callback(self,msg):
+        if self.previous_waypoint is not None:# been navigating
+            distance_from_goal=msg.feedback.distance_remaining# distance of
+            fail_attempts=msg.feedback.number_of_recoveries
+            max_distance=mt.sqrt((self.current_goal[0]-self.previous_waypoint[0])**2+(self.current_goal[1]-self.current_goal[1])**2)#distace from where it is to where its going
+            max_distance=mt.sqrt((self.goals[self.aisle_index][self.goal_index][0]-self.goals[self.aisle_index][self.goal_index][0])**2+((self.goals[self.aisle_index][self.goal_index][1]-self.goals[self.aisle_index][self.goal_index][1])))*.25## 25 percent of an aisle
+            if(max_distance>distance_from_goal and fail_attempts>2):
+                if(self.aisle_index==len(self.goals)-1):
+                    self.aisle_index=0
+                    if(self.goal_index==0 or self.goal_index==1):
+                        self.orientation=-1
+                        self.goal_index=2
+                        self.skip_counter+=1
+                    else:
+                        self.orientation=1
+                        self.goal_index=0
+                        self.skip_counter+=1
+                else:
+                    self.ailse_index+=1
+                    if(self.goal_index==0 or self.goal_index==1):# beginning of aisle or middle of aisle
+                        self.orientation=-1
+                        self.goal_index=2
+                        self.skip_counter+=1
+                    else:
+                        self.orientation=1
+                        self.goal_index=0
+                        self.skip_counter+=1
+        else:# Started in a blocked aisle 
+            if(fail_attempts>=2):# failed too many times skip
+                self.ailse_index+=1
+                if(self.goal_index==0 or self.goal_index==1):# beginning of aisle or middle of aisle
+                    self.orientation=-1
+                    self.goal_index=2
+                    self.skip_counter+=1
+                else:
+                    self.orientation=1
+                    self.goal_index=0
+                    self.skip_counter+=1   
+        self.cycle()# restart with new points
+                    
+        
     
             
     def goal_response_callback(self,future):
@@ -104,6 +125,8 @@ class AutoNav(Node):
             self.get_logger().warn("Goal finished but robot is paused — waiting before continuing.")
             return
         self.get_logger().info(f"Goal completed with result: {result}")
+        self.skip_counter=0
+        self.previous_waypoint=self.goals[self.aisle_index][self.goal_index]
         self.goal_in_progress=False
         if self.hold_index:# repeat goal_index when reach ends
             if self.aisle_index>=len(self.goals):# reset aisle index
@@ -143,8 +166,14 @@ class AutoNav(Node):
             self.get_logger().info("Waiting for customer to finish interaction")
         else:
             self.get_logger().info("No interaction continue navigation")
-            self.send_nav_goal(self.goals[self.aisle_index][self.goal_index][0],self.goals[self.aisle_index][self.goal_index][1])
+            self.send_nav_goal(self.goals[self.aisle_index][self.goal_index][0],self.goals[self.aisle_index][self.goal_index][1]) # consider just doing the self.cycle() function
             self.prox_wait_timer=self.create_timer(10.0,self.enable_proximity)# Allow robot to move for a little before resuming proximity detection
+
+    def assisted(self):
+        self.assistance_timer.cancel()
+        self.get_logger().info("I was assisted")
+        self.skip_counter=0
+        self.cycle()
 
     def enable_proximity(self):
         self.prox_wait_timer.cancel()# cancel timer this  prevents from staying stuck due to proximity sensor
