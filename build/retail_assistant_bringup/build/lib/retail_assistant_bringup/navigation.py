@@ -66,46 +66,43 @@ class AutoNav(Node):
     def aisle_skip_callback(self,msg):
         if self.skip:# prevent spamming
             return
-        fail_attempts=msg.feedback.number_of_recoveries
         distance_from_goal=msg.feedback.distance_remaining
+        robot_x=msg.feedback.current_pose.pose.position.x
+        robot_y=msg.feedback.current_pose.pose.position.y
         end_aisle=len(self.goals[self.aisle_index])-1
+        start_aisle=(self.goals[self.aisle_index][0][0],self.goals[self.aisle_index][0][1])# beginin of aisle
+        finish_aisle=(self.goals[self.aisle_index][len(self.goals[self.aisle_index])-1][0],self.goals[self.aisle_index][len(self.goals[self.aisle_index])-1][1])# end of aisle 
         if self.previous_waypoint is not None:# been navigating
-            max_distance=mt.sqrt((self.current_goal[0]-self.previous_waypoint[0])**2+(self.current_goal[1]-self.previous_waypoint[1])**2)#distace from where it is to where its going
-            max_distance+=mt.sqrt((self.goals[self.aisle_index][end_aisle][0]-self.goals[self.aisle_index][0][0])**2+((self.goals[self.aisle_index][end_aisle][1]-self.goals[self.aisle_index][0][1]))**2)*.25## 25 percent of an aisle
-            if(max_distance<distance_from_goal or fail_attempts>2):
-                if(self.aisle_index==len(self.goals)-1):
-                    self.aisle_index=0
-                    if(self.goal_index==0 or self.goal_index==1):
-                        self.orientation=-1
-                        self.goal_index=2
-                        self.skip=True
-                        #self.skip_once=True
-                    else:
-                        self.orientation=1
-                        self.goal_index=0
-                        self.skip=True
-                        #self.skip_counter+=1
-                       
-                else:
-                    self.aisle_index+=1
-                    if(self.goal_index==0 or self.goal_index==1):# beginning of aisle or middle of aisle
-                        self.orientation=-1
-                        self.goal_index=2
-                        self.skip=True
-                        
-                    else:
-                        self.orientation=1
-                        self.goal_index=0
-                        self.skip=True
-                print(f"recoveries={fail_attempts} and distance {distance_from_goal}")
+            if(self.aisle_index==len(self.goals)-1):# last aisle
+                between_aisle=(self.goals[0][0][0],self.goals[0][0][1])# distance between aisle despite top or bottom should be relatively the same
+            else:
+                distance_between_aisle=mt.sqrt((self.goals[self.aisle_index+1][0][0]-start_aisle[0])**2+(self.goals[self.aisle_index+1][0][1]-start_aisle[1])**2)
+            if(self.goal_index==0):#beginning of aisle is blocked
+        
+                max_distance=mt.sqrt((finish_aisle[0]-self.previous_waypoint[0])**2+(finish_aisle[1]-self.previous_waypoint[1])**2)
+                max_distance+=distance_between_aisle
+                max_distance+=max_distance*.25
+            elif(self.goal_index==1):# middle of aisle is blocked
+                max_distance=mt.sqrt((finish_aisle[0]-self.previous_waypoint[0])**2+(finish_aisle[1]-self.previous_waypoint[1])**2)
+                max_distance+=distance_between_aisle
+                max_distance+=max_distance*.25
+            elif(self.goal_index==2):# end of aisle is blocked
+                max_distance=mt.sqrt((start_aisle[0]-self.previous_waypoint[0])**2+(start_aisle[1]-self.previous_waypoint[1])**2)
+                max_distance+=distance_between_aisle
+                max_distance+=max_distance*.25
+
+            if(max_distance<distance_from_goal):
+                print(f"distance to goal {distance_from_goal} and the max distance {max_distance}")
+                self.previous_waypoint=(robot_x,robot_y)# change previous goal
+                self.skip=True
+                self.goal_in_progress=False
                 cancel_future=self.nav_client._cancel_goal_async(self.goal_handle)# cancel goal
-                #self.skip=False
-                #if(self.skip_once):
-                    #self.stuck=True
-                self.cycle()# restart with new points
+
+                
         else:# Started in a blocked aisle 
-            if(fail_attempts>=2):# failed too many times skip
-                self.aisle_index+=1
+            max_distance=mt.sqrt((self.goals[self.aisle_index][end_aisle][0]-self.goals[self.aisle_index][0][0])**2+((self.goals[self.aisle_index][end_aisle][1]-self.goals[self.aisle_index][0][1]))**2)*1.25
+            if(max_distance<distance_from_goal):# failed too many times skip
+                self.previous_waypoint=(robot_x,robot_y)
                 if(self.goal_index==0 or self.goal_index==1):# beginning of aisle or middle of aisle
                     self.orientation=-1
                     self.goal_index=2
@@ -114,11 +111,8 @@ class AutoNav(Node):
                     self.orientation=1
                     self.goal_index=0
                     self.skip=True
+                self.goal_in_progress=False
                 cancel_future=self.nav_client._cancel_goal_async(self.goal_handle)# cancel goal   
-                self.skip=False
-               # if(self.skip_once):
-                   # self.stuck=True
-                self.cycle()# restart with new points
                     
         
     
@@ -140,25 +134,51 @@ class AutoNav(Node):
         if self.paused:# goal_result_callback runs anytime a goal is updated including cancellations prevents spam of goals when prox detect
             self.get_logger().warn("Goal finished but robot is paused — waiting before continuing.")
             return
-        self.get_logger().info(f"Goal completed with result: {result}")
-        self.skip=False
-        self.previous_waypoint=self.goals[self.aisle_index][self.goal_index]# save waypoint before changing
-        self.goal_in_progress=False
-        if self.hold_index:# repeat goal_index when reach ends
-            self.hold_index=False
-            self.aisle_index+=1
-            if(self.aisle_index==len(self.goals)):
-                self.aisle_index=0
-            self.orientation*=-1.0# change orientation when changing aisles
-        else:# if not changing aisles update goal index
-            if self.orientation>0:
-                self.goal_index+=1
-                if self.goal_index==len(self.goals[self.aisle_index])-1:#reaches end of aisle
-                    self.hold_index=True
-            else:# odd aisle go backward
-                self.goal_index-=1
-                if self.goal_index==0:# at beginning of aisle
-                    self.hold_index=True
+        if self.skip:
+            self.get_logger().warn("Ailse blocked skipping to next aisle")
+            self.planner_timer = self.create_timer(5.0, self.allow_planner_update)
+            self.skip=False
+            if(self.aisle_index==len(self.goals)-1):
+                    self.aisle_index=0
+                    if(self.goal_index==0 or self.goal_index==1):
+                        self.orientation=-1.0
+                        self.goal_index=2
+                        #self.skip_once=True
+                    else:
+                        self.orientation=1.0
+                        self.goal_index=0
+                        #self.skip_counter+=1
+                       
+            else:
+                self.aisle_index+=1
+                if(self.goal_index==0 or self.goal_index==1):# beginning of aisle or middle of aisle
+                    self.orientation=-1
+                    self.goal_index=2
+                        
+                else:
+                    self.orientation=1
+                    self.goal_index=0
+            self.orientation=float(self.orientation)
+        else:   
+            self.get_logger().info(f"Goal completed with result: {result}")
+            self.skip=False
+            self.previous_waypoint=self.goals[self.aisle_index][self.goal_index]# save waypoint before changing
+            self.goal_in_progress=False
+            if self.hold_index:# repeat goal_index when reach ends
+                self.hold_index=False
+                self.aisle_index+=1
+                if(self.aisle_index==len(self.goals)):
+                    self.aisle_index=0
+                self.orientation*=-1.0# change orientation when changing aisles
+            else:# if not changing aisles update goal index
+                if self.orientation>0:
+                    self.goal_index+=1
+                    if self.goal_index==len(self.goals[self.aisle_index])-1:#reaches end of aisle
+                        self.hold_index=True
+                else:# odd aisle go backward
+                    self.goal_index-=1
+                    if self.goal_index==0:# at beginning of aisle
+                        self.hold_index=True
         self.cycle()
 
 
@@ -186,7 +206,9 @@ class AutoNav(Node):
             #self.send_nav_goal(self.goals[self.aisle_index][self.goal_index][0],self.goals[self.aisle_index][self.goal_index][1]) # consider just doing the self.cycle() function
             self.cycle()
             self.prox_wait_timer=self.create_timer(10.0,self.enable_proximity)# Allow robot to move for a little before resuming proximity detection
-
+    def allow_planner_update(self):
+        self.planner_timer.cancel()
+        
     def assisted(self):
         self.assistance_timer.cancel()
         self.get_logger().info("I was assisted")
