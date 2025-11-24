@@ -78,19 +78,9 @@ class AutoNav(Node):
                 distance_between_aisle=mt.sqrt(self.goals[len(self.goals)-1][0][0]-(between_aisle[0])**2+(self.goals[len(self.goals)-1][0][1]-between_aisle[1])**2)
             else:
                 distance_between_aisle=mt.sqrt((self.goals[self.aisle_index+1][0][0]-start_aisle[0])**2+(self.goals[self.aisle_index+1][0][1]-start_aisle[1])**2)
-            if(self.goal_index==0):#beginning of aisle is blocked
-        
-                max_distance=mt.sqrt((finish_aisle[0]-self.previous_waypoint[0])**2+(finish_aisle[1]-self.previous_waypoint[1])**2)
-                max_distance+=distance_between_aisle
-                max_distance+=max_distance*.25
-            elif(self.goal_index==1):# middle of aisle is blocked
-                max_distance=mt.sqrt((finish_aisle[0]-self.previous_waypoint[0])**2+(finish_aisle[1]-self.previous_waypoint[1])**2)
-                max_distance+=distance_between_aisle
-                max_distance+=max_distance*.25
-            elif(self.goal_index==2):# end of aisle is blocked
-                max_distance=mt.sqrt((start_aisle[0]-self.previous_waypoint[0])**2+(start_aisle[1]-self.previous_waypoint[1])**2)
-                max_distance+=distance_between_aisle
-                max_distance+=max_distance*.25
+                max_distance=mt.sqrt((finish_aisle[0]-start_aisle[0])**2+(finish_aisle[1]-start_aisle[1])**2)# distance of the aisle 
+                max_distance+=distance_between_aisle# distance between aisles 
+                max_distance+=max_distance*.25# padding
 
             if(max_distance<distance_from_goal):
                 print(f"distance to goal {distance_from_goal} and the max distance {max_distance}")
@@ -101,7 +91,7 @@ class AutoNav(Node):
                 cancel_future=self.nav_client._cancel_goal_async(self.goal_handle)# cancel goal
 
                 
-        else:# Started in a blocked aisle 
+        else:# Started in a blocked aisle Need to refine this
             max_distance=mt.sqrt((self.goals[self.aisle_index][end_aisle][0]-self.goals[self.aisle_index][0][0])**2+((self.goals[self.aisle_index][end_aisle][1]-self.goals[self.aisle_index][0][1]))**2)*1.25
             if(max_distance<distance_from_goal):# failed too many times skip
                 self.previous_waypoint=(robot_x,robot_y)
@@ -138,18 +128,23 @@ class AutoNav(Node):
         if self.paused:# goal_result_callback runs anytime a goal is updated including cancellations prevents spam of goals when prox detect
             self.get_logger().warn("Goal finished but robot is paused — waiting before continuing.")
             return
-        if self.reverse:
+        if self.reverse:# skip aisle indexing behavior
             self.get_logger().warn("Ailse blocked skipping to next aisle")
-            self.planner_timer = self.create_timer(10, self.allow_planner_update)
+            self.planner_timer = self.create_timer(10, self.allow_planner_update)# timer to wait till check aisles again 
             self.orientation*=-1.0
             self.hold_index=False
             self.reverse=False
             if self.orientation>0:
                 self.goal_index+=1
+                if self.goal_index==len(self.goals[self.aisle_index])-1:
+                    self.hold_index=True
             else:
                 self.goal_index-=1
+                if self.ailse_index==0:
+                    self.hold_index=True
             self.cycle()
             return 
+        
         self.get_logger().info(f"Goal completed with result: {result}")
         self.previous_waypoint=self.goals[self.aisle_index][self.goal_index]# save waypoint before changing
         self.goal_in_progress=False
