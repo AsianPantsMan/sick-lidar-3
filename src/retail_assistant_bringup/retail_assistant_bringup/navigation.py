@@ -26,6 +26,7 @@ class AutoNav(Node):
         self.orientation=1.0
         self.interaction=False
         self.paused=False
+        self.unstuck=False
         self.goal_handle = None
         self.distance_to_goal=0
         self.aisle_index=0
@@ -38,13 +39,16 @@ class AutoNav(Node):
         self.in_aisle=True
         self.back_to_start=False
         self.changing_aisle=False
+        self.closest_distance_to_goal=99999
+        self.stuck=False
+        self.progression_counter=0
+        self.progression_timer = self.create_timer(30, self.check_progression)
+        #self.robot_x=0
+        #self.robot_y=0
         self.cycle()# loop function
 
     def cycle(self):
         print(f"Goal_index= {self.goal_index} Aisle_index= {self.aisle_index} ")
-        #if(self.skip_counter==2):
-            #self.get_logger.warn('STUCK IN A AISLE WAITING FOR ASSISTANCE')
-            #self.assistance_timer = self.create_timer(15.0, self.assisted) 
         if not self.goal_in_progress:
             x=self.goals[self.aisle_index][self.goal_index][0]
             y=self.goals[self.aisle_index][self.goal_index][1]
@@ -69,11 +73,14 @@ class AutoNav(Node):
         send_future.add_done_callback(self.goal_response_callback)#when this future finishes, call this function
 
     def aisle_skip_callback(self,msg): # add last aisle behavior 
+        self.distance_to_goal=msg.feedback.distance_remaining
+        self.robot_x=msg.feedback.current_pose.pose.position.x
+        self.robot_y=msg.feedback.current_pose.pose.position.y
+        if(self.closest_distance_to_goal>msg.feedback.distance_remaining):
+            self.closest_distance_to_goal=msg.feedback.distance_remaining
         if self.skip or self.back_to_start:#  prevent
             return
         distance_from_goal=msg.feedback.distance_remaining# set timer so robot can localize where it is
-        robot_x=msg.feedback.current_pose.pose.position.x
-        robot_y=msg.feedback.current_pose.pose.position.y
         start_aisle=(self.goals[self.aisle_index][0][0],self.goals[self.aisle_index][0][1])# beginin of aisle
         finish_aisle=(self.goals[self.aisle_index][len(self.goals[self.aisle_index])-1][0],self.goals[self.aisle_index][len(self.goals[self.aisle_index])-1][1])# end of aisle 
         max_distance=mt.sqrt((finish_aisle[0]-start_aisle[0])**2+(finish_aisle[1]-start_aisle[1])**2)
@@ -81,7 +88,7 @@ class AutoNav(Node):
         max_distance+=max_distance*.25
         if(max_distance<distance_from_goal):
             print(f"distance to goal {distance_from_goal} and the max distance {max_distance}")
-            self.previous_waypoint=(robot_x,robot_y)# change previous goal
+            self.previous_waypoint=(self.robot_x,self.robot_y)# change previous goal
             self.skip=True
             self.reverse=True
             self.goal_in_progress=False
@@ -185,16 +192,32 @@ class AutoNav(Node):
         self.get_logger().info("Allowing robot to move and the planner to update before checking Aisle blockage")
         self.skip=False
         #self.reverse=True
+    def check_progression(self):
+        if self.distance_to_goal>=self.closest_distance_to_goal:
+            self.progression_counter+=1
+        if self.progression_counter>2:
+            self.progression_counter=0
+            self.get_logger().warn("I am stuck and in need of assistance")
+            self.goal_in_progress=False
+            self.paused=True
+            cancel_future=self.nav_client._cancel_goal_async(self.goal_handle)
+            self.resume_timer = self.create_timer(15.0, self.resume_navigation)
+            self.unstuck=True
 
     def resume_navigation(self):
         self.resume_timer.cancel()# cancel timer 
         if self.interaction:
             self.get_logger().info("Waiting for customer to finish interaction")
         else:
-            self.get_logger().info("No interaction continue navigation")
+            if self.unstuck:
+                self.get_logger().info("Was given assistance resuming navigation")
+                self.unstuck=False
+            else:
+                self.get_logger().info("No interaction continue navigation")
+                self.prox_wait_timer=self.create_timer(10.0,self.enable_proximity)
             #self.send_nav_goal(self.goals[self.aisle_index][self.goal_index][0],self.goals[self.aisle_index][self.goal_index][1]) # consider just doing the self.cycle() function
             self.cycle()
-            self.prox_wait_timer=self.create_timer(10.0,self.enable_proximity)# Allow robot to move for a little before resuming proximity detection
+           # Allow robot to move for a little before resuming proximity detection
             
     def assisted(self):
         self.assistance_timer.cancel()
