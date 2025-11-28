@@ -123,6 +123,7 @@ class AutoNav(Node):
             if self.changing_aisle:
                 self.aisle_index+=1
                 self.changing_aisle=True
+                self.orientation*=-1
                 print("The entrance of the aisle is blocked headed to the next aisle instead")
                 if self.aisle_index>len(self.goals)-1:
                     self.aisle_index=0

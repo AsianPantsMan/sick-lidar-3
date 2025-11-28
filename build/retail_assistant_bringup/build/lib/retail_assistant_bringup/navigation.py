@@ -6,6 +6,7 @@ from nav2_msgs.action import NavigateToPose
 from geometry_msgs.msg import PoseStamped
 from sensor_msgs.msg import Range
 from rclpy.timer import Timer
+from action_msgs.msg import GoalStatus
 import math as mt
 from time import sleep
 # NEED FILE PROCESSING 
@@ -49,6 +50,8 @@ class AutoNav(Node):
             y=self.goals[self.aisle_index][self.goal_index][1]
             self.current_goal=(x,y)
             print(f"about to send {x} and {y}")
+            print(f' Changing aisle: {self.changing_aisle}')
+            self.last_aisle=len(self.goals[self.aisle_index])-1
             self.send_nav_goal(x,y)
 
 
@@ -73,7 +76,7 @@ class AutoNav(Node):
         robot_y=msg.feedback.current_pose.pose.position.y
         start_aisle=(self.goals[self.aisle_index][0][0],self.goals[self.aisle_index][0][1])# beginin of aisle
         finish_aisle=(self.goals[self.aisle_index][len(self.goals[self.aisle_index])-1][0],self.goals[self.aisle_index][len(self.goals[self.aisle_index])-1][1])# end of aisle 
-        max_distance=mt.sqrt((finish_aisle[0]-start_aisle[0])**2+(finish_aisle[0]-start_aisle[0])**2)
+        max_distance=mt.sqrt((finish_aisle[0]-start_aisle[0])**2+(finish_aisle[1]-start_aisle[1])**2)
             #max_distance+=distance_between_aisle
         max_distance+=max_distance*.25
         if(max_distance<distance_from_goal):
@@ -100,9 +103,12 @@ class AutoNav(Node):
         result_future.add_done_callback(self.goal_result_callback)
 
     def goal_result_callback(self,future):# logic for indexing
-        result=future.result().result# waits for nav2 to complete goal
+        result=future.result()# waits for nav2 to complete goal
+        if((self.goal_index==0 and self.orientation>0) or (self.goal_index==self.last_aisle and self.orientation<0)):
+                self.changing_aisle=True
+        else:
+            self.changing_aisle=False
         self.back_to_start=False
-        self.changing_aisle=False
         if self.previous_waypoint is not None:
             print(f"Current waypoint is {self.current_goal} Previous waypoint is {self.previous_waypoint}")
         if self.paused:# goal_result_callback runs anytime a goal is updated including cancellations prevents spam of goals when prox detect
@@ -116,22 +122,26 @@ class AutoNav(Node):
             self.reverse=False
             if self.changing_aisle:
                 self.aisle_index+=1
+                self.changing_aisle=True
+                self.orientation*=-1
                 print("The entrance of the aisle is blocked headed to the next aisle instead")
                 if self.aisle_index>len(self.goals)-1:
                     self.aisle_index=0
                     self.back_to_start=True
             elif self.orientation>0:
                 self.goal_index+=1
+                self.changing_aisle=False
                 if self.goal_index==len(self.goals[self.aisle_index])-1:
                     self.hold_index=True
             else:
                 self.goal_index-=1
-                if self.aisle_index==0:
+                self.changing_aisle=False
+                if self.goal_index==0:
                     self.hold_index=True
             self.cycle()
             return 
         
-        self.get_logger().info(f"Goal completed with result: {result}")
+        self.get_logger().info(f"Goal completed with result: {result.status}")
         self.previous_waypoint=self.goals[self.aisle_index][self.goal_index]# save waypoint before changing
         self.goal_in_progress=False
         if self.hold_index:# repeat goal_index when reach ends
@@ -144,7 +154,6 @@ class AutoNav(Node):
         else:# if not changing aisles update goal index
             if self.orientation>0:
                 self.goal_index+=1
-                self.changing_aisle=True
                 if self.goal_index==len(self.goals[self.aisle_index])-1: #and not self.reverse:#reaches end of aisle
                     self.hold_index=True
                         #self.reverse=False
