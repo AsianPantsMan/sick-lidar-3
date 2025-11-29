@@ -31,6 +31,7 @@
 /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/share/retail_assistant_bringup/description/gazebo_control_tracked.xacro
 /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/share/retail_assistant_bringup/description/robot.urdf.xacro
 /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/share/retail_assistant_bringup/worlds/fake_store_layout.world
+/home/kendell/retail_assistant_ws/install/retail_assistant_bringup/share/retail_assistant_bringup/worlds/demo_store.world
 /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/share/retail_assistant_bringup/config/test_slam.rviz
 /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/share/retail_assistant_bringup/config/mapper_params_online_async.yaml
 /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/share/retail_assistant_bringup/config/nav2_params_slam.yaml

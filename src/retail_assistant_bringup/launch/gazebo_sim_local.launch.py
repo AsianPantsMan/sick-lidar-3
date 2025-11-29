@@ -26,9 +26,9 @@ def generate_launch_description():
     gazebo = IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([os.path.join(
                     get_package_share_directory('gazebo_ros'),'launch','gazebo.launch.py')]),
-                    launch_arguments={'world': os.path.join(get_package_share_directory(package_name),'worlds','fake_store_layout.world')}.items()#os.path.join(get_package_share_directory(package_name),'worlds','fake_store_layout')
+                    launch_arguments={'world': os.path.join(get_package_share_directory(package_name),'worlds','demo_store.world')}.items()#os.path.join(get_package_share_directory(package_name),'worlds','fake_store_layout')
              )
-    print(os.path.join(get_package_share_directory(package_name),'worlds','fake_store_layout.world'))
+    print(os.path.join(get_package_share_directory(package_name),'worlds','demo_store.world'))
     spawn_entity = Node(package='gazebo_ros', executable='spawn_entity.py',
                         arguments=['-topic', 'robot_description',
                                    '-entity', 'retail_assistant'],

@@ -43,4 +43,5 @@ retail_assistant_bringup/test.py
 test/test_copyright.py
 test/test_flake8.py
 test/test_pep257.py
+worlds/demo_store.world
 worlds/fake_store_layout.world

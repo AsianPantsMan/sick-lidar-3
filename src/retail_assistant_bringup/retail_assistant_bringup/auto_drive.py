@@ -101,7 +101,7 @@ class MyMapNode(Node):
         frontier_ratio=frontier/(neighborhood.shape[0]*neighborhood.shape[1])
         occupied_ratio=occupied/(neighborhood.shape[0]*neighborhood.shape[1])
         score-=occupied_ratio*10 # penalize occupied space
-        if distance_to_wall<0.2:#frontier inside wall
+        if distance_to_wall<0.45:#frontier inside wall
             self.points_scored-=1
             return 0,0,-99999#inside wall 
         if free_ratio>0.75 or free_ratio<0.3:# information gain to low
