@@ -26,26 +26,24 @@ class AutoNav(Node):
                     [(5.92,9.41),(-0.949,9.02),(-9.42,9.41)])
         self.goal_in_progress=False
         self.goal_index=0 # keeps track of where to go next
-        self.orientation=1.0
-        self.interaction=False
-        self.paused=False
-        self.unstuck=False
+        self.orientation=1.0# way robot needs to move within aisle
+        self.interaction=False# placeholder variable for when people actaully interact with screen
+        self.paused=False# if the robot is paused for human interaction or stuck logic
+        self.unstuck=False# Wether the robot was freed or not
         self.goal_handle = None
-        self.distance_to_goal=0
-        self.aisle_index=3
-        self.hold_index=False
-        self.previous_waypoint=None
+        self.distance_to_goal=0# current distance to goal
+        self.aisle_index=3 # aisle index in aisle 4 at begining 
+        self.hold_index=False# wether to hold the index of last aisle when changing aisles or not
+        self.previous_waypoint=None # previous goal 
         self.current_goal=None
-        self.skip=False
-        self.reverse=False
-        self.skip_counter=0
-        self.in_aisle=True
-        self.back_to_start=False
-        self.changing_aisle=False
-        self.closest_distance_to_goal=99999
-        self.stuck=False
-        self.progression_counter=0
-        self.progression_timer = self.create_timer(30, self.check_progression)
+        self.skip=False# whether to run skip aisle logic or not
+        self.reverse=False# whether it has been determined aisle is blocked and robot needs to reverse
+        self.back_to_start=False# wheter the robot is going back to the beigning or not 
+        self.changing_aisle=False# is the robot switching aisles
+        self.closest_distance_to_goal=99999 # the closest the robot has come to its target goal
+        self.stuck=False 
+        self.progression_counter=0 # counter keeping track how many times the robot has not come any closer to the goal 
+        self.progression_timer = self.create_timer(30, self.check_progression)# timer that periodically checks the robots progression
         #self.robot_x=0
         #self.robot_y=0
         self.cycle()# loop function
@@ -228,12 +226,6 @@ class AutoNav(Node):
             self.cycle()
            # Allow robot to move for a little before resuming proximity detection
             
-    def assisted(self):
-        self.assistance_timer.cancel()
-        self.get_logger().info("I was assisted")
-        self.skip_counter=0
-        self.skip=False
-        self.cycle()
 
     def enable_proximity(self):
         self.prox_wait_timer.cancel()# cancel timer this  prevents from staying stuck due to proximity sensor

@@ -18,31 +18,32 @@ class AutoNav(Node):
         self.nav_client = ActionClient(self, NavigateToPose, 'navigate_to_pose')
         self.prox_front=self.create_subscription(Range,'/ultrasonic/front',self.proximity_callback,10)#msg type , topic, callback function,10)
         self.prox_back=self.create_subscription(Range,'/ultrasonic/back',self.proximity_callback,10)
-        self.goals= ([(4.94 ,0.138),(-1.83,0.13),(-10.68,-0.136)],
-                    [(4.92,5.00),(-1.61,4.59),(-10.43,4.59)],
-                    [(4.91,9.66),(-1.84,9.01),(-9.30,9.30)])
+        self.goals= ([(4.43,-14.9),(-2.77,-14.3),(-10.2,-14.2)],
+                    [(3.82,-9.78),(-2.17,-9.8),(-10.5,-9.44)],
+                    [(4.89,-4.69),(-1.95,-4.91),(-10.3,-5.08)],
+                    [(5.22,-0.108),(-1.84,0.166),(-9.85,-0.231)],
+                    [(5.35,4.81),(-2.03,4.49),(-9.7,4.7)],
+                    [(5.92,9.41),(-0.949,9.02),(-9.42,9.41)])
         self.goal_in_progress=False
         self.goal_index=0 # keeps track of where to go next
-        self.orientation=1.0
-        self.interaction=False
-        self.paused=False
-        self.unstuck=False
+        self.orientation=1.0# way robot needs to move within aisle
+        self.interaction=False# placeholder variable for when people actaully interact with screen
+        self.paused=False# if the robot is paused for human interaction or stuck logic
+        self.unstuck=False# Wether the robot was freed or not
         self.goal_handle = None
-        self.distance_to_goal=0
-        self.aisle_index=0
-        self.hold_index=False
-        self.previous_waypoint=None
+        self.distance_to_goal=0# current distance to goal
+        self.aisle_index=3 # aisle index in aisle 4 at begining 
+        self.hold_index=False# wether to hold the index of last aisle when changing aisles or not
+        self.previous_waypoint=None # previous goal 
         self.current_goal=None
-        self.skip=False
-        self.reverse=False
-        self.skip_counter=0
-        self.in_aisle=True
-        self.back_to_start=False
-        self.changing_aisle=False
-        self.closest_distance_to_goal=99999
-        self.stuck=False
-        self.progression_counter=0
-        self.progression_timer = self.create_timer(30, self.check_progression)
+        self.skip=False# whether to run skip aisle logic or not
+        self.reverse=False# whether it has been determined aisle is blocked and robot needs to reverse
+        self.back_to_start=False# wheter the robot is going back to the beigning or not 
+        self.changing_aisle=False# is the robot switching aisles
+        self.closest_distance_to_goal=99999 # the closest the robot has come to its target goal
+        self.stuck=False 
+        self.progression_counter=0 # counter keeping track how many times the robot has not come any closer to the goal 
+        self.progression_timer = self.create_timer(30, self.check_progression)# timer that periodically checks the robots progression
         #self.robot_x=0
         #self.robot_y=0
         self.cycle()# loop function
@@ -76,8 +77,6 @@ class AutoNav(Node):
         self.distance_to_goal=msg.feedback.distance_remaining
         self.robot_x=msg.feedback.current_pose.pose.position.x
         self.robot_y=msg.feedback.current_pose.pose.position.y
-        if(self.closest_distance_to_goal>msg.feedback.distance_remaining):
-            self.closest_distance_to_goal=msg.feedback.distance_remaining
         if self.skip or self.back_to_start:#  prevent
             return
         distance_from_goal=msg.feedback.distance_remaining# set timer so robot can localize where it is
@@ -149,6 +148,8 @@ class AutoNav(Node):
             return 
         
         self.get_logger().info(f"Goal completed with result: {result.status}")
+        self.closest_distance_to_goal=9999
+        self.progression_counter=0
         self.previous_waypoint=self.goals[self.aisle_index][self.goal_index]# save waypoint before changing
         self.goal_in_progress=False
         if self.hold_index:# repeat goal_index when reach ends
@@ -195,7 +196,12 @@ class AutoNav(Node):
     def check_progression(self):
         if self.distance_to_goal>=self.closest_distance_to_goal:
             self.progression_counter+=1
+        else:
+            self.progression_counter=0
+            self.closest_distance_to_goal=self.distance_to_goal
+
         if self.progression_counter>2:
+            self.closest_distance_to_goal=9999
             self.progression_counter=0
             self.get_logger().warn("I am stuck and in need of assistance")
             self.goal_in_progress=False
@@ -220,12 +226,6 @@ class AutoNav(Node):
             self.cycle()
            # Allow robot to move for a little before resuming proximity detection
             
-    def assisted(self):
-        self.assistance_timer.cancel()
-        self.get_logger().info("I was assisted")
-        self.skip_counter=0
-        self.skip=False
-        self.cycle()
 
     def enable_proximity(self):
         self.prox_wait_timer.cancel()# cancel timer this  prevents from staying stuck due to proximity sensor
