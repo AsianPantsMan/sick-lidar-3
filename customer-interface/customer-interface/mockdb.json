@@ -1,74 +1,494 @@
 {
   "products": {
     "prod_001": {
-      "productName": "Bananas",
-      "productCategory": "Produce",
-      "price": 2.99,
-      "aisleLocation": "A1",
-      "image": "https://images.heb.com/is/image/HEBGrocery/000377497-1?hei=360&wid=360"
+      "productName": "White Rice",
+      "productCategory": "Dry Goods & Grains",
+      "price": 2.48,
+      "aisleLocation": "4",
+      "image": "https://images.heb.com/is/image/HEBGrocery/000033265-1?hei=360&wid=360"
     },
     "prod_002": {
-      "productName": "Whole Milk",
-      "productCategory": "Dairy",
-      "price": 3.49,
-      "aisleLocation": "B3",
-      "image": "https://images.heb.com/is/image/HEBGrocery/000540143-1?hei=360&wid=360"
+      "productName": "Quinoa",
+      "productCategory": "Dry Goods & Grains",
+      "price": 5.98,
+      "aisleLocation": "4",
+      "image": "https://images.heb.com/is/image/HEBGrocery/prd-small/002160608.jpg?v=1"
     },
     "prod_003": {
-      "productName": "Sourdough",
-      "productCategory": "Bakery",
-      "price": 4.29,
-      "aisleLocation": "C2",
-      "image": "https://images.heb.com/is/image/HEBGrocery/002058534-1?hei=360&wid=360"
+      "productName": "Pasta",
+      "productCategory": "Dry Goods & Grains",
+      "price": 1.84,
+      "aisleLocation": "4",
+      "image": "https://images.heb.com/is/image/HEBGrocery/000199205-1?hei=360&wid=360"
     },
     "prod_004": {
-      "productName": "Ground Beef",
-      "productCategory": "Meat",
-      "price": 6.99,
-      "aisleLocation": "D1",
-      "image": "https://images.heb.com/is/image/HEBGrocery/000312956-1?hei=360&wid=360"
+      "productName": "Oats",
+      "productCategory": "Dry Goods & Grains",
+      "price": 3.97,
+      "aisleLocation": "8",
+      "image": "https://images.heb.com/is/image/HEBGrocery/001527031-1?hei=360&wid=360"
     },
     "prod_005": {
-      "productName": "Cheerios",
-      "productCategory": "Breakfast",
-      "price": 5.49,
-      "aisleLocation": "E4",
-      "image": "https://images.heb.com/is/image/HEBGrocery/000032021-1?hei=360&wid=360"
+      "productName": "Couscous",
+      "productCategory": "Dry Goods & Grains",
+      "price": 1.98,
+      "aisleLocation": "4",
+      "image": "https://images.heb.com/is/image/HEBGrocery/prd-small/001507490.jpg?v=1"
     },
     "prod_006": {
-      "productName": "Tomatoes",
-      "productCategory": "Produce",
-      "price": 1.99,
-      "aisleLocation": "A2",
-      "image": "https://images.heb.com/is/image/HEBGrocery/prd-small/015141532.jpg?v=1"
+      "productName": "Barley",
+      "productCategory": "Dry Goods & Grains",
+      "price": 3.38,
+      "aisleLocation": "4",
+      "image": "https://images.heb.com/is/image/HEBGrocery/001418962-1?hei=360&wid=360"
     },
     "prod_007": {
-      "productName": "Vanilla Ice Cream",
-      "productCategory": "Frozen",
-      "price": 4.99,
-      "aisleLocation": "F1",
-      "image": "https://images.heb.com/is/image/HEBGrocery/000313590-1?hei=360&wid=360"
+      "productName": "Brown Rice",
+      "productCategory": "Dry Goods & Grains",
+      "price": 2.48,
+      "aisleLocation": "4",
+      "image": "https://images.heb.com/is/image/HEBGrocery/000033266-1?hei=360&wid=360"
     },
     "prod_008": {
-      "productName": "Olive Oil",
-      "productCategory": "Pantry",
-      "price": 8.99,
-      "aisleLocation": "G3",
-      "image": "https://images.heb.com/is/image/HEBGrocery/001902616-1?hei=360&wid=360"
+      "productName": "Lentils",
+      "productCategory": "Dry Goods & Grains",
+      "price": 3.18,
+      "aisleLocation": "4",
+      "image": "https://images.heb.com/is/image/HEBGrocery/002106624-1?hei=360&wid=360"
     },
     "prod_009": {
-      "productName": "Greek Yogurt",
-      "productCategory": "Dairy",
-      "price": 5.99,
-      "aisleLocation": "B2",
-      "image": "https://images.heb.com/is/image/HEBGrocery/012016560-1?hei=360&wid=360"
+      "productName": "Black Beans",
+      "productCategory": "Dry Goods & Grains",
+      "price": 1.50,
+      "aisleLocation": "2",
+      "image": "https://images.heb.com/is/image/HEBGrocery/000127071-1?hei=360&wid=360"
     },
     "prod_010": {
-      "productName": "Tide Laundry Detergent",
-      "productCategory": "Household",
+      "productName": "Garbazno Beans",
+      "productCategory": "Dry Goods & Grains",
+      "price": 1.98,
+      "aisleLocation": "2",
+      "image": "https://images.heb.com/is/image/HEBGrocery/000676812-1?hei=360&wid=360"
+    },
+    "prod_011": {
+      "productName": "All-Purpose Flour",
+      "productCategory": "Baking & Canned",
+      "price": 3.99,
+      "aisleLocation": "5",
+      "image": "https://images.heb.com/is/image/HEBGrocery/000958887-1?hei=360&wid=360"
+    },
+    "prod_012": {
+      "productName": "Baking Powder",
+      "productCategory": "Baking & Canned",
+      "price": 2.49,
+      "aisleLocation": "5",
+      "image": "https://images.heb.com/is/image/HEBGrocery/003316507-1?hei=360&wid=360"
+    },
+    "prod_013": {
+      "productName": "Vanilla Extract",
+      "productCategory": "Baking & Canned",
+      "price": 5.99,
+      "aisleLocation": "5",
+      "image": "https://images.heb.com/is/image/HEBGrocery/000150208-1?hei=360&wid=360"
+    },
+    "prod_014": {
+      "productName": "Canned Tomatoes",
+      "productCategory": "Baking & Canned",
+      "price": 1.79,
+      "aisleLocation": "2",
+      "image": "https://images.heb.com/is/image/HEBGrocery/001015991-1?hei=360&wid=360"
+    },
+    "prod_015": {
+      "productName": "Tomato Sauce",
+      "productCategory": "Baking & Canned",
+      "price": 1.49,
+      "aisleLocation": "4",
+      "image": "https://images.heb.com/is/image/HEBGrocery/000123944-1?hei=360&wid=360"
+    },
+    "prod_016": {
+      "productName": "Canned Corn",
+      "productCategory": "Baking & Canned",
+      "price": 1.29,
+      "aisleLocation": "2",
+      "image": "https://images.heb.com/is/image/HEBGrocery/000088124-1?hei=360&wid=360"
+    },
+    "prod_017": {
+      "productName": "Olive Oil",
+      "productCategory": "Baking & Canned",
+      "price": 8.99,
+      "aisleLocation": "6",
+      "image": "https://images.heb.com/is/image/HEBGrocery/001902616-1?hei=360&wid=360"
+    },
+    "prod_018": {
+      "productName": "Vegetable Oil",
+      "productCategory": "Baking & Canned",
+      "price": 4.99,
+      "aisleLocation": "6",
+      "image": "https://images.heb.com/is/image/HEBGrocery/000127061-1?hei=360&wid=360"
+    },
+    "prod_019": {
+      "productName": "Sugar",
+      "productCategory": "Baking & Canned",
+      "price": 3.49,
+      "aisleLocation": "5",
+      "image": "https://images.heb.com/is/image/HEBGrocery/001110197-1?hei=360&wid=360"
+    },
+    "prod_020": {
+      "productName": "Canned Beans",
+      "productCategory": "Baking & Canned",
+      "price": 1.59,
+      "aisleLocation": "2",
+      "image": "https://images.heb.com/is/image/HEBGrocery/000581002-1?hei=360&wid=360"
+    },
+    "prod_021": {
+      "productName": "Potato Chips",
+      "productCategory": "Snacks & Breakfast",
+      "price": 3.99,
+      "aisleLocation": "9",
+      "image": "https://images.heb.com/is/image/HEBGrocery/005422005-1?hei=360&wid=360"
+    },
+    "prod_022": {
+      "productName": "Cheerios",
+      "productCategory": "Snacks & Breakfast",
+      "price": 5.49,
+      "aisleLocation": "8",
+      "image": "https://images.heb.com/is/image/HEBGrocery/000032021-1?hei=360&wid=360"
+    },
+    "prod_023": {
+      "productName": "Granola Bars",
+      "productCategory": "Snacks & Breakfast",
+      "price": 4.29,
+      "aisleLocation": "9",
+      "image": "https://images.heb.com/is/image/HEBGrocery/002182213-1?hei=360&wid=360"
+    },
+    "prod_024": {
+      "productName": "Crackers",
+      "productCategory": "Snacks & Breakfast",
+      "price": 3.49,
+      "aisleLocation": "9",
+      "image": "https://images.heb.com/is/image/HEBGrocery/008939540-1?hei=360&wid=360"
+    },
+    "prod_025": {
+      "productName": "Pretzels",
+      "productCategory": "Snacks & Breakfast",
+      "price": 2.99,
+      "aisleLocation": "9",
+      "image": "https://images.heb.com/is/image/HEBGrocery/000599508-1?hei=360&wid=360"
+    },
+    "prod_026": {
+      "productName": "Popcorn",
+      "productCategory": "Snacks & Breakfast",
+      "price": 3.79,
+      "aisleLocation": "9",
+      "image": "https://images.heb.com/is/image/HEBGrocery/001770554-1?hei=360&wid=360"
+    },
+    "prod_027": {
+      "productName": "Frosted Flakes",
+      "productCategory": "Snacks & Breakfast",
+      "price": 4.99,
+      "aisleLocation": "8",
+      "image": "https://images.heb.com/is/image/HEBGrocery/002511055-1?hei=360&wid=360"
+    },
+    "prod_028": {
+      "productName": "Pancake Mix",
+      "productCategory": "Snacks & Breakfast",
+      "price": 3.29,
+      "aisleLocation": "8",
+      "image": "https://images.heb.com/is/image/HEBGrocery/000103546-1?hei=360&wid=360"
+    },
+    "prod_029": {
+      "productName": "Maple Syrup",
+      "productCategory": "Snacks & Breakfast",
+      "price": 6.99,
+      "aisleLocation": "8",
+      "image": "https://images.heb.com/is/image/HEBGrocery/000987406-1?hei=360&wid=360"
+    },
+    "prod_030": {
+      "productName": "Trail Mix",
+      "productCategory": "Snacks & Breakfast",
+      "price": 5.49,
+      "aisleLocation": "9",
+      "image": "https://images.heb.com/is/image/HEBGrocery/000780815-1?hei=360&wid=360"
+    },
+    "prod_031": {
+      "productName": "Bottled Water",
+      "productCategory": "Beverages",
+      "price": 4.99,
+      "aisleLocation": "11",
+      "image": "https://images.heb.com/is/image/HEBGrocery/005799043-1?hei=360&wid=360"
+    },
+    "prod_032": {
+      "productName": "Gatorade",
+      "productCategory": "Beverages",
+      "price": 3.49,
+      "aisleLocation": "11",
+      "image": "https://images.heb.com/is/image/HEBGrocery/001379282-1?hei=360&wid=360"
+    },
+    "prod_033": {
+      "productName": "Iced Tea",
+      "productCategory": "Beverages",
+      "price": 3.99,
+      "aisleLocation": "12",
+      "image": "https://images.heb.com/is/image/HEBGrocery/003515622-1?hei=360&wid=360"
+    },
+    "prod_034": {
+      "productName": "Coca-Cola",
+      "productCategory": "Beverages",
+      "price": 5.99,
+      "aisleLocation": "11",
+      "image": "https://images.heb.com/is/image/HEBGrocery/000612848-1?hei=360&wid=360"
+    },
+    "prod_035": {
+      "productName": "Sparkling Water",
+      "productCategory": "Beverages",
+      "price": 4.49,
+      "aisleLocation": "12",
+      "image": "https://images.heb.com/is/image/HEBGrocery/003792554-1?hei=360&wid=360"
+    },
+    "prod_036": {
+      "productName": "Coffee",
+      "productCategory": "Beverages",
+      "price": 8.99,
+      "aisleLocation": "12",
+      "image": "https://images.heb.com/is/image/HEBGrocery/001604429-1?hei=360&wid=360"
+    },
+    "prod_037": {
+      "productName": "Green Tea",
+      "productCategory": "Beverages",
+      "price": 3.99,
+      "aisleLocation": "12",
+      "image": "https://images.heb.com/is/image/HEBGrocery/000932766-1?hei=360&wid=360"
+    },
+    "prod_038": {
+      "productName": "Apple Juice",
+      "productCategory": "Beverages",
+      "price": 3.79,
+      "aisleLocation": "11",
+      "image": "https://images.heb.com/is/image/HEBGrocery/005520092-1?hei=360&wid=360"
+    },
+    "prod_039": {
+      "productName": "Powerade",
+      "productCategory": "Beverages",
+      "price": 2.99,
+      "aisleLocation": "11",
+      "image": "https://images.heb.com/is/image/HEBGrocery/001031754-1?hei=360&wid=360"
+    },
+    "prod_040": {
+      "productName": "Energy Drink",
+      "productCategory": "Beverages",
+      "price": 2.49,
+      "aisleLocation": "11",
+      "image": "https://images.heb.com/is/image/HEBGrocery/004774005-1?hei=360&wid=360"
+    },
+    "prod_041": {
+      "productName": "Printer Paper",
+      "productCategory": "Office Supplies",
+      "price": 7.99,
+      "aisleLocation": "21",
+      "image": "https://images.heb.com/is/image/HEBGrocery/010282525-1?hei=360&wid=360"
+    },
+    "prod_042": {
+      "productName": "Pens",
+      "productCategory": "Office Supplies",
+      "price": 4.99,
+      "aisleLocation": "21",
+      "image": "https://images.heb.com/is/image/HEBGrocery/003387513-1?hei=360&wid=360"
+    },
+    "prod_043": {
+      "productName": "Notebooks",
+      "productCategory": "Office Supplies",
+      "price": 3.49,
+      "aisleLocation": "21",
+      "image": "https://images.heb.com/is/image/HEBGrocery/prd-small/003486024.jpg?v=1"
+    },
+    "prod_044": {
+      "productName": "Sticky Notes",
+      "productCategory": "Office Supplies",
+      "price": 2.99,
+      "aisleLocation": "21",
+      "image": "https://images.heb.com/is/image/HEBGrocery/004731022-1?hei=360&wid=360"
+    },
+    "prod_045": {
+      "productName": "Tape",
+      "productCategory": "Office Supplies",
+      "price": 1.99,
+      "aisleLocation": "21",
+      "image": "https://images.heb.com/is/image/HEBGrocery/003883506-1?hei=360&wid=360"
+    },
+    "prod_046": {
+      "productName": "Stapler",
+      "productCategory": "Office Supplies",
+      "price": 6.49,
+      "aisleLocation": "21",
+      "image": "https://images.heb.com/is/image/HEBGrocery/003849029-1?hei=360&wid=360"
+    },
+    "prod_047": {
+      "productName": "Scissors",
+      "productCategory": "Office Supplies",
+      "price": 3.99,
+      "aisleLocation": "21",
+      "image": "https://images.heb.com/is/image/HEBGrocery/003744521-1?hei=360&wid=360"
+    },
+    "prod_048": {
+      "productName": "Highlighters",
+      "productCategory": "Office Supplies",
+      "price": 4.49,
+      "aisleLocation": "21",
+      "image": "https://images.heb.com/is/image/HEBGrocery/003757048-1?hei=360&wid=360"
+    },
+    "prod_049": {
+      "productName": "Folders",
+      "productCategory": "Office Supplies",
+      "price": 5.99,
+      "aisleLocation": "21",
+      "image": "https://images.heb.com/is/image/HEBGrocery/003758560-1?hei=360&wid=360"
+    },
+    "prod_050": {
+      "productName": "Binder Clips",
+      "productCategory": "Office Supplies",
+      "price": 2.49,
+      "aisleLocation": "21",
+      "image": "https://images.heb.com/is/image/HEBGrocery/003849012-1?hei=360&wid=360"
+    },
+    "prod_051": {
+      "productName": "Dog Food",
+      "productCategory": "Pet Supplies",
+      "price": 24.99,
+      "aisleLocation": "14",
+      "image": "https://images.heb.com/is/image/HEBGrocery/002137413-1?hei=360&wid=360"
+    },
+    "prod_052": {
+      "productName": "Cat Food",
+      "productCategory": "Pet Supplies",
+      "price": 19.99,
+      "aisleLocation": "14",
+      "image": "https://images.heb.com/is/image/HEBGrocery/001937697-1?hei=360&wid=360"
+    },
+    "prod_053": {
+      "productName": "Dog Treats",
+      "productCategory": "Pet Supplies",
+      "price": 6.99,
+      "aisleLocation": "13",
+      "image": "https://images.heb.com/is/image/HEBGrocery/010204509-1?hei=360&wid=360"
+    },
+    "prod_054": {
+      "productName": "Cat Litter",
+      "productCategory": "Pet Supplies",
       "price": 12.99,
-      "aisleLocation": "H1",
+      "aisleLocation": "13",
+      "image": "https://images.heb.com/is/image/HEBGrocery/prd-small/002211894.jpg?v=1"
+    },
+    "prod_055": {
+      "productName": "Pet Toys",
+      "productCategory": "Pet Supplies",
+      "price": 8.99,
+      "aisleLocation": "13",
+      "image": "https://images.heb.com/is/image/HEBGrocery/001801050-1?hei=360&wid=360"
+    },
+    "prod_056": {
+      "productName": "Dog Leash",
+      "productCategory": "Pet Supplies",
+      "price": 14.99,
+      "aisleLocation": "13",
+      "image": "https://i5.walmartimages.com/seo/Auroth-Dog-Leash-Small-Medium-Large-Dogs-Heavy-Duty-Dog-Leash-6ft-Long-Tactical-Bungee-Dog-Leash-Double-Handle-Reflective-Training-Walking-Dog-Leash_18c7b0bb-111b-4264-a370-abefccdcc693.13158d437c7d5500f030ba6ec7361f6b.jpeg?odnHeight=2000&odnWidth=2000&odnBg=FFFFFF"
+    },
+    "prod_057": {
+      "productName": "Pet Bowls",
+      "productCategory": "Pet Supplies",
+      "price": 9.99,
+      "aisleLocation": "13",
+      "image": "https://i5.walmartimages.com/seo/Vibrant-Life-Stainless-Steel-Paw-Embossed-Dog-Bowl-Xtra-Small_ff196d17-639a-4e67-bbc2-4fb49bc98e69.a72d44dc6194dce9bee159e0bbfacad8.jpeg?odnHeight=2000&odnWidth=2000&odnBg=FFFFFF"
+    },
+    "prod_058": {
+      "productName": "Flea Treatment",
+      "productCategory": "Pet Supplies",
+      "price": 16.99,
+      "aisleLocation": "13",
+      "image": "https://images.heb.com/is/image/HEBGrocery/006519021-1?hei=360&wid=360"
+    },
+    "prod_059": {
+      "productName": "Pet Shampoo",
+      "productCategory": "Pet Supplies",
+      "price": 7.99,
+      "aisleLocation": "13",
+      "image": "https://images.heb.com/is/image/HEBGrocery/002057471-1?hei=360&wid=360"
+    },
+    "prod_060": {
+      "productName": "Bird Seed",
+      "productCategory": "Pet Supplies",
+      "price": 11.99,
+      "aisleLocation": "13",
+      "image": "https://images.heb.com/is/image/HEBGrocery/002023494-1?hei=360&wid=360"
+    },
+    "prod_061": {
+      "productName": "Laundry Detergent",
+      "productCategory": "Household & Personal Care",
+      "price": 12.99,
+      "aisleLocation": "19",
       "image": "https://images.heb.com/is/image/HEBGrocery/prd-small/001027068.jpg?v=1"
+    },
+    "prod_062": {
+      "productName": "Dish Soap",
+      "productCategory": "Household & Personal Care",
+      "price": 3.49,
+      "aisleLocation": "19",
+      "image": "https://images.heb.com/is/image/HEBGrocery/001966991-1?hei=360&wid=360"
+    },
+    "prod_063": {
+      "productName": "Paper Towels",
+      "productCategory": "Household & Personal Care",
+      "price": 8.99,
+      "aisleLocation": "17",
+      "image": "https://images.heb.com/is/image/HEBGrocery/002210789-1?hei=360&wid=360"
+    },
+    "prod_064": {
+      "productName": "Toilet Paper",
+      "productCategory": "Household & Personal Care",
+      "price": 14.99,
+      "aisleLocation": "17",
+      "image": "https://images.heb.com/is/image/HEBGrocery/006299121-1?hei=360&wid=360"
+    },
+    "prod_065": {
+      "productName": "Shampoo",
+      "productCategory": "Household & Personal Care",
+      "price": 5.99,
+      "aisleLocation": "25",
+      "image": "https://images.heb.com/is/image/HEBGrocery/008445034-1?hei=360&wid=360"
+    },
+    "prod_066": {
+      "productName": "Conditioner",
+      "productCategory": "Household & Personal Care",
+      "price": 5.99,
+      "aisleLocation": "25",
+      "image": "https://images.heb.com/is/image/HEBGrocery/002065061-1?hei=360&wid=360"
+    },
+    "prod_067": {
+      "productName": "Toothpaste",
+      "productCategory": "Household & Personal Care",
+      "price": 3.99,
+      "aisleLocation": "26",
+      "image": "https://images.heb.com/is/image/HEBGrocery/001656821-1?hei=360&wid=360"
+    },
+    "prod_068": {
+      "productName": "Hand Soap",
+      "productCategory": "Household & Personal Care",
+      "price": 2.99,
+      "aisleLocation": "25",
+      "image": "https://images.heb.com/is/image/HEBGrocery/003587012-1?hei=360&wid=360"
+    },
+    "prod_069": {
+      "productName": "Trash Bags",
+      "productCategory": "Household & Personal Care",
+      "price": 9.99,
+      "aisleLocation": "18",
+      "image": "https://images.heb.com/is/image/HEBGrocery/005524054-1?hei=360&wid=360"
+    },
+    "prod_070": {
+      "productName": "Cleaning Spray",
+      "productCategory": "Household & Personal Care",
+      "price": 4.49,
+      "aisleLocation": "18",
+      "image": "https://images.heb.com/is/image/HEBGrocery/002106008-1?hei=360&wid=360"
     }
   }
 }

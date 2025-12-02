@@ -1,0 +1,52 @@
+/* Custom styles for react-simple-keyboard */
+.hg-theme-default {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+}
+
+.hg-theme-default .hg-button {
+  height: 70px;
+  font-size: 24px;
+  font-weight: 600;
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  color: #333;
+  margin: 4px;
+}
+
+.hg-theme-default .hg-button:active {
+  background: #500000;
+  color: white;
+  transform: scale(0.95);
+}
+
+.hg-theme-default .hg-button.hg-red {
+  background: #fee;
+  color: #c00;
+  font-size: 20px;
+}
+
+.hg-theme-default .hg-button.hg-red:active {
+  background: #fcc;
+}
+
+.hg-theme-default .hg-button.hg-highlight {
+  background: #500000;
+  color: white;
+  font-size: 20px;
+}
+
+.hg-theme-default .hg-button.hg-highlight:active {
+  background: #600000;
+}
+
+.hg-theme-default .hg-button.hg-standardBtn[data-skbtn="{space}"] {
+  width: 85%;
+}
+
+.hg-theme-default .hg-button.hg-standardBtn[data-skbtn="{enter}"] {
+  width: 10%;
+  font-size: 28px;
+}
