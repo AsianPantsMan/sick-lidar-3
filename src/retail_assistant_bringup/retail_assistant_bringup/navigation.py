@@ -175,7 +175,7 @@ class AutoNav(Node):
 
     def proximity_callback(self,sensor): # Human interaction detection
         direction=sensor.header.frame_id
-        if sensor.range < 0.5 and not self.paused:
+        if sensor.range < 0.3 and not self.paused:
             self.goal_in_progress=False     # consider a cooldown timer to prevent infinite triggers 
             self.paused=True
             self.get_logger().info(f"Person detected close to {direction}")
@@ -223,7 +223,7 @@ class AutoNav(Node):
                 self.get_logger().info("No interaction continue navigation")
                 self.prox_wait_timer=self.create_timer(10.0,self.enable_proximity)
             #self.send_nav_goal(self.goals[self.aisle_index][self.goal_index][0],self.goals[self.aisle_index][self.goal_index][1]) # consider just doing the self.cycle() function
-            self.cycle()
+        self.cycle()
            # Allow robot to move for a little before resuming proximity detection
             
 
