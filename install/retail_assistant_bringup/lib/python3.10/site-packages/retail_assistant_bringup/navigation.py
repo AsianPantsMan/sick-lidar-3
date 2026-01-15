@@ -175,7 +175,7 @@ class AutoNav(Node):
 
     def proximity_callback(self,sensor): # Human interaction detection
         direction=sensor.header.frame_id
-        if sensor.range < 0.5 and not self.paused:
+        if sensor.range < 0.3 and not self.paused:
             self.goal_in_progress=False     # consider a cooldown timer to prevent infinite triggers 
             self.paused=True
             self.get_logger().info(f"Person detected close to {direction}")

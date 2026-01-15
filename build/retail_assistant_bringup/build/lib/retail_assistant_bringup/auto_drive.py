@@ -15,10 +15,12 @@ class MyMapNode(Node):
         self.create_subscription(OccupancyGrid, '/map', self.map_callback, 10)#Whenever /map type occupancy gird updated call function callback
         self.nav_client = ActionClient(self, NavigateToPose, 'navigate_to_pose')# client for nav2 locations?
         self.goal_in_progress = False
+        self.goal_handle = None
             # prevent cycling through same points
         self.visited_frontiers= []
         self.points_to_score=[]
         self.points_scored=0
+        self.skip_point=False
     #function subscribed and using pose topic made by slam toolbox to get robot position
 
     def map_callback(self, msg):
@@ -127,17 +129,17 @@ class MyMapNode(Node):
         goal.pose.pose.orientation.w = 1.0
         print(f"Sending nav2 a goal {x},{y}")
         self.nav_client.wait_for_server()# wait until the action server is available
-        send_future=self.nav_client.send_goal_async(goal)# send the goal
+        send_future=self.nav_client.send_goal_async(goal,feedback_callback=self.recovery_skip_callback)# send the goal
         send_future.add_done_callback(self.goal_response_callback)
 
     def goal_response_callback(self,future):
-        goal_handle =future.result()
-        if not goal_handle.accepted:
+        self.goal_handle =future.result()
+        if not self.goal_handle.accepted:
             self.get_logger().warn("goal rejected by nav2")
             self.goal_in_progress=False
             return
         self.get_logger().info("Goal accepted navigating")
-        result_future=goal_handle.get_result_async()
+        result_future=self.goal_handle.get_result_async()
         result_future.add_done_callback(self.goal_result_callback)
 
     def goal_result_callback(self,future):
@@ -145,10 +147,20 @@ class MyMapNode(Node):
         self.get_logger().info(f"Goal completed with result: {result}")
         self.wait_timer=self.create_timer(3.0,self.wait_then_send_goal)#non blocking 
          # so next frontier can begin
-    
+    def recovery_skip_callback(self,msg):
+        if self.skip_point:
+            return
+        recoveries=msg.feedback.number_of_recoveries
+        if recoveries>3:
+            self.get_logger().warn(f"Skipping goal due to too many recoveries")
+            self.goal_in_progress=False
+            self.skip_point=True
+            cancel_future=self.nav_client._cancel_goal_async(self.goal_handle)
+
     def wait_then_send_goal(self):
         self.wait_timer.cancel()
         self.goal_in_progress=False
+        self.skip_point=False
 
 def main():
     rclpy.init()## initialize rclpy which sets up all the ros communication stuff
