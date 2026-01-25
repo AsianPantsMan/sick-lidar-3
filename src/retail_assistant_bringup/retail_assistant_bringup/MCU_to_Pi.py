@@ -75,4 +75,44 @@ class MCUToPiNode(Node):
         #################Linear velocity of wheels##################
         velocity_left=self.radius_m*track_left #Linear velocity of left wheel
         velocity_right=self.radius_m*track_right #Linear velocity of right wheel
-       
+        #################Linear and angular velocity of robot#######
+        velocity=(velocity_left + velocity_right) / 2.0 # Average linear velocity
+        angular_velocity=(velocity_right - velocity_left) / self.track_width_m # Angular velocity of
+        ds =velocity * dt # Distance traveled in this time step
+        dtheta=angular_velocity * dt # Change in orientation
+
+        self.x+= ds*mt.cos(self.theta)# distance travled in x direction
+        self.y+= ds*mt.sin(self.theta)# distance traveled in y direction
+        self.theta += dtheta
+
+        self.theta=mt.atan2(mt.sin(self.theta), mt.cos(self.theta)) # Normalize theta to [-pi, pi]
+
+        q=self.yaw_to_quaternion(self.theta) # Convert yaw to quaternion
+
+        if self.publish_tf:
+            t=TransformStamped()
+            t.header.stamp=now.to_msg()
+            t.header.frame_id=self.odom_frame
+            t.child_frame_id=self.base_frame
+            t.transform.translation.x=float(self.x)
+            t.transform.translation.y=float(self.y)
+            t.transform.translation.z=0.0
+            t.transform.rotation=q
+            self.tf_broadcaster.sendTransform(t) # Send the transform
+        odom= Odometry()# make odometry message object for topic
+        odom.header.stamp=now.to_msg()
+        odom.header.frame_id=self.odom_frame
+        odom.child_frame_id=self.base_frame
+        odom.pose.pose.position.x=float(self.x)
+        odom.pose.pose.position.y=float(self.y)
+        odom.pose.pose.position.z=0.0
+        odom.pose.pose.orientation=q
+        odom.twist.twist.linear.x=float(velocity)
+        odom.twist.twist.linear.y=0.0
+        odom.twist.twist.angular.z=float(angular_velocity)
+
+        self.odom_pub.publish(odom)  # Publish the odometry message
+        
+        self.last_left_ticks=left_ticks  # Update last ticks and time
+        self.last_right_ticks=right_ticks
+        self.last_time=now
