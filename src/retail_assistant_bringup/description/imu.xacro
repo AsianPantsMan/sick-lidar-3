@@ -30,7 +30,11 @@
             <always_on>true</always_on><!--IMU is always on-->
             <update_rate>30.0</update_rate><!-- How often IMU updates-->
             <visualize>true</visualize><!--Whether to visualize in rviz-->
-            <plugin name="ignition::gazebo::systems::Imu" filename="libignition-gazebo-imu-system.so"><!--Plugin connects gazebo and ros2-->
+            <plugin name="gazebo_ros_imu_sensor" filename="libgazebo_ros_imu_sensor.so"><!--Plugin connects gazebo and ros2-->
+                <ros>
+                    <namespace>/imu</namespace>
+                    <remapping>~/out:=data</remapping><!--Remaps output topic to /imu/data-->
+                </ros>
                 <gaussianNoise>0.0002</gaussianNoise>
             </plugin><!--Adds noise to the IMU data to simulate real world-->
         </sensor>

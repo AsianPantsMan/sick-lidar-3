@@ -78,7 +78,7 @@ class AutoNav(Node):
         self.robot_x=msg.feedback.current_pose.pose.position.x
         self.robot_y=msg.feedback.current_pose.pose.position.y
         if self.skip or self.back_to_start:#  prevent
-            return
+            return                          # ToDO maybe find better way to handle this also handle if starts far from start
         distance_from_goal=msg.feedback.distance_remaining# set timer so robot can localize where it is
         start_aisle=(self.goals[self.aisle_index][0][0],self.goals[self.aisle_index][0][1])# beginin of aisle
         finish_aisle=(self.goals[self.aisle_index][len(self.goals[self.aisle_index])-1][0],self.goals[self.aisle_index][len(self.goals[self.aisle_index])-1][1])# end of aisle 
