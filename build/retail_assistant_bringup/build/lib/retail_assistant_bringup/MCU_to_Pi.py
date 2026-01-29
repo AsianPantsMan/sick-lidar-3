@@ -3,8 +3,6 @@ from rclpy.node import Node
 from geometry_msgs.msg import Twist
 from nav_msgs.msg import Odometry
 from rclpy.timer import Timer
-from sensors_msgs.msg import Range
-from sensors_msgs.msg import Imu
 import math as mt # What 
 # Tread length wheel to wheel 14.5 inches 
 # Tread from top is 12 inches
@@ -26,7 +24,7 @@ class MCUToPiNode(Node):
 
         # Frame names
         self.declare_parameter('odom_frame','odom')# Frame relaitve to the start
-        self.declate_parameter('base_frame','base_link')# Relative to itself 
+        self.declate_parameter('base_frame','base_link')# Relative to itself
         self.odom_frame=str(self.get_parameter('odom_frame').value)
         self.base_frame=str(self.get_parameter('base_frame').value) 
         self.declare_parameter('publish_tf',True)
@@ -41,7 +39,6 @@ class MCUToPiNode(Node):
         self.last_right_ticks=None
         self.last_time=None
         self.odom_pub=self.create_publisher(Odometry,'/odom',10)# Publisher for odometry
-        self.Imu_pub=self.create_publisher(Imu,'/imu/data',10)# Publisher for IMU
         self.tf_broadcaster=TransformBroadcaster(self)# TF broadcaster for coordinate frames
 
         self.rad_per_tick=(2.0*mt.pi)/float(self.ticks_per_rev)# Radians per tick for wheel rotation
@@ -55,7 +52,7 @@ class MCUToPiNode(Node):
         q.w=math.cos(yaw/2.0)
         return q # ROS compatible quaternion from yaw angle
 
-    def Odom_update(self,left_ticks,right_ticks):#  for differential drive odometry
+    def Odom_update(self,left_ticks,right_ticks):# Help from chat and github for differential drive odometry
         now=self.get_clock().now()# gets current time
 
         if self.last_left_ticks is None:# first time function is called set grounds for previous and current
@@ -129,45 +126,6 @@ class MCUToPiNode(Node):
         self.last_left_ticks=left_ticks  # Update last ticks and time
         self.last_right_ticks=right_ticks
         self.last_time=now
-    def Imu():
-        # orientation xyzw
-        # angular velocity xyz
-        # linear acceleration xyz
-        orientation_x=float(1)
-        orientation_y=float(2)
-        orientation_z=float(3)
-        orientation_w=float(4)
-        angular_velocity_x=float(5)# Dummy values for now 
-        angular_velocity_y=float(6)
-        angular_velocity_z=float(7)
-        linear_acceleration_x=float(8)
-        linear_acceleration_y=float(9)
-        linear_acceleration_z=float(10)
-        Imu = Imu()# IMU message object for topic
-        Imu.header.stamp=self.get_clock().now().to_msg()
-        Imu.header.frame_id=self.base_frame
-        Imu.orientation.x=orientation_x
-        Imu.orientation.y=orientation_y
-        Imu.orientation.z=orientation_z
-        Imu.orientation.w=orientation_w
-        Imu.angular_velocity.x=angular_velocity_x
-        Imu.angular_velocity.y=angular_velocity_y
-        Imu.angular_velocity.z=angular_velocity_z
-        Imu.linear_acceleration.x=linear_acceleration_x
-        Imu.linear_acceleration.y=linear_acceleration_y
-        Imu.linear_acceleration.z=linear_acceleration_z
-        Imu.orientation_covariance[0]=-1.0  # Indicate orientation not available
-        Imu.angular_velocity_covariance=[# ignore things that are not diagnoals dont know correlations between axes
-            0.02, 0.0, 0.0,
-            0.0, 0.02, 0.0,
-            0.0, 0.0, 0.02
-        ]  #convariance resembles how accurate the measurement is
-        Imu.linear_acceleration_covariance=[0.20, 0.0, 0.0,
-                                           0.0, 0.20, 0.0,
-                                            0.0, 0.0, 0.20]# acceleratomer more noisy
-        self.Imu_pub.publish(Imu)  # Publish the IMU message
-    def Ultrasonic():
-        pass
 def main():
     rclpy.init()
     node=MCUToPiNode()

@@ -1,0 +1,5 @@
+  File "/home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup/MCU_to_Pi.py", line 41
+    self.odom_pub=self.create_publisher(Odometry'/odom',10)# Publisher for odometry
+                                                ^^^^^^^
+SyntaxError: invalid syntax
+
