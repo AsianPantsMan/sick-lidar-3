@@ -1,0 +1,11 @@
+../Core/Src/motor_control.c:12:6:motor_init	8
+../Core/Src/motor_control.c:36:6:motor_setSpeed	6
+../Core/Src/motor_control.c:63:6:motor_setDirection	5
+../Core/Src/motor_control.c:89:6:motor_enable	1
+../Core/Src/motor_control.c:96:6:motor_disable	1
+../Core/Src/motor_control.c:104:6:motor_brake	1
+../Core/Src/motor_control.c:119:6:motor_coast	1
+../Core/Src/motor_control.c:129:6:motor_emergencyStop	1
+../Core/Src/motor_control.c:137:6:motor_updatePWM	7
+../Core/Src/motor_control.c:151:15:motor_getState	1
+../Core/Src/motor_control.c:155:6:motor_checkFaults	2

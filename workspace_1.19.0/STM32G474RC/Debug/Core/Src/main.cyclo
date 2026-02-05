@@ -1,0 +1,7 @@
+../Core/Src/main.c:70:6:LED_Test	1
+../Core/Src/main.c:84:5:_write	4
+../Core/Src/main.c:106:6:usbVCOMPrintTest	1
+../Core/Src/main.c:111:6:MD1Test	1
+../Core/Src/main.c:130:5:main	1
+../Core/Src/main.c:218:6:SystemClock_Config	3
+../Core/Src/main.c:268:6:Error_Handler	1

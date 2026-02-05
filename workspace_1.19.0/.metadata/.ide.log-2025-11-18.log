@@ -1,0 +1,253 @@
+2025-11-18 10:39:08,801 [INFO] WebApp:194 - Connection lost
+2025-11-18 10:57:13,684 [INFO] WebApp:191 - Connection restablished
+2025-11-18 10:58:17,695 [INFO] WebApp:194 - Connection lost
+2025-11-18 11:08:32,029 [INFO] WebApp:191 - Connection restablished
+2025-11-18 12:50:48,394 [INFO] NvicIntPanel:101 - NVIC parent = com.st.microxplorer.plugins.ip.nvic.MultiNvicIntPanel[,0,0,450x170,layout=javax.swing.BoxLayout,alignmentX=0.0,alignmentY=0.0,border=,flags=9,maximumSize=,minimumSize=,preferredSize=]
+2025-11-18 12:58:07,475 [INFO] UtilMem:75 - End SaveConfig() Used Memory: 419379224 Bytes (715128832)
+2025-11-18 12:58:11,107 [INFO] UtilMem:75 - End SaveConfig() Used Memory: 439302168 Bytes (715128832)
+2025-11-18 12:58:16,760 [INFO] UtilMem:75 - End SaveConfig() Used Memory: 259372672 Bytes (715128832)
+2025-11-18 12:58:17,734 [INFO] BlockDiagram:2775 - set Specific Code input for plugin: NVIC
+2025-11-18 12:58:17,739 [INFO] BlockDiagram:2775 - set Specific Code input for plugin: USART
+2025-11-18 12:58:17,739 [INFO] BlockDiagram:2775 - set Specific Code input for plugin: TIM1_8F3
+2025-11-18 12:58:17,740 [INFO] BlockDiagram:2775 - set Specific Code input for plugin: DAC
+2025-11-18 12:58:17,740 [INFO] BlockDiagram:2775 - set Specific Code input for plugin: SYS
+2025-11-18 12:58:17,740 [INFO] BlockDiagram:2775 - set Specific Code input for plugin: GPIO
+2025-11-18 12:58:17,741 [INFO] BlockDiagram:2775 - set Specific Code input for plugin: RCC
+2025-11-18 12:58:17,741 [INFO] BlockDiagram:2775 - set Specific Code input for plugin: I2C
+2025-11-18 12:58:17,742 [INFO] CodeGenerator:892 - code generatio: config db path: /Applications/STM32CubeIDE.app/Contents/Eclipse/plugins/com.st.stm32cube.common.mx_6.15.0.202507011659//db/
+2025-11-18 12:58:17,915 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/MXTmpFiles/license.tmp_save
+2025-11-18 12:58:18,286 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/MXTmpFiles/license.tmp
+2025-11-18 12:58:18,423 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Src/gpio.c_save
+2025-11-18 12:58:18,612 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Src/gpio.c
+2025-11-18 12:58:18,616 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Inc/gpio.h_save
+2025-11-18 12:58:18,718 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Inc/gpio.h
+2025-11-18 12:58:19,177 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Src/dac.c_save
+2025-11-18 12:58:19,384 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Src/dac.c
+2025-11-18 12:58:19,387 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Inc/dac.h_save
+2025-11-18 12:58:19,472 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Inc/dac.h
+2025-11-18 12:58:19,476 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Src/i2c.c_save
+2025-11-18 12:58:19,585 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Src/i2c.c
+2025-11-18 12:58:19,587 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Inc/i2c.h_save
+2025-11-18 12:58:19,665 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Inc/i2c.h
+2025-11-18 12:58:19,668 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Src/tim.c_save
+2025-11-18 12:58:19,777 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Src/tim.c
+2025-11-18 12:58:19,779 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Inc/tim.h_save
+2025-11-18 12:58:19,844 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Inc/tim.h
+2025-11-18 12:58:19,849 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Src/usart.c_save
+2025-11-18 12:58:19,986 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Src/usart.c
+2025-11-18 12:58:19,988 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Inc/usart.h_save
+2025-11-18 12:58:20,045 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Inc/usart.h
+2025-11-18 12:58:20,051 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Src/stm32f3xx_it.c_save
+2025-11-18 12:58:20,193 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Src/stm32f3xx_it.c
+2025-11-18 12:58:20,195 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Inc/stm32f3xx_it.h_save
+2025-11-18 12:58:20,248 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Inc/stm32f3xx_it.h
+2025-11-18 12:58:20,255 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Src/stm32f3xx_hal_msp.c_save
+2025-11-18 12:58:20,328 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Src/stm32f3xx_hal_msp.c
+2025-11-18 12:58:20,330 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/MXTmpFiles/system.tmp_save
+2025-11-18 12:58:20,374 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/MXTmpFiles/system.tmp
+2025-11-18 12:58:20,387 [INFO] CodeEngine:321 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Inc/stm32f3xx_hal_conf.h_save
+2025-11-18 12:58:20,439 [INFO] CodeEngine:345 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Inc/stm32f3xx_hal_conf.h
+2025-11-18 12:58:20,508 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Inc/main.h_save
+2025-11-18 12:58:20,620 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Inc/main.h
+2025-11-18 12:58:20,623 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Src/main.c_save
+2025-11-18 12:58:20,718 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Src/main.c
+2025-11-18 12:58:20,932 [INFO] ProjectBuilder:3606 - Time for Copy HAL[1] : 81mS.
+2025-11-18 12:58:20,939 [INFO] ProjectBuilder:5216 - Project Generator version: 4.7.0-B52
+2025-11-18 12:58:21,014 [INFO] ConfigFileManager:1595 - The Die is : DIE439
+2025-11-18 12:58:24,268 [INFO] ProjectBuilder:5496 - Time for Generating toolchain IDE Files: 3321mS.
+2025-11-18 12:58:24,276 [INFO] ProjectBuilder:3463 - Time for Copy CMSIS : 1mS.
+2025-11-18 12:58:24,278 [INFO] ProjectBuilder:3463 - Time for Copy CMSIS : 0mS.
+2025-11-18 13:45:29,696 [INFO] UtilMem:75 - End SaveConfig() Used Memory: 359286416 Bytes (722468864)
+2025-11-18 13:45:31,567 [INFO] UtilMem:75 - End SaveConfig() Used Memory: 432247280 Bytes (722468864)
+2025-11-18 13:45:33,907 [INFO] UtilMem:75 - End SaveConfig() Used Memory: 524522016 Bytes (722468864)
+2025-11-18 13:45:34,909 [INFO] BlockDiagram:2775 - set Specific Code input for plugin: NVIC
+2025-11-18 13:45:34,914 [INFO] BlockDiagram:2775 - set Specific Code input for plugin: TIM1_8F3
+2025-11-18 13:45:34,915 [INFO] BlockDiagram:2775 - set Specific Code input for plugin: DAC
+2025-11-18 13:45:34,916 [INFO] BlockDiagram:2775 - set Specific Code input for plugin: SYS
+2025-11-18 13:45:34,918 [INFO] BlockDiagram:2775 - set Specific Code input for plugin: GPIO
+2025-11-18 13:45:34,919 [INFO] BlockDiagram:2775 - set Specific Code input for plugin: RCC
+2025-11-18 13:45:34,920 [INFO] BlockDiagram:2775 - set Specific Code input for plugin: I2C
+2025-11-18 13:45:34,924 [INFO] CodeGenerator:892 - code generatio: config db path: /Applications/STM32CubeIDE.app/Contents/Eclipse/plugins/com.st.stm32cube.common.mx_6.15.0.202507011659//db/
+2025-11-18 13:45:35,090 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/MXTmpFiles/license.tmp_save
+2025-11-18 13:45:35,505 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/MXTmpFiles/license.tmp
+2025-11-18 13:45:35,629 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Src/gpio.c_save
+2025-11-18 13:45:35,845 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Src/gpio.c
+2025-11-18 13:45:35,849 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Inc/gpio.h_save
+2025-11-18 13:45:35,954 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Inc/gpio.h
+2025-11-18 13:45:36,396 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Src/dac.c_save
+2025-11-18 13:45:36,628 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Src/dac.c
+2025-11-18 13:45:36,631 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Inc/dac.h_save
+2025-11-18 13:45:36,730 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Inc/dac.h
+2025-11-18 13:45:36,736 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Src/i2c.c_save
+2025-11-18 13:45:36,866 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Src/i2c.c
+2025-11-18 13:45:36,869 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Inc/i2c.h_save
+2025-11-18 13:45:36,953 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Inc/i2c.h
+2025-11-18 13:45:36,961 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Src/tim.c_save
+2025-11-18 13:45:37,073 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Src/tim.c
+2025-11-18 13:45:37,076 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Inc/tim.h_save
+2025-11-18 13:45:37,159 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Inc/tim.h
+2025-11-18 13:45:37,166 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Src/stm32f3xx_it.c_save
+2025-11-18 13:45:37,356 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Src/stm32f3xx_it.c
+2025-11-18 13:45:37,362 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Inc/stm32f3xx_it.h_save
+2025-11-18 13:45:37,446 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Inc/stm32f3xx_it.h
+2025-11-18 13:45:37,458 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Src/stm32f3xx_hal_msp.c_save
+2025-11-18 13:45:37,574 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Src/stm32f3xx_hal_msp.c
+2025-11-18 13:45:37,578 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/MXTmpFiles/system.tmp_save
+2025-11-18 13:45:37,693 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/MXTmpFiles/system.tmp
+2025-11-18 13:45:37,698 [INFO] CodeEngine:321 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Inc/stm32f3xx_hal_conf.h_save
+2025-11-18 13:45:37,797 [INFO] CodeEngine:345 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Inc/stm32f3xx_hal_conf.h
+2025-11-18 13:45:37,885 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Inc/main.h_save
+2025-11-18 13:45:38,000 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Inc/main.h
+2025-11-18 13:45:38,004 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Src/main.c_save
+2025-11-18 13:45:38,106 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Src/main.c
+2025-11-18 13:45:38,352 [INFO] ProjectBuilder:3606 - Time for Copy HAL[1] : 99mS.
+2025-11-18 13:45:38,360 [INFO] ProjectBuilder:5216 - Project Generator version: 4.7.0-B52
+2025-11-18 13:45:38,467 [INFO] ConfigFileManager:1595 - The Die is : DIE439
+2025-11-18 13:45:42,559 [INFO] ProjectBuilder:5496 - Time for Generating toolchain IDE Files: 4192mS.
+2025-11-18 13:45:42,570 [INFO] ProjectBuilder:3463 - Time for Copy CMSIS : 1mS.
+2025-11-18 13:45:42,576 [INFO] ProjectBuilder:3463 - Time for Copy CMSIS : 0mS.
+2025-11-18 13:52:41,364 [INFO] UtilMem:75 - End SaveConfig() Used Memory: 478322600 Bytes (722468864)
+2025-11-18 13:52:43,540 [INFO] UtilMem:75 - End SaveConfig() Used Memory: 499272872 Bytes (722468864)
+2025-11-18 13:53:04,835 [INFO] UtilMem:75 - End SaveConfig() Used Memory: 594131472 Bytes (722468864)
+2025-11-18 13:53:05,187 [INFO] BlockDiagram:2775 - set Specific Code input for plugin: NVIC
+2025-11-18 13:53:05,187 [INFO] BlockDiagram:2775 - set Specific Code input for plugin: TIM1_8F3
+2025-11-18 13:53:05,187 [INFO] BlockDiagram:2775 - set Specific Code input for plugin: DAC
+2025-11-18 13:53:05,187 [INFO] BlockDiagram:2775 - set Specific Code input for plugin: SYS
+2025-11-18 13:53:05,188 [INFO] BlockDiagram:2775 - set Specific Code input for plugin: GPIO
+2025-11-18 13:53:05,188 [INFO] BlockDiagram:2775 - set Specific Code input for plugin: RCC
+2025-11-18 13:53:05,188 [INFO] BlockDiagram:2775 - set Specific Code input for plugin: I2C
+2025-11-18 13:53:05,188 [INFO] CodeGenerator:892 - code generatio: config db path: /Applications/STM32CubeIDE.app/Contents/Eclipse/plugins/com.st.stm32cube.common.mx_6.15.0.202507011659//db/
+2025-11-18 13:53:05,276 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/MXTmpFiles/license.tmp_save
+2025-11-18 13:53:05,508 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/MXTmpFiles/license.tmp
+2025-11-18 13:53:05,637 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Src/gpio.c_save
+2025-11-18 13:53:05,814 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Src/gpio.c
+2025-11-18 13:53:05,818 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Inc/gpio.h_save
+2025-11-18 13:53:05,914 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Inc/gpio.h
+2025-11-18 13:53:06,185 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Src/dac.c_save
+2025-11-18 13:53:06,347 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Src/dac.c
+2025-11-18 13:53:06,350 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Inc/dac.h_save
+2025-11-18 13:53:06,441 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Inc/dac.h
+2025-11-18 13:53:06,446 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Src/i2c.c_save
+2025-11-18 13:53:06,577 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Src/i2c.c
+2025-11-18 13:53:06,580 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Inc/i2c.h_save
+2025-11-18 13:53:06,645 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Inc/i2c.h
+2025-11-18 13:53:06,649 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Src/tim.c_save
+2025-11-18 13:53:06,809 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Src/tim.c
+2025-11-18 13:53:06,811 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Inc/tim.h_save
+2025-11-18 13:53:06,864 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Inc/tim.h
+2025-11-18 13:53:06,868 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Src/stm32f3xx_it.c_save
+2025-11-18 13:53:06,924 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Src/stm32f3xx_it.c
+2025-11-18 13:53:06,928 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Inc/stm32f3xx_it.h_save
+2025-11-18 13:53:06,981 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Inc/stm32f3xx_it.h
+2025-11-18 13:53:06,986 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Src/stm32f3xx_hal_msp.c_save
+2025-11-18 13:53:07,053 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Src/stm32f3xx_hal_msp.c
+2025-11-18 13:53:07,054 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/MXTmpFiles/system.tmp_save
+2025-11-18 13:53:07,114 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/MXTmpFiles/system.tmp
+2025-11-18 13:53:07,119 [INFO] CodeEngine:321 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Inc/stm32f3xx_hal_conf.h_save
+2025-11-18 13:53:07,170 [INFO] CodeEngine:345 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Inc/stm32f3xx_hal_conf.h
+2025-11-18 13:53:07,250 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Inc/main.h_save
+2025-11-18 13:53:07,334 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Inc/main.h
+2025-11-18 13:53:07,337 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Src/main.c_save
+2025-11-18 13:53:07,435 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Src/main.c
+2025-11-18 13:53:07,953 [INFO] ProjectBuilder:3606 - Time for Copy HAL[1] : 65mS.
+2025-11-18 13:53:07,969 [INFO] ProjectBuilder:5216 - Project Generator version: 4.7.0-B52
+2025-11-18 13:53:08,106 [INFO] ConfigFileManager:1595 - The Die is : DIE439
+2025-11-18 13:53:09,669 [INFO] ProjectBuilder:5496 - Time for Generating toolchain IDE Files: 1700mS.
+2025-11-18 13:53:09,670 [INFO] ProjectBuilder:3463 - Time for Copy CMSIS : 0mS.
+2025-11-18 13:53:09,672 [INFO] ProjectBuilder:3463 - Time for Copy CMSIS : 0mS.
+2025-11-18 13:54:00,936 [INFO] UtilMem:75 - End SaveConfig() Used Memory: 629748944 Bytes (722468864)
+2025-11-18 13:54:02,730 [INFO] UtilMem:75 - End SaveConfig() Used Memory: 280830384 Bytes (722468864)
+2025-11-18 13:54:03,146 [INFO] UtilMem:75 - End SaveConfig() Used Memory: 306077072 Bytes (722468864)
+2025-11-18 13:54:03,409 [INFO] BlockDiagram:2775 - set Specific Code input for plugin: NVIC
+2025-11-18 13:54:03,410 [INFO] BlockDiagram:2775 - set Specific Code input for plugin: USART
+2025-11-18 13:54:03,411 [INFO] BlockDiagram:2775 - set Specific Code input for plugin: TIM1_8F3
+2025-11-18 13:54:03,411 [INFO] BlockDiagram:2775 - set Specific Code input for plugin: DAC
+2025-11-18 13:54:03,411 [INFO] BlockDiagram:2775 - set Specific Code input for plugin: SYS
+2025-11-18 13:54:03,411 [INFO] BlockDiagram:2775 - set Specific Code input for plugin: GPIO
+2025-11-18 13:54:03,411 [INFO] BlockDiagram:2775 - set Specific Code input for plugin: RCC
+2025-11-18 13:54:03,411 [INFO] BlockDiagram:2775 - set Specific Code input for plugin: I2C
+2025-11-18 13:54:03,414 [INFO] CodeGenerator:892 - code generatio: config db path: /Applications/STM32CubeIDE.app/Contents/Eclipse/plugins/com.st.stm32cube.common.mx_6.15.0.202507011659//db/
+2025-11-18 13:54:03,499 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/MXTmpFiles/license.tmp_save
+2025-11-18 13:54:03,628 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/MXTmpFiles/license.tmp
+2025-11-18 13:54:03,689 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Src/gpio.c_save
+2025-11-18 13:54:03,775 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Src/gpio.c
+2025-11-18 13:54:03,777 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Inc/gpio.h_save
+2025-11-18 13:54:03,822 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Inc/gpio.h
+2025-11-18 13:54:03,999 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Src/dac.c_save
+2025-11-18 13:54:04,084 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Src/dac.c
+2025-11-18 13:54:04,085 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Inc/dac.h_save
+2025-11-18 13:54:04,127 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Inc/dac.h
+2025-11-18 13:54:04,130 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Src/i2c.c_save
+2025-11-18 13:54:04,189 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Src/i2c.c
+2025-11-18 13:54:04,192 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Inc/i2c.h_save
+2025-11-18 13:54:04,236 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Inc/i2c.h
+2025-11-18 13:54:04,238 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Src/tim.c_save
+2025-11-18 13:54:04,303 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Src/tim.c
+2025-11-18 13:54:04,305 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Inc/tim.h_save
+2025-11-18 13:54:04,351 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Inc/tim.h
+2025-11-18 13:54:04,353 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Src/usart.c_save
+2025-11-18 13:54:04,419 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Src/usart.c
+2025-11-18 13:54:04,420 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Inc/usart.h_save
+2025-11-18 13:54:04,463 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Inc/usart.h
+2025-11-18 13:54:04,467 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Src/stm32f3xx_it.c_save
+2025-11-18 13:54:04,514 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Src/stm32f3xx_it.c
+2025-11-18 13:54:04,519 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Inc/stm32f3xx_it.h_save
+2025-11-18 13:54:04,562 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Inc/stm32f3xx_it.h
+2025-11-18 13:54:04,572 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Src/stm32f3xx_hal_msp.c_save
+2025-11-18 13:54:04,632 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Src/stm32f3xx_hal_msp.c
+2025-11-18 13:54:04,635 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/MXTmpFiles/system.tmp_save
+2025-11-18 13:54:04,676 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/MXTmpFiles/system.tmp
+2025-11-18 13:54:04,682 [INFO] CodeEngine:321 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Inc/stm32f3xx_hal_conf.h_save
+2025-11-18 13:54:04,734 [INFO] CodeEngine:345 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Inc/stm32f3xx_hal_conf.h
+2025-11-18 13:54:04,767 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Inc/main.h_save
+2025-11-18 13:54:04,817 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Inc/main.h
+2025-11-18 13:54:04,821 [INFO] CodeEngine:265 - oldGeneratedFile, /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Src/main.c_save
+2025-11-18 13:54:04,901 [INFO] CodeEngine:289 - Generated code: /Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/Core/Src/main.c
+2025-11-18 13:54:05,425 [INFO] ProjectBuilder:3606 - Time for Copy HAL[1] : 60mS.
+2025-11-18 13:54:05,443 [INFO] ProjectBuilder:5216 - Project Generator version: 4.7.0-B52
+2025-11-18 13:54:05,577 [INFO] ConfigFileManager:1595 - The Die is : DIE439
+2025-11-18 13:54:07,255 [INFO] ProjectBuilder:5496 - Time for Generating toolchain IDE Files: 1813mS.
+2025-11-18 13:54:07,257 [INFO] ProjectBuilder:3463 - Time for Copy CMSIS : 0mS.
+2025-11-18 13:54:07,258 [INFO] ProjectBuilder:3463 - Time for Copy CMSIS : 0mS.
+2025-11-18 14:04:59,973 [INFO] WebApp:194 - Connection lost
+2025-11-18 14:05:11,825 [INFO] WebApp:191 - Connection restablished
+2025-11-18 14:08:39,247 [INFO] WebApp:194 - Connection lost
+2025-11-18 14:17:22,296 [INFO] WebApp:191 - Connection restablished
+2025-11-18 14:30:29,125 [INFO] WebApp:194 - Connection lost
+2025-11-18 14:30:35,533 [INFO] WebApp:191 - Connection restablished
+2025-11-18 14:31:53,381 [INFO] WebApp:194 - Connection lost
+2025-11-18 14:32:02,495 [INFO] WebApp:191 - Connection restablished
+2025-11-18 14:35:02,347 [INFO] WebApp:194 - Connection lost
+2025-11-18 14:35:26,115 [INFO] WebApp:191 - Connection restablished
+2025-11-18 14:35:27,507 [INFO] WebApp:194 - Connection lost
+2025-11-18 14:35:30,594 [INFO] WebApp:191 - Connection restablished
+2025-11-18 14:37:38,373 [INFO] WebApp:194 - Connection lost
+2025-11-18 14:37:52,888 [INFO] WebApp:191 - Connection restablished
+2025-11-18 17:28:09,564 [INFO] WebApp:194 - Connection lost
+2025-11-18 17:28:24,767 [INFO] WebApp:191 - Connection restablished
+2025-11-18 17:28:46,372 [INFO] WebApp:194 - Connection lost
+2025-11-18 17:30:34,437 [INFO] WebApp:191 - Connection restablished
+2025-11-18 17:30:56,003 [INFO] WebApp:194 - Connection lost
+2025-11-18 17:48:59,303 [INFO] WebApp:191 - Connection restablished
+2025-11-18 19:01:57,950 [INFO] WebApp:194 - Connection lost
+2025-11-18 19:16:20,320 [INFO] WebApp:191 - Connection restablished
+2025-11-18 19:19:48,923 [INFO] WebApp:194 - Connection lost
+2025-11-18 19:20:06,840 [INFO] WebApp:191 - Connection restablished
+2025-11-18 19:21:14,040 [INFO] WebApp:194 - Connection lost
+2025-11-18 19:50:36,868 [INFO] WebApp:191 - Connection restablished
+2025-11-18 21:12:55,642 [INFO] WebApp:194 - Connection lost
+2025-11-18 21:13:01,089 [INFO] WebApp:191 - Connection restablished
+2025-11-18 22:17:31,360 [INFO] WebApp:194 - Connection lost
+2025-11-18 22:17:35,728 [INFO] WebApp:191 - Connection restablished
+2025-11-18 22:19:53,940 [INFO] WebApp:194 - Connection lost
+2025-11-18 22:19:59,738 [INFO] WebApp:191 - Connection restablished
+2025-11-18 22:26:06,469 [INFO] WebApp:194 - Connection lost
+2025-11-18 22:26:10,548 [INFO] WebApp:191 - Connection restablished
+2025-11-18 22:28:10,039 [INFO] WebApp:194 - Connection lost
+2025-11-18 22:28:13,976 [INFO] WebApp:191 - Connection restablished
+2025-11-18 23:20:10,660 [INFO] WebApp:194 - Connection lost
+2025-11-18 23:20:15,213 [INFO] WebApp:191 - Connection restablished
+2025-11-18 23:25:35,260 [INFO] WebApp:194 - Connection lost
+2025-11-18 23:25:41,965 [INFO] WebApp:191 - Connection restablished
+2025-11-18 23:58:05,967 [INFO] WebApp:194 - Connection lost
+2025-11-18 23:58:07,406 [INFO] WebApp:191 - Connection restablished

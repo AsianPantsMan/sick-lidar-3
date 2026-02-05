@@ -1,0 +1,9 @@
+../Core/Inc/bno055_stm32.h:20:6:bno055_assignI2C	1
+../Core/Inc/bno055_stm32.h:24:6:bno055_delay	1
+../Core/Inc/bno055_stm32.h:32:6:bno055_writeData	3
+../Core/Inc/bno055_stm32.h:49:6:bno055_readData	1
+../Core/Src/main.c:116:5:_write	1
+../Core/Src/main.c:128:5:main	1
+../Core/Src/main.c:324:6:SystemClock_Config	4
+../Core/Src/main.c:371:6:HAL_UART_RxCpltCallback	5
+../Core/Src/main.c:403:6:Error_Handler	1

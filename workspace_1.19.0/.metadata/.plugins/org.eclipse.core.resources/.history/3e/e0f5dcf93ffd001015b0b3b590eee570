@@ -1,0 +1,89 @@
+/*
+ * drv8245-q1.h
+ *
+ *  Created on: Jan 28, 2026
+ *      Author: caseyear
+ */
+
+#ifndef INC_DRV8245_Q1_H_
+#define INC_DRV8245_Q1_H_
+
+
+//---------------------------------------------------------------------- register addresses ----------------------------------------------------------------------
+
+//read-only
+#define DEVICE_ID 0x00
+#define FAULT_SUMMARY 0x01
+#define STATUS1 0x02
+#define STATUS2 0x03
+
+//read-write
+#define COMMAND 0x08
+#define SPI_IN 0x09
+#define CONFIG1 0x0A
+#define CONFIG2 0x0B
+#define CONFIG3 0x0C
+#define CONFIG4 0x0D
+
+//---------------------------------------------------------------------- register fields ----------------------------------------------------------------------
+
+//FAULT_SUMMARY
+#define FAULT_SUMMARY_SPI_ERR
+#define FAULT_SUMMARY_POR
+#define FAULT_SUMMARY_FAULT
+#define FAULT_SUMMARY_VMOV
+#define FAULT_SUMMARY_VMUV
+#define FAULT_SUMMARY_OCP
+#define FAULT_SUMMARY_TSD
+#define FAULT_SUMMARY_OLA
+
+//STATUS1
+#define STATUS1_OLA1
+#define STATUS1_OLA2
+#define STATUS1_ITRIP_CMP
+#define STATUS1_ACTIVE
+#define STATUS1_OCP_H1
+#define STATUS1_OCP_L1
+#define STATUS1_OCP_H2
+#define STATUS1_OCP_L2
+
+//STATUS2
+#define STATUS2_DRVOFF_STAT
+#define STATUS2_ACTIVE
+#define STATUS2_OLP_CMP
+
+//COMMAND
+#define COMMAND_CLR_FLT
+#define COMMAND_SPI_IN_LOCK
+#define COMMAND_REG_LOCK
+
+//SPI_IN
+#define SPI_IN_S_DRVOFF
+#define SPI_IN_S_DRVOFF2
+#define SPI_IN_S_EN_IN1
+#define SPI_IN_S_PH_IN2
+
+//CONFIG1
+
+
+//CONFIG2
+
+
+//CONFIG3
+
+
+//CONFIG4
+
+
+//---------------------------------------------------------------------- structs ----------------------------------------------------------------------
+
+
+
+//---------------------------------------------------------------------- functions ----------------------------------------------------------------------
+
+void drv8245_readData();
+void drv8245_writeData();
+
+void drv8245_reset();
+
+#endif /* INC_DRV8245_Q1_H_ */

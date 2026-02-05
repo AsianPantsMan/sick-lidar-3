@@ -1,0 +1,11 @@
+connections/org.eclipse.remote.serial.core.connectionType/SerialConnection/serial.baudRate=11
+connections/org.eclipse.remote.serial.core.connectionType/SerialConnection/serial.byteSize=3
+connections/org.eclipse.remote.serial.core.connectionType/SerialConnection/serial.parity=0
+connections/org.eclipse.remote.serial.core.connectionType/SerialConnection/serial.portName=/dev/cu.usbmodem1103
+connections/org.eclipse.remote.serial.core.connectionType/SerialConnection/serial.stopBits=0
+connections/org.eclipse.remote.serial.core.connectionType/SerialConnection1/serial.baudRate=9
+connections/org.eclipse.remote.serial.core.connectionType/SerialConnection1/serial.byteSize=3
+connections/org.eclipse.remote.serial.core.connectionType/SerialConnection1/serial.parity=0
+connections/org.eclipse.remote.serial.core.connectionType/SerialConnection1/serial.portName=/dev/cu.debug-console
+connections/org.eclipse.remote.serial.core.connectionType/SerialConnection1/serial.stopBits=0
+eclipse.preferences.version=1

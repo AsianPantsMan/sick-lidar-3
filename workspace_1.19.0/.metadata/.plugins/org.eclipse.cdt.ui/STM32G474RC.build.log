@@ -1,0 +1,28 @@
+15:45:53 **** Incremental Build of configuration Debug for project STM32G474RC ****
+make -j11 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G474xx -c -I../USB_Device/App -I../USB_Device/Target -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function '_write':
+../Core/Src/main.c:90:26: warning: implicit declaration of function 'CDC_Transmit_FS' [-Wimplicit-function-declaration]
+   90 |                 result = CDC_Transmit_FS((uint8_t *)ptr, len);
+      |                          ^~~~~~~~~~~~~~~
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:178:11: warning: unused variable 'speed' [-Wunused-variable]
+  178 |   int16_t speed = 20;
+      |           ^~~~~
+../Core/Src/main.c:177:12: warning: unused variable 'last_update' [-Wunused-variable]
+  177 |   uint32_t last_update = 0;
+      |            ^~~~~~~~~~~
+arm-none-eabi-gcc -o "STM32G474RC.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/caseyear/STM32CubeIDE/workspace_1.19.0/STM32G474RC/STM32G474RCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="STM32G474RC.map" -Wl,--gc-sections -static -u_printf_float --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: STM32G474RC.elf
+ 
+arm-none-eabi-size  STM32G474RC.elf 
+arm-none-eabi-objdump -h -S STM32G474RC.elf  > "STM32G474RC.list"
+   text	   data	    bss	    dec	    hex	filename
+  65020	    844	   9724	  75588	  12744	STM32G474RC.elf
+Finished building: default.size.stdout
+ 
+Finished building: STM32G474RC.list
+ 
+
+15:45:54 Build Finished. 0 errors, 3 warnings. (took 941ms)
+

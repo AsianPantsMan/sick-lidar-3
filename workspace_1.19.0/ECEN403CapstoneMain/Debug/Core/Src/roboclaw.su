@@ -1,0 +1,4 @@
+../Core/Src/roboclaw.c:6:16:GetEncoderDiff	16	static
+../Core/Src/roboclaw.c:10:6:RoboClaw_Init	24	static
+../Core/Src/roboclaw.c:37:6:RoboClaw_SetSetpoint	16	static
+../Core/Src/roboclaw.c:41:6:RoboClaw_Update	40	static

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<item key="hasShownOverlayPopupBefore" value="true"/>
+	<item key="replaceBarOpen" value="false"/>
+	<list key="searchhistory">
+		<item value="write"/>
+		<item value="usb"/>
+		<item value="setpage"/>
+		<item value="temp"/>
+		<item value="state"/>
+		<item value="calib"/>
+		<item value="init"/>
+		<item value="unit_sel"/>
+		<item value="function"/>
+		<item value="uart_rx"/>
+		<item value="mcu"/>
+		<item value="dac"/>
+		<item value="tim"/>
+		<item value="huart"/>
+		<item value="busy"/>
+	</list>
+</section>

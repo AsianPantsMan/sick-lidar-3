@@ -1,0 +1,45 @@
+2025-10-28 00:11:23,239 [INFO] WebApp:194 - Connection lost
+2025-10-28 00:11:28,668 [INFO] WebAppUi:1100 - Web application message: Reloading CAD
+2025-10-28 00:11:30,300 [INFO] WebApp:191 - Connection restablished
+2025-10-28 11:12:57,170 [INFO] WebApp:194 - Connection lost
+2025-10-28 11:24:25,012 [INFO] WebAppUi:1100 - Web application message: Reloading CAD
+2025-10-28 11:24:26,223 [INFO] WebApp:191 - Connection restablished
+2025-10-28 11:25:26,034 [INFO] WebApp:194 - Connection lost
+2025-10-28 11:27:20,658 [INFO] WebAppUi:1100 - Web application message: Reloading CAD
+2025-10-28 11:27:22,000 [INFO] WebApp:191 - Connection restablished
+2025-10-28 11:28:26,247 [INFO] WebApp:194 - Connection lost
+2025-10-28 11:28:29,146 [INFO] WebAppUi:1100 - Web application message: Reloading CAD
+2025-10-28 11:28:36,066 [INFO] WebApp:191 - Connection restablished
+2025-10-28 11:28:57,584 [INFO] WebApp:194 - Connection lost
+2025-10-28 11:29:57,607 [INFO] WebAppUi:1100 - Web application message: Reloading CAD
+2025-10-28 11:29:58,914 [INFO] WebApp:191 - Connection restablished
+2025-10-28 11:30:59,823 [INFO] WebApp:194 - Connection lost
+2025-10-28 11:32:43,425 [INFO] WebAppUi:1100 - Web application message: Reloading CAD
+2025-10-28 11:32:44,279 [INFO] WebApp:191 - Connection restablished
+2025-10-28 13:10:54,670 [INFO] I2cTimingTraitement:330 - 0x0010020A
+2025-10-28 13:11:00,171 [INFO] I2cTimingTraitement:330 - 0x0010020A
+2025-10-28 14:04:32,728 [INFO] WebApp:194 - Connection lost
+2025-10-28 14:04:42,555 [INFO] WebAppUi:1100 - Web application message: Reloading CAD
+2025-10-28 14:04:44,027 [INFO] WebApp:191 - Connection restablished
+2025-10-28 14:08:25,179 [INFO] WebApp:194 - Connection lost
+2025-10-28 14:08:37,223 [INFO] WebAppUi:1100 - Web application message: Reloading CAD
+2025-10-28 14:08:46,178 [INFO] WebApp:191 - Connection restablished
+2025-10-28 14:09:06,648 [INFO] WebApp:194 - Connection lost
+2025-10-28 14:50:46,206 [INFO] WebAppUi:1100 - Web application message: Reloading CAD
+2025-10-28 14:50:47,132 [INFO] WebApp:191 - Connection restablished
+2025-10-28 14:51:07,887 [INFO] WebApp:194 - Connection lost
+2025-10-28 14:55:23,471 [INFO] WebAppUi:1100 - Web application message: Reloading CAD
+2025-10-28 14:55:24,839 [INFO] WebApp:191 - Connection restablished
+2025-10-28 17:25:49,458 [INFO] WebApp:194 - Connection lost
+2025-10-28 17:27:25,162 [INFO] WebAppUi:1100 - Web application message: Reloading CAD
+2025-10-28 17:27:27,759 [INFO] WebApp:191 - Connection restablished
+2025-10-28 19:09:31,994 [INFO] WebApp:194 - Connection lost
+2025-10-28 19:09:49,973 [INFO] WebAppUi:1100 - Web application message: Reloading CAD
+2025-10-28 19:09:51,663 [INFO] WebApp:191 - Connection restablished
+2025-10-28 19:20:11,745 [INFO] WebApp:194 - Connection lost
+2025-10-28 19:20:45,191 [INFO] WebAppUi:1100 - Web application message: Reloading CAD
+2025-10-28 19:20:46,353 [INFO] WebApp:191 - Connection restablished
+2025-10-28 23:50:50,346 [INFO] UtilMem:75 - End SaveConfig() Used Memory: 512369904 Bytes (909115392)
+2025-10-28 23:51:00,694 [INFO] WebApp:403 - JxBrowser engine has been closed 
+2025-10-28 23:51:00,695 [INFO] WebAppUi:504 - JxBrowser engine has been closed 
+2025-10-28 23:51:00,702 [INFO] WebAppUi:541 - Close the Jxbrowser engine manually
