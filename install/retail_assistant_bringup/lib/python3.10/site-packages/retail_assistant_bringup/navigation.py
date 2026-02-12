@@ -42,10 +42,13 @@ class AutoNav(Node):
         self.changing_aisle=False# is the robot switching aisles
         self.closest_distance_to_goal=99999 # the closest the robot has come to its target goal
         self.stuck=False 
+        self.aisle_skip_off=False# prevent aisle skip logic
         self.progression_counter=0 # counter keeping track how many times the robot has not come any closer to the goal 
         self.progression_timer = self.create_timer(30, self.check_progression)# timer that periodically checks the robots progression
+        self.is_startup=True
         #self.robot_x=0
         #self.robot_y=0
+        self.aisle_skip_counter=0
         self.cycle()# loop function
 
     def cycle(self):
@@ -77,7 +80,7 @@ class AutoNav(Node):
         self.distance_to_goal=msg.feedback.distance_remaining
         self.robot_x=msg.feedback.current_pose.pose.position.x
         self.robot_y=msg.feedback.current_pose.pose.position.y
-        if self.skip or self.back_to_start:#  prevent
+        if self.skip or self.back_to_start or self.aisle_skip_off or self.is_startup:#  prevent
             return                          # ToDO maybe find better way to handle this also handle if starts far from start
         distance_from_goal=msg.feedback.distance_remaining# set timer so robot can localize where it is
         start_aisle=(self.goals[self.aisle_index][0][0],self.goals[self.aisle_index][0][1])# beginin of aisle
@@ -86,15 +89,21 @@ class AutoNav(Node):
             #max_distance+=distance_between_aisle
         max_distance+=max_distance*.25
         if(max_distance<distance_from_goal):
+            self.aisle_skip_counter_timer=self.create_timer(1.5,self.aisle_skip_progression)# start timer to see if still blocked after delay
+        if(self.aisle_skip_counter>1):
             print(f"distance to goal {distance_from_goal} and the max distance {max_distance}")
             self.previous_waypoint=(self.robot_x,self.robot_y)# change previous goal
             self.skip=True
             self.reverse=True
             self.goal_in_progress=False
+            self.aisle_skip_counter=0
             cancel_future=self.nav_client._cancel_goal_async(self.goal_handle)# cancel goal
 
                 
-        
+    def aisle_skip_progression(self):
+        self.aisle_skip_counter+=1
+        self.logger().warn(f"Aisle skip counter at {self.aisle_skip_counter}")
+        self.aisle_skip_counter_timer.cancel()
             
     def goal_response_callback(self,future):
         self.goal_handle =future.result()
@@ -150,6 +159,8 @@ class AutoNav(Node):
         self.get_logger().info(f"Goal completed with result: {result.status}")
         self.closest_distance_to_goal=9999
         self.progression_counter=0
+        self.aisle_skip_counter=0
+        self.is_startup=False
         self.previous_waypoint=self.goals[self.aisle_index][self.goal_index]# save waypoint before changing
         self.goal_in_progress=False
         if self.hold_index:# repeat goal_index when reach ends

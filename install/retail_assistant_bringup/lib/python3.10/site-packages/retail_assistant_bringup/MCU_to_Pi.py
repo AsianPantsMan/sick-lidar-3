@@ -3,8 +3,12 @@ from rclpy.node import Node
 from geometry_msgs.msg import Twist
 from nav_msgs.msg import Odometry
 from rclpy.timer import Timer
-from sensors_msgs.msg import Range
-from sensors_msgs.msg import Imu
+from sensor_msgs.msg import Range
+from sensor_msgs.msg import Imu
+from tf2_ros import TransformBroadcaster
+from tf2_ros import TransformStamped
+from geometry_msgs.msg import Quaternion
+from rclpy.timer import Timer
 import math as mt # What 
 # Tread length wheel to wheel 14.5 inches 
 # Tread from top is 12 inches
@@ -17,16 +21,16 @@ class MCUToPiNode(Node):
                                                     #Must declare parameters in ros if want to overide with yaml files
         self.ticks_per_rev=int(self.get_parameter('ticks_per_rev').value)# get parameter value for to be int
 
-        self.declare_parameter('radius_m',0.05) # Default radius in meters| effecitve radius of rotating part encoder measure
+        self.declare_parameter('radius_m',0.06) # Default radius in meters| effecitve radius of rotating part encoder measure
         self.radius_m=float(self.get_parameter('radius_m').value) #use drive sporket pitch radius or calibrate with meters_per_tick
         
         # distance between left and right track center lines
-        self.declare_parameter('track_width_m',0.3)
-        self.track_widht_m=float(self.get_parameter('track_width_m').value)
+        self.declare_parameter('track_width_m',0.23)# Default track width in meters
+        self.track_width_m=float(self.get_parameter('track_width_m').value)
 
         # Frame names
         self.declare_parameter('odom_frame','odom')# Frame relaitve to the start
-        self.declate_parameter('base_frame','base_link')# Relative to itself 
+        self.declare_parameter('base_frame','base_link')# Relative to itself 
         self.odom_frame=str(self.get_parameter('odom_frame').value)
         self.base_frame=str(self.get_parameter('base_frame').value) 
         self.declare_parameter('publish_tf',True)
@@ -44,15 +48,16 @@ class MCUToPiNode(Node):
         self.Imu_pub=self.create_publisher(Imu,'/imu/data',10)# Publisher for IMU
         self.tf_broadcaster=TransformBroadcaster(self)# TF broadcaster for coordinate frames
 
-        self.rad_per_tick=(2.0*mt.pi)/float(self.ticks_per_rev)# Radians per tick for wheel rotation
+        self.radians_per_tick=(2.0*mt.pi)/float(self.ticks_per_rev)# Radians per tick for wheel rotation
         self.get_logger().info("Wheel odom node has been started")
-        self.test_odom() # For testing odometry updates
+        self.test_timer=self.create_timer(10, self.test_odom) # For testing odometry updates
+        self.test_imu_timer=self.create_timer(5,self.imu_update) # For testing IMU updates
     def yaw_to_quaternion(self,yaw):  
         q=Quaternion()
         q.x=0.0
         q.y=0.0
-        q.z=math.sin(yaw/2.0)
-        q.w=math.cos(yaw/2.0)
+        q.z=mt.sin(yaw/2.0)
+        q.w=mt.cos(yaw/2.0)
         return q # ROS compatible quaternion from yaw angle
 
     def Odom_update(self,left_ticks,right_ticks):#  for differential drive odometry
@@ -123,28 +128,41 @@ class MCUToPiNode(Node):
         odom.twist.twist.linear.x=float(velocity)
         odom.twist.twist.linear.y=0.0
         odom.twist.twist.angular.z=float(angular_velocity)
-        odom.pose.covariance=[0.5,0,0,0,0,0,
-                             0,0.5,0,0,0,0,
-                             0,0,1e6,0,0,0,
-                             0,0,0,1e6,0,0,
-                             0,0,0,0,1e6,0,
-                             0,0,0,0,0,0.1] # Placeholder covariance values
-        self.odom_pub.publish(odom)  # Publish the odometry message
+        odom.pose.covariance = [
+    0.05, 0.0,  0.0,  0.0,  0.0,  0.0,
+    0.0,  0.05, 0.0,  0.0,  0.0,  0.0,
+    0.0,  0.0,  1e6,  0.0,  0.0,  0.0,
+    0.0,  0.0,  0.0,  1e6,  0.0,  0.0,
+    0.0,  0.0,  0.0,  0.0,  1e6,  0.0,
+    0.0,  0.0,  0.0,  0.0,  0.0,  0.1
+                                    ] # Placeholder covariance values
+        odom.twist.covariance = [
+    0.1, 0.0,  0.0,  0.0,  0.0,  0.0,
+    0.0, 0.1,  0.0,  0.0,  0.0,  0.0,
+    0.0, 0.0,  1e6,  0.0,  0.0,  0.0,
+    0.0, 0.0,  0.0,  1e6,  0.0,  0.0,
+    0.0, 0.0,  0.0,  0.0,  1e6,  0.0,
+    0.0, 0.0,  0.0,  0.0,  0.0,  0.2
+                                ]  # Placeholder covariance values
+        self.odom_pub.publish(odom)
 
         self.last_left_ticks=left_ticks  # Update last ticks and time
         self.last_right_ticks=right_ticks
         self.last_time=now
-    def test_odom():
+        print("here ")
+    def test_odom(self):
         # Simulate odometry updates for testing
+        self.test_timer.cancel()  # Cancel the timer after first call
         for i in range(10):
             left_ticks = i * 100  # Simulated left encoder ticks
             right_ticks = i * 100  # Simulated right encoder ticks
             self.Odom_update(left_ticks, right_ticks)  # Update odometry with simulated ticks
-    def Imu():
+    def imu_update(self):
         # orientation xyzw
         # angular velocity xyz
         # linear acceleration xyz
         # get imu from port 
+        self.test_imu_timer.cancel()  # Cancel the timer after first call
         orientation_x=float(1)
         orientation_y=float(2)
         orientation_z=float(3)
@@ -155,29 +173,29 @@ class MCUToPiNode(Node):
         linear_acceleration_x=float(8)
         linear_acceleration_y=float(9)
         linear_acceleration_z=float(10)
-        Imu = Imu()# IMU message object for topic
-        Imu.header.stamp=self.get_clock().now().to_msg()
-        Imu.header.frame_id=self.base_frame
-        Imu.orientation.x=orientation_x
-        Imu.orientation.y=orientation_y
-        Imu.orientation.z=orientation_z
-        Imu.orientation.w=orientation_w
-        Imu.angular_velocity.x=angular_velocity_x
-        Imu.angular_velocity.y=angular_velocity_y
-        Imu.angular_velocity.z=angular_velocity_z
-        Imu.linear_acceleration.x=linear_acceleration_x
-        Imu.linear_acceleration.y=linear_acceleration_y
-        Imu.linear_acceleration.z=linear_acceleration_z
-        Imu.orientation_covariance[0]=-1.0  # Indicate orientation not available
-        Imu.angular_velocity_covariance=[# ignore things that are not diagnoals dont know correlations between axes
+        imu_msg = Imu()# IMU message object for topic
+        imu_msg.header.stamp=self.get_clock().now().to_msg()
+        imu_msg.header.frame_id=self.base_frame
+        imu_msg.orientation.x=orientation_x
+        imu_msg.orientation.y=orientation_y
+        imu_msg.orientation.z=orientation_z
+        imu_msg.orientation.w=orientation_w
+        imu_msg.angular_velocity.x=angular_velocity_x
+        imu_msg.angular_velocity.y=angular_velocity_y
+        imu_msg.angular_velocity.z=angular_velocity_z
+        imu_msg.linear_acceleration.x=linear_acceleration_x
+        imu_msg.linear_acceleration.y=linear_acceleration_y
+        imu_msg.linear_acceleration.z=linear_acceleration_z
+        imu_msg.orientation_covariance[0]=-1.0  # Indicate orientation not available
+        imu_msg.angular_velocity_covariance=[# ignore things that are not diagnoals dont know correlations between axes
             0.02, 0.0, 0.0,
             0.0, 0.02, 0.0,
             0.0, 0.0, 0.02
         ]  #convariance resembles how accurate the measurement is
-        Imu.linear_acceleration_covariance=[0.20, 0.0, 0.0,
+        imu_msg .linear_acceleration_covariance=[0.20, 0.0, 0.0,
                                             0.0, 0.20, 0.0,
                                             0.0, 0.0, 0.20]# acceleratomer more noisy
-        self.Imu_pub.publish(Imu)  # Publish the IMU message
+        self.Imu_pub.publish(imu_msg)  # Publish the IMU message
 
 def main():
     rclpy.init()

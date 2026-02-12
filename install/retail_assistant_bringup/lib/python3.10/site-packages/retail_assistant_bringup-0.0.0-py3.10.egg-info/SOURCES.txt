@@ -31,7 +31,6 @@ launch/gazebo_sim.launch.py
 launch/gazebo_sim_auto_mapping.launch.py
 launch/gazebo_sim_local.launch.py
 launch/gazebo_sim_slam.launch.py
-launch/navigation.py
 launch/rsp.py
 launch/slam_launch.py
 resource/retail_assistant_bringup
@@ -41,6 +40,7 @@ retail_assistant_bringup/__init__.py
 retail_assistant_bringup/auto_drive.py
 retail_assistant_bringup/navigation.py
 retail_assistant_bringup/test.py
+retail_assistant_bringup/ultrasonic.py
 test/test_copyright.py
 test/test_flake8.py
 test/test_pep257.py
