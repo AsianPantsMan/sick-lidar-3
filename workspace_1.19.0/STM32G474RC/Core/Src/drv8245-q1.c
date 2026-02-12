@@ -1,38 +1,35 @@
 /*
- * drv8245-q1.c
- *
- *  Created on: Jan 28, 2026
- *      Author: caseyear
- */
+* drv8245-q1.c
+*
+*  Created on: Jan 28, 2026
+*      Author: caseyear
+*/
 
 #include "drv8245-q1.h"
 #include <stdio.h>
 
-static drv8245_handle_t *_drv8245_handle = NULL;
+static drv8245_handle_t *_drv8245_handle;
 
-static uint8_t reg_cache[6] = {0};
-
-void drv8245_setHandle(drv8245_handle_t *handle) {
-    _drv8245_handle = handle;
-    printf("DRV8245 handle set at 0x%08lX\r\n", (uint32_t)_drv8245_handle);
-}
+// Register cache for read-modify-write operations
+static uint8_t reg_cache[6] = {0};  // COMMAND through CONFIG4
 
 void drv8245_assign(SPI_HandleTypeDef *hspi_device) {
     if (_drv8245_handle == NULL) {
-        printf("ERROR: drv8245_handle not initialized - call drv8245_setHandle() first!\r\n");
+        printf("ERROR: drv8245_handle not initialized\r\n");
         return;
     }
     _drv8245_handle->hspi = hspi_device;
-    printf("SPI assigned to DRV8245\r\n");
 }
 
 void drv8245_readData(uint8_t *data) {
+    // Pull CS low
     HAL_GPIO_WritePin(_drv8245_handle->csPort, _drv8245_handle->csPin, GPIO_PIN_RESET);
 
+    // SPI read: send address with read bit (bit 14 = 1)
     uint8_t tx_data[2];
     uint8_t rx_data[2];
-    tx_data[0] = data[0] | 0x80;  // Set read bit
-    tx_data[1] = 0x00;             // Dummy byte
+    tx_data[0] = 0x40 | (data[0] & 0x3F);  // Bit 14=1 (read), bits 13-8=address
+    tx_data[1] = 0x00;                      // Dummy byte
 
     HAL_StatusTypeDef status = HAL_SPI_TransmitReceive(_drv8245_handle->hspi,
                                                         tx_data, rx_data, 2, 100);
@@ -52,9 +49,9 @@ void drv8245_writeData(uint8_t *data) {
     // Pull CS low
     HAL_GPIO_WritePin(_drv8245_handle->csPort, _drv8245_handle->csPin, GPIO_PIN_RESET);
 
-    // SPI write: send address with write bit (MSB = 0)
+    // SPI write: send address with write bit (bit 14 = 0)
     uint8_t tx_data[2];
-    tx_data[0] = data[0] & 0x7F;  // Clear write bit
+    tx_data[0] = data[0] & 0x3F;  // Bit 14=0 (write), bits 13-8=address
     tx_data[1] = data[1];          // Data byte
 
     HAL_StatusTypeDef status = HAL_SPI_Transmit(_drv8245_handle->hspi, tx_data, 2, 100);
@@ -87,28 +84,29 @@ void drv8245_init() {
 
     // Set CS high initially
     HAL_GPIO_WritePin(_drv8245_handle->csPort, _drv8245_handle->csPin, GPIO_PIN_SET);
-    HAL_Delay(10);  // Brief delay for chip to be ready
 
-    printf("Initializing DRV8245SP (SPI variant)...\r\n");
+    // SPI (P) variant: VDD supply must be enabled externally
+    // Wait for VDD to stabilize and device to complete power-up sequence
+    printf("Waiting for DRV8245 power-up (VDD must be > 3.8V)...\r\n");
+    HAL_Delay(10);  // Allow VDD to stabilize
 
-    // Read device ID to verify SPI communication
+    // Wait for tCOM (400µs typ) - device ready for communication
+    HAL_Delay(2);   // 2ms to be safe
+
+    // Device should assert nFAULT low, then we send CLR_FLT command
+    printf("Sending CLR_FLT to acknowledge power-up...\r\n");
+    drv8245_clearFaults();
+
+    // Wait for device to enter STANDBY state
+    HAL_Delay(2);
+
+    // Read device ID
     uint8_t data[2];
     data[0] = DEVICE_ID;
     drv8245_readData(data);
-    printf("DRV8245 Device ID: 0x%02X (expected 0x40 or 0x50)\r\n", data[1]);
+    printf("DRV8245 Device ID: 0x%02X\r\n", data[1]);
 
-    if (data[1] != 0x40 && data[1] != 0x50) {
-        printf("WARNING: Unexpected Device ID\r\n");
-    }
-
-    // Clear any faults
-    drv8245_clearFaults();
-
-    // Enable device via SPI (no nSLEEP pin on SP variant)
-    data[0] = SPI_IN;
-    data[1] = 0x00;  // Clear DRVOFF bits to enable
-    drv8245_writeData(data);
-
+    // Default configuration
     // CONFIG1: Enable OLA detection, OCP retry
     data[0] = CONFIG1;
     data[1] = CONFIG1_EN_OLA | CONFIG1_OCP_RETRY;
@@ -132,7 +130,7 @@ void drv8245_init() {
     // Update cache
     drv8245_updateData();
 
-    printf("DRV8245SP Initialized\r\n");
+    printf("DRV8245 Initialized\r\n");
 }
 
 void drv8245_setSlewRate(uint8_t slew_rate) {
@@ -160,7 +158,7 @@ void drv8245_setOCR(uint8_t ocr_level) {
 }
 
 void drv8245_setBridgeMode(uint8_t mode) {
-    // mode: 0=H-bridge, 1=PH/EN, 2=PWM, 3=Independent
+    // mode: 0=PH/EN, 1=PWM, 2=Independent
     uint8_t data[2];
     data[0] = CONFIG3;
     drv8245_readData(data);
@@ -172,28 +170,28 @@ void drv8245_setBridgeMode(uint8_t mode) {
 }
 
 void drv8245_reset() {
-    // DRV8245SP doesn't have nSLEEP - use SPI soft reset instead
-    uint8_t data[2];
+    // SPI (P) variant: No nSLEEP pin
+    // Reset by cycling VDD power externally or sending software reset command
+    printf("DRV8245 (P) variant: Reset via VDD power cycle required\r\n");
+    printf("Software workaround: Clearing all faults and reconfiguring...\r\n");
 
-    // Set DRVOFF bit to disable outputs
-    data[0] = SPI_IN;
-    data[1] = SPI_IN_S_DRVOFF;
-    drv8245_writeData(data);
-    HAL_Delay(10);
-
-    // Clear DRVOFF to re-enable
-    data[1] = 0x00;
-    drv8245_writeData(data);
-    HAL_Delay(10);
-
-    // Clear any faults
     drv8245_clearFaults();
+    HAL_Delay(5);
 
-    printf("DRV8245SP Reset Complete\r\n");
+    // Re-initialize
+    drv8245_init();
 }
 
 void drv8245_setSpiControl(uint8_t enable) {
     uint8_t data[2];
+
+    // First unlock SPI_IN register
+    data[0] = COMMAND;
+    drv8245_readData(data);
+    data[1] = (data[1] & 0xFC) | 0x02;  // SPI_IN_LOCK = 10b (unlock)
+    drv8245_writeData(data);
+
+    // Now write to SPI_IN
     data[0] = SPI_IN;
     drv8245_readData(data);
 
@@ -208,6 +206,14 @@ void drv8245_setSpiControl(uint8_t enable) {
 
 void drv8245_setDriveOutput(uint8_t enable, uint8_t direction) {
     uint8_t data[2];
+
+    // First unlock SPI_IN register
+    data[0] = COMMAND;
+    drv8245_readData(data);
+    data[1] = (data[1] & 0xFC) | 0x02;  // SPI_IN_LOCK = 10b (unlock)
+    drv8245_writeData(data);
+
+    // Now write to SPI_IN
     data[0] = SPI_IN;
     drv8245_readData(data);
 
@@ -233,7 +239,7 @@ void drv8245_lockReg() {
     data[0] = COMMAND;
     drv8245_readData(data);
 
-    data[1] = (data[1] & ~COMMAND_REG_LOCK) | 0x02;  // Lock registers
+    data[1] = (data[1] & 0xFC) | 0x03;  // REG_LOCK = 11b (lock)
     drv8245_writeData(data);
 
     printf("DRV8245 Registers Locked\r\n");
@@ -242,10 +248,9 @@ void drv8245_lockReg() {
 void drv8245_unlockReg() {
     uint8_t data[2];
     data[0] = COMMAND;
-    data[1] = 0x03;  // Unlock sequence
-    drv8245_writeData(data);
+    drv8245_readData(data);
 
-    data[1] = 0x03;  // Repeat unlock
+    data[1] = (data[1] & 0xFC) | 0x01;  // REG_LOCK = 01b (unlock)
     drv8245_writeData(data);
 
     printf("DRV8245 Registers Unlocked\r\n");
@@ -282,9 +287,7 @@ void drv8245_getFaultSummary() {
 void drv8245_clearFaults() {
     uint8_t data[2];
     data[0] = COMMAND;
-    drv8245_readData(data);
-
-    data[1] |= COMMAND_CLR_FLT;  // Set clear fault bit
+    data[1] = 0x80;  // CLR_FLT bit (bit 7)
     drv8245_writeData(data);
 
     HAL_Delay(1);

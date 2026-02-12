@@ -69,15 +69,15 @@ void SystemClock_Config(void);
 
 void LED_Test(){
 	HAL_GPIO_TogglePin(IMU_LED_GPIO_Port, IMU_LED_Pin);
-	HAL_Delay(1000);
+	HAL_Delay(100);
 	HAL_GPIO_TogglePin(MCU_LED_GPIO_Port, MCU_LED_Pin);
-	HAL_Delay(1000);
+	HAL_Delay(100);
 	HAL_GPIO_TogglePin(MD2_LED_GPIO_Port, MD2_LED_Pin);
-	HAL_Delay(1000);
+	HAL_Delay(100);
 	HAL_GPIO_TogglePin(MD1_LED_GPIO_Port, MD1_LED_Pin);
-	HAL_Delay(1000);
+	HAL_Delay(100);
 	HAL_GPIO_TogglePin(PI_LED_GPIO_Port, PI_LED_Pin);
-	HAL_Delay(1000);
+	HAL_Delay(100);
 }
 
 //makes printf redirect to usb
@@ -108,17 +108,17 @@ void usbVCOMPrintTest(){
 	CDC_Transmit_FS((uint16_t*)start_byte, sizeof(start_byte));
 }
 
-void MD1Test(){
+void MD1Read(){
 	uint8_t fault = HAL_GPIO_ReadPin(MD1_nFAULT_GPIO_Port, MD1_nFAULT_Pin);
-	printf("nFAULT_Pin: %d\r\n", fault);
+	printf("nFAULT_Pin: %u\r\n", fault);
 	uint8_t ph_in2 = HAL_GPIO_ReadPin(MD1_PH_IN2_GPIO_Port, MD1_PH_IN2_Pin);
-	printf("MD1_PH_IN2_Pin: %d\r\n", ph_in2);
+	printf("MD1_PH_IN2_Pin: %u\r\n", ph_in2);
 	uint8_t en_in1 = HAL_GPIO_ReadPin(MD1_EN_IN1_GPIO_Port, MD1_EN_IN1_Pin);
-	printf("MD1_EN_IN1_Pin: %d\r\n", en_in1);
+	printf("MD1_EN_IN1_Pin: %u\r\n", en_in1);
 	uint8_t iprop = HAL_GPIO_ReadPin(MD1_IPROPI_GPIO_Port, MD1_IPROPI_Pin);
-	printf("MD1_IPROPI_Pin: %d\r\n", iprop);
+	printf("MD1_IPROPI_Pin: %u\r\n", iprop);
 	uint8_t drvoff = HAL_GPIO_ReadPin(MD1_DRVOFF_GPIO_Port, MD1_DRVOFF_Pin);
-	printf("MD1_DRVOFF_Pin: %d\r\n\n", drvoff);
+	printf("MD1_DRVOFF_Pin: %u\r\n\n", drvoff);
 
 }
 /* USER CODE END 0 */
@@ -167,8 +167,16 @@ int main(void)
   MX_TIM5_Init();
   /* USER CODE BEGIN 2 */
 
-  //bno055_assign(&hi2c1);
-  //bno055_init();
+  //IMU
+  HAL_Delay(1000);
+  bno055_assign(&hi2c2);
+  bno055_init();
+  bno055_setOperationModeNDOF();
+
+  //encoders
+  HAL_TIM_Encoder_Start((&htim1), TIM_CHANNEL_ALL);
+  HAL_TIM_Encoder_Start((&htim8), TIM_CHANNEL_ALL);
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -178,6 +186,7 @@ int main(void)
   int16_t speed = 20;
   uint8_t iteration = 0;
 
+
   while (1)
   {
 
@@ -186,25 +195,29 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 
-	printf("iteration: %d\r\n", iteration);
+//	uint16_t encoder1 = (uint16_t)__HAL_TIM_GET_COUNTER(&htim1);
+//	uint16_t encoder2 = (uint16_t)__HAL_TIM_GET_COUNTER(&htim8);
+
 
 	//tests, commented out as we go
 	//LED_Test();
 	//usbVCOMPrintTest();
-	MD1Test();
+	//MD1Read();
 
-	uint8_t nfault_redundant = HAL_GPIO_ReadPin(IO1_GPIO_Port, IO1_Pin);
-	printf("%d\r\n", nfault_redundant);
+
 
 	//IMU printout
-	//bno055_data_vector v = bno055_getVectorQuaternion();
-	//printf("IMU:\r\n");
-	//printf("W: %.2f | X: %.2f | Y: %.2f | Z: %.2f\r\n", v.w, v.x, v.y, v.z);
+	bno055_data_vector v = bno055_getVectorQuaternion();
+	GPIO_PinState rst_state = HAL_GPIO_ReadPin(IMU_RST_GPIO_Port, IMU_RST_Pin);
+
+	//printf("IMU_RST pin state: %d (active low)\r\n", rst_state);
+	printf("IMU:\r\n");
+	printf("W: %.2f | X: %.2f | Y: %.2f | Z: %.2f\r\n", v.w, v.x, v.y, v.z);
 
 
-	HAL_GPIO_TogglePin(MD1_LED_GPIO_Port, MD1_LED_Pin);
-	iteration = iteration + 1;
-
+//	HAL_GPIO_TogglePin(MD1_LED_GPIO_Port, MD1_LED_Pin);
+	//iteration = iteration + 1;
+//
 	HAL_Delay(1000);
 
   }
@@ -227,12 +240,11 @@ void SystemClock_Config(void)
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
   */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
-  RCC_OscInitStruct.HSIState = RCC_HSI_ON;
-  RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+  RCC_OscInitStruct.HSEState = RCC_HSE_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
-  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
-  RCC_OscInitStruct.PLL.PLLM = RCC_PLLM_DIV1;
+  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
+  RCC_OscInitStruct.PLL.PLLM = RCC_PLLM_DIV2;
   RCC_OscInitStruct.PLL.PLLN = 12;
   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
   RCC_OscInitStruct.PLL.PLLQ = RCC_PLLQ_DIV4;
@@ -246,12 +258,12 @@ void SystemClock_Config(void)
   */
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
-  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSI;
+  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
 
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_0) != HAL_OK)
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_3) != HAL_OK)
   {
     Error_Handler();
   }

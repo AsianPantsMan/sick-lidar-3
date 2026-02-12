@@ -1,7 +1,7 @@
 ../Core/Src/main.c:70:6:LED_Test	8	static
 ../Core/Src/main.c:84:5:_write	40	static
 ../Core/Src/main.c:106:6:usbVCOMPrintTest	32	static
-../Core/Src/main.c:111:6:MD1Test	16	static
-../Core/Src/main.c:130:5:main	24	static
-../Core/Src/main.c:218:6:SystemClock_Config	88	static
-../Core/Src/main.c:268:6:Error_Handler	4	static,ignoring_inline_asm
+../Core/Src/main.c:111:6:MD1Read	16	static
+../Core/Src/main.c:130:5:main	88	static
+../Core/Src/main.c:231:6:SystemClock_Config	88	static
+../Core/Src/main.c:280:6:Error_Handler	4	static,ignoring_inline_asm

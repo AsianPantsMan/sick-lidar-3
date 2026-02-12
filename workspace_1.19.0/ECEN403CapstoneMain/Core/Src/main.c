@@ -26,7 +26,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "bno055_stm32.h"
+#include "bno055.h"
 #include "pid.h"
 #include <math.h>
 #include <string.h>
@@ -159,8 +159,8 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
   // IMU enable
-  bno055_assignI2C(&hi2c1);
-  bno055_setup();
+  bno055_assign(&hi2c1);
+  bno055_init();
   bno055_setOperationModeNDOF();
   HAL_Delay(1000);
 
@@ -199,7 +199,11 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 
-	HAL_GPIO_WritePin(Test_Pin_GPIO_Port, Test_Pin_Pin, GPIO_PIN_SET);
+
+	HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+	uint8_t imu = HAL_GPIO_ReadPin(read_reset_GPIO_Port, read_reset_Pin);
+
+	printf("imu reset state: %d\r\n", imu);
 //    uint32_t current_time = HAL_GetTick();
 //    float dt = (current_time - last_time) / 1000.0f;
 //
@@ -258,9 +262,9 @@ int main(void)
 //      HAL_DAC_SetValue(&hdac, DAC_CHANNEL_1, DAC_ALIGN_12B_R, dac_value);
 
       // IMU
-//      bno055_vector_t v = bno055_getVectorQuaternion();
-//      printf("IMU:\r\n");
-//      printf("W: %.2f | X: %.2f | Y: %.2f | Z: %.2f\r\n", v.w, v.x, v.y, v.z);
+      bno055_data_vector v = bno055_getVectorQuaternion();
+      printf("IMU:\r\n");
+      printf("W: %.2f | X: %.2f | Y: %.2f | Z: %.2f\r\n", v.w, v.x, v.y, v.z);
 
 //      // Motor PID inputs/DAC
 //      printf("Motor Targets:\r\n");

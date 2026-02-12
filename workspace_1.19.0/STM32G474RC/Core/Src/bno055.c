@@ -22,41 +22,54 @@ void bno055_assign(I2C_HandleTypeDef *hi2c_device){
 }
 
 void bno055_init(){
-	// Check I2C state before attempting anything
-	if (_bno055_i2c_port->State != HAL_I2C_STATE_READY) {
-		printf("I2C not ready! State: %d. Resetting...\r\n", _bno055_i2c_port->State);
-		HAL_I2C_DeInit(_bno055_i2c_port);
-		HAL_Delay(10);
-		HAL_I2C_Init(_bno055_i2c_port);
+	bno055_reset();
+
+	uint8_t id = 0;
+	bno055_readData(CHIP_ID, &id, 1);
+	if (id != 0xA0) {
+	printf("Can't find BNO055, id: 0x%02x. Please check your wiring.\r\n", id);
 	}
+	bno055_setPage(0);
+	bno055_writeData(SYS_TRIGGER, 0x0);
 
-	// Check device presence BEFORE reset
-	HAL_StatusTypeDef status = HAL_I2C_IsDeviceReady(_bno055_i2c_port,
-													  BNO055_I2C_ADDR << 1,
-													  3, 1000);
-
-	if (status != HAL_OK) {
-		printf("BNO055 I2C communication failed! Status: %d\r\n", status);
-		printf("Continuing without IMU...\r\n");
-		return;
-	}
-
-    bno055_reset();
-    uint8_t id = 0;
-
-    bno055_readData(CHIP_ID, &id, 1);
-    if(id != 0xA0) {
-        printf("BNO055 wrong chip ID: 0x%02X (expected 0xA0)\r\n", id);
-        printf("Continuing without IMU...\r\n");
-        return;
-    }
-
-    printf("BNO055 Found! ID: 0x%02X\r\n", id);
-
-    bno055_setPage(0);
-    bno055_writeData(SYS_TRIGGER, 0x0);
-    bno055_setOperationModeConfig();
-    bno055_delay(10);
+	// Select BNO055 config mode
+	bno055_setOperationModeConfig();
+	bno055_delay(10);
+//	// Check I2C state before attempting anything
+//	if (_bno055_i2c_port->State != HAL_I2C_STATE_READY) {
+//		printf("I2C not ready! State: %d. Resetting...\r\n", _bno055_i2c_port->State);
+//		HAL_I2C_DeInit(_bno055_i2c_port);
+//		HAL_Delay(10);
+//		HAL_I2C_Init(_bno055_i2c_port);
+//	}
+//
+//	// Check device presence BEFORE reset
+//	HAL_StatusTypeDef status = HAL_I2C_IsDeviceReady(_bno055_i2c_port,
+//													  BNO055_I2C_ADDR << 1,
+//													  3, 1000);
+//
+//	if (status != HAL_OK) {
+//		printf("BNO055 I2C communication failed! Status: %d\r\n", status);
+//		printf("Continuing without IMU...\r\n");
+//		return;
+//	}
+//
+//    bno055_reset();
+//    uint8_t id = 0;
+//
+//    bno055_readData(CHIP_ID, &id, 1);
+//    if(id != 0xA0) {
+//        printf("BNO055 wrong chip ID: 0x%02X (expected 0xA0)\r\n", id);
+//        printf("Continuing without IMU...\r\n");
+//        return;
+//    }
+//
+//    printf("BNO055 Found! ID: 0x%02X\r\n", id);
+//
+//    bno055_setPage(0);
+//    bno055_writeData(SYS_TRIGGER, 0x0);
+//    bno055_setOperationModeConfig();
+//    bno055_delay(10);
 
     HAL_GPIO_WritePin(IMU_LED_GPIO_Port, IMU_LED_Pin, GPIO_PIN_SET);
 }
@@ -70,20 +83,36 @@ void bno055_writeData(uint8_t reg, uint8_t data){
 
 	status = HAL_I2C_Master_Transmit(_bno055_i2c_port, BNO055_I2C_ADDR << 1,
 	                                   txdata, sizeof(txdata), 100);
+
+	if (status != HAL_OK) {
+		if (status != HAL_OK) {
+		        printf("writeData FAILED: %d (reg=0x%02X, data=0x%02X, i2c_state=%d)\r\n",
+		               status, reg, data, _bno055_i2c_port->State);
+		    }
+		}
+//	    if (status == HAL_BUSY) {
+//	      printf("writeData FAILED: HAL_BUSY (reg=0x%02X)\r\n", reg);
+//	    } else if (status == HAL_TIMEOUT) {
+//	      printf("writeData FAILED: HAL_TIMEOUT (reg=0x%02X)\r\n", reg);
+//	    } else {
+//	      printf("writeData FAILED: %d (reg=0x%02X)\r\n", status, reg);
+//	    }
+//	}
 }
 
 void bno055_readData(uint8_t reg, uint8_t *data, uint8_t len){
     HAL_StatusTypeDef status;
-
-    status = HAL_I2C_Master_Transmit(_bno055_i2c_port, BNO055_I2C_ADDR << 1, &reg, 1, 100);
+    status = HAL_I2C_Mem_Read(_bno055_i2c_port, BNO055_I2C_ADDR << 1,
+                                reg, I2C_MEMADD_SIZE_8BIT,
+                                data, len, 100);
     if (status != HAL_OK) {
-        printf("I2C Transmit Failed: %d\r\n", status);
-        return;
-    }
-
-    status = HAL_I2C_Master_Receive(_bno055_i2c_port, BNO055_I2C_ADDR << 1, data, len, 100);
-    if (status != HAL_OK) {
-        printf("I2C Receive Failed: %d\r\n", status);
+        if (status == HAL_BUSY) {
+          printf("readData FAILED: HAL_BUSY (reg=0x%02X, len=%d)\r\n", reg, len);
+        } else if (status == HAL_TIMEOUT) {
+          printf("readData FAILED: HAL_TIMEOUT (reg=0x%02X, len=%d)\r\n", reg, len);
+        } else {
+          printf("readData FAILED: %d (reg=0x%02X, len=%d)\r\n", status, reg, len);
+        }
     }
 }
 
