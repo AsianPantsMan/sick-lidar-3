@@ -13,6 +13,8 @@ class PiToMCUNode(Node):
     def cmd_vel_callback(self,msg):
         linear_x=msg.linear.x# m/s
         angular_z=msg.angular.z# rad/s
+        ########### TURN into sperate wheel speeds to send to MCU####
+        
         print(f"Received cmd_vel: linear_x={linear_x}, angular_z={angular_z}")
 def main():
     rclpy.init()

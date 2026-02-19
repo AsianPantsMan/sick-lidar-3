@@ -1,4 +1,13 @@
-goals= ([(4.94 ,0.138),(-1.83,0.13),(-10.68,-0.136),(0,0)],
-                    [(4.92,5.00),(-1.61,4.59),(-10.43,4.59)],
-                    [(4.91,9.66),(-1.84,9.01),(-9.30,9.30)])
-print(f"goal length {len(goals[0])}")
+import serial
+import time 
+def read_from_port(port_name,baudrate):
+        ser=serial.Serial(port_name,baudrate,timeout=1)
+        while True:
+            data_to_send="Hello from Raspberry Pi!\n"
+            ser.write(data_to_send.encode())
+            print(f"Sent: {data_to_send.strip()}")
+            time.sleep(1)
+if __name__=="__main__":
+    port_name="/dev/ttyAMA0"  # Update with your port name
+    baudrate=115200
+    read_from_port(port_name,baudrate)

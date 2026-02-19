@@ -18,12 +18,8 @@ class AutoNav(Node):
         self.nav_client = ActionClient(self, NavigateToPose, 'navigate_to_pose')
         self.prox_front=self.create_subscription(Range,'/ultrasonic/front',self.proximity_callback,10)#msg type , topic, callback function,10)
         self.prox_back=self.create_subscription(Range,'/ultrasonic/back',self.proximity_callback,10)
-        self.goals= ([(4.43,-14.9),(-2.77,-14.3),(-10.2,-14.2)],
-                    [(3.82,-9.78),(-2.17,-9.8),(-10.5,-9.44)],
-                    [(4.89,-4.69),(-1.95,-4.91),(-10.3,-5.08)],
-                    [(5.22,-0.108),(-1.84,0.166),(-9.85,-0.231)],
-                    [(5.35,4.81),(-2.03,4.49),(-9.7,4.7)],
-                    [(5.92,9.41),(-0.949,9.02),(-9.42,9.41)])
+        self.goals= ([])
+        self.waypoint_create()
         self.goal_in_progress=False
         self.goal_index=0 # keeps track of where to go next
         self.orientation=1.0# way robot needs to move within aisle
@@ -50,6 +46,40 @@ class AutoNav(Node):
         #self.robot_y=0
         self.aisle_skip_counter=0
         self.cycle()# loop function
+
+    def waypoint_create(self):
+        test=False
+        if test:
+            self.goals=([(4.43,-14.9),(-2.77,-14.3),(-10.2,-14.2)],
+                    [(3.82,-9.78),(-2.17,-9.8),(-10.5,-9.44)],
+                    [(4.89,-4.69),(-1.95,-4.91),(-10.3,-5.08)],
+                    [(5.22,-0.108),(-1.84,0.166),(-9.85,-0.231)],
+                    [(5.35,4.81),(-2.03,4.49),(-9.7,4.7)],
+                    [(5.92,9.41),(-0.949,9.02),(-9.42,9.41)])
+        else: #csv file processing for waypoint collection
+           header=True
+           aisle=[]
+           aisle_id="A1"# could change later
+           goals=[]
+           with open('/home/kendell/retail_assistant_ws/Staff-interface/Staff-interface/aisles.csv', 'r') as file:
+                for line in file:
+                    if header:
+                        header = False
+                        continue
+                    else: # not header
+                        line=line.split(',')
+                        if(line[0]!=aisle_id):
+                          goals.append(aisle)
+                          aisle=[]
+                        x=round(float(line[2]),3)
+                        y=round(float(line[3]),3)
+                        aisle.append((x,y))
+                        aisle_id=line[0]
+        goals.append(aisle)# add last aisle
+        self.goals=goals
+        print(self.goals[3][0][0])
+
+
 
     def cycle(self):
         print(f"Goal_index= {self.goal_index} Aisle_index= {self.aisle_index} ")

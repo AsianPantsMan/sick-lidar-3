@@ -52,6 +52,12 @@ class MCUToPiNode(Node):
         self.get_logger().info("Wheel odom node has been started")
         self.test_timer=self.create_timer(10, self.test_odom) # For testing odometry updates
         self.test_imu_timer=self.create_timer(5,self.imu_update) # For testing IMU updates
+
+        self.test_left_ticks = 0
+        self.test_right_ticks = 0
+        self.test_step = 0
+        self.test_mode = "straight"
+
     def yaw_to_quaternion(self,yaw):  
         q=Quaternion()
         q.x=0.0
@@ -151,12 +157,56 @@ class MCUToPiNode(Node):
         self.last_time=now
         print("here ")
     def test_odom(self):
-        # Simulate odometry updates for testing
-        self.test_timer.cancel()  # Cancel the timer after first call
-        for i in range(10):
-            left_ticks = i * 100  # Simulated left encoder ticks
-            right_ticks = i * 100  # Simulated right encoder ticks
-            self.Odom_update(left_ticks, right_ticks)  # Update odometry with simulated ticks
+    # Reset test state
+        self.test_left_ticks = 0
+        self.test_right_ticks = 0
+        self.test_step = 0
+        self.test_mode = "straight"   # change to "spin" or "arc" to test others
+
+    # Cancel one-shot timer if you're using one
+        if hasattr(self, "test_timer"):
+            self.test_timer.cancel()
+
+    # Run at 50 Hz
+        self.test_timer = self.create_timer(0.02, self._test_odom_step)
+
+
+    def _test_odom_step(self):
+
+    # Stop test after ~6 seconds
+        if self.test_step >= 300:
+            self.get_logger().info("Odom test complete.")
+            self.test_timer.cancel()
+            return
+
+        step_ticks = 20
+
+    # ----- MOTION PROFILES -----
+        if self.test_mode == "straight":
+            dl = step_ticks
+            dr = step_ticks
+
+        elif self.test_mode == "spin":
+            dl = step_ticks
+            dr = -step_ticks
+
+        elif self.test_mode == "arc":
+            dl = step_ticks
+            dr = int(step_ticks * 0.6)
+
+        else:
+            dl = step_ticks
+            dr = step_ticks
+
+    # Accumulate total ticks (absolute tick simulation)
+        self.test_left_ticks += dl
+        self.test_right_ticks += dr
+
+    # Call your real odom function
+        self.Odom_update(self.test_left_ticks, self.test_right_ticks)
+
+        self.test_step += 1
+
     def imu_update(self):
         # orientation xyzw
         # angular velocity xyz
