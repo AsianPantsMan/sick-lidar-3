@@ -1,4 +1,4 @@
-16:19:40 **** Incremental Build of configuration Debug for project STM32G474RC ****
+16:54:05 **** Incremental Build of configuration Debug for project STM32G474RC ****
 make -j11 all 
 arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G474xx -c -I../USB_Device/App -I../USB_Device/Target -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
 ../Core/Src/main.c: In function 'piSendReceive':
@@ -22,15 +22,35 @@ In file included from ../Core/Inc/stm32g4xx_hal_conf.h:348,
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h:1634:72: note: expected 'uint8_t *' {aka 'unsigned char *'} but argument is of type 'char **'
  1634 | HAL_StatusTypeDef HAL_UART_Receive(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t Size, uint32_t Timeout);
       |                                                               ~~~~~~~~~^~~~~
+../Core/Src/main.c: In function 'UART_PrintErrorDetails':
+../Core/Src/main.c:262:10: warning: unused variable 'msg' [-Wunused-variable]
+  262 |     char msg[100];
+      |          ^~~
+../Core/Src/main.c: In function 'UART_CheckConfiguration':
+../Core/Src/main.c:349:14: warning: unused variable 'mode' [-Wunused-variable]
+  349 |     uint32_t mode = huart->Init.Mode;                // UART_MODE_TX_RX
+      |              ^~~~
+../Core/Src/main.c:348:14: warning: unused variable 'parity' [-Wunused-variable]
+  348 |     uint32_t parity = huart->Init.Parity;            // UART_PARITY_NONE
+      |              ^~~~~~
+../Core/Src/main.c:347:14: warning: unused variable 'stopBits' [-Wunused-variable]
+  347 |     uint32_t stopBits = huart->Init.StopBits;        // UART_STOPBITS_1
+      |              ^~~~~~~~
+../Core/Src/main.c:346:14: warning: unused variable 'wordLength' [-Wunused-variable]
+  346 |     uint32_t wordLength = huart->Init.WordLength;    // UART_WORDLENGTH_8B
+      |              ^~~~~~~~~~
+../Core/Src/main.c:345:14: warning: unused variable 'baudrate' [-Wunused-variable]
+  345 |     uint32_t baudrate = huart->Init.BaudRate;        // Should match your setting
+      |              ^~~~~~~~
 ../Core/Src/main.c: In function 'main':
-../Core/Src/main.c:308:18: warning: unused variable 'encoder2' [-Wunused-variable]
-  308 |         uint16_t encoder2 = (uint16_t)__HAL_TIM_GET_COUNTER(&htim3);
+../Core/Src/main.c:521:18: warning: unused variable 'encoder2' [-Wunused-variable]
+  521 |         uint16_t encoder2 = (uint16_t)__HAL_TIM_GET_COUNTER(&htim3);
       |                  ^~~~~~~~
-../Core/Src/main.c:307:18: warning: unused variable 'encoder1' [-Wunused-variable]
-  307 |         uint16_t encoder1 = (uint16_t)__HAL_TIM_GET_COUNTER(&htim4);
+../Core/Src/main.c:520:18: warning: unused variable 'encoder1' [-Wunused-variable]
+  520 |         uint16_t encoder1 = (uint16_t)__HAL_TIM_GET_COUNTER(&htim4);
       |                  ^~~~~~~~
-../Core/Src/main.c:304:28: warning: unused variable 'quaternion' [-Wunused-variable]
-  304 |         bno055_data_vector quaternion = bno055_getVectorQuaternion();
+../Core/Src/main.c:517:28: warning: unused variable 'quaternion' [-Wunused-variable]
+  517 |         bno055_data_vector quaternion = bno055_getVectorQuaternion();
       |                            ^~~~~~~~~~
 arm-none-eabi-gcc -o "STM32G474RC.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/caseyear/STM32CubeIDE/workspace_1.19.0/STM32G474RC/STM32G474RCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="STM32G474RC.map" -Wl,--gc-sections -static -u_printf_float --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 Finished building target: STM32G474RC.elf
@@ -38,11 +58,11 @@ Finished building target: STM32G474RC.elf
 arm-none-eabi-size  STM32G474RC.elf 
 arm-none-eabi-objdump -h -S STM32G474RC.elf  > "STM32G474RC.list"
    text	   data	    bss	    dec	    hex	filename
-  71916	    856	   9600	  82372	  141c4	STM32G474RC.elf
+  70764	    856	   9600	  81220	  13d44	STM32G474RC.elf
 Finished building: default.size.stdout
  
 Finished building: STM32G474RC.list
  
 
-16:19:41 Build Finished. 0 errors, 5 warnings. (took 1s.55ms)
+16:54:05 Build Finished. 0 errors, 11 warnings. (took 938ms)
 

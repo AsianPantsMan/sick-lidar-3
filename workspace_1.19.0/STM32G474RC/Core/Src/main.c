@@ -185,24 +185,247 @@ uint8_t piSendReceive(char* receiveData, bno055_data_vector imu_position, uint16
 	return 0;
 }
 
-HAL_StatusTypeDef UART_LoopbackTest_IT(UART_HandleTypeDef *huart)
+//CLAUDE SPAGHETTI CODE MESS
+typedef enum {
+    UART_TEST_OK = 0,
+    UART_TEST_TX_FAIL,
+    UART_TEST_RX_FAIL,
+    UART_TEST_DATA_MISMATCH,
+    UART_TEST_TIMEOUT,
+    UART_TEST_OVERRUN,
+    UART_TEST_FRAME_ERROR,
+    UART_TEST_NOISE_ERROR,
+    UART_TEST_PARITY_ERROR
+} UART_TestResult_t;
+
+UART_TestResult_t UART_LoopbackTest_Debug(UART_HandleTypeDef *huart)
 {
-    uint8_t txData[] = "Test";
-    uint8_t rxData[10] = {0};
+    uint8_t txData[] = "ABC123";
+    uint8_t rxData[20] = {0};
+    HAL_StatusTypeDef status;
+    uint32_t timeout = 1000;
 
-    // Start reception in interrupt mode
-    HAL_UART_Receive_IT(huart, rxData, strlen((char*)txData));
+    // Clear any pending errors
+    __HAL_UART_CLEAR_FLAG(huart, UART_CLEAR_OREF | UART_CLEAR_NEF |
+                          UART_CLEAR_PEF | UART_CLEAR_FEF);
 
-    // Transmit data
-    if (HAL_UART_Transmit(huart, txData, strlen((char*)txData), 1000) != HAL_OK)
+    // Flush receive buffer
+    while(__HAL_UART_GET_FLAG(huart, UART_FLAG_RXNE))
     {
-        return HAL_ERROR;
+        (void)huart->Instance->RDR;  // Read and discard (for STM32F0/F3/F7/L4)
+        // Use huart->Instance->DR for STM32F1/F4
     }
 
-    // Wait for reception (add timeout counter in real application)
-    while (huart->RxState != HAL_UART_STATE_READY);
+    memset(rxData, 0, sizeof(rxData));
 
-    return (memcmp(txData, rxData, strlen((char*)txData)) == 0) ? HAL_OK : HAL_ERROR;
+    // Transmit
+    status = HAL_UART_Transmit(huart, txData, strlen((char*)txData), timeout);
+    if (status != HAL_OK)
+    {
+        return UART_TEST_TX_FAIL;
+    }
+
+    HAL_Delay(100);  // Increased delay for loopback
+
+    // Receive
+    status = HAL_UART_Receive(huart, rxData, strlen((char*)txData), timeout);
+    if (status == HAL_TIMEOUT)
+    {
+        return UART_TEST_TIMEOUT;
+    }
+    else if (status != HAL_OK)
+    {
+        // Check specific error flags
+        if (__HAL_UART_GET_FLAG(huart, UART_FLAG_ORE))
+            return UART_TEST_OVERRUN;
+        if (__HAL_UART_GET_FLAG(huart, UART_FLAG_FE))
+            return UART_TEST_FRAME_ERROR;
+        if (__HAL_UART_GET_FLAG(huart, UART_FLAG_NE))
+            return UART_TEST_NOISE_ERROR;
+        if (__HAL_UART_GET_FLAG(huart, UART_FLAG_PE))
+            return UART_TEST_PARITY_ERROR;
+
+        return UART_TEST_RX_FAIL;
+    }
+
+    // Compare data
+    if (memcmp(txData, rxData, strlen((char*)txData)) != 0)
+    {
+        return UART_TEST_DATA_MISMATCH;
+    }
+
+    return UART_TEST_OK;
+}
+
+void UART_PrintErrorDetails(UART_HandleTypeDef *huart, UART_TestResult_t result)
+{
+    char msg[100];
+
+    switch(result)
+    {
+        case UART_TEST_OK:
+            printf("UART Test PASSED\r\n");
+            break;
+        case UART_TEST_TX_FAIL:
+            printf("TX Failed - Check TX pin connection\r\n");
+            break;
+        case UART_TEST_RX_FAIL:
+            printf("RX Failed - Check RX pin connection\r\n");
+            break;
+        case UART_TEST_TIMEOUT:
+            printf("RX Timeout - No data received (check TX-RX jumper)\r\n");
+            break;
+        case UART_TEST_DATA_MISMATCH:
+            printf("Data Mismatch - Baud rate or config issue\r\n");
+            break;
+        case UART_TEST_OVERRUN:
+            printf("Overrun Error - Data not read fast enough\r\n");
+            break;
+        case UART_TEST_FRAME_ERROR:
+            printf("Frame Error - Wrong stop bits or baud rate\r\n");
+            break;
+        case UART_TEST_NOISE_ERROR:
+            printf("Noise Error - Check hardware connections\r\n");
+            break;
+        case UART_TEST_PARITY_ERROR:
+            printf("Parity Error - Check parity config\r\n");
+            break;
+    }
+
+    // Output via another UART or store in buffer for debugging
+    // HAL_UART_Transmit(&huart1, (uint8_t*)msg, strlen(msg), 1000);
+}
+
+void UART_DiagnosticTests(UART_HandleTypeDef *huart)
+{
+    // Test 1: Check UART state
+    if (huart->gState != HAL_UART_STATE_READY)
+    {
+        // UART not ready - check initialization
+        return;
+    }
+
+    // Test 2: Simple byte test
+    uint8_t testByte = 0x55;  // 01010101 pattern
+    uint8_t rxByte = 0;
+
+    HAL_UART_Transmit(huart, &testByte, 1, 100);
+    HAL_Delay(10);
+    HAL_StatusTypeDef status = HAL_UART_Receive(huart, &rxByte, 1, 500);
+
+    if (status == HAL_TIMEOUT)
+    {
+        // No data received - physical connection issue
+    }
+    else if (rxByte != testByte)
+    {
+        // Data corrupted - configuration issue
+    }
+
+    // Test 3: Different patterns
+    uint8_t patterns[] = {0x00, 0xFF, 0xAA, 0x55};
+    for (int i = 0; i < 4; i++)
+    {
+        uint8_t rx = 0;
+        HAL_UART_Transmit(huart, &patterns[i], 1, 100);
+        HAL_Delay(10);
+        HAL_UART_Receive(huart, &rx, 1, 500);
+
+        if (rx != patterns[i])
+        {
+            // Failed on this pattern
+            break;
+        }
+    }
+}
+
+void UART_CheckConfiguration(UART_HandleTypeDef *huart)
+{
+    // Verify basic settings
+    uint32_t baudrate = huart->Init.BaudRate;        // Should match your setting
+    uint32_t wordLength = huart->Init.WordLength;    // UART_WORDLENGTH_8B
+    uint32_t stopBits = huart->Init.StopBits;        // UART_STOPBITS_1
+    uint32_t parity = huart->Init.Parity;            // UART_PARITY_NONE
+    uint32_t mode = huart->Init.Mode;                // UART_MODE_TX_RX
+
+    // Check if peripheral is enabled
+    if (!(huart->Instance->CR1 & USART_CR1_UE))
+    {
+        // UART not enabled!
+    }
+
+    // Check if TX and RX are enabled
+    if (!(huart->Instance->CR1 & USART_CR1_TE))
+    {
+        // Transmitter not enabled
+    }
+
+    if (!(huart->Instance->CR1 & USART_CR1_RE))
+    {
+        // Receiver not enabled
+    }
+}
+
+HAL_StatusTypeDef UART_TestPins(UART_HandleTypeDef *huart)
+{
+    // De-initialize UART
+    HAL_UART_DeInit(huart);
+
+    // Configure TX pin as GPIO output
+    GPIO_InitTypeDef GPIO_InitStruct = {0};
+    GPIO_InitStruct.Pin = BACKUP_USART_TX_Pin;  // Your TX pin (e.g., GPIO_PIN_2)
+    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+    HAL_GPIO_Init(BACKUP_USART_TX_GPIO_Port, &GPIO_InitStruct);  // e.g., GPIOA
+
+    // Configure RX pin as GPIO input
+    GPIO_InitStruct.Pin = BACKUP_USART_RX_Pin;  // Your RX pin (e.g., GPIO_PIN_3)
+    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+    GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+    HAL_GPIO_Init(BACKUP_USART_RX_GPIO_Port, &GPIO_InitStruct);
+
+    HAL_Delay(10);
+
+    // Test: Set TX high, read RX (should be high if connected)
+    HAL_GPIO_WritePin(BACKUP_USART_TX_GPIO_Port, BACKUP_USART_TX_Pin, GPIO_PIN_SET);
+    HAL_Delay(1);
+    GPIO_PinState rxState1 = HAL_GPIO_ReadPin(BACKUP_USART_RX_GPIO_Port, BACKUP_USART_RX_Pin);
+
+    // Test: Set TX low, read RX (should be low if connected)
+    HAL_GPIO_WritePin(BACKUP_USART_TX_GPIO_Port, BACKUP_USART_TX_Pin, GPIO_PIN_RESET);
+    HAL_Delay(1);
+    GPIO_PinState rxState2 = HAL_GPIO_ReadPin(BACKUP_USART_RX_GPIO_Port, BACKUP_USART_RX_Pin);
+
+    // Re-initialize UART
+    HAL_UART_Init(huart);
+
+    if (rxState1 == GPIO_PIN_SET && rxState2 == GPIO_PIN_RESET)
+    {
+        return HAL_OK;  // Physical loopback confirmed
+    }
+
+    return HAL_ERROR;  // No loopback connection
+}
+
+void CompleteUARTTest(UART_HandleTypeDef *huart)
+{
+    // Step 1: Pin connectivity test
+    if (UART_TestPins(huart) != HAL_OK)
+    {
+        // TX-RX not connected!
+        Error_Handler();
+    }
+
+    // Step 2: Check configuration
+    UART_CheckConfiguration(huart);
+
+    // Step 3: Run diagnostic tests
+    UART_DiagnosticTests(huart);
+
+    // Step 4: Full loopback test
+    UART_TestResult_t result = UART_LoopbackTest_Debug(huart);
+    UART_PrintErrorDetails(huart, result);
 }
 
 /* USER CODE END 0 */
@@ -273,17 +496,6 @@ int main(void)
   HAL_TIM_Encoder_Start((&htim4), TIM_CHANNEL_ALL);
   HAL_TIM_Encoder_Start((&htim3), TIM_CHANNEL_ALL);
 
-	if (UART_LoopbackTest_IT(&huart2) == HAL_OK)
-	{
-		// Test passed - toggle LED or set flag
-		HAL_GPIO_WritePin(PI_LED_GPIO_Port, PI_LED_Pin, GPIO_PIN_SET);
-	}
-	else
-	{
-		// Test failed - handle error
-		printf("error with self communication\r\n");
-	}
-
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -299,6 +511,7 @@ int main(void)
 
 	//random tests, commented out
 	//LED_Test();
+	CompleteUARTTest(&huart3);
 
 	//IMU
 	bno055_data_vector quaternion = bno055_getVectorQuaternion();
