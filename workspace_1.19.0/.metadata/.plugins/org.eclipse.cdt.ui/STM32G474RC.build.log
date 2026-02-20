@@ -1,34 +1,48 @@
-18:33:29 **** Incremental Build of configuration Debug for project STM32G474RC ****
+16:19:40 **** Incremental Build of configuration Debug for project STM32G474RC ****
 make -j11 all 
 arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G474xx -c -I../USB_Device/App -I../USB_Device/Target -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
-../Core/Src/main.c: In function '_write':
-../Core/Src/main.c:90:26: warning: implicit declaration of function 'CDC_Transmit_FS' [-Wimplicit-function-declaration]
-   90 |                 result = CDC_Transmit_FS((uint8_t *)ptr, len);
-      |                          ^~~~~~~~~~~~~~~
+../Core/Src/main.c: In function 'piSendReceive':
+../Core/Src/main.c:154:57: warning: pointer targets in passing argument 2 of 'HAL_UART_Transmit' differ in signedness [-Wpointer-sign]
+  154 |         uint8_t sendStatus = HAL_UART_Transmit(&huart2, tx_buffer, TX_BUFFER_SIZE, 1000);
+      |                                                         ^~~~~~~~~
+      |                                                         |
+      |                                                         char *
+In file included from ../Core/Inc/stm32g4xx_hal_conf.h:348,
+                 from ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h:29,
+                 from ../Core/Inc/main.h:30,
+                 from ../Core/Src/main.c:20:
+../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h:1633:79: note: expected 'const uint8_t *' {aka 'const unsigned char *'} but argument is of type 'char *'
+ 1633 | HAL_StatusTypeDef HAL_UART_Transmit(UART_HandleTypeDef *huart, const uint8_t *pData, uint16_t Size, uint32_t Timeout);
+      |                                                                ~~~~~~~~~~~~~~~^~~~~
+../Core/Src/main.c:167:59: warning: passing argument 2 of 'HAL_UART_Receive' from incompatible pointer type [-Wincompatible-pointer-types]
+  167 |         uint8_t receiveStatus = HAL_UART_Receive(&huart2, &receiveData, RX_BUFFER_SIZE, 1000);
+      |                                                           ^~~~~~~~~~~~
+      |                                                           |
+      |                                                           char **
+../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h:1634:72: note: expected 'uint8_t *' {aka 'unsigned char *'} but argument is of type 'char **'
+ 1634 | HAL_StatusTypeDef HAL_UART_Receive(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t Size, uint32_t Timeout);
+      |                                                               ~~~~~~~~~^~~~~
 ../Core/Src/main.c: In function 'main':
-../Core/Src/main.c:211:23: warning: unused variable 'rst_state' [-Wunused-variable]
-  211 |         GPIO_PinState rst_state = HAL_GPIO_ReadPin(IMU_RST_GPIO_Port, IMU_RST_Pin);
-      |                       ^~~~~~~~~
-../Core/Src/main.c:187:11: warning: unused variable 'iteration' [-Wunused-variable]
-  187 |   uint8_t iteration = 0;
-      |           ^~~~~~~~~
-../Core/Src/main.c:186:11: warning: unused variable 'speed' [-Wunused-variable]
-  186 |   int16_t speed = 20;
-      |           ^~~~~
-../Core/Src/main.c:185:12: warning: unused variable 'last_update' [-Wunused-variable]
-  185 |   uint32_t last_update = 0;
-      |            ^~~~~~~~~~~
+../Core/Src/main.c:308:18: warning: unused variable 'encoder2' [-Wunused-variable]
+  308 |         uint16_t encoder2 = (uint16_t)__HAL_TIM_GET_COUNTER(&htim3);
+      |                  ^~~~~~~~
+../Core/Src/main.c:307:18: warning: unused variable 'encoder1' [-Wunused-variable]
+  307 |         uint16_t encoder1 = (uint16_t)__HAL_TIM_GET_COUNTER(&htim4);
+      |                  ^~~~~~~~
+../Core/Src/main.c:304:28: warning: unused variable 'quaternion' [-Wunused-variable]
+  304 |         bno055_data_vector quaternion = bno055_getVectorQuaternion();
+      |                            ^~~~~~~~~~
 arm-none-eabi-gcc -o "STM32G474RC.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/caseyear/STM32CubeIDE/workspace_1.19.0/STM32G474RC/STM32G474RCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="STM32G474RC.map" -Wl,--gc-sections -static -u_printf_float --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 Finished building target: STM32G474RC.elf
  
 arm-none-eabi-size  STM32G474RC.elf 
 arm-none-eabi-objdump -h -S STM32G474RC.elf  > "STM32G474RC.list"
    text	   data	    bss	    dec	    hex	filename
-  69164	    856	   9728	  79748	  13784	STM32G474RC.elf
+  71916	    856	   9600	  82372	  141c4	STM32G474RC.elf
 Finished building: default.size.stdout
  
 Finished building: STM32G474RC.list
  
 
-18:33:30 Build Finished. 0 errors, 5 warnings. (took 1s.69ms)
+16:19:41 Build Finished. 0 errors, 5 warnings. (took 1s.55ms)
 

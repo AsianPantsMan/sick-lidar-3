@@ -39,6 +39,7 @@
         * EVENT_OUT
         * EXTI
      PA3   ------> S_TIM2_CH4
+     PA15   ------> I2C1_SCL
 */
 void MX_GPIO_Init(void)
 {
@@ -54,7 +55,8 @@ void MX_GPIO_Init(void)
   __HAL_RCC_GPIOD_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOC, MD1_PH_IN2_Pin|MD1_EN_IN1_Pin|IMU_LED_Pin|MCU_LED_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOC, MD2_nSLEEP_Pin|MD1_nSLEEP_Pin|MD1_PH_IN2_Pin|IMU_LED_Pin
+                          |MCU_LED_Pin|MD2_PH_IN2_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOA, MD1_DRVOFF_Pin|IMU_RST_Pin, GPIO_PIN_RESET);
@@ -66,11 +68,20 @@ void MX_GPIO_Init(void)
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(BACKUP_SPI_NSS_GPIO_Port, BACKUP_SPI_NSS_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pins : IO3_Pin IO2_Pin IO1_Pin */
-  GPIO_InitStruct.Pin = IO3_Pin|IO2_Pin|IO1_Pin;
+  /*Configure GPIO pins : MD2_nSLEEP_Pin MD1_nSLEEP_Pin MD1_PH_IN2_Pin IMU_LED_Pin
+                           MCU_LED_Pin MD2_PH_IN2_Pin */
+  GPIO_InitStruct.Pin = MD2_nSLEEP_Pin|MD1_nSLEEP_Pin|MD1_PH_IN2_Pin|IMU_LED_Pin
+                          |MCU_LED_Pin|MD2_PH_IN2_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : IO2_Pin */
+  GPIO_InitStruct.Pin = IO2_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+  HAL_GPIO_Init(IO2_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : MCU_NRST_Pin */
   GPIO_InitStruct.Pin = MCU_NRST_Pin;
@@ -79,13 +90,6 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   GPIO_InitStruct.Alternate = GPIO_AF15_EVENTOUT;
   HAL_GPIO_Init(MCU_NRST_GPIO_Port, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : MD1_PH_IN2_Pin MD1_EN_IN1_Pin IMU_LED_Pin MCU_LED_Pin */
-  GPIO_InitStruct.Pin = MD1_PH_IN2_Pin|MD1_EN_IN1_Pin|IMU_LED_Pin|MCU_LED_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
   /*Configure GPIO pins : MD1_DRVOFF_Pin IMU_RST_Pin */
   GPIO_InitStruct.Pin = MD1_DRVOFF_Pin|IMU_RST_Pin;
@@ -122,6 +126,14 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : BACKUP_I2C_SCL_Pin */
+  GPIO_InitStruct.Pin = BACKUP_I2C_SCL_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  GPIO_InitStruct.Alternate = GPIO_AF4_I2C1;
+  HAL_GPIO_Init(BACKUP_I2C_SCL_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : BACKUP_SPI_NSS_Pin */
   GPIO_InitStruct.Pin = BACKUP_SPI_NSS_Pin;

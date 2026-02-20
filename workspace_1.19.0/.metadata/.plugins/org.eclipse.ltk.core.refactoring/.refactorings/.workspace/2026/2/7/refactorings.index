@@ -1,2 +1,4 @@
 1770856610224	Delete resource 'STM32G474RC/Archive'
 1770856616366	Delete resource 'ECEN403CapstoneMain/Archive'
+1770858011470	Delete resource 'STM32G474RC/Core/Inc/motor_control.h'
+1770858020662	Delete resource 'STM32G474RC/Core/Src/motor_control.c'

@@ -7,3 +7,4 @@ org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:ECEN403CapstoneMain\ Debug/acti
 org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:ECEN403CapstoneMain\ Debug/activeLaunchTarget=null\:---
 org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:Hello\ World1\ Debug/activeLaunchMode=run
 org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:Hello\ World1\ Debug/activeLaunchTarget=null\:---
+org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:STM32G474RC\ Debug/activeLaunchMode=run

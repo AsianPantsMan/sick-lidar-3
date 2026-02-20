@@ -35,41 +35,6 @@ void bno055_init(){
 	// Select BNO055 config mode
 	bno055_setOperationModeConfig();
 	bno055_delay(10);
-//	// Check I2C state before attempting anything
-//	if (_bno055_i2c_port->State != HAL_I2C_STATE_READY) {
-//		printf("I2C not ready! State: %d. Resetting...\r\n", _bno055_i2c_port->State);
-//		HAL_I2C_DeInit(_bno055_i2c_port);
-//		HAL_Delay(10);
-//		HAL_I2C_Init(_bno055_i2c_port);
-//	}
-//
-//	// Check device presence BEFORE reset
-//	HAL_StatusTypeDef status = HAL_I2C_IsDeviceReady(_bno055_i2c_port,
-//													  BNO055_I2C_ADDR << 1,
-//													  3, 1000);
-//
-//	if (status != HAL_OK) {
-//		printf("BNO055 I2C communication failed! Status: %d\r\n", status);
-//		printf("Continuing without IMU...\r\n");
-//		return;
-//	}
-//
-//    bno055_reset();
-//    uint8_t id = 0;
-//
-//    bno055_readData(CHIP_ID, &id, 1);
-//    if(id != 0xA0) {
-//        printf("BNO055 wrong chip ID: 0x%02X (expected 0xA0)\r\n", id);
-//        printf("Continuing without IMU...\r\n");
-//        return;
-//    }
-//
-//    printf("BNO055 Found! ID: 0x%02X\r\n", id);
-//
-//    bno055_setPage(0);
-//    bno055_writeData(SYS_TRIGGER, 0x0);
-//    bno055_setOperationModeConfig();
-//    bno055_delay(10);
 
     HAL_GPIO_WritePin(IMU_LED_GPIO_Port, IMU_LED_Pin, GPIO_PIN_SET);
 }

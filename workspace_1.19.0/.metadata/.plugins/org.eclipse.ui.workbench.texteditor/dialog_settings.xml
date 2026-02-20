@@ -3,6 +3,10 @@
 	<item key="hasShownOverlayPopupBefore" value="true"/>
 	<item key="replaceBarOpen" value="false"/>
 	<list key="searchhistory">
+		<item value="clr_fault"/>
+		<item value="nss"/>
+		<item value="_drv8245_spi_port"/>
+		<item value="spi"/>
 		<item value="write"/>
 		<item value="usb"/>
 		<item value="setpage"/>
@@ -14,9 +18,5 @@
 		<item value="function"/>
 		<item value="uart_rx"/>
 		<item value="mcu"/>
-		<item value="dac"/>
-		<item value="tim"/>
-		<item value="huart"/>
-		<item value="busy"/>
 	</list>
 </section>

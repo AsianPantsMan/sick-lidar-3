@@ -1,0 +1,92 @@
+/*
+* drv8245-q1.c
+*
+*  Created on: Jan 28, 2026
+*      Author: caseyear
+*/
+
+#include "drv8245-q1.h"
+#include "main.h"
+#include <stdio.h>
+
+void delay_us(uint32_t us)
+{
+    uint32_t start_cycle = DWT->CYCCNT;
+    uint32_t cycles_to_wait = us * (SystemCoreClock / 1000000);
+
+    while ((DWT->CYCCNT - start_cycle) < cycles_to_wait);
+}
+
+HAL_StatusTypeDef MD1_motor_init(){
+	uint32_t timeout_start;
+	GPIO_PinState fault_status;
+
+//	GPIO_PinState sleep_status = HAL_GPIO_ReadPin(MD1_nSLEEP_GPIO_Port, MD1_nSLEEP_Pin);
+//	printf("sleep pin is: %d\r\n", sleep_status);
+
+	//initiate wakeup sequence
+	printf("nSLEEP asserted high on motor driver 1\r\n");
+	HAL_GPIO_WritePin(MD1_nSLEEP_GPIO_Port, MD1_nSLEEP_Pin, GPIO_PIN_SET);
+
+//	sleep_status = HAL_GPIO_ReadPin(MD1_nSLEEP_GPIO_Port, MD1_nSLEEP_Pin);
+//	printf("sleep pin is: %d\r\n", sleep_status);
+
+	fault_status = HAL_GPIO_ReadPin(MD1_nFAULT_GPIO_Port, MD1_nFAULT_Pin);
+	if (fault_status == GPIO_PIN_RESET) {
+		printf("nFAULT pin asserted low\r\n");
+	}else{
+		printf("error: nFAULT pin stuck high");
+		return 1;
+	}
+
+	//pulse nSLEEP to acknowledge device wakeup
+	printf("send reset pulse on nSLEEP\r\n");
+	HAL_GPIO_WritePin(MD1_nSLEEP_GPIO_Port, MD1_nSLEEP_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(MD1_nSLEEP_GPIO_Port, MD1_nSLEEP_Pin, GPIO_PIN_SET);
+
+	HAL_Delay(1);
+
+//	fault_status = HAL_GPIO_ReadPin(MD1_nFAULT_GPIO_Port, MD1_nFAULT_Pin);
+//	if (fault_status == GPIO_PIN_SET) {
+//		printf("nFAULT pin deasserted high, in standby\r\n");
+//	}else{
+//		printf("initialization incomplete\r\n");
+//		return 2;
+//	}
+
+	GPIO_PinState sleep_status = HAL_GPIO_ReadPin(MD1_nSLEEP_GPIO_Port, MD1_nSLEEP_Pin);
+	printf("sleep pin is: %d\r\n", sleep_status);
+	HAL_Delay(100);
+	sleep_status = HAL_GPIO_ReadPin(MD1_nSLEEP_GPIO_Port, MD1_nSLEEP_Pin);
+	printf("sleep pin is: %d\r\n", sleep_status);
+
+	//turn on md1 led
+	HAL_GPIO_WritePin(MD1_LED_GPIO_Port, MD1_LED_Pin, GPIO_PIN_SET);
+	printf("now in standby. motor driver 1 ready!\r\n");
+	return 0;
+}
+
+uint8_t MD2_motor_init(){
+	printf("nSLEEP asserted on motor driver 2\r\n");
+	HAL_GPIO_WritePin(MD2_nSLEEP_GPIO_Port, MD2_nSLEEP_Pin, GPIO_PIN_SET);
+	HAL_Delay(20);
+
+	GPIO_PinState init_status = HAL_GPIO_ReadPin(MD2_nSLEEP_GPIO_Port, MD2_nSLEEP_Pin);
+	while (init_status == GPIO_PIN_SET){
+		printf("waiting for nSLEEP to de-assert...\r\n");
+		HAL_Delay(100);
+	}
+	HAL_GPIO_WritePin(MD2_LED_GPIO_Port, MD2_LED_Pin, GPIO_PIN_SET);
+	printf("nSLEEP de-asserted, motor driver 2 ready\r\n");
+}
+
+uint8_t MD1_setSpeed(TIM_HandleTypeDef *htim, uint32_t channel, uint8_t duty){
+
+	//phase debug
+	GPIO_PinState phase = HAL_GPIO_ReadPin(MD1_PH_IN2_GPIO_Port, MD1_PH_IN2_Pin);
+	printf("motor driver 1 phase: %d\r\n", phase);
+
+	__HAL_TIM_SET_COMPARE(htim, channel, duty);
+
+	return (uint8_t)((duty * 100) / 1000);
+}

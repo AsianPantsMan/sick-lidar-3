@@ -6,291 +6,160 @@
 */
 
 #include "drv8245-q1.h"
+#include "main.h"
 #include <stdio.h>
 
-static drv8245_handle_t *_drv8245_handle;
 
-// Register cache for read-modify-write operations
-static uint8_t reg_cache[6] = {0};  // COMMAND through CONFIG4
 
-void drv8245_assign(SPI_HandleTypeDef *hspi_device) {
-    if (_drv8245_handle == NULL) {
-        printf("ERROR: drv8245_handle not initialized\r\n");
-        return;
-    }
-    _drv8245_handle->hspi = hspi_device;
+void delay_us(uint32_t us)
+{
+    uint32_t start = DWT->CYCCNT;
+    uint32_t cycles = us * (SystemCoreClock / 1000000);
+
+    while ((DWT->CYCCNT - start) < cycles);
 }
 
-void drv8245_readData(uint8_t *data) {
-    // Pull CS low
-    HAL_GPIO_WritePin(_drv8245_handle->csPort, _drv8245_handle->csPin, GPIO_PIN_RESET);
+void md_reset_pulse(){
 
-    // SPI read: send address with read bit (bit 14 = 1)
-    uint8_t tx_data[2];
-    uint8_t rx_data[2];
-    tx_data[0] = 0x40 | (data[0] & 0x3F);  // Bit 14=1 (read), bits 13-8=address
-    tx_data[1] = 0x00;                      // Dummy byte
-
-    HAL_StatusTypeDef status = HAL_SPI_TransmitReceive(_drv8245_handle->hspi,
-                                                        tx_data, rx_data, 2, 100);
-
-    // Pull CS high
-    HAL_GPIO_WritePin(_drv8245_handle->csPort, _drv8245_handle->csPin, GPIO_PIN_SET);
-
-    if (status != HAL_OK) {
-        printf("DRV8245 SPI Read Failed: %d\r\n", status);
-        return;
-    }
-
-    data[1] = rx_data[1];  // Return data byte
 }
 
-void drv8245_writeData(uint8_t *data) {
-    // Pull CS low
-    HAL_GPIO_WritePin(_drv8245_handle->csPort, _drv8245_handle->csPin, GPIO_PIN_RESET);
+HAL_StatusTypeDef MD1_motor_init(){
+	GPIO_PinState fault_status1;
 
-    // SPI write: send address with write bit (bit 14 = 0)
-    uint8_t tx_data[2];
-    tx_data[0] = data[0] & 0x3F;  // Bit 14=0 (write), bits 13-8=address
-    tx_data[1] = data[1];          // Data byte
+//	//debug block, check nSLEEP & nFAULT before init
+//	GPIO_PinState sleep_status1 = HAL_GPIO_ReadPin(MD1_nSLEEP_GPIO_Port, MD1_nSLEEP_Pin);
+//	printf("sleep pin is: %d\r\n", sleep_status1);
+//	fault_status = HAL_GPIO_ReadPin(MD1_nFAULT_GPIO_Port, MD1_nFAULT_Pin);
+//	printf("fault pin is: %d\r\n", fault_status1);
 
-    HAL_StatusTypeDef status = HAL_SPI_Transmit(_drv8245_handle->hspi, tx_data, 2, 100);
+	//initiate wakeup sequence
+	printf("nSLEEP asserted high on motor driver 1\r\n");
+	HAL_GPIO_WritePin(MD1_nSLEEP_GPIO_Port, MD1_nSLEEP_Pin, GPIO_PIN_SET);
+	HAL_Delay(1);
 
-    // Pull CS high
-    HAL_GPIO_WritePin(_drv8245_handle->csPort, _drv8245_handle->csPin, GPIO_PIN_SET);
+	fault_status1 = HAL_GPIO_ReadPin(MD1_nFAULT_GPIO_Port, MD1_nFAULT_Pin);
+	if (fault_status1 == GPIO_PIN_RESET) {
+		printf("nFAULT pin asserted low\r\n");
+	}else{
+		printf("error: nFAULT pin stuck high");
+		return HAL_ERROR;
+	}
 
-    if (status != HAL_OK) {
-        printf("DRV8245 SPI Write Failed: %d\r\n", status);
-    }
+	//pulse nSLEEP to acknowledge device wake up
+	printf("send reset pulse on nSLEEP\r\n");
+	HAL_GPIO_WritePin(MD1_nSLEEP_GPIO_Port, MD1_nSLEEP_Pin, GPIO_PIN_RESET);
+	delay_us(30);
+	HAL_GPIO_WritePin(MD1_nSLEEP_GPIO_Port, MD1_nSLEEP_Pin, GPIO_PIN_SET);
+
+	fault_status1 = HAL_GPIO_ReadPin(MD1_nFAULT_GPIO_Port, MD1_nFAULT_Pin);
+	if (fault_status1 == GPIO_PIN_SET) {
+		printf("nFAULT pin de-asserted high, in standby\r\n");
+	}else{
+		printf("initialization incomplete\r\n");
+
+		return HAL_ERROR;
+	}
+	//turn on md1 led
+	HAL_GPIO_WritePin(MD1_LED_GPIO_Port, MD1_LED_Pin, GPIO_PIN_SET);
+	printf("now in standby. motor driver 1 ready!\r\n");
+
+	return HAL_OK;
+
 }
 
-void drv8245_updateData() {
-    // Helper function to update register cache
-    uint8_t data[2];
+HAL_StatusTypeDef MD2_motor_init(){
+	GPIO_PinState fault_status2;
 
-    // Read COMMAND through CONFIG4 registers
-    for (uint8_t i = 0; i < 6; i++) {
-        data[0] = COMMAND + i;
-        drv8245_readData(data);
-        reg_cache[i] = data[1];
-    }
+//	//debug block, check nSLEEP & nFAULT before init
+//	GPIO_PinState sleep_status2 = HAL_GPIO_ReadPin(MD2_nSLEEP_GPIO_Port, MD2_nSLEEP_Pin);
+//	printf("sleep pin is: %d\r\n", sleep_status2);
+//	fault_status2 = HAL_GPIO_ReadPin(MD2_nFAULT_GPIO_Port, MD2_nFAULT_Pin);
+//	printf("fault pin is: %d\r\n", fault_status2);
+
+	//initiate wakeup sequence
+	printf("nSLEEP asserted high on motor driver 2\r\n");
+	HAL_GPIO_WritePin(MD2_nSLEEP_GPIO_Port, MD2_nSLEEP_Pin, GPIO_PIN_SET);
+	HAL_Delay(1);
+
+	fault_status2 = HAL_GPIO_ReadPin(MD2_nFAULT_GPIO_Port, MD2_nFAULT_Pin);
+	if (fault_status2 == GPIO_PIN_RESET) {
+		printf("nFAULT pin asserted low\r\n");
+	}else{
+		printf("error: nFAULT pin stuck high");
+		return HAL_ERROR;
+	}
+
+	//pulse nSLEEP to acknowledge device wake up
+	printf("send reset pulse on nSLEEP\r\n");
+	HAL_GPIO_WritePin(MD2_nSLEEP_GPIO_Port, MD2_nSLEEP_Pin, GPIO_PIN_RESET);
+	delay_us(30);
+	HAL_GPIO_WritePin(MD2_nSLEEP_GPIO_Port, MD2_nSLEEP_Pin, GPIO_PIN_SET);
+
+//  //BYPASSING FAULT CHECK BECAUSE NFAULT PIN ON STM32 IS LIKELY BURNT OUT FROM A PRIOR 5V SIGNAL SENT, UNCOMMENT FOR FUTURE CHECK, THE MD STILL WORKS
+//	fault_status2 = HAL_GPIO_ReadPin(MD2_nFAULT_GPIO_Port, MD2_nFAULT_Pin);
+//	if (fault_status2 == GPIO_PIN_SET) {
+//		printf("nFAULT pin de-asserted high, in standby\r\n");
+//	}else{
+//		printf("initialization incomplete\r\n");
+//
+//		return HAL_ERROR;
+//	}
+	//turn on md2 led
+	HAL_GPIO_WritePin(MD2_LED_GPIO_Port, MD2_LED_Pin, GPIO_PIN_SET);
+	printf("now in standby. motor driver 2 ready!\r\n");
+
+	return HAL_OK;
 }
 
-void drv8245_init() {
-    if (_drv8245_handle == NULL) {
-        printf("ERROR: DRV8245 handle not assigned\r\n");
-        return;
-    }
+uint8_t MD1_setSpeed(TIM_HandleTypeDef *htim, uint32_t channel, uint8_t duty) {
+	if (duty > 100) {
+		printf("ERROR: Invalid duty cycle %d%%\r\n", duty);
+		return 0;
+	}
 
-    // Set CS high initially
-    HAL_GPIO_WritePin(_drv8245_handle->csPort, _drv8245_handle->csPin, GPIO_PIN_SET);
+	uint32_t timer_period = __HAL_TIM_GET_AUTORELOAD(htim);
 
-    // SPI (P) variant: VDD supply must be enabled externally
-    // Wait for VDD to stabilize and device to complete power-up sequence
-    printf("Waiting for DRV8245 power-up (VDD must be > 3.8V)...\r\n");
-    HAL_Delay(10);  // Allow VDD to stabilize
+	//calculate compare value based on timer period
+	uint32_t compare_value = (timer_period * duty) / 100;
+	printf("[DEBUG] Calculated compare value: %lu\r\n", compare_value);
 
-    // Wait for tCOM (400µs typ) - device ready for communication
-    HAL_Delay(2);   // 2ms to be safe
+	__HAL_TIM_SET_COMPARE(htim, channel, compare_value);
 
-    // Device should assert nFAULT low, then we send CLR_FLT command
-    printf("Sending CLR_FLT to acknowledge power-up...\r\n");
-    drv8245_clearFaults();
+	//start PWM output
+	HAL_StatusTypeDef pwm_result = HAL_TIM_PWM_Start(htim, channel);
+	printf("HAL_TIM_PWM_Start result: %d\r\n", pwm_result);
+	if (pwm_result != HAL_OK) {
+		printf("ERROR: Failed to start PWM\r\n");
+		return 0;
+	}
 
-    // Wait for device to enter STANDBY state
-    HAL_Delay(2);
+	printf("Motor speed set to %d%% (Compare: %lu/%lu)\r\n", duty, compare_value, timer_period);
 
-    // Read device ID
-    uint8_t data[2];
-    data[0] = DEVICE_ID;
-    drv8245_readData(data);
-    printf("DRV8245 Device ID: 0x%02X\r\n", data[1]);
-
-    // Default configuration
-    // CONFIG1: Enable OLA detection, OCP retry
-    data[0] = CONFIG1;
-    data[1] = CONFIG1_EN_OLA | CONFIG1_OCP_RETRY;
-    drv8245_writeData(data);
-
-    // CONFIG2: Default PWM extend, ITRIP at 1.0A
-    data[0] = CONFIG2;
-    data[1] = CONFIG2_PWM_EXTEND | (0x03);  // S_ITRIP = 011 (1.0A)
-    drv8245_writeData(data);
-
-    // CONFIG3: Default slew rate, PH/EN mode
-    data[0] = CONFIG3;
-    data[1] = (0x02 << 2) | 0x01;  // Medium slew rate, PH/EN mode
-    drv8245_writeData(data);
-
-    // CONFIG4: Default OCP settings
-    data[0] = CONFIG4;
-    data[1] = 0x00;
-    drv8245_writeData(data);
-
-    // Update cache
-    drv8245_updateData();
-
-    printf("DRV8245 Initialized\r\n");
+	return duty;
 }
 
-void drv8245_setSlewRate(uint8_t slew_rate) {
-    // slew_rate: 0-7 (0=slowest, 7=fastest)
-    uint8_t data[2];
-    data[0] = CONFIG3;
-    drv8245_readData(data);
+uint8_t MD2_setSpeed(TIM_HandleTypeDef *htim, uint32_t channel, uint8_t duty) {
+	if (duty > 100) {
+		printf("ERROR: Invalid duty cycle %d%%\r\n", duty);
+		return 0;
+	}
 
-    data[1] = (data[1] & ~CONFIG3_S_SR) | ((slew_rate & 0x07) << 2);
-    drv8245_writeData(data);
+	uint32_t timer_period = __HAL_TIM_GET_AUTORELOAD(htim);
 
-    printf("DRV8245 Slew Rate Set: %d\r\n", slew_rate);
-}
+	//calculate compare value based on timer period
+	uint32_t compare_value = (timer_period * duty) / 100;
 
-void drv8245_setOCR(uint8_t ocr_level) {
-    // ocr_level: 0-3 (overcurrent threshold)
-    uint8_t data[2];
-    data[0] = CONFIG4;
-    drv8245_readData(data);
+	__HAL_TIM_SET_COMPARE(htim, channel, compare_value);
 
-    data[1] = (data[1] & ~CONFIG4_OCP_SEL) | ((ocr_level & 0x03) << 3);
-    drv8245_writeData(data);
+	//start PWM output
+	HAL_StatusTypeDef pwm_result = HAL_TIM_PWM_Start(htim, channel);
+	if (pwm_result != HAL_OK) {
+		printf("ERROR: Failed to start PWM\r\n");
+		return 0;
+	}
 
-    printf("DRV8245 OCR Level Set: %d\r\n", ocr_level);
-}
+	printf("Motor speed set to %d%% (Compare: %lu/%lu)\r\n", duty, compare_value, timer_period);
 
-void drv8245_setBridgeMode(uint8_t mode) {
-    // mode: 0=PH/EN, 1=PWM, 2=Independent
-    uint8_t data[2];
-    data[0] = CONFIG3;
-    drv8245_readData(data);
 
-    data[1] = (data[1] & ~CONFIG3_S_MODE) | (mode & 0x03);
-    drv8245_writeData(data);
-
-    printf("DRV8245 Bridge Mode Set: %d\r\n", mode);
-}
-
-void drv8245_reset() {
-    // SPI (P) variant: No nSLEEP pin
-    // Reset by cycling VDD power externally or sending software reset command
-    printf("DRV8245 (P) variant: Reset via VDD power cycle required\r\n");
-    printf("Software workaround: Clearing all faults and reconfiguring...\r\n");
-
-    drv8245_clearFaults();
-    HAL_Delay(5);
-
-    // Re-initialize
-    drv8245_init();
-}
-
-void drv8245_setSpiControl(uint8_t enable) {
-    uint8_t data[2];
-
-    // First unlock SPI_IN register
-    data[0] = COMMAND;
-    drv8245_readData(data);
-    data[1] = (data[1] & 0xFC) | 0x02;  // SPI_IN_LOCK = 10b (unlock)
-    drv8245_writeData(data);
-
-    // Now write to SPI_IN
-    data[0] = SPI_IN;
-    drv8245_readData(data);
-
-    if (enable) {
-        data[1] |= SPI_IN_S_EN_IN1;
-    } else {
-        data[1] &= ~SPI_IN_S_EN_IN1;
-    }
-
-    drv8245_writeData(data);
-}
-
-void drv8245_setDriveOutput(uint8_t enable, uint8_t direction) {
-    uint8_t data[2];
-
-    // First unlock SPI_IN register
-    data[0] = COMMAND;
-    drv8245_readData(data);
-    data[1] = (data[1] & 0xFC) | 0x02;  // SPI_IN_LOCK = 10b (unlock)
-    drv8245_writeData(data);
-
-    // Now write to SPI_IN
-    data[0] = SPI_IN;
-    drv8245_readData(data);
-
-    // Clear relevant bits
-    data[1] &= ~(SPI_IN_S_DRVOFF | SPI_IN_S_EN_IN1 | SPI_IN_S_PH_IN2);
-
-    if (enable) {
-        data[1] |= SPI_IN_S_EN_IN1;  // Enable output
-
-        if (direction) {
-            data[1] |= SPI_IN_S_PH_IN2;  // Forward
-        }
-        // else: direction bit stays 0 for reverse
-    } else {
-        data[1] |= SPI_IN_S_DRVOFF;  // Disable output
-    }
-
-    drv8245_writeData(data);
-}
-
-void drv8245_lockReg() {
-    uint8_t data[2];
-    data[0] = COMMAND;
-    drv8245_readData(data);
-
-    data[1] = (data[1] & 0xFC) | 0x03;  // REG_LOCK = 11b (lock)
-    drv8245_writeData(data);
-
-    printf("DRV8245 Registers Locked\r\n");
-}
-
-void drv8245_unlockReg() {
-    uint8_t data[2];
-    data[0] = COMMAND;
-    drv8245_readData(data);
-
-    data[1] = (data[1] & 0xFC) | 0x01;  // REG_LOCK = 01b (unlock)
-    drv8245_writeData(data);
-
-    printf("DRV8245 Registers Unlocked\r\n");
-}
-
-void drv8245_getFaultSummary() {
-    uint8_t data[2];
-
-    // Read FAULT_SUMMARY
-    data[0] = FAULT_SUMMARY;
-    drv8245_readData(data);
-
-    printf("\r\nDRV8245 Fault Summary: 0x%02X\r\n", data[1]);
-    if (data[1] & FAULT_SUMMARY_SPI_ERR) printf("  - SPI Error\r\n");
-    if (data[1] & FAULT_SUMMARY_POR)     printf("  - Power-On Reset\r\n");
-    if (data[1] & FAULT_SUMMARY_FAULT)   printf("  - Fault Condition\r\n");
-    if (data[1] & FAULT_SUMMARY_VMOV)    printf("  - VM Overvoltage\r\n");
-    if (data[1] & FAULT_SUMMARY_VMUV)    printf("  - VM Undervoltage\r\n");
-    if (data[1] & FAULT_SUMMARY_OCP)     printf("  - Overcurrent\r\n");
-    if (data[1] & FAULT_SUMMARY_TSD)     printf("  - Thermal Shutdown\r\n");
-    if (data[1] & FAULT_SUMMARY_OLA)     printf("  - Open Load\r\n");
-
-    // Read STATUS1
-    data[0] = STATUS1;
-    drv8245_readData(data);
-    printf("STATUS1: 0x%02X\r\n", data[1]);
-
-    // Read STATUS2
-    data[0] = STATUS2;
-    drv8245_readData(data);
-    printf("STATUS2: 0x%02X\r\n", data[1]);
-}
-
-void drv8245_clearFaults() {
-    uint8_t data[2];
-    data[0] = COMMAND;
-    data[1] = 0x80;  // CLR_FLT bit (bit 7)
-    drv8245_writeData(data);
-
-    HAL_Delay(1);
-
-    printf("DRV8245 Faults Cleared\r\n");
+	return duty;
 }

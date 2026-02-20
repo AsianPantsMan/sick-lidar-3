@@ -1,0 +1,46 @@
+/*
+ * drv8245-q1.h
+ *
+ *  Created on: Jan 28, 2026
+ *      Author: caseyear
+ */
+
+#ifndef INC_DRV8245_Q1_H_
+#define INC_DRV8245_Q1_H_
+
+#include "main.h"
+#include "stm32g4xx_hal.h"
+#include <stdbool.h>
+
+typedef struct {
+    GPIO_TypeDef *nSLEEP_Port;
+    uint16_t nSLEEP_Pin;
+
+    GPIO_TypeDef *nFAULT_Port;
+    uint16_t nFAULT_Pin;
+
+    GPIO_TypeDef *PHASE_Port;
+    uint16_t PHASE_Pin;
+
+    GPIO_TypeDef *LED_Port;
+    uint16_t LED_Pin;
+
+    TIM_HandleTypeDef *PWM_Timer;
+    uint32_t PWM_Channel;
+
+    //state variables
+    MD_Direction_t direction;
+    uint16_t current_speed;
+
+} MotorDriver_t;
+
+void delay_us(uint32_t microseconds);
+void md_reset_pulse();
+
+HAL_StatusTypeDef MD1_motor_init();
+HAL_StatusTypeDef MD2_motor_init();
+uint8_t MD1_setSpeed(TIM_HandleTypeDef *htim, uint32_t channel, uint8_t duty);
+uint8_t MD2_setSpeed(TIM_HandleTypeDef *htim, uint32_t channel, uint8_t duty);
+
+
+#endif /* INC_DRV8245_Q1_H_ */

@@ -1,0 +1,18 @@
+/*
+ * drv8245-q1.h
+ *
+ *  Created on: Jan 28, 2026
+ *      Author: caseyear
+ */
+
+#ifndef INC_DRV8245_Q1_H_
+#define INC_DRV8245_Q1_H_
+
+#include "main.h"
+#include "stm32g4xx_hal.h"
+#include <stdbool.h>
+
+void MD1_motor_init();
+
+
+#endif /* INC_DRV8245_Q1_H_ */

@@ -19,7 +19,6 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "adc.h"
-#include "fdcan.h"
 #include "i2c.h"
 #include "spi.h"
 #include "tim.h"
@@ -29,9 +28,9 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "usbd_cdc_if.h"
 #include <bno055.h>
 #include "drv8245-q1.h"
-#include "motor_control.h"
 
 /* USER CODE END Includes */
 
@@ -42,7 +41,8 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
+#define TX_BUFFER_SIZE 38 //currently set for imu (4 doubles), 2 encoders (2 uint16_t) => (8 * 4) + (2 * 2) + 2 (framing) = 38 bytes
+#define RX_BUFFER_SIZE 100 //currently set for 6 floats, (3 linear velocity, 3 angular velocity)
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -53,9 +53,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-drv8245_handle_t drv_motor1;
-motor_handle_t motor1;
-
+char rx_buffer[RX_BUFFER_SIZE];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -66,6 +64,31 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+
+uint8_t DWT_Init(void)
+{
+    /* Check if DWT is present */
+    if (!(CoreDebug->DEMCR & CoreDebug_DEMCR_TRCENA_Msk)) {
+        /* Enable TRC (Trace) */
+        CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
+    }
+
+    /* Reset the cycle counter */
+    DWT->CYCCNT = 0;
+
+    /* Enable cycle counter */
+    DWT->CTRL |= DWT_CTRL_CYCCNTENA_Msk;
+
+    uint32_t start = DWT->CYCCNT;
+    for (volatile int i = 0; i < 100; i++);
+    uint32_t end = DWT->CYCCNT;
+
+    if (end > start) {
+        return 0;
+    } else {
+        return 1;
+    }
+}
 
 void LED_Test(){
 	HAL_GPIO_TogglePin(IMU_LED_GPIO_Port, IMU_LED_Pin);
@@ -103,24 +126,85 @@ int _write(int file, char *ptr, int len) {
 	}
 }
 
-void usbVCOMPrintTest(){
-	const char start_byte[] = "Hello World!\n\r";
-	CDC_Transmit_FS((uint16_t*)start_byte, sizeof(start_byte));
+uint8_t piSendReceive(char* receiveData, bno055_data_vector imu_position, uint16_t encoder1, uint16_t encoder2){
+
+	HAL_GPIO_WritePin(PI_LED_GPIO_Port, PI_LED_Pin, GPIO_PIN_SET);
+
+	//create transmit buffer
+	char tx_buffer[TX_BUFFER_SIZE];
+
+	tx_buffer[0] = 0xAA;
+
+	memcpy(&tx_buffer[1], &imu_position.w, 8);
+	memcpy(&tx_buffer[9], &imu_position.x, 8);
+	memcpy(&tx_buffer[17], &imu_position.y, 8);
+	memcpy(&tx_buffer[25], &imu_position.z, 8);
+	memcpy(&tx_buffer[33], &encoder1, 2);
+	memcpy(&tx_buffer[35], &encoder2, 2);
+
+	tx_buffer[37] = 0x55; //use index sizeof(tx_buffer) - 1
+
+	//check receive buffer
+	if (receiveData == NULL) {
+	        printf("Error: receiveData pointer is NULL\r\n");
+	        return -3;
+	    }
+
+	//send
+	uint8_t sendStatus = HAL_UART_Transmit(&huart2, tx_buffer, TX_BUFFER_SIZE, 1000);
+		if (sendStatus != HAL_OK){
+				printf("transmission error\r\n");
+				return -2;
+			}
+	//debug line
+//		else{
+//			printf("transmission successful\r\n");
+//		}
+
+	HAL_Delay(10);
+
+	//receive
+	uint8_t receiveStatus = HAL_UART_Receive(&huart2, &receiveData, RX_BUFFER_SIZE, 1000);
+	printf("data received \r\n");
+	if (receiveStatus != HAL_OK) {
+	        if (receiveStatus == HAL_TIMEOUT) {
+	            printf("receive timeout\r\n");
+	        } else {
+	            printf("receive error: %d\r\n", receiveStatus);
+	        }
+	        return -1;
+	    }
+
+	//debug line, comment out as needed
+	printf("Received: ");
+	    for(int i = 0; i < RX_BUFFER_SIZE; i++) {
+	        printf("%02X ", receiveData[i]);
+	    }
+	    printf("\r\n");
+
+	return 0;
 }
 
-void MD1Read(){
-	uint8_t fault = HAL_GPIO_ReadPin(MD1_nFAULT_GPIO_Port, MD1_nFAULT_Pin);
-	printf("nFAULT_Pin: %u\r\n", fault);
-	uint8_t ph_in2 = HAL_GPIO_ReadPin(MD1_PH_IN2_GPIO_Port, MD1_PH_IN2_Pin);
-	printf("MD1_PH_IN2_Pin: %u\r\n", ph_in2);
-	uint8_t en_in1 = HAL_GPIO_ReadPin(MD1_EN_IN1_GPIO_Port, MD1_EN_IN1_Pin);
-	printf("MD1_EN_IN1_Pin: %u\r\n", en_in1);
-	uint8_t iprop = HAL_GPIO_ReadPin(MD1_IPROPI_GPIO_Port, MD1_IPROPI_Pin);
-	printf("MD1_IPROPI_Pin: %u\r\n", iprop);
-	uint8_t drvoff = HAL_GPIO_ReadPin(MD1_DRVOFF_GPIO_Port, MD1_DRVOFF_Pin);
-	printf("MD1_DRVOFF_Pin: %u\r\n\n", drvoff);
+HAL_StatusTypeDef UART_LoopbackTest_IT(UART_HandleTypeDef *huart)
+{
+    uint8_t txData[] = "Test";
+    uint8_t rxData[10] = {0};
 
+    // Start reception in interrupt mode
+    HAL_UART_Receive_IT(huart, rxData, strlen((char*)txData));
+
+    // Transmit data
+    if (HAL_UART_Transmit(huart, txData, strlen((char*)txData), 1000) != HAL_OK)
+    {
+        return HAL_ERROR;
+    }
+
+    // Wait for reception (add timeout counter in real application)
+    while (huart->RxState != HAL_UART_STATE_READY);
+
+    return (memcmp(txData, rxData, strlen((char*)txData)) == 0) ? HAL_OK : HAL_ERROR;
 }
+
 /* USER CODE END 0 */
 
 /**
@@ -154,18 +238,22 @@ int main(void)
   MX_GPIO_Init();
   MX_ADC1_Init();
   MX_ADC2_Init();
-  MX_I2C1_Init();
-  MX_SPI1_Init();
   MX_TIM1_Init();
   MX_TIM8_Init();
   MX_USART2_UART_Init();
-  MX_FDCAN2_Init();
   MX_I2C2_Init();
   MX_SPI3_Init();
   MX_USART3_UART_Init();
   MX_USB_Device_Init();
   MX_TIM5_Init();
+  MX_TIM3_Init();
+  MX_TIM4_Init();
   /* USER CODE BEGIN 2 */
+
+  DWT_Init(); //used to calculate microsecond pulses in drv8245-q1.c
+
+  //Display MCU Function LED
+  HAL_GPIO_WritePin(MCU_LED_GPIO_Port, MCU_LED_Pin, GPIO_PIN_SET);
 
   //IMU
   HAL_Delay(1000);
@@ -173,19 +261,33 @@ int main(void)
   bno055_init();
   bno055_setOperationModeNDOF();
 
-  //encoders
-  HAL_TIM_Encoder_Start((&htim1), TIM_CHANNEL_ALL);
-  HAL_TIM_Encoder_Start((&htim8), TIM_CHANNEL_ALL);
+  //Motor Driver
+//  HAL_Delay(5000);
+//  MD1_motor_init();
+//  MD1_setSpeed(&htim1, TIM_CHANNEL_4, 50);
+//  MD2_motor_init();
+//  MD2_setSpeed(&htim8, TIM_CHANNEL_1, 50);
+
+
+  //Motor Encoders
+  HAL_TIM_Encoder_Start((&htim4), TIM_CHANNEL_ALL);
+  HAL_TIM_Encoder_Start((&htim3), TIM_CHANNEL_ALL);
+
+	if (UART_LoopbackTest_IT(&huart2) == HAL_OK)
+	{
+		// Test passed - toggle LED or set flag
+		HAL_GPIO_WritePin(PI_LED_GPIO_Port, PI_LED_Pin, GPIO_PIN_SET);
+	}
+	else
+	{
+		// Test failed - handle error
+		printf("error with self communication\r\n");
+	}
 
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-
-  uint32_t last_update = 0;
-  int16_t speed = 20;
-  uint8_t iteration = 0;
-
 
   while (1)
   {
@@ -195,29 +297,27 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 
-//	uint16_t encoder1 = (uint16_t)__HAL_TIM_GET_COUNTER(&htim1);
-//	uint16_t encoder2 = (uint16_t)__HAL_TIM_GET_COUNTER(&htim8);
-
-
-	//tests, commented out as we go
+	//random tests, commented out
 	//LED_Test();
-	//usbVCOMPrintTest();
-	//MD1Read();
+
+	//IMU
+	bno055_data_vector quaternion = bno055_getVectorQuaternion();
+
+	//Motor Encoders
+	uint16_t encoder1 = (uint16_t)__HAL_TIM_GET_COUNTER(&htim4);
+	uint16_t encoder2 = (uint16_t)__HAL_TIM_GET_COUNTER(&htim3);
 
 
 
-	//IMU printout
-	bno055_data_vector v = bno055_getVectorQuaternion();
-	GPIO_PinState rst_state = HAL_GPIO_ReadPin(IMU_RST_GPIO_Port, IMU_RST_Pin);
-
-	//printf("IMU_RST pin state: %d (active low)\r\n", rst_state);
-	printf("IMU:\r\n");
-	printf("W: %.2f | X: %.2f | Y: %.2f | Z: %.2f\r\n", v.w, v.x, v.y, v.z);
+	//Raspberry Pi Communication
+//	piSendReceive(rx_buffer, quaternion, encoder1, encoder2);
 
 
-//	HAL_GPIO_TogglePin(MD1_LED_GPIO_Port, MD1_LED_Pin);
-	//iteration = iteration + 1;
-//
+	//debug printouts
+//	printf("IMU:\r\n");
+//	printf("W: %.2f | X: %.2f | Y: %.2f | Z: %.2f\r\n", quaternion.w, quaternion.x, quaternion.y, quaternion.z);
+//	printf("Encoder 1:%d\r\n", encoder1);
+//	printf("Encoder 2:%d\r\n", encoder2);
 	HAL_Delay(1000);
 
   }

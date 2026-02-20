@@ -57,22 +57,18 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define IO3_Pin GPIO_PIN_13
-#define IO3_GPIO_Port GPIOC
+#define MD2_nSLEEP_Pin GPIO_PIN_13
+#define MD2_nSLEEP_GPIO_Port GPIOC
 #define IO2_Pin GPIO_PIN_14
 #define IO2_GPIO_Port GPIOC
-#define IO1_Pin GPIO_PIN_15
-#define IO1_GPIO_Port GPIOC
+#define MD1_nSLEEP_Pin GPIO_PIN_15
+#define MD1_nSLEEP_GPIO_Port GPIOC
 #define OSCILLATOR_IN_Pin GPIO_PIN_0
 #define OSCILLATOR_IN_GPIO_Port GPIOF
 #define OSCILLATOR_OUT_Pin GPIO_PIN_1
 #define OSCILLATOR_OUT_GPIO_Port GPIOF
 #define MCU_NRST_Pin GPIO_PIN_10
 #define MCU_NRST_GPIO_Port GPIOG
-#define ENCODER1_A_Pin GPIO_PIN_0
-#define ENCODER1_A_GPIO_Port GPIOC
-#define ENCODER1_B_Pin GPIO_PIN_1
-#define ENCODER1_B_GPIO_Port GPIOC
 #define MD1_PH_IN2_Pin GPIO_PIN_2
 #define MD1_PH_IN2_GPIO_Port GPIOC
 #define MD1_EN_IN1_Pin GPIO_PIN_3
@@ -85,14 +81,8 @@ void Error_Handler(void);
 #define MD1_nFAULT_GPIO_Port GPIOA
 #define BUZZER_Pin GPIO_PIN_3
 #define BUZZER_GPIO_Port GPIOA
-#define MD_SPI_NSS_Pin GPIO_PIN_4
-#define MD_SPI_NSS_GPIO_Port GPIOA
-#define MD_SPI_SCK_Pin GPIO_PIN_5
-#define MD_SPI_SCK_GPIO_Port GPIOA
-#define MD_SPI_MISO_Pin GPIO_PIN_6
-#define MD_SPI_MISO_GPIO_Port GPIOA
-#define MD_SPI_MOSI_Pin GPIO_PIN_7
-#define MD_SPI_MOSI_GPIO_Port GPIOA
+#define ENCODER2_A_Pin GPIO_PIN_6
+#define ENCODER2_A_GPIO_Port GPIOA
 #define IMU_LED_Pin GPIO_PIN_4
 #define IMU_LED_GPIO_Port GPIOC
 #define MCU_LED_Pin GPIO_PIN_5
@@ -119,10 +109,6 @@ void Error_Handler(void);
 #define MD2_EN_IN1_GPIO_Port GPIOC
 #define MD2_PH_IN2_Pin GPIO_PIN_7
 #define MD2_PH_IN2_GPIO_Port GPIOC
-#define ENCODER2_B_Pin GPIO_PIN_8
-#define ENCODER2_B_GPIO_Port GPIOC
-#define ENCODER2_A_Pin GPIO_PIN_9
-#define ENCODER2_A_GPIO_Port GPIOC
 #define IMU_SDA_Pin GPIO_PIN_8
 #define IMU_SDA_GPIO_Port GPIOA
 #define IMU_SCL_Pin GPIO_PIN_9
@@ -147,12 +133,12 @@ void Error_Handler(void);
 #define PI_UART_TX_GPIO_Port GPIOB
 #define PI_UART_RX_Pin GPIO_PIN_4
 #define PI_UART_RX_GPIO_Port GPIOB
-#define BACKUP_CAN_TX_Pin GPIO_PIN_5
-#define BACKUP_CAN_TX_GPIO_Port GPIOB
-#define BACKUP_CAN_RX_Pin GPIO_PIN_6
-#define BACKUP_CAN_RX_GPIO_Port GPIOB
-#define BACKUP_I2C_SDA_Pin GPIO_PIN_7
-#define BACKUP_I2C_SDA_GPIO_Port GPIOB
+#define ENCODER2_B_Pin GPIO_PIN_5
+#define ENCODER2_B_GPIO_Port GPIOB
+#define ENCODER1_A_Pin GPIO_PIN_6
+#define ENCODER1_A_GPIO_Port GPIOB
+#define ENCODER1_B_Pin GPIO_PIN_7
+#define ENCODER1_B_GPIO_Port GPIOB
 #define BOOT_Pin GPIO_PIN_8
 #define BOOT_GPIO_Port GPIOB
 #define IO4_Pin GPIO_PIN_9

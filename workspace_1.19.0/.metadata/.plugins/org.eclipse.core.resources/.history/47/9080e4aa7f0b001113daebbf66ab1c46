@@ -1,0 +1,28 @@
+/*
+ * drv8245-q1.h
+ *
+ *  Created on: Jan 28, 2026
+ *      Author: caseyear
+ */
+
+#ifndef INC_DRV8245_Q1_H_
+#define INC_DRV8245_Q1_H_
+
+#include "main.h"
+#include "stm32g4xx_hal.h"
+#include <stdbool.h>
+
+
+//---------------------------------------------------------------------- register addresses ----------------------------------------------------------------------
+
+// Motor driver constants
+#define MOTOR_PWM_FREQUENCY         20000
+#define MOTOR_PWM_TIMER_PERIOD      1000
+#define MOTOR_MAX_SPEED             100
+#define MOTOR_MIN_SPEED             0
+#define MOTOR_DEADTIME_US           2
+#define MOTOR_FAULT_TIMEOUT_MS      100
+
+
+
+#endif /* INC_DRV8245_Q1_H_ */
