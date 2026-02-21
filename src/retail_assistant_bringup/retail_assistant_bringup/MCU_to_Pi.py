@@ -3,13 +3,13 @@ from rclpy.node import Node
 from geometry_msgs.msg import Twist
 from nav_msgs.msg import Odometry
 from rclpy.timer import Timer
-from sensor_msgs.msg import Range
 from sensor_msgs.msg import Imu
 from tf2_ros import TransformBroadcaster
 from tf2_ros import TransformStamped
 from geometry_msgs.msg import Quaternion
 from rclpy.timer import Timer
-import math as mt # What 
+import math as mt 
+from std_msgs.msg import Int64MultiArray
 # Tread length wheel to wheel 14.5 inches 
 # Tread from top is 12 inches
 # Tread is 2 inches wide
@@ -39,11 +39,11 @@ class MCUToPiNode(Node):
         self.x=0.0 # Robot position in x(starting at 0)
         self.y=0.0 # Robot position in y(starting at 0)
         self.theta=0.0 # Robot orientation (starting at 0 radians)
-
+        ### TO DO ADD SUBSCRIBER FOR STM32 comminication
         # Last encoder readings
-        self.last_left_ticks=None #initialize last ticks to none to detect first time
-        self.last_right_ticks=None
-        self.last_time=None
+        self.last_left_ticks=0 #initialize last ticks to none to detect first time
+        self.last_right_ticks=0
+        self.last_time=self.get_clock().now() # Time of last update
         self.odom_pub=self.create_publisher(Odometry,'/odom',10)# Publisher for odometry
         self.Imu_pub=self.create_publisher(Imu,'/imu/data',10)# Publisher for IMU
         self.tf_broadcaster=TransformBroadcaster(self)# TF broadcaster for coordinate frames
@@ -52,12 +52,12 @@ class MCUToPiNode(Node):
         self.get_logger().info("Wheel odom node has been started")
         self.test_timer=self.create_timer(10, self.test_odom) # For testing odometry updates
         self.test_imu_timer=self.create_timer(5,self.imu_update) # For testing IMU updates
-
         self.test_left_ticks = 0
         self.test_right_ticks = 0
         self.test_step = 0
         self.test_mode = "straight"
-
+        self.imu_read=self.create_subscription(Imu,'/stm32_imu',self.imu_update,10) # Subscribing to imu topic from stm32
+        self.encoder_read=self.create_subscription(Int64MultiArray,'/stm32_encoder',self.Odom_update,10)
     def yaw_to_quaternion(self,yaw):  
         q=Quaternion()
         q.x=0.0
@@ -66,9 +66,10 @@ class MCUToPiNode(Node):
         q.w=mt.cos(yaw/2.0)
         return q # ROS compatible quaternion from yaw angle
 
-    def Odom_update(self,left_ticks,right_ticks):#  for differential drive odometry
+    def Odom_update(self,msg):#  for differential drive odometry
         now=self.get_clock().now()# gets current time
-
+        left_ticks=msg.data[0] # left encoder ticks
+        right_ticks=msg.data[1] # right encoder ticks
         if self.last_left_ticks is None:# first time function is called set grounds for previous and current
             self.last_left_ticks=left_ticks
             self.last_right_ticks=right_ticks
@@ -113,15 +114,6 @@ class MCUToPiNode(Node):
             t.transform.translation.z=0.0
             t.transform.rotation=q
             self.tf_broadcaster.sendTransform(t) # Send the transform   if self.publish_tf:
-            t = TransformStamped()
-            t.header.stamp = now.to_msg()
-            t.header.frame_id = self.odom_frame
-            t.child_frame_id = self.base_frame
-            t.transform.translation.x = float(self.x)
-            t.transform.translation.y = float(self.y)
-            t.transform.translation.z = 0.0
-            t.transform.rotation = q
-            self.tf_broadcaster.sendTransform(t)
 
         odom= Odometry()# make odometry message object for topic
         odom.header.stamp=now.to_msg()
@@ -155,7 +147,6 @@ class MCUToPiNode(Node):
         self.last_left_ticks=left_ticks  # Update last ticks and time
         self.last_right_ticks=right_ticks
         self.last_time=now
-        print("here ")
     def test_odom(self):
     # Reset test state
         self.test_left_ticks = 0
@@ -168,7 +159,7 @@ class MCUToPiNode(Node):
             self.test_timer.cancel()
 
     # Run at 50 Hz
-        self.test_timer = self.create_timer(0.02, self._test_odom_step)
+        self.test_timer = self.create_timer(0.05, lambda: self.Odom_update(0,0))
 
 
     def _test_odom_step(self):
@@ -207,22 +198,22 @@ class MCUToPiNode(Node):
 
         self.test_step += 1
 
-    def imu_update(self):
+    def imu_update(self,msg):
         # orientation xyzw
         # angular velocity xyz
         # linear acceleration xyz
         # get imu from port 
         self.test_imu_timer.cancel()  # Cancel the timer after first call
-        orientation_x=float(1)
-        orientation_y=float(2)
-        orientation_z=float(3)
-        orientation_w=float(4)
-        angular_velocity_x=float(5)# Dummy values for now 
-        angular_velocity_y=float(6)
-        angular_velocity_z=float(7)
-        linear_acceleration_x=float(8)
-        linear_acceleration_y=float(9)
-        linear_acceleration_z=float(10)
+        orientation_x=msg.orientation.x 
+        orientation_y=msg.orientation.y
+        orientation_z=msg.orientation.z
+        orientation_w=msg.orientation.w
+        angular_velocity_x=float(0)# Dummy values for now 
+        angular_velocity_y=float(0)
+        angular_velocity_z=float(0)
+        linear_acceleration_x=float(0)
+        linear_acceleration_y=float(0)
+        linear_acceleration_z=float(0)
         imu_msg = Imu()# IMU message object for topic
         imu_msg.header.stamp=self.get_clock().now().to_msg()
         imu_msg.header.frame_id=self.base_frame
@@ -236,7 +227,11 @@ class MCUToPiNode(Node):
         imu_msg.linear_acceleration.x=linear_acceleration_x
         imu_msg.linear_acceleration.y=linear_acceleration_y
         imu_msg.linear_acceleration.z=linear_acceleration_z
-        imu_msg.orientation_covariance[0]=-1.0  # Indicate orientation not available
+        imu_msg.orientation_covariance = [
+            0.01, 0.0, 0.0,
+            0.0, 0.01, 0.0,
+            0.0, 0.0, 0.01
+            ]  # Indicate orientation not available Loook at convriances later 
         imu_msg.angular_velocity_covariance=[# ignore things that are not diagnoals dont know correlations between axes
             0.02, 0.0, 0.0,
             0.0, 0.02, 0.0,

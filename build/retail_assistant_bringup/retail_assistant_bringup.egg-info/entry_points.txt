@@ -1,4 +1,6 @@
 [console_scripts]
 auto_drive = retail_assistant_bringup.auto_drive:main
+mcu_to_pi = retail_assistant_bringup.MCU_to_Pi:main
 navigation = retail_assistant_bringup.navigation:main
+ultrasonic = retail_assistant_bringup.ultrasonic:main
 

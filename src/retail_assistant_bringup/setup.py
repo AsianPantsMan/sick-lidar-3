@@ -23,7 +23,7 @@ setup(
     install_requires=['setuptools'],
     zip_safe=True,
     maintainer='kendell',
-    maintainer_email='kendelltaylor)0@gmail.com',
+    maintainer_email='kendelltaylor0@gmail.com',
     description='Retail assistant robot package',
     license='TODO: License declaration',
     extras_require={
@@ -34,6 +34,8 @@ setup(
     entry_points={
         'console_scripts': ['auto_drive = retail_assistant_bringup.auto_drive:main',
                             'navigation = retail_assistant_bringup.navigation:main',
+                            'ultrasonic = retail_assistant_bringup.ultrasonic:main',
+                            'mcu_to_pi = retail_assistant_bringup.MCU_to_Pi:main',
         ],
     },
 )
