@@ -20,7 +20,9 @@ void delay_us(uint32_t us)
 }
 
 void md_reset_pulse(){
-
+	HAL_GPIO_WritePin(MD1_nSLEEP_GPIO_Port, MD1_nSLEEP_Pin, GPIO_PIN_RESET);
+	delay_us(30);
+	HAL_GPIO_WritePin(MD1_nSLEEP_GPIO_Port, MD1_nSLEEP_Pin, GPIO_PIN_SET);
 }
 
 HAL_StatusTypeDef MD1_motor_init(){
@@ -47,9 +49,7 @@ HAL_StatusTypeDef MD1_motor_init(){
 
 	//pulse nSLEEP to acknowledge device wake up
 	printf("send reset pulse on nSLEEP\r\n");
-	HAL_GPIO_WritePin(MD1_nSLEEP_GPIO_Port, MD1_nSLEEP_Pin, GPIO_PIN_RESET);
-	delay_us(30);
-	HAL_GPIO_WritePin(MD1_nSLEEP_GPIO_Port, MD1_nSLEEP_Pin, GPIO_PIN_SET);
+	md_reset_pulse();
 
 	fault_status1 = HAL_GPIO_ReadPin(MD1_nFAULT_GPIO_Port, MD1_nFAULT_Pin);
 	if (fault_status1 == GPIO_PIN_SET) {
@@ -91,9 +91,7 @@ HAL_StatusTypeDef MD2_motor_init(){
 
 	//pulse nSLEEP to acknowledge device wake up
 	printf("send reset pulse on nSLEEP\r\n");
-	HAL_GPIO_WritePin(MD2_nSLEEP_GPIO_Port, MD2_nSLEEP_Pin, GPIO_PIN_RESET);
-	delay_us(30);
-	HAL_GPIO_WritePin(MD2_nSLEEP_GPIO_Port, MD2_nSLEEP_Pin, GPIO_PIN_SET);
+	md_reset_pulse();
 
 //  //BYPASSING FAULT CHECK BECAUSE NFAULT PIN ON STM32 IS LIKELY BURNT OUT FROM A PRIOR 5V SIGNAL SENT, UNCOMMENT FOR FUTURE CHECK, THE MD STILL WORKS
 //	fault_status2 = HAL_GPIO_ReadPin(MD2_nFAULT_GPIO_Port, MD2_nFAULT_Pin);

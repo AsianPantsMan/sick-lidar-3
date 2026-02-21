@@ -119,6 +119,32 @@ int _write(int file, char *ptr, int len) {
   return len;
 }
 
+HAL_StatusTypeDef UART_LoopbackTest(UART_HandleTypeDef *huart)
+{
+    uint8_t txByte = 'A';
+    uint8_t rxByte = 0;
+
+    // Send one byte
+    HAL_UART_Transmit(huart, &txByte, 1, 100);
+
+    // Wait a bit
+    HAL_Delay(10);
+
+    // Receive one byte
+    if (HAL_UART_Receive(huart, &rxByte, 1, 100) != HAL_OK)
+    {
+        return HAL_ERROR;  // Timeout - nothing received
+    }
+
+    // Check if received matches sent
+    if (rxByte == txByte)
+    {
+        return HAL_OK;  // Test passed
+    }
+
+    return HAL_ERROR;  // Test failed
+}
+
 /* USER CODE END 0 */
 
 /**
@@ -164,6 +190,8 @@ int main(void)
   bno055_setOperationModeNDOF();
   HAL_Delay(1000);
 
+
+
 //  // Motor DAC initialization
 //  HAL_DAC_Start(&hdac, DAC_CHANNEL_1);
 //  HAL_DAC_SetValue(&hdac, DAC_CHANNEL_1, DAC_ALIGN_12B_R, DAC_VAL_STOP);
@@ -200,10 +228,25 @@ int main(void)
     /* USER CODE BEGIN 3 */
 
 
-	HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
-	uint8_t imu = HAL_GPIO_ReadPin(read_reset_GPIO_Port, read_reset_Pin);
-
-	printf("imu reset state: %d\r\n", imu);
+	  if (UART_LoopbackTest(&huart1) == HAL_OK)
+	  {
+		  // SUCCESS - toggle green LED
+		  HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);
+	  }
+	  else
+	  {
+		  // FAILED - blink error LED
+		  while(1)
+		  {
+			  printf("error \r\n");
+			  HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+			  HAL_Delay(50);
+		  }
+	  }
+//	HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+//	uint8_t imu = HAL_GPIO_ReadPin(read_reset_GPIO_Port, read_reset_Pin);
+//
+//	printf("imu reset state: %d\r\n", imu);
 //    uint32_t current_time = HAL_GetTick();
 //    float dt = (current_time - last_time) / 1000.0f;
 //
@@ -260,11 +303,11 @@ int main(void)
 //      }
 //
 //      HAL_DAC_SetValue(&hdac, DAC_CHANNEL_1, DAC_ALIGN_12B_R, dac_value);
-
-      // IMU
-      bno055_data_vector v = bno055_getVectorQuaternion();
-      printf("IMU:\r\n");
-      printf("W: %.2f | X: %.2f | Y: %.2f | Z: %.2f\r\n", v.w, v.x, v.y, v.z);
+//
+//      // IMU
+//      bno055_data_vector v = bno055_getVectorQuaternion();
+//      printf("IMU:\r\n");
+//      printf("W: %.2f | X: %.2f | Y: %.2f | Z: %.2f\r\n", v.w, v.x, v.y, v.z);
 
 //      // Motor PID inputs/DAC
 //      printf("Motor Targets:\r\n");

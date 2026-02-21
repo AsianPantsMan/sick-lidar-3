@@ -3,6 +3,10 @@
 	<item key="hasShownOverlayPopupBefore" value="true"/>
 	<item key="replaceBarOpen" value="false"/>
 	<list key="searchhistory">
+		<item value="timeout"/>
+		<item value="error"/>
+		<item value="on motor driver 1"/>
+		<item value="on motor 1"/>
 		<item value="clr_fault"/>
 		<item value="nss"/>
 		<item value="_drv8245_spi_port"/>
@@ -14,9 +18,5 @@
 		<item value="state"/>
 		<item value="calib"/>
 		<item value="init"/>
-		<item value="unit_sel"/>
-		<item value="function"/>
-		<item value="uart_rx"/>
-		<item value="mcu"/>
 	</list>
 </section>

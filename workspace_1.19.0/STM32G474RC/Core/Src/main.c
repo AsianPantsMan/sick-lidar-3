@@ -42,7 +42,7 @@
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 #define TX_BUFFER_SIZE 38 //currently set for imu (4 doubles), 2 encoders (2 uint16_t) => (8 * 4) + (2 * 2) + 2 (framing) = 38 bytes
-#define RX_BUFFER_SIZE 100 //currently set for 6 floats, (3 linear velocity, 3 angular velocity)
+#define RX_BUFFER_SIZE 38 //currently set for 6 floats, (3 linear velocity, 3 angular velocity)
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -53,7 +53,9 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-char rx_buffer[RX_BUFFER_SIZE];
+char tx_buffer[TX_BUFFER_SIZE];
+uint8_t rx_buffer[RX_BUFFER_SIZE];
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -64,6 +66,8 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+
+/*-------------------------------------------------------- init DWT for microsecond delays --------------------------------------------------------*/
 
 uint8_t DWT_Init(void)
 {
@@ -90,20 +94,7 @@ uint8_t DWT_Init(void)
     }
 }
 
-void LED_Test(){
-	HAL_GPIO_TogglePin(IMU_LED_GPIO_Port, IMU_LED_Pin);
-	HAL_Delay(100);
-	HAL_GPIO_TogglePin(MCU_LED_GPIO_Port, MCU_LED_Pin);
-	HAL_Delay(100);
-	HAL_GPIO_TogglePin(MD2_LED_GPIO_Port, MD2_LED_Pin);
-	HAL_Delay(100);
-	HAL_GPIO_TogglePin(MD1_LED_GPIO_Port, MD1_LED_Pin);
-	HAL_Delay(100);
-	HAL_GPIO_TogglePin(PI_LED_GPIO_Port, PI_LED_Pin);
-	HAL_Delay(100);
-}
-
-//makes printf redirect to usb
+/*-------------------------------------------------------- makes printf redirect to usb --------------------------------------------------------*/
 int _write(int file, char *ptr, int len) {
 	uint8_t result = USBD_OK;
 	uint32_t start_tick = HAL_GetTick();
@@ -126,306 +117,172 @@ int _write(int file, char *ptr, int len) {
 	}
 }
 
-uint8_t piSendReceive(char* receiveData, bno055_data_vector imu_position, uint16_t encoder1, uint16_t encoder2){
+/*-------------------------------------------------------- basic hardware tests --------------------------------------------------------*/
 
-	HAL_GPIO_WritePin(PI_LED_GPIO_Port, PI_LED_Pin, GPIO_PIN_SET);
+void LED_Test(){
+	HAL_GPIO_TogglePin(IMU_LED_GPIO_Port, IMU_LED_Pin);
+	HAL_Delay(100);
+	HAL_GPIO_TogglePin(MCU_LED_GPIO_Port, MCU_LED_Pin);
+	HAL_Delay(100);
+	HAL_GPIO_TogglePin(MD2_LED_GPIO_Port, MD2_LED_Pin);
+	HAL_Delay(100);
+	HAL_GPIO_TogglePin(MD1_LED_GPIO_Port, MD1_LED_Pin);
+	HAL_Delay(100);
+	HAL_GPIO_TogglePin(PI_LED_GPIO_Port, PI_LED_Pin);
+	HAL_Delay(100);
+}
+
+void TestPinConnection(void)
+{
+    printf("Testing pin connection...\r\n");
+    HAL_UART_DeInit(&huart2);
+
+    GPIO_InitTypeDef GPIO_InitStruct = {0};
+    GPIO_InitStruct.Pin = PI_UART_TX_Pin;
+    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    HAL_GPIO_Init(PI_UART_TX_GPIO_Port, &GPIO_InitStruct);
+
+    GPIO_InitStruct.Pin = PI_UART_RX_Pin;
+    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+    GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+    HAL_GPIO_Init(PI_UART_RX_GPIO_Port, &GPIO_InitStruct);
+
+    HAL_Delay(10);
+
+    HAL_GPIO_WritePin(PI_UART_TX_GPIO_Port, PI_UART_TX_Pin, GPIO_PIN_SET);
+    HAL_Delay(1);
+    GPIO_PinState rx1 = HAL_GPIO_ReadPin(PI_UART_RX_GPIO_Port, PI_UART_RX_Pin);
+
+    HAL_GPIO_WritePin(PI_UART_TX_GPIO_Port, PI_UART_TX_Pin, GPIO_PIN_RESET);
+    HAL_Delay(1);
+    GPIO_PinState rx2 = HAL_GPIO_ReadPin(PI_UART_RX_GPIO_Port, PI_UART_RX_Pin);
+
+    printf("TX=HIGH, RX=%d (should be 1)\r\n", rx1);
+    printf("TX=LOW, RX=%d (should be 0)\r\n", rx2);
+
+    if(rx1 == 1 && rx2 == 0)
+    {
+        printf("Pin connection: OK!\r\n");
+    }
+    else
+    {
+        printf("Pin connection: FAILED!\r\n");
+    }
+
+    MX_USART2_UART_Init();
+}
+
+void UARTLoopbackTest(char* testString)
+{
+    uint8_t rxBuffer[100] = {0};
+    uint8_t length = strlen(testString);
+
+    printf("Test starting...\r\n");
+    printf("Sending: %s (length=%d)\r\n", testString, length);
+
+    for(int i = 0; i < length; i++)
+    {
+        HAL_UART_Transmit(&huart2, (uint8_t*)&testString[i], 1, 100);
+        HAL_Delay(10);
+
+        if(HAL_UART_Receive(&huart2, &rxBuffer[i], 1, 100) != HAL_OK)
+        {
+            printf("Timeout at byte %d\r\n", i);
+            return;
+        }
+    }
+
+    rxBuffer[length] = '\0';
+
+    printf("RX String: %s\r\n", (char*)rxBuffer);
+    printf("RX Hex: ");
+    for(int i = 0; i < length; i++){
+        printf("%02X ", rxBuffer[i]);
+    }
+    printf("\r\n");
+
+    if(strcmp(testString, (char*)rxBuffer) == 0){
+        HAL_GPIO_WritePin(PI_LED_GPIO_Port, PI_LED_Pin, 1);
+        printf("PASSED\r\n");
+    }else{
+        printf("FAILED\r\n");
+    }
+}
+void printDebug(bno055_data_vector imu_position, uint16_t encoder1, uint16_t encoder2){
+	//clear screen
+	printf("\033[2J");
+	printf("\033[H");
+
+	printf("IMU:\r\n");
+	printf("W: %.2f | X: %.2f | Y: %.2f | Z: %.2f\r\n", imu_position.w, imu_position.x, imu_position.y, imu_position.z);
+	printf("Encoder 1:%d\r\n", encoder1);
+	printf("Encoder 2:%d\r\n", encoder2);
+
+	printf("Transmitted: ");
+	for(int i = 0; i < TX_BUFFER_SIZE; i++) {
+		printf("%02X ", tx_buffer[i]);
+	}
+	printf("\r\n");
+
+
+}
+
+/*-------------------------------------------------------- STM32 <-> Raspberry Pi Communication --------------------------------------------------------*/
+
+uint8_t piSend(bno055_data_vector imu_position, uint16_t encoder1, uint16_t encoder2){
 
 	//create transmit buffer
-	char tx_buffer[TX_BUFFER_SIZE];
+	uint8_t tx_buffer[TX_BUFFER_SIZE];
 
 	tx_buffer[0] = 0xAA;
-
 	memcpy(&tx_buffer[1], &imu_position.w, 8);
 	memcpy(&tx_buffer[9], &imu_position.x, 8);
 	memcpy(&tx_buffer[17], &imu_position.y, 8);
 	memcpy(&tx_buffer[25], &imu_position.z, 8);
 	memcpy(&tx_buffer[33], &encoder1, 2);
 	memcpy(&tx_buffer[35], &encoder2, 2);
-
 	tx_buffer[37] = 0x55; //use index sizeof(tx_buffer) - 1
 
-	//check receive buffer
-	if (receiveData == NULL) {
-	        printf("Error: receiveData pointer is NULL\r\n");
-	        return -3;
-	    }
+	HAL_StatusTypeDef sendStatus = HAL_UART_Transmit(&huart2, tx_buffer, TX_BUFFER_SIZE, 100);
+	if (sendStatus != HAL_OK){
+		printf("transmission error\r\n");
+		return 2;
+	}
 
-	//send
-	uint8_t sendStatus = HAL_UART_Transmit(&huart2, tx_buffer, TX_BUFFER_SIZE, 1000);
-		if (sendStatus != HAL_OK){
-				printf("transmission error\r\n");
-				return -2;
-			}
-	//debug line
-//		else{
-//			printf("transmission successful\r\n");
-//		}
 
-	HAL_Delay(10);
 
-	//receive
-	uint8_t receiveStatus = HAL_UART_Receive(&huart2, &receiveData, RX_BUFFER_SIZE, 1000);
-	printf("data received \r\n");
-	if (receiveStatus != HAL_OK) {
-	        if (receiveStatus == HAL_TIMEOUT) {
-	            printf("receive timeout\r\n");
-	        } else {
-	            printf("receive error: %d\r\n", receiveStatus);
-	        }
-	        return -1;
-	    }
-
-	//debug line, comment out as needed
-	printf("Received: ");
-	    for(int i = 0; i < RX_BUFFER_SIZE; i++) {
-	        printf("%02X ", receiveData[i]);
-	    }
-	    printf("\r\n");
+	HAL_GPIO_WritePin(PI_LED_GPIO_Port, PI_LED_Pin, GPIO_PIN_SET);
 
 	return 0;
 }
 
-//CLAUDE SPAGHETTI CODE MESS
-typedef enum {
-    UART_TEST_OK = 0,
-    UART_TEST_TX_FAIL,
-    UART_TEST_RX_FAIL,
-    UART_TEST_DATA_MISMATCH,
-    UART_TEST_TIMEOUT,
-    UART_TEST_OVERRUN,
-    UART_TEST_FRAME_ERROR,
-    UART_TEST_NOISE_ERROR,
-    UART_TEST_PARITY_ERROR
-} UART_TestResult_t;
+uint8_t piReceive(uint8_t* rx_buffer){
 
-UART_TestResult_t UART_LoopbackTest_Debug(UART_HandleTypeDef *huart)
-{
-    uint8_t txData[] = "ABC123";
-    uint8_t rxData[20] = {0};
-    HAL_StatusTypeDef status;
-    uint32_t timeout = 1000;
-
-    // Clear any pending errors
-    __HAL_UART_CLEAR_FLAG(huart, UART_CLEAR_OREF | UART_CLEAR_NEF |
-                          UART_CLEAR_PEF | UART_CLEAR_FEF);
-
-    // Flush receive buffer
-    while(__HAL_UART_GET_FLAG(huart, UART_FLAG_RXNE))
-    {
-        (void)huart->Instance->RDR;  // Read and discard (for STM32F0/F3/F7/L4)
-        // Use huart->Instance->DR for STM32F1/F4
+    if (rx_buffer == NULL) {
+        printf("Error: receiveData pointer is NULL\r\n");
+        return 3;
     }
+    memset(rx_buffer, 0, RX_BUFFER_SIZE);
 
-    memset(rxData, 0, sizeof(rxData));
+    HAL_StatusTypeDef receiveStatus = HAL_UART_Receive(&huart2, rx_buffer, RX_BUFFER_SIZE, 100);
 
-    // Transmit
-    status = HAL_UART_Transmit(huart, txData, strlen((char*)txData), timeout);
-    if (status != HAL_OK)
-    {
-        return UART_TEST_TX_FAIL;
-    }
-
-    HAL_Delay(100);  // Increased delay for loopback
-
-    // Receive
-    status = HAL_UART_Receive(huart, rxData, strlen((char*)txData), timeout);
-    if (status == HAL_TIMEOUT)
-    {
-        return UART_TEST_TIMEOUT;
-    }
-    else if (status != HAL_OK)
-    {
-        // Check specific error flags
-        if (__HAL_UART_GET_FLAG(huart, UART_FLAG_ORE))
-            return UART_TEST_OVERRUN;
-        if (__HAL_UART_GET_FLAG(huart, UART_FLAG_FE))
-            return UART_TEST_FRAME_ERROR;
-        if (__HAL_UART_GET_FLAG(huart, UART_FLAG_NE))
-            return UART_TEST_NOISE_ERROR;
-        if (__HAL_UART_GET_FLAG(huart, UART_FLAG_PE))
-            return UART_TEST_PARITY_ERROR;
-
-        return UART_TEST_RX_FAIL;
-    }
-
-    // Compare data
-    if (memcmp(txData, rxData, strlen((char*)txData)) != 0)
-    {
-        return UART_TEST_DATA_MISMATCH;
-    }
-
-    return UART_TEST_OK;
-}
-
-void UART_PrintErrorDetails(UART_HandleTypeDef *huart, UART_TestResult_t result)
-{
-    char msg[100];
-
-    switch(result)
-    {
-        case UART_TEST_OK:
-            printf("UART Test PASSED\r\n");
-            break;
-        case UART_TEST_TX_FAIL:
-            printf("TX Failed - Check TX pin connection\r\n");
-            break;
-        case UART_TEST_RX_FAIL:
-            printf("RX Failed - Check RX pin connection\r\n");
-            break;
-        case UART_TEST_TIMEOUT:
-            printf("RX Timeout - No data received (check TX-RX jumper)\r\n");
-            break;
-        case UART_TEST_DATA_MISMATCH:
-            printf("Data Mismatch - Baud rate or config issue\r\n");
-            break;
-        case UART_TEST_OVERRUN:
-            printf("Overrun Error - Data not read fast enough\r\n");
-            break;
-        case UART_TEST_FRAME_ERROR:
-            printf("Frame Error - Wrong stop bits or baud rate\r\n");
-            break;
-        case UART_TEST_NOISE_ERROR:
-            printf("Noise Error - Check hardware connections\r\n");
-            break;
-        case UART_TEST_PARITY_ERROR:
-            printf("Parity Error - Check parity config\r\n");
-            break;
-    }
-
-    // Output via another UART or store in buffer for debugging
-    // HAL_UART_Transmit(&huart1, (uint8_t*)msg, strlen(msg), 1000);
-}
-
-void UART_DiagnosticTests(UART_HandleTypeDef *huart)
-{
-    // Test 1: Check UART state
-    if (huart->gState != HAL_UART_STATE_READY)
-    {
-        // UART not ready - check initialization
-        return;
-    }
-
-    // Test 2: Simple byte test
-    uint8_t testByte = 0x55;  // 01010101 pattern
-    uint8_t rxByte = 0;
-
-    HAL_UART_Transmit(huart, &testByte, 1, 100);
-    HAL_Delay(10);
-    HAL_StatusTypeDef status = HAL_UART_Receive(huart, &rxByte, 1, 500);
-
-    if (status == HAL_TIMEOUT)
-    {
-        // No data received - physical connection issue
-    }
-    else if (rxByte != testByte)
-    {
-        // Data corrupted - configuration issue
-    }
-
-    // Test 3: Different patterns
-    uint8_t patterns[] = {0x00, 0xFF, 0xAA, 0x55};
-    for (int i = 0; i < 4; i++)
-    {
-        uint8_t rx = 0;
-        HAL_UART_Transmit(huart, &patterns[i], 1, 100);
-        HAL_Delay(10);
-        HAL_UART_Receive(huart, &rx, 1, 500);
-
-        if (rx != patterns[i])
-        {
-            // Failed on this pattern
-            break;
+    if (receiveStatus != HAL_OK) {
+        if (receiveStatus == HAL_TIMEOUT) {
+            printf("RX Timeout\r\n");
+        } else {
+            printf("RX error: %d\r\n", receiveStatus);
         }
-    }
-}
-
-void UART_CheckConfiguration(UART_HandleTypeDef *huart)
-{
-    // Verify basic settings
-    uint32_t baudrate = huart->Init.BaudRate;        // Should match your setting
-    uint32_t wordLength = huart->Init.WordLength;    // UART_WORDLENGTH_8B
-    uint32_t stopBits = huart->Init.StopBits;        // UART_STOPBITS_1
-    uint32_t parity = huart->Init.Parity;            // UART_PARITY_NONE
-    uint32_t mode = huart->Init.Mode;                // UART_MODE_TX_RX
-
-    // Check if peripheral is enabled
-    if (!(huart->Instance->CR1 & USART_CR1_UE))
-    {
-        // UART not enabled!
+        return 1;
     }
 
-    // Check if TX and RX are enabled
-    if (!(huart->Instance->CR1 & USART_CR1_TE))
-    {
-        // Transmitter not enabled
+    printf("Received (%d bytes): ", RX_BUFFER_SIZE);
+    for(int i = 0; i < RX_BUFFER_SIZE; i++) {
+        printf("%02X ", rx_buffer[i]);
     }
+    printf("\r\n");
 
-    if (!(huart->Instance->CR1 & USART_CR1_RE))
-    {
-        // Receiver not enabled
-    }
-}
-
-HAL_StatusTypeDef UART_TestPins(UART_HandleTypeDef *huart)
-{
-    // De-initialize UART
-    HAL_UART_DeInit(huart);
-
-    // Configure TX pin as GPIO output
-    GPIO_InitTypeDef GPIO_InitStruct = {0};
-    GPIO_InitStruct.Pin = BACKUP_USART_TX_Pin;  // Your TX pin (e.g., GPIO_PIN_2)
-    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-    HAL_GPIO_Init(BACKUP_USART_TX_GPIO_Port, &GPIO_InitStruct);  // e.g., GPIOA
-
-    // Configure RX pin as GPIO input
-    GPIO_InitStruct.Pin = BACKUP_USART_RX_Pin;  // Your RX pin (e.g., GPIO_PIN_3)
-    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-    GPIO_InitStruct.Pull = GPIO_PULLDOWN;
-    HAL_GPIO_Init(BACKUP_USART_RX_GPIO_Port, &GPIO_InitStruct);
-
-    HAL_Delay(10);
-
-    // Test: Set TX high, read RX (should be high if connected)
-    HAL_GPIO_WritePin(BACKUP_USART_TX_GPIO_Port, BACKUP_USART_TX_Pin, GPIO_PIN_SET);
-    HAL_Delay(1);
-    GPIO_PinState rxState1 = HAL_GPIO_ReadPin(BACKUP_USART_RX_GPIO_Port, BACKUP_USART_RX_Pin);
-
-    // Test: Set TX low, read RX (should be low if connected)
-    HAL_GPIO_WritePin(BACKUP_USART_TX_GPIO_Port, BACKUP_USART_TX_Pin, GPIO_PIN_RESET);
-    HAL_Delay(1);
-    GPIO_PinState rxState2 = HAL_GPIO_ReadPin(BACKUP_USART_RX_GPIO_Port, BACKUP_USART_RX_Pin);
-
-    // Re-initialize UART
-    HAL_UART_Init(huart);
-
-    if (rxState1 == GPIO_PIN_SET && rxState2 == GPIO_PIN_RESET)
-    {
-        return HAL_OK;  // Physical loopback confirmed
-    }
-
-    return HAL_ERROR;  // No loopback connection
-}
-
-void CompleteUARTTest(UART_HandleTypeDef *huart)
-{
-    // Step 1: Pin connectivity test
-    if (UART_TestPins(huart) != HAL_OK)
-    {
-        // TX-RX not connected!
-        Error_Handler();
-    }
-
-    // Step 2: Check configuration
-    UART_CheckConfiguration(huart);
-
-    // Step 3: Run diagnostic tests
-    UART_DiagnosticTests(huart);
-
-    // Step 4: Full loopback test
-    UART_TestResult_t result = UART_LoopbackTest_Debug(huart);
-    UART_PrintErrorDetails(huart, result);
+    return 0;
 }
 
 /* USER CODE END 0 */
@@ -485,16 +342,22 @@ int main(void)
   bno055_setOperationModeNDOF();
 
   //Motor Driver
-//  HAL_Delay(5000);
-//  MD1_motor_init();
-//  MD1_setSpeed(&htim1, TIM_CHANNEL_4, 50);
-//  MD2_motor_init();
-//  MD2_setSpeed(&htim8, TIM_CHANNEL_1, 50);
-
+  MD1_motor_init();
+  //MD1_setSpeed(&htim1, TIM_CHANNEL_4, 50);
+  MD2_motor_init();
+  //MD1_setSpeed(&htim8, TIM_CHANNEL_1, 50);
 
   //Motor Encoders
   HAL_TIM_Encoder_Start((&htim4), TIM_CHANNEL_ALL);
   HAL_TIM_Encoder_Start((&htim3), TIM_CHANNEL_ALL);
+
+  /* random tests, commented out */
+  //LED_Test();
+
+  //TestPinConnection();
+
+  //char test[] = "Hello world";
+  //UARTLoopbackTest(test);
 
   /* USER CODE END 2 */
 
@@ -509,29 +372,21 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 
-	//random tests, commented out
-	//LED_Test();
-	CompleteUARTTest(&huart3);
-
 	//IMU
 	bno055_data_vector quaternion = bno055_getVectorQuaternion();
+
 
 	//Motor Encoders
 	uint16_t encoder1 = (uint16_t)__HAL_TIM_GET_COUNTER(&htim4);
 	uint16_t encoder2 = (uint16_t)__HAL_TIM_GET_COUNTER(&htim3);
 
 
-
 	//Raspberry Pi Communication
-//	piSendReceive(rx_buffer, quaternion, encoder1, encoder2);
-
+	piSend(quaternion, encoder1, encoder2);
+	piReceive(&rx_buffer);
 
 	//debug printouts
-//	printf("IMU:\r\n");
-//	printf("W: %.2f | X: %.2f | Y: %.2f | Z: %.2f\r\n", quaternion.w, quaternion.x, quaternion.y, quaternion.z);
-//	printf("Encoder 1:%d\r\n", encoder1);
-//	printf("Encoder 2:%d\r\n", encoder2);
-	HAL_Delay(1000);
+	//printDebug(quaternion, encoder1, encoder2);
 
   }
   /* USER CODE END 3 */

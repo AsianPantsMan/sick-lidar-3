@@ -1,6 +1,6 @@
 ../Core/Src/drv8245-q1.c:14:6:delay_us	2
 ../Core/Src/drv8245-q1.c:22:6:md_reset_pulse	1
-../Core/Src/drv8245-q1.c:26:19:MD1_motor_init	3
+../Core/Src/drv8245-q1.c:28:19:MD1_motor_init	3
 ../Core/Src/drv8245-q1.c:70:19:MD2_motor_init	2
-../Core/Src/drv8245-q1.c:114:9:MD1_setSpeed	8
-../Core/Src/drv8245-q1.c:141:9:MD2_setSpeed	8
+../Core/Src/drv8245-q1.c:112:9:MD1_setSpeed	8
+../Core/Src/drv8245-q1.c:139:9:MD2_setSpeed	8
