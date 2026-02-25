@@ -42,7 +42,7 @@
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 #define TX_BUFFER_SIZE 38 //currently set for imu (4 doubles), 2 encoders (2 uint16_t) => (8 * 4) + (2 * 2) + 2 (framing) = 38 bytes
-#define RX_BUFFER_SIZE 38 //currently set for 6 floats, (3 linear velocity, 3 angular velocity)
+#define RX_BUFFER_SIZE 8 //currently set for 6 floats, (3 linear velocity, 3 angular velocity)
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -343,9 +343,9 @@ int main(void)
 
   //Motor Driver
   MD1_motor_init();
-  //MD1_setSpeed(&htim1, TIM_CHANNEL_4, 50);
+  MD1_setSpeed(&htim1, TIM_CHANNEL_4, 50);
   MD2_motor_init();
-  //MD1_setSpeed(&htim8, TIM_CHANNEL_1, 50);
+  MD1_setSpeed(&htim8, TIM_CHANNEL_1, 50);
 
   //Motor Encoders
   HAL_TIM_Encoder_Start((&htim4), TIM_CHANNEL_ALL);

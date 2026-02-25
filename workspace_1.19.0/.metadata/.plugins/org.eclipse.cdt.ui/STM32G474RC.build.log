@@ -1,10 +1,10 @@
-16:43:30 **** Incremental Build of configuration Debug for project STM32G474RC ****
+17:26:20 **** Incremental Build of configuration Debug for project STM32G474RC ****
 make -j11 all 
 arm-none-eabi-size  STM32G474RC.elf 
    text	   data	    bss	    dec	    hex	filename
-  71228	    856	   9640	  81724	  13f3c	STM32G474RC.elf
+  71228	    856	   9608	  81692	  13f1c	STM32G474RC.elf
 Finished building: default.size.stdout
  
 
-16:43:30 Build Finished. 0 errors, 0 warnings. (took 193ms)
+17:26:21 Build Finished. 0 errors, 0 warnings. (took 173ms)
 
