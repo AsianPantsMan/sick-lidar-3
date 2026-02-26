@@ -6,6 +6,9 @@
  */
 #include "pid.h"
 #include <stdlib.h>
+#include <stm32g4xx_hal_tim.h>
+#include "drv8245-q1.h"
+#include "stm32g4xx_hal.h"
 
 void MotorControl_Init(MotorControl_t* motor,
                        TIM_HandleTypeDef* pwm_timer, uint32_t pwm_channel,
@@ -37,11 +40,21 @@ void MotorControl_SetTargetSpeed(MotorControl_t* motor, int32_t target_rpm)
     motor->target_speed_rpm = target_rpm;
 }
 
+int32_t MotorControl_getTargetRpm(MotorControl_t* motor){
+	return motor->target_speed_rpm;
+}
+
+float MotorControl_getRpm(MotorControl_t* motor){
+	return motor->current_speed_rpm;
+}
+
 void MotorControl_RunPID(MotorControl_t* motor)
 {
-
     // Read current encoder count
-    motor->current_encoder_count = (uint16_t)__HAL_TIM_GET_COUNTER(motor->encoder_timer);
+
+	if (motor->encoder_timer != NULL) {
+	    motor->current_encoder_count = (uint16_t)__HAL_TIM_GET_COUNTER(motor->encoder_timer);
+	}
 
     // Calculate ticks moved
     int16_t ticks_moved = motor->current_encoder_count - motor->last_encoder_count;

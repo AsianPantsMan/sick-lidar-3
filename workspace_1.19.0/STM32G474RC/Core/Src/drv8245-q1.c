@@ -117,6 +117,12 @@ HAL_StatusTypeDef MD2_motor_init(){
 
 uint8_t MD1_setSpeed(TIM_HandleTypeDef *htim, uint32_t channel, int8_t duty) {
 
+//	GPIO_PinState fault_status = HAL_GPIO_ReadPin(MD1_nFAULT_GPIO_Port,MD1_nFAULT_Pin);
+//	GPIO_PinState sleep_status = HAL_GPIO_ReadPin(MD1_nSLEEP_GPIO_Port,MD1_nSLEEP_Pin);
+//	if (fault_status == 1 && sleep_status == 1){
+//		HAL_GPIO_TogglePin(PI_LED_GPIO_Port, PI_LED_Pin);
+//	}
+//	printf("fault status: %d, sleep status: %d\r\n", fault_status, sleep_status);
 	//Set direction +duty is forward, -duty is backward
 	if (duty<0){
 		HAL_GPIO_WritePin(MD1_PH_IN2_GPIO_Port, MD1_PH_IN2_Pin, GPIO_PIN_SET);
@@ -130,19 +136,19 @@ uint8_t MD1_setSpeed(TIM_HandleTypeDef *htim, uint32_t channel, int8_t duty) {
 
 	//calculate compare value based on timer period
 	uint32_t compare_value = (timer_period * duty) / 100;
-	printf("[DEBUG] Calculated compare value: %lu\r\n", compare_value);
+//	printf("[DEBUG] Calculated compare value: %lu\r\n", compare_value);
 
 	__HAL_TIM_SET_COMPARE(htim, channel, compare_value);
 
 	//start PWM output
 	HAL_StatusTypeDef pwm_result = HAL_TIM_PWM_Start(htim, channel);
-	printf("HAL_TIM_PWM_Start result: %d\r\n", pwm_result);
+//	printf("HAL_TIM_PWM_Start result: %d\r\n", pwm_result);
 	if (pwm_result != HAL_OK) {
-		printf("ERROR: Failed to start PWM\r\n");
+//		printf("ERROR: Failed to start PWM\r\n");
 		return 0;
 	}
 
-	printf("Motor speed set to %d%% (Compare: %lu/%lu)\r\n", duty, compare_value, timer_period);
+//	printf("Motor speed set to %d%% (Compare: %lu/%lu)\r\n", duty, compare_value, timer_period);
 
 	return duty;
 }
@@ -168,11 +174,11 @@ uint8_t MD2_setSpeed(TIM_HandleTypeDef *htim, uint32_t channel, int8_t duty) {
 	//start PWM output
 	HAL_StatusTypeDef pwm_result = HAL_TIM_PWM_Start(htim, channel);
 	if (pwm_result != HAL_OK) {
-		printf("ERROR: Failed to start PWM\r\n");
+//		printf("ERROR: Failed to start PWM\r\n");
 		return 0;
 	}
 
-	printf("Motor speed set to %d%% (Compare: %lu/%lu)\r\n", duty, compare_value, timer_period);
+//	printf("Motor speed set to %d%% (Compare: %lu/%lu)\r\n", duty, compare_value, timer_period);
 
 
 	return duty;

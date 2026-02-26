@@ -1,3 +1,5 @@
-../Core/Src/pid.c:10:6:MotorControl_Init	40	static
-../Core/Src/pid.c:35:6:MotorControl_SetTargetSpeed	16	static
-../Core/Src/pid.c:40:6:MotorControl_RunPID	40	static
+../Core/Src/pid.c:13:6:MotorControl_Init	40	static
+../Core/Src/pid.c:38:6:MotorControl_SetTargetSpeed	16	static
+../Core/Src/pid.c:43:9:MotorControl_getTargetRpm	16	static
+../Core/Src/pid.c:47:7:MotorControl_getRpm	16	static
+../Core/Src/pid.c:51:6:MotorControl_RunPID	40	static

@@ -62,20 +62,8 @@ uint8_t rx_buffer[RX_BUFFER_SIZE];
 uint16_t encoder1;
 uint16_t encoder2;
 
-MotorControl_t Left_Motor;
-MotorControl_t Right_Motor;
-//float rpm;
-
-uint32_t curr_time_ms;
-
-volatile uint32_t command_timeout_counter = 0;
-//float ticks = 0;
-
-//uint16_t prev_cnt;
-//uint16_t curr_cnt;
-//const uint16_t pid_loop_frequency = 100;
-//const float period = 1.0f / pid_loop_frequency;
-
+MotorControl_t left_motor;
+MotorControl_t right_motor;
 
 /* USER CODE END PV */
 
@@ -371,20 +359,24 @@ int main(void)
   //MD2_setSpeed(&htim8, TIM_CHANNEL_1, 50);
 
   //Motor Encoders
-  HAL_TIM_Encoder_Start((&htim4), TIM_CHANNEL_ALL);
-  HAL_TIM_Encoder_Start((&htim3), TIM_CHANNEL_ALL);
+  HAL_TIM_Encoder_Start((&htim4), TIM_CHANNEL_ALL); //encoder1
+  HAL_TIM_Encoder_Start((&htim3), TIM_CHANNEL_ALL); //encoder2
 
   //PID loop
-  HAL_TIM_Base_Start_IT(&htim6);
-  MotorControl_Init(&Left_Motor, &htim1, TIM_CHANNEL_4, &htim4,
-		  1000, //Kp
-		  100,	//Ki
-		  1);	//Kd
-  MotorControl_Init(&Right_Motor, &htim8, TIM_CHANNEL_1, &htim3,
-		  1000, //Kp
-		  100,	//Ki
-		  1);	//Kd
+  MotorControl_Init(&left_motor, &htim1, TIM_CHANNEL_4, &htim4,
+		  1.0f, //Kp
+		  0.0f,	//Ki
+		  0.0f);	//Kd
 
+  MotorControl_Init(&right_motor, &htim8, TIM_CHANNEL_1, &htim3,
+		  1.0f, //Kp
+		  0.0f,	//Ki
+		  0.0f);	//Kd
+
+  MotorControl_SetTargetSpeed(&left_motor, 100);
+  MotorControl_SetTargetSpeed(&right_motor, 100);
+
+  HAL_TIM_Base_Start_IT(&htim6);
   /* random tests, commented out */
   //LED_Test();
 
@@ -401,7 +393,6 @@ int main(void)
   while (1)
   {
 
-
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -414,16 +405,17 @@ int main(void)
 	encoder1 = (uint16_t)__HAL_TIM_GET_COUNTER(&htim4);
 	encoder2 = (uint16_t)__HAL_TIM_GET_COUNTER(&htim3);
 
-	printf("encoder1:%d\r\n", encoder1);
-	printf("encoder2:%d\r\n", encoder2);
+//	printf("encoder1:%d\r\n", encoder1);
+//	printf("encoder2:%d\r\n", encoder2);
 
 	//Raspberry Pi Communication
 	piSend(quaternion, encoder1, encoder2);
 	piReceive(rx_buffer);
 
 	//Motor speed
-	MotorControl_SetTargetSpeed(&Left_Motor, 100);
-	MotorControl_SetTargetSpeed(&Right_Motor, 100);
+	float left_motor_rpm = MotorControl_getRpm(&left_motor);
+	int32_t left_target_rpm = MotorControl_getTargetRpm(&left_motor);
+	printf("Left motor target RPM is: %d, it is currently at %f\r\n", left_target_rpm, left_motor_rpm);
 
 	//debug printouts
 	//printDebug(quaternion, encoder1, encoder2);
@@ -485,11 +477,10 @@ void SystemClock_Config(void)
 // ADD THIS CALLBACK
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
-
-  if (htim->Instance == TIM6)
+  if(htim->Instance == TIM6)
   {
-	  MotorControl_RunPID(&Left_Motor);
-	  MotorControl_RunPID(&Right_Motor);
+	  MotorControl_RunPID(&left_motor);
+	  //MotorControl_RunPID(&right_motor);
   }
 }
 /* USER CODE END 4 */
