@@ -31,7 +31,7 @@
 #include "usbd_cdc_if.h"
 #include <bno055.h>
 #include "drv8245-q1.h"
-#include "motor_control.h"
+#include "pid.h"
 
 /* USER CODE END Includes */
 
@@ -43,7 +43,9 @@
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 #define TX_BUFFER_SIZE 38 //currently set for imu (4 doubles), 2 encoders (2 uint16_t) => (8 * 4) + (2 * 2) + 2 (framing) = 38 bytes
-#define RX_BUFFER_SIZE 38 //currently set for 6 floats, (3 linear velocity, 3 angular velocity)
+#define RX_BUFFER_SIZE 8 //currently set for 6 floats, (3 linear velocity, 3 angular velocity)
+#define MOTOR_CPR 996.8f
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -56,10 +58,20 @@
 /* USER CODE BEGIN PV */
 char tx_buffer[TX_BUFFER_SIZE];
 uint8_t rx_buffer[RX_BUFFER_SIZE];
-MotorControl_t left_motor;
-MotorControl_t right_motor;
+
+uint16_t encoder1;
+uint16_t encoder2;
+float rpm;
+
+uint32_t curr_time_ms;
+
 volatile uint32_t command_timeout_counter = 0;
-#define COMMAND_TIMEOUT_TICKS 1000  // 500ms at 2kHz
+float ticks = 0;
+
+uint16_t prev_cnt;
+uint16_t curr_cnt;
+const float dt_sec = 1.0f / 100;
+
 
 /* USER CODE END PV */
 
@@ -257,7 +269,7 @@ uint8_t piSend(bno055_data_vector imu_position, uint16_t encoder1, uint16_t enco
 
 
 
-	HAL_GPIO_WritePin(PI_LED_GPIO_Port, PI_LED_Pin, GPIO_PIN_SET);
+//	HAL_GPIO_WritePin(PI_LED_GPIO_Port, PI_LED_Pin, GPIO_PIN_SET);
 
 	return 0;
 }
@@ -350,49 +362,16 @@ int main(void)
 
   //Motor Driver
   MD1_motor_init();
-  //MD1_setSpeed(&htim1, TIM_CHANNEL_4, 20);
+  MD1_setSpeed(&htim1, TIM_CHANNEL_4, 50);
   MD2_motor_init();
-  //MD2_setSpeed(&htim8, TIM_CHANNEL_1, 10);
-
+  MD2_setSpeed(&htim8, TIM_CHANNEL_1, 50);
 
   //Motor Encoders
   HAL_TIM_Encoder_Start((&htim4), TIM_CHANNEL_ALL);
   HAL_TIM_Encoder_Start((&htim3), TIM_CHANNEL_ALL);
 
-
-  // ADD MOTOR CONTROL INITIALIZATION
-  MotorControl_Init(&left_motor,
-                    &htim1, TIM_CHANNEL_4,
-                    MD1_PH_IN2_GPIO_Port, MD1_PH_IN2_Pin,
-                    &htim4,
-                    5000.0f, 20.0f, 100.0f);
-
-  MotorControl_Init(&right_motor,
-                    &htim8, TIM_CHANNEL_1,
-                    MD2_PH_IN2_GPIO_Port, MD2_PH_IN2_Pin,
-                    &htim3,
-                    5000.0f, 20.0f, 100.0f);
-
-  // ADD TIM6 for PID loop (make sure you added TIM6 in CubeMX)
+  //PID loop
   HAL_TIM_Base_Start_IT(&htim6);
-
-
-  // ============================================================
-  // MANUAL TESTING: Set target speeds directly
-  // ============================================================
-  // Convert RPM or m/s to ticks/s using the formula from your motor spec
-  // Example calculations for 50 RPM:
-  // 50 RPM = 50/60 = 0.833 rev/s
-  // 0.833 rev/s * 1993.6 ticks/rev = 6645 ticks/s
-
-  int32_t test_speed_forward = 1661;   // ~38 RPM forward
-  int32_t test_speed_backward = -5000; // ~38 RPM backward
-  int32_t test_speed_stop = 1000;
-
-
-
-  printf("Motors initialized with target speed: %ld ticks/s\r\n", test_speed_forward);
-
 
   /* random tests, commented out */
   //LED_Test();
@@ -407,9 +386,6 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 
-  uint32_t test_phase = 0;
-  uint32_t phase_start_time = HAL_GetTick();
-
   while (1)
   {
 
@@ -423,44 +399,22 @@ int main(void)
 
 
 	//Motor Encoders
-	uint16_t encoder1 = (uint16_t)__HAL_TIM_GET_COUNTER(&htim4);
-	uint16_t encoder2 = (uint16_t)__HAL_TIM_GET_COUNTER(&htim3);
+	encoder1 = (uint16_t)__HAL_TIM_GET_COUNTER(&htim4);
+	encoder2 = (uint16_t)__HAL_TIM_GET_COUNTER(&htim3);
 
-//	printf("encoder1:%d\r\n", encoder1);
-//	printf("encoder2:%d\r\n", encoder2);
+	printf("encoder1:%d\r\n", encoder1);
+	printf("encoder2:%d\r\n", encoder2);
 
 	//Raspberry Pi Communication
 	piSend(quaternion, encoder1, encoder2);
-	piReceive(&rx_buffer);
+	piReceive(rx_buffer);
 
 	//debug printouts
 	//printDebug(quaternion, encoder1, encoder2);
-
-    // Get current time
-    uint32_t current_time = HAL_GetTick();
-
-    // Set test speeds
-    MotorControl_SetTargetSpeed(&right_motor, 1000);
-    //HAL_Delay(1000);
-    MotorControl_SetTargetSpeed(&left_motor, 1000);
-
-
-    // Print debug info every 500ms
-    static uint32_t last_debug_time = 0;
-    if (current_time - last_debug_time > 500) {
-        last_debug_time = current_time;
-
-        printf("Left:  Target=%6ld  Current=%6.1f  PWM=%4d\r\n",
-               left_motor.target_speed_ticks_per_sec,
-               left_motor.current_speed_ticks_per_sec,
-               left_motor.output_pwm);
-
-        printf("Right: Target=%6ld  Current=%6.1f  PWM=%4d\r\n",
-               right_motor.target_speed_ticks_per_sec,
-               right_motor.current_speed_ticks_per_sec,
-               right_motor.output_pwm);
-        printf("---\r\n");
-    }
+	printf("timer 6 interrupt, rpm at %f\r\n", rpm);
+	printf("prev_cnt: %d\r\n", prev_cnt);
+	printf("curr_cnt: %d\r\n", curr_cnt);
+	printf("dt_sec: %f\r\n", dt_sec);
 
   }
   /* USER CODE END 3 */
@@ -515,19 +469,25 @@ void SystemClock_Config(void)
 // ADD THIS CALLBACK
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
-    if (htim->Instance == TIM6) {
-        // Safety timeout check comment out for testing
-        command_timeout_counter++;
-        if (command_timeout_counter > COMMAND_TIMEOUT_TICKS) {
-            left_motor.target_speed_ticks_per_sec = 0;
-            right_motor.target_speed_ticks_per_sec = 0;
-            command_timeout_counter = COMMAND_TIMEOUT_TICKS;
-        }
 
-        // Run PID for both motors at 2kHz
-        MotorControl_RunPID(&left_motor);
-        MotorControl_RunPID(&right_motor);
-    }
+  if (htim->Instance == TIM6)
+  {
+
+	 curr_cnt = (uint16_t)__HAL_TIM_GET_COUNTER(&htim4);
+
+	 // signed delta with wrap handling for 16-bit counter
+	 int32_t ticks = (int32_t)(curr_cnt - prev_cnt);
+
+
+
+	 // dt is fixed if you're in a fixed-rate timer callback:
+
+
+	 // RPM = ticks/dt * 60 / CPR
+	 rpm = (float)ticks * (60.0f / (MOTOR_CPRx\ * dt_sec));
+	 prev_cnt = curr_cnt;
+	 // equivalently: ticks * (60 * SAMPLE_HZ / MOTOR_CPR)
+  }
 }
 /* USER CODE END 4 */
 

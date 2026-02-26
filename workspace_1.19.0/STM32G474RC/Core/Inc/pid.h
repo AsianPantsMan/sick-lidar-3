@@ -1,0 +1,15 @@
+/*
+ * pid.h
+ *
+ *  Created on: Feb 25, 2026
+ *      Author: caseyear
+ */
+
+#ifndef INC_PID_H_
+#define INC_PID_H_
+
+#define MOTOR_CPR 996.8
+
+uint16_t getEncoderRpm(TIM_HandleTypeDef *timer);
+uint8_t calcPid();
+#endif /* INC_PID_H_ */
