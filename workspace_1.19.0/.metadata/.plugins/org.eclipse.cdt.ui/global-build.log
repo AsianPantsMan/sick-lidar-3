@@ -15448,3 +15448,423 @@ Finished building: default.size.stdout
  
 Finished building: STM32G474RC.list
  
+15:48:50 **** Incremental Build of configuration Debug for project STM32G474RC ****
+make -j11 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G474xx -c -I../USB_Device/App -I../USB_Device/Target -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "STM32G474RC.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/caseyear/STM32CubeIDE/workspace_1.19.0/STM32G474RC/STM32G474RCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="STM32G474RC.map" -Wl,--gc-sections -static -u_printf_float --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: STM32G474RC.elf
+ 
+arm-none-eabi-size  STM32G474RC.elf 
+arm-none-eabi-objdump -h -S STM32G474RC.elf  > "STM32G474RC.list"
+   text	   data	    bss	    dec	    hex	filename
+  72412	    856	   9688	  82956	  1440c	STM32G474RC.elf
+Finished building: default.size.stdout
+ 
+Finished building: STM32G474RC.list
+ 
+16:58:39 **** Incremental Build of configuration Debug for project STM32G474RC ****
+make -j11 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G474xx -c -I../USB_Device/App -I../USB_Device/Target -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/pid.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G474xx -c -I../USB_Device/App -I../USB_Device/Target -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/pid.d" -MT"Core/Src/pid.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/pid.o"
+../Core/Src/pid.c: In function 'MotorControl_RunPID':
+../Core/Src/pid.c:68:22: error: 'MotorControl_t' has no member named 'rpm_tau'
+   68 |     float tau = motor->rpm_tau;
+      |                      ^~
+../Core/Src/pid.c:70:10: error: 'MotorControl_t' has no member named 'rpm_filt'
+   70 |     motor->rpm_filt += alpha * (motor->current_speed_rpm - motor->rpm_filt);
+      |          ^~
+../Core/Src/pid.c:70:65: error: 'MotorControl_t' has no member named 'rpm_filt'
+   70 |     motor->rpm_filt += alpha * (motor->current_speed_rpm - motor->rpm_filt);
+      |                                                                 ^~
+../Core/Src/pid.c:72:57: error: 'MotorControl_t' has no member named 'rpm_filt'
+   72 |     float error = (float)motor->target_speed_rpm - motor->rpm_filt;
+      |                                                         ^~
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:391:12: warning: unused variable 'start_time' [-Wunused-variable]
+  391 |   uint32_t start_time = HAL_GetTick();
+      |            ^~~~~~~~~~
+make: *** [Core/Src/subdir.mk:61: Core/Src/pid.o] Error 1
+make: *** Waiting for unfinished jobs....
+"make -j11 all" terminated with exit code 2. Build might be incomplete.
+17:00:07 **** Incremental Build of configuration Debug for project STM32G474RC ****
+make -j11 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G474xx -c -I../USB_Device/App -I../USB_Device/Target -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/pid.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G474xx -c -I../USB_Device/App -I../USB_Device/Target -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/pid.d" -MT"Core/Src/pid.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/pid.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:391:12: warning: unused variable 'start_time' [-Wunused-variable]
+  391 |   uint32_t start_time = HAL_GetTick();
+      |            ^~~~~~~~~~
+arm-none-eabi-gcc -o "STM32G474RC.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/caseyear/STM32CubeIDE/workspace_1.19.0/STM32G474RC/STM32G474RCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="STM32G474RC.map" -Wl,--gc-sections -static -u_printf_float --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: STM32G474RC.elf
+ 
+arm-none-eabi-size  STM32G474RC.elf 
+arm-none-eabi-objdump -h -S STM32G474RC.elf  > "STM32G474RC.list"
+   text	   data	    bss	    dec	    hex	filename
+  73044	    856	   9744	  83644	  146bc	STM32G474RC.elf
+Finished building: default.size.stdout
+ 
+Finished building: STM32G474RC.list
+ 
+17:00:47 **** Incremental Build of configuration Debug for project STM32G474RC ****
+make -j11 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G474xx -c -I../USB_Device/App -I../USB_Device/Target -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:391:12: warning: unused variable 'start_time' [-Wunused-variable]
+  391 |   uint32_t start_time = HAL_GetTick();
+      |            ^~~~~~~~~~
+arm-none-eabi-gcc -o "STM32G474RC.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/caseyear/STM32CubeIDE/workspace_1.19.0/STM32G474RC/STM32G474RCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="STM32G474RC.map" -Wl,--gc-sections -static -u_printf_float --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: STM32G474RC.elf
+ 
+arm-none-eabi-size  STM32G474RC.elf 
+arm-none-eabi-objdump -h -S STM32G474RC.elf  > "STM32G474RC.list"
+   text	   data	    bss	    dec	    hex	filename
+  73548	    856	   9800	  84204	  148ec	STM32G474RC.elf
+Finished building: default.size.stdout
+ 
+Finished building: STM32G474RC.list
+ 
+17:02:12 **** Incremental Build of configuration Debug for project STM32G474RC ****
+make -j11 all 
+arm-none-eabi-size  STM32G474RC.elf 
+   text	   data	    bss	    dec	    hex	filename
+  73548	    856	   9800	  84204	  148ec	STM32G474RC.elf
+Finished building: default.size.stdout
+ 
+17:06:35 **** Incremental Build of configuration Debug for project STM32G474RC ****
+make -j11 all 
+arm-none-eabi-size  STM32G474RC.elf 
+   text	   data	    bss	    dec	    hex	filename
+  73548	    856	   9800	  84204	  148ec	STM32G474RC.elf
+Finished building: default.size.stdout
+ 
+17:07:14 **** Incremental Build of configuration Debug for project STM32G474RC ****
+make -j11 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G474xx -c -I../USB_Device/App -I../USB_Device/Target -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:391:12: warning: unused variable 'start_time' [-Wunused-variable]
+  391 |   uint32_t start_time = HAL_GetTick();
+      |            ^~~~~~~~~~
+arm-none-eabi-gcc -o "STM32G474RC.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/caseyear/STM32CubeIDE/workspace_1.19.0/STM32G474RC/STM32G474RCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="STM32G474RC.map" -Wl,--gc-sections -static -u_printf_float --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: STM32G474RC.elf
+ 
+arm-none-eabi-size  STM32G474RC.elf 
+arm-none-eabi-objdump -h -S STM32G474RC.elf  > "STM32G474RC.list"
+   text	   data	    bss	    dec	    hex	filename
+  71860	    856	   9800	  82516	  14254	STM32G474RC.elf
+Finished building: default.size.stdout
+ 
+Finished building: STM32G474RC.list
+ 
+17:08:03 **** Incremental Build of configuration Debug for project STM32G474RC ****
+make -j11 all 
+arm-none-eabi-size  STM32G474RC.elf 
+   text	   data	    bss	    dec	    hex	filename
+  71860	    856	   9800	  82516	  14254	STM32G474RC.elf
+Finished building: default.size.stdout
+ 
+17:08:27 **** Incremental Build of configuration Debug for project STM32G474RC ****
+make -j11 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G474xx -c -I../USB_Device/App -I../USB_Device/Target -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:391:12: warning: unused variable 'start_time' [-Wunused-variable]
+  391 |   uint32_t start_time = HAL_GetTick();
+      |            ^~~~~~~~~~
+arm-none-eabi-gcc -o "STM32G474RC.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/caseyear/STM32CubeIDE/workspace_1.19.0/STM32G474RC/STM32G474RCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="STM32G474RC.map" -Wl,--gc-sections -static -u_printf_float --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: STM32G474RC.elf
+ 
+arm-none-eabi-size  STM32G474RC.elf 
+arm-none-eabi-objdump -h -S STM32G474RC.elf  > "STM32G474RC.list"
+   text	   data	    bss	    dec	    hex	filename
+  73548	    856	   9800	  84204	  148ec	STM32G474RC.elf
+Finished building: default.size.stdout
+ 
+Finished building: STM32G474RC.list
+ 
+17:09:37 **** Incremental Build of configuration Debug for project STM32G474RC ****
+make -j11 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G474xx -c -I../USB_Device/App -I../USB_Device/Target -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:423:44: warning: format '%d' expects argument of type 'int', but argument 2 has type 'int32_t' {aka 'long int'} [-Wformat=]
+  423 |         printf("Left motor target RPM is: %d, it is currently at %f\r\n", left_target_rpm, left_motor_rpm);
+      |                                           ~^                              ~~~~~~~~~~~~~~~
+      |                                            |                              |
+      |                                            int                            int32_t {aka long int}
+      |                                           %ld
+../Core/Src/main.c:391:12: warning: unused variable 'start_time' [-Wunused-variable]
+  391 |   uint32_t start_time = HAL_GetTick();
+      |            ^~~~~~~~~~
+arm-none-eabi-gcc -o "STM32G474RC.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/caseyear/STM32CubeIDE/workspace_1.19.0/STM32G474RC/STM32G474RCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="STM32G474RC.map" -Wl,--gc-sections -static -u_printf_float --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: STM32G474RC.elf
+ 
+arm-none-eabi-size  STM32G474RC.elf 
+arm-none-eabi-objdump -h -S STM32G474RC.elf  > "STM32G474RC.list"
+   text	   data	    bss	    dec	    hex	filename
+  73700	    856	   9800	  84356	  14984	STM32G474RC.elf
+Finished building: default.size.stdout
+ 
+Finished building: STM32G474RC.list
+ 
+17:11:36 **** Incremental Build of configuration Debug for project STM32G474RC ****
+make -j11 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G474xx -c -I../USB_Device/App -I../USB_Device/Target -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:426:44: warning: format '%d' expects argument of type 'int', but argument 2 has type 'int32_t' {aka 'long int'} [-Wformat=]
+  426 |         printf("Left motor target RPM is: %d, it is currently at %f\r\n", left_target_rpm, left_motor_rpm);
+      |                                           ~^                              ~~~~~~~~~~~~~~~
+      |                                            |                              |
+      |                                            int                            int32_t {aka long int}
+      |                                           %ld
+../Core/Src/main.c:391:12: warning: unused variable 'start_time' [-Wunused-variable]
+  391 |   uint32_t start_time = HAL_GetTick();
+      |            ^~~~~~~~~~
+arm-none-eabi-gcc -o "STM32G474RC.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/caseyear/STM32CubeIDE/workspace_1.19.0/STM32G474RC/STM32G474RCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="STM32G474RC.map" -Wl,--gc-sections -static -u_printf_float --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: STM32G474RC.elf
+ 
+arm-none-eabi-size  STM32G474RC.elf 
+arm-none-eabi-objdump -h -S STM32G474RC.elf  > "STM32G474RC.list"
+   text	   data	    bss	    dec	    hex	filename
+  73764	    856	   9800	  84420	  149c4	STM32G474RC.elf
+Finished building: default.size.stdout
+ 
+Finished building: STM32G474RC.list
+ 
+17:14:32 **** Incremental Build of configuration Debug for project STM32G474RC ****
+make -j11 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G474xx -c -I../USB_Device/App -I../USB_Device/Target -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:426:44: warning: format '%d' expects argument of type 'int', but argument 2 has type 'int32_t' {aka 'long int'} [-Wformat=]
+  426 |         printf("Left motor target RPM is: %d, it is currently at %f\r\n", left_target_rpm, left_motor_rpm);
+      |                                           ~^                              ~~~~~~~~~~~~~~~
+      |                                            |                              |
+      |                                            int                            int32_t {aka long int}
+      |                                           %ld
+../Core/Src/main.c:391:12: warning: unused variable 'start_time' [-Wunused-variable]
+  391 |   uint32_t start_time = HAL_GetTick();
+      |            ^~~~~~~~~~
+arm-none-eabi-gcc -o "STM32G474RC.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/caseyear/STM32CubeIDE/workspace_1.19.0/STM32G474RC/STM32G474RCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="STM32G474RC.map" -Wl,--gc-sections -static -u_printf_float --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: STM32G474RC.elf
+ 
+arm-none-eabi-size  STM32G474RC.elf 
+arm-none-eabi-objdump -h -S STM32G474RC.elf  > "STM32G474RC.list"
+   text	   data	    bss	    dec	    hex	filename
+  73764	    856	   9800	  84420	  149c4	STM32G474RC.elf
+Finished building: default.size.stdout
+ 
+Finished building: STM32G474RC.list
+ 
+17:15:01 **** Incremental Build of configuration Debug for project STM32G474RC ****
+make -j11 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G474xx -c -I../USB_Device/App -I../USB_Device/Target -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:426:44: warning: format '%d' expects argument of type 'int', but argument 2 has type 'int32_t' {aka 'long int'} [-Wformat=]
+  426 |         printf("Left motor target RPM is: %d, it is currently at %f\r\n", left_target_rpm, left_motor_rpm);
+      |                                           ~^                              ~~~~~~~~~~~~~~~
+      |                                            |                              |
+      |                                            int                            int32_t {aka long int}
+      |                                           %ld
+../Core/Src/main.c:391:12: warning: unused variable 'start_time' [-Wunused-variable]
+  391 |   uint32_t start_time = HAL_GetTick();
+      |            ^~~~~~~~~~
+arm-none-eabi-gcc -o "STM32G474RC.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/caseyear/STM32CubeIDE/workspace_1.19.0/STM32G474RC/STM32G474RCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="STM32G474RC.map" -Wl,--gc-sections -static -u_printf_float --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: STM32G474RC.elf
+ 
+arm-none-eabi-size  STM32G474RC.elf 
+arm-none-eabi-objdump -h -S STM32G474RC.elf  > "STM32G474RC.list"
+   text	   data	    bss	    dec	    hex	filename
+  73764	    856	   9800	  84420	  149c4	STM32G474RC.elf
+Finished building: default.size.stdout
+ 
+Finished building: STM32G474RC.list
+ 
+17:16:23 **** Incremental Build of configuration Debug for project STM32G474RC ****
+make -j11 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G474xx -c -I../USB_Device/App -I../USB_Device/Target -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:426:44: warning: format '%d' expects argument of type 'int', but argument 2 has type 'int32_t' {aka 'long int'} [-Wformat=]
+  426 |         printf("Left motor target RPM is: %d, it is currently at %f\r\n", left_target_rpm, left_motor_rpm);
+      |                                           ~^                              ~~~~~~~~~~~~~~~
+      |                                            |                              |
+      |                                            int                            int32_t {aka long int}
+      |                                           %ld
+../Core/Src/main.c:391:12: warning: unused variable 'start_time' [-Wunused-variable]
+  391 |   uint32_t start_time = HAL_GetTick();
+      |            ^~~~~~~~~~
+arm-none-eabi-gcc -o "STM32G474RC.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/caseyear/STM32CubeIDE/workspace_1.19.0/STM32G474RC/STM32G474RCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="STM32G474RC.map" -Wl,--gc-sections -static -u_printf_float --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: STM32G474RC.elf
+ 
+arm-none-eabi-size  STM32G474RC.elf 
+arm-none-eabi-objdump -h -S STM32G474RC.elf  > "STM32G474RC.list"
+   text	   data	    bss	    dec	    hex	filename
+  73764	    856	   9800	  84420	  149c4	STM32G474RC.elf
+Finished building: default.size.stdout
+ 
+Finished building: STM32G474RC.list
+ 
+17:16:50 **** Incremental Build of configuration Debug for project STM32G474RC ****
+make -j11 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G474xx -c -I../USB_Device/App -I../USB_Device/Target -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:426:44: warning: format '%d' expects argument of type 'int', but argument 2 has type 'int32_t' {aka 'long int'} [-Wformat=]
+  426 |         printf("Left motor target RPM is: %d, it is currently at %f\r\n", left_target_rpm, left_motor_rpm);
+      |                                           ~^                              ~~~~~~~~~~~~~~~
+      |                                            |                              |
+      |                                            int                            int32_t {aka long int}
+      |                                           %ld
+../Core/Src/main.c:391:12: warning: unused variable 'start_time' [-Wunused-variable]
+  391 |   uint32_t start_time = HAL_GetTick();
+      |            ^~~~~~~~~~
+arm-none-eabi-gcc -o "STM32G474RC.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/caseyear/STM32CubeIDE/workspace_1.19.0/STM32G474RC/STM32G474RCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="STM32G474RC.map" -Wl,--gc-sections -static -u_printf_float --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: STM32G474RC.elf
+ 
+arm-none-eabi-size  STM32G474RC.elf 
+arm-none-eabi-objdump -h -S STM32G474RC.elf  > "STM32G474RC.list"
+   text	   data	    bss	    dec	    hex	filename
+  73764	    856	   9800	  84420	  149c4	STM32G474RC.elf
+Finished building: default.size.stdout
+ 
+Finished building: STM32G474RC.list
+ 
+17:17:48 **** Incremental Build of configuration Debug for project STM32G474RC ****
+make -j11 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G474xx -c -I../USB_Device/App -I../USB_Device/Target -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:426:44: warning: format '%d' expects argument of type 'int', but argument 2 has type 'int32_t' {aka 'long int'} [-Wformat=]
+  426 |         printf("Left motor target RPM is: %d, it is currently at %f\r\n", left_target_rpm, left_motor_rpm);
+      |                                           ~^                              ~~~~~~~~~~~~~~~
+      |                                            |                              |
+      |                                            int                            int32_t {aka long int}
+      |                                           %ld
+../Core/Src/main.c:391:12: warning: unused variable 'start_time' [-Wunused-variable]
+  391 |   uint32_t start_time = HAL_GetTick();
+      |            ^~~~~~~~~~
+arm-none-eabi-gcc -o "STM32G474RC.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/caseyear/STM32CubeIDE/workspace_1.19.0/STM32G474RC/STM32G474RCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="STM32G474RC.map" -Wl,--gc-sections -static -u_printf_float --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: STM32G474RC.elf
+ 
+arm-none-eabi-size  STM32G474RC.elf 
+arm-none-eabi-objdump -h -S STM32G474RC.elf  > "STM32G474RC.list"
+   text	   data	    bss	    dec	    hex	filename
+  73764	    856	   9800	  84420	  149c4	STM32G474RC.elf
+Finished building: default.size.stdout
+ 
+Finished building: STM32G474RC.list
+ 
+17:18:25 **** Incremental Build of configuration Debug for project STM32G474RC ****
+make -j11 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G474xx -c -I../USB_Device/App -I../USB_Device/Target -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:426:44: warning: format '%d' expects argument of type 'int', but argument 2 has type 'int32_t' {aka 'long int'} [-Wformat=]
+  426 |         printf("Left motor target RPM is: %d, it is currently at %f\r\n", left_target_rpm, left_motor_rpm);
+      |                                           ~^                              ~~~~~~~~~~~~~~~
+      |                                            |                              |
+      |                                            int                            int32_t {aka long int}
+      |                                           %ld
+../Core/Src/main.c:391:12: warning: unused variable 'start_time' [-Wunused-variable]
+  391 |   uint32_t start_time = HAL_GetTick();
+      |            ^~~~~~~~~~
+arm-none-eabi-gcc -o "STM32G474RC.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/caseyear/STM32CubeIDE/workspace_1.19.0/STM32G474RC/STM32G474RCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="STM32G474RC.map" -Wl,--gc-sections -static -u_printf_float --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: STM32G474RC.elf
+ 
+arm-none-eabi-size  STM32G474RC.elf 
+arm-none-eabi-objdump -h -S STM32G474RC.elf  > "STM32G474RC.list"
+   text	   data	    bss	    dec	    hex	filename
+  73764	    856	   9800	  84420	  149c4	STM32G474RC.elf
+Finished building: default.size.stdout
+ 
+Finished building: STM32G474RC.list
+ 
+17:18:54 **** Incremental Build of configuration Debug for project STM32G474RC ****
+make -j11 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G474xx -c -I../USB_Device/App -I../USB_Device/Target -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:426:44: warning: format '%d' expects argument of type 'int', but argument 2 has type 'int32_t' {aka 'long int'} [-Wformat=]
+  426 |         printf("Left motor target RPM is: %d, it is currently at %f\r\n", left_target_rpm, left_motor_rpm);
+      |                                           ~^                              ~~~~~~~~~~~~~~~
+      |                                            |                              |
+      |                                            int                            int32_t {aka long int}
+      |                                           %ld
+../Core/Src/main.c:391:12: warning: unused variable 'start_time' [-Wunused-variable]
+  391 |   uint32_t start_time = HAL_GetTick();
+      |            ^~~~~~~~~~
+arm-none-eabi-gcc -o "STM32G474RC.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/caseyear/STM32CubeIDE/workspace_1.19.0/STM32G474RC/STM32G474RCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="STM32G474RC.map" -Wl,--gc-sections -static -u_printf_float --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: STM32G474RC.elf
+ 
+arm-none-eabi-size  STM32G474RC.elf 
+arm-none-eabi-objdump -h -S STM32G474RC.elf  > "STM32G474RC.list"
+   text	   data	    bss	    dec	    hex	filename
+  73764	    856	   9800	  84420	  149c4	STM32G474RC.elf
+Finished building: default.size.stdout
+ 
+Finished building: STM32G474RC.list
+ 
+17:20:54 **** Incremental Build of configuration Debug for project STM32G474RC ****
+make -j11 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G474xx -c -I../USB_Device/App -I../USB_Device/Target -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:426:44: warning: format '%d' expects argument of type 'int', but argument 2 has type 'int32_t' {aka 'long int'} [-Wformat=]
+  426 |         printf("Left motor target RPM is: %d, it is currently at %f\r\n", left_target_rpm, left_motor_rpm);
+      |                                           ~^                              ~~~~~~~~~~~~~~~
+      |                                            |                              |
+      |                                            int                            int32_t {aka long int}
+      |                                           %ld
+../Core/Src/main.c:391:12: warning: unused variable 'start_time' [-Wunused-variable]
+  391 |   uint32_t start_time = HAL_GetTick();
+      |            ^~~~~~~~~~
+arm-none-eabi-gcc -o "STM32G474RC.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/caseyear/STM32CubeIDE/workspace_1.19.0/STM32G474RC/STM32G474RCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="STM32G474RC.map" -Wl,--gc-sections -static -u_printf_float --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: STM32G474RC.elf
+ 
+arm-none-eabi-size  STM32G474RC.elf 
+arm-none-eabi-objdump -h -S STM32G474RC.elf  > "STM32G474RC.list"
+   text	   data	    bss	    dec	    hex	filename
+  73764	    856	   9800	  84420	  149c4	STM32G474RC.elf
+Finished building: default.size.stdout
+ 
+Finished building: STM32G474RC.list
+ 
+17:21:41 **** Incremental Build of configuration Debug for project STM32G474RC ****
+make -j11 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G474xx -c -I../USB_Device/App -I../USB_Device/Target -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:426:44: warning: format '%d' expects argument of type 'int', but argument 2 has type 'int32_t' {aka 'long int'} [-Wformat=]
+  426 |         printf("Left motor target RPM is: %d, it is currently at %f\r\n", left_target_rpm, left_motor_rpm);
+      |                                           ~^                              ~~~~~~~~~~~~~~~
+      |                                            |                              |
+      |                                            int                            int32_t {aka long int}
+      |                                           %ld
+../Core/Src/main.c:391:12: warning: unused variable 'start_time' [-Wunused-variable]
+  391 |   uint32_t start_time = HAL_GetTick();
+      |            ^~~~~~~~~~
+arm-none-eabi-gcc -o "STM32G474RC.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/caseyear/STM32CubeIDE/workspace_1.19.0/STM32G474RC/STM32G474RCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="STM32G474RC.map" -Wl,--gc-sections -static -u_printf_float --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: STM32G474RC.elf
+ 
+arm-none-eabi-size  STM32G474RC.elf 
+arm-none-eabi-objdump -h -S STM32G474RC.elf  > "STM32G474RC.list"
+   text	   data	    bss	    dec	    hex	filename
+  73764	    856	   9800	  84420	  149c4	STM32G474RC.elf
+Finished building: default.size.stdout
+ 
+Finished building: STM32G474RC.list
+ 
+17:23:40 **** Incremental Build of configuration Debug for project STM32G474RC ****
+make -j11 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G474xx -c -I../USB_Device/App -I../USB_Device/Target -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:426:44: warning: format '%d' expects argument of type 'int', but argument 2 has type 'int32_t' {aka 'long int'} [-Wformat=]
+arm-none-eabi-gcc -o "STM32G474RC.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/caseyear/STM32CubeIDE/workspace_1.19.0/STM32G474RC/STM32G474RCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="STM32G474RC.map" -Wl,--gc-sections -static -u_printf_float --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+  426 |         printf("Left motor target RPM is: %d, it is currently at %f\r\n", left_target_rpm, left_motor_rpm);
+      |                                           ~^                              ~~~~~~~~~~~~~~~
+      |                                            |                              |
+      |                                            int                            int32_t {aka long int}
+      |                                           %ld
+../Core/Src/main.c:391:12: warning: unused variable 'start_time' [-Wunused-variable]
+  391 |   uint32_t start_time = HAL_GetTick();
+      |            ^~~~~~~~~~
+Finished building target: STM32G474RC.elf
+ 
+arm-none-eabi-size  STM32G474RC.elf 
+arm-none-eabi-objdump -h -S STM32G474RC.elf  > "STM32G474RC.list"
+   text	   data	    bss	    dec	    hex	filename
+  73764	    856	   9800	  84420	  149c4	STM32G474RC.elf
+Finished building: default.size.stdout
+ 
+Finished building: STM32G474RC.list
+ 

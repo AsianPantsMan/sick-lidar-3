@@ -27,8 +27,6 @@ void MotorControl_Init(MotorControl_t* motor,
     motor->last_encoder_count = 0;
     motor->current_encoder_count = 0;
     motor->current_speed_rpm = 0.0f;
-    motor->rpm_filt = 0.0f;
-    motor->rpm_tau  = 0.05f;
     motor->error_integral = 0.0f;
     motor->last_error = 0.0f;
     motor->output_pwm_duty = 0;
@@ -88,8 +86,8 @@ void MotorControl_RunPID(MotorControl_t* motor)
     motor->output_pwm_duty = ((int32_t)pid_output / MAX_RPM)*100;
 
     //Case for duty cycle is higher then 100%
-    if (motor->output_pwm_duty > 100) motor->output_pwm_duty = 100;
-    if (motor->output_pwm_duty < -100) motor->output_pwm_duty = -100;
+    if (motor->output_pwm_duty > 1) motor->output_pwm_duty = 100;
+    if (motor->output_pwm_duty < -1) motor->output_pwm_duty = -100;
 
     // Apply to hardware
 	if (motor->pwm_channel == TIM_CHANNEL_1) {

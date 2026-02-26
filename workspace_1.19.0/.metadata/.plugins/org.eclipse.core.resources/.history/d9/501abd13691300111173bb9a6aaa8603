@@ -365,7 +365,7 @@ int main(void)
 
   //PID loop
   MotorControl_Init(&left_motor, &htim1, TIM_CHANNEL_4, &htim4,
-		  4.0f, //Kp
+		  3.0f, //Kp
 		  0.0f,	//Ki
 		  0.0f);	//Kd
 
@@ -374,8 +374,8 @@ int main(void)
 		  0.0f,	//Ki
 		  0.0f);	//Kd
 
-  MotorControl_SetTargetSpeed(&left_motor, 200);
-  MotorControl_SetTargetSpeed(&right_motor, 200);
+  MotorControl_SetTargetSpeed(&left_motor, 100);
+  MotorControl_SetTargetSpeed(&right_motor, 100);
 
   HAL_TIM_Base_Start_IT(&htim6);
   /* random tests, commented out */

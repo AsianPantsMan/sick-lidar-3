@@ -364,20 +364,20 @@ int main(void)
   HAL_TIM_Encoder_Start((&htim3), TIM_CHANNEL_ALL); //encoder2
 
   //PID loop
-  MotorControl_Init(&left_motor, &htim1, TIM_CHANNEL_4, &htim4,
-		  4.0f, //Kp
-		  0.0f,	//Ki
-		  0.0f);	//Kd
-
-  MotorControl_Init(&right_motor, &htim8, TIM_CHANNEL_1, &htim3,
-		  1.0f, //Kp
-		  0.0f,	//Ki
-		  0.0f);	//Kd
-
-  MotorControl_SetTargetSpeed(&left_motor, 200);
-  MotorControl_SetTargetSpeed(&right_motor, 200);
-
-  HAL_TIM_Base_Start_IT(&htim6);
+//  MotorControl_Init(&left_motor, &htim1, TIM_CHANNEL_4, &htim4,
+//		  1.0f, //Kp
+//		  0.0f,	//Ki
+//		  0.0f);	//Kd
+//
+//  MotorControl_Init(&right_motor, &htim8, TIM_CHANNEL_1, &htim3,
+//		  1.0f, //Kp
+//		  0.0f,	//Ki
+//		  0.0f);	//Kd
+//
+//  MotorControl_SetTargetSpeed(&left_motor, 100);
+//  MotorControl_SetTargetSpeed(&right_motor, 100);
+//
+//  HAL_TIM_Base_Start_IT(&htim6);
   /* random tests, commented out */
   //LED_Test();
 
@@ -404,9 +404,6 @@ int main(void)
     encoder1 = (uint16_t)__HAL_TIM_GET_COUNTER(&htim4);
     encoder2 = (uint16_t)__HAL_TIM_GET_COUNTER(&htim3);
 
-    printf("encoder1: %d\r\n", encoder1);
-    printf("encoder2: %d\r\n", encoder2);
-
     // Only set speed for the first 20 seconds after startup
 //    if (HAL_GetTick() - start_time < 10000) {
 //    	MD1_setSpeed(&htim1, TIM_CHANNEL_4, 10);
@@ -421,13 +418,16 @@ int main(void)
     piReceive(rx_buffer);
 
     //Motor speed
-	float left_motor_rpm = MotorControl_getRpm(&left_motor);
-	int32_t left_target_rpm = MotorControl_getTargetRpm(&left_motor);
-	printf("Left motor target RPM is: %d, it is currently at %f\r\n", left_target_rpm, left_motor_rpm);
+//	float left_motor_rpm = MotorControl_getRpm(&left_motor);
+//	int32_t left_target_rpm = MotorControl_getTargetRpm(&left_motor);
+//	printf("Left motor target RPM is: %d, it is currently at %f\r\n", left_target_rpm, left_motor_rpm);
 
     //debug printouts
     //printDebug(quaternion, encoder1, encoder2);
     //printf("timer 6 interrupt, rpm at %f\r\n", rpm);
+    //printf("prev_cnt: %d\r\n", prev_cnt);
+    //printf("curr_cnt: %d\r\n", curr_cnt);
+    //printf("dt_sec: %f\r\n", period);
 
   }
   /* USER CODE END 3 */

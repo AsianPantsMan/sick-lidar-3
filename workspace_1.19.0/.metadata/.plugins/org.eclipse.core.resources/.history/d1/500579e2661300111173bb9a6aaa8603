@@ -41,8 +41,6 @@ typedef struct {
 
     // Calculated current speed (Process Variable)
     float current_speed_rpm;
-    float rpm_filt;          // filtered RPM state
-	float rpm_tau;
 
     // PID internal state
     float error_integral;

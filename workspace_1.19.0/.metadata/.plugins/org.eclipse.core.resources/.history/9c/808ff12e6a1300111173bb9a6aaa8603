@@ -374,8 +374,8 @@ int main(void)
 		  0.0f,	//Ki
 		  0.0f);	//Kd
 
-  MotorControl_SetTargetSpeed(&left_motor, 200);
-  MotorControl_SetTargetSpeed(&right_motor, 200);
+  MotorControl_SetTargetSpeed(&left_motor, 100);
+  MotorControl_SetTargetSpeed(&right_motor, 100);
 
   HAL_TIM_Base_Start_IT(&htim6);
   /* random tests, commented out */
