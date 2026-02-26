@@ -405,11 +405,11 @@ int main(void)
 
     // Only set speed for the first 20 seconds after startup
     if (HAL_GetTick() - start_time < 20000) {
-    	MD1_setSpeed(&htim1, TIM_CHANNEL_4, 10);
-    	MD2_setSpeed(&htim8, TIM_CHANNEL_1, 10);
+        MotorControl_SetTargetSpeed(&left_motor, 50);
+        MotorControl_SetTargetSpeed(&right_motor, 50);
     } else {
-    	MD1_setSpeed(&htim1, TIM_CHANNEL_4, 0);
-		MD2_setSpeed(&htim8, TIM_CHANNEL_1, 0);
+        MotorControl_SetTargetSpeed(&left_motor, 0);
+        MotorControl_SetTargetSpeed(&right_motor, 0);
     }
 
     //Raspberry Pi Communication

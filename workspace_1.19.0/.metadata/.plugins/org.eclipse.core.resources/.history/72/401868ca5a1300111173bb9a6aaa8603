@@ -61,7 +61,7 @@ void MotorControl_RunPID(MotorControl_t* motor)
     motor->last_encoder_count = motor->current_encoder_count;
 
     // --- Low-pass filter for RPM ---
-    float instant_rpm = (float)ticks_moved * (60.0f / (MOTOR_CPR * period)); //turn into current_speed_rpm if working
+    float instant_rpm = (float)ticks_moved * (60.0f / (MOTOR_CPR * period));
     static float rpm_filtered = 0.0f;
     const float alpha = 0.2f; // Smoothing factor (0 < alpha < 1), lower = smoother
     rpm_filtered = alpha * instant_rpm + (1.0f - alpha) * rpm_filtered;

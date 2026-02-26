@@ -15398,3 +15398,53 @@ Finished building: default.size.stdout
  
 Finished building: STM32G474RC.list
  
+15:33:34 **** Incremental Build of configuration Debug for project STM32G474RC ****
+make -j11 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G474xx -c -I../USB_Device/App -I../USB_Device/Target -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/pid.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G474xx -c -I../USB_Device/App -I../USB_Device/Target -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/pid.d" -MT"Core/Src/pid.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/pid.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:418:44: warning: format '%d' expects argument of type 'int', but argument 2 has type 'int32_t' {aka 'long int'} [-Wformat=]
+  418 |         printf("Left motor target RPM is: %d, it is currently at %f\r\n", left_target_rpm, left_motor_rpm);
+      |                                           ~^                              ~~~~~~~~~~~~~~~
+      |                                            |                              |
+      |                                            int                            int32_t {aka long int}
+      |                                           %ld
+arm-none-eabi-gcc -o "STM32G474RC.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/caseyear/STM32CubeIDE/workspace_1.19.0/STM32G474RC/STM32G474RCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="STM32G474RC.map" -Wl,--gc-sections -static -u_printf_float --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: STM32G474RC.elf
+ 
+arm-none-eabi-size  STM32G474RC.elf 
+arm-none-eabi-objdump -h -S STM32G474RC.elf  > "STM32G474RC.list"
+   text	   data	    bss	    dec	    hex	filename
+  73668	    856	   9784	  84308	  14954	STM32G474RC.elf
+Finished building: default.size.stdout
+ 
+Finished building: STM32G474RC.list
+ 
+15:42:42 **** Incremental Build of configuration Debug for project STM32G474RC ****
+make -j11 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G474xx -c -I../USB_Device/App -I../USB_Device/Target -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "STM32G474RC.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/caseyear/STM32CubeIDE/workspace_1.19.0/STM32G474RC/STM32G474RCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="STM32G474RC.map" -Wl,--gc-sections -static -u_printf_float --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: STM32G474RC.elf
+ 
+arm-none-eabi-size  STM32G474RC.elf 
+arm-none-eabi-objdump -h -S STM32G474RC.elf  > "STM32G474RC.list"
+   text	   data	    bss	    dec	    hex	filename
+  72436	    856	   9784	  83076	  14484	STM32G474RC.elf
+Finished building: default.size.stdout
+ 
+Finished building: STM32G474RC.list
+ 
+15:43:30 **** Incremental Build of configuration Debug for project STM32G474RC ****
+make -j11 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G474xx -c -I../USB_Device/App -I../USB_Device/Target -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "STM32G474RC.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/caseyear/STM32CubeIDE/workspace_1.19.0/STM32G474RC/STM32G474RCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="STM32G474RC.map" -Wl,--gc-sections -static -u_printf_float --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: STM32G474RC.elf
+ 
+arm-none-eabi-size  STM32G474RC.elf 
+arm-none-eabi-objdump -h -S STM32G474RC.elf  > "STM32G474RC.list"
+   text	   data	    bss	    dec	    hex	filename
+  72412	    856	   9688	  82956	  1440c	STM32G474RC.elf
+Finished building: default.size.stdout
+ 
+Finished building: STM32G474RC.list
+ 
