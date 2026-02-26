@@ -1,5 +1,0 @@
-../Core/Src/motor_control.c:4:6:MotorControl_Init	40	static
-../Core/Src/motor_control.c:37:6:MotorControl_SetTargetSpeed	16	static
-../Core/Src/motor_control.c:47:6:MotorControl_RunPID	40	static
-../Core/Src/motor_control.c:109:6:MotorControl_Stop	16	static
-../Core/Src/motor_control.c:123:7:MotorControl_GetCurrentSpeed	16	static

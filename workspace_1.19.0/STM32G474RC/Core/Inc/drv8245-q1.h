@@ -29,7 +29,6 @@ typedef struct {
     uint32_t PWM_Channel;
 
     //state variables
-    bool direction;
     uint16_t current_speed;
 
 } MotorDriver_t;
@@ -39,8 +38,8 @@ void md_reset_pulse();
 
 HAL_StatusTypeDef MD1_motor_init();
 HAL_StatusTypeDef MD2_motor_init();
-uint8_t MD1_setSpeed(TIM_HandleTypeDef *htim, uint32_t channel, uint8_t duty);
-uint8_t MD2_setSpeed(TIM_HandleTypeDef *htim, uint32_t channel, uint8_t duty);
+uint8_t MD1_setSpeed(TIM_HandleTypeDef *htim, uint32_t channel, int8_t duty);
+uint8_t MD2_setSpeed(TIM_HandleTypeDef *htim, uint32_t channel, int8_t duty);
 
 
 #endif /* INC_DRV8245_Q1_H_ */

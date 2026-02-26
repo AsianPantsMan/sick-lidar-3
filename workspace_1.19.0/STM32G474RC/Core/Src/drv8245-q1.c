@@ -115,10 +115,15 @@ HAL_StatusTypeDef MD2_motor_init(){
 	return HAL_OK;
 }
 
-uint8_t MD1_setSpeed(TIM_HandleTypeDef *htim, uint32_t channel, uint8_t duty) {
-	if (duty > 100) {
-		printf("ERROR: Invalid duty cycle %d%%\r\n", duty);
-		return 0;
+uint8_t MD1_setSpeed(TIM_HandleTypeDef *htim, uint32_t channel, int8_t duty) {
+
+	//Set direction +duty is forward, -duty is backward
+	if (duty<0){
+		HAL_GPIO_WritePin(MD1_PH_IN2_GPIO_Port, MD1_PH_IN2_Pin, GPIO_PIN_SET);
+		duty = -duty;
+	}
+	else{
+		HAL_GPIO_WritePin(MD1_PH_IN2_GPIO_Port, MD1_PH_IN2_Pin, GPIO_PIN_RESET);
 	}
 
 	uint32_t timer_period = __HAL_TIM_GET_AUTORELOAD(htim);
@@ -142,10 +147,15 @@ uint8_t MD1_setSpeed(TIM_HandleTypeDef *htim, uint32_t channel, uint8_t duty) {
 	return duty;
 }
 
-uint8_t MD2_setSpeed(TIM_HandleTypeDef *htim, uint32_t channel, uint8_t duty) {
-	if (duty > 100) {
-		printf("ERROR: Invalid duty cycle %d%%\r\n", duty);
-		return 0;
+uint8_t MD2_setSpeed(TIM_HandleTypeDef *htim, uint32_t channel, int8_t duty) {
+
+	//Set direction +duty is forward, -duty is backward
+	if (duty<0){
+		HAL_GPIO_WritePin(MD2_PH_IN2_GPIO_Port, MD2_PH_IN2_Pin, GPIO_PIN_SET);
+		duty = -duty;
+	}
+	else{
+		HAL_GPIO_WritePin(MD2_PH_IN2_GPIO_Port, MD2_PH_IN2_Pin, GPIO_PIN_RESET);
 	}
 
 	uint32_t timer_period = __HAL_TIM_GET_AUTORELOAD(htim);

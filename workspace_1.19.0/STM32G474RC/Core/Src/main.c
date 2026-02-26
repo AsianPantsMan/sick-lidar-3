@@ -44,7 +44,7 @@
 /* USER CODE BEGIN PD */
 #define TX_BUFFER_SIZE 38 //currently set for imu (4 doubles), 2 encoders (2 uint16_t) => (8 * 4) + (2 * 2) + 2 (framing) = 38 bytes
 #define RX_BUFFER_SIZE 8 //currently set for 6 floats, (3 linear velocity, 3 angular velocity)
-#define MOTOR_CPR 996.8f
+//#define MOTOR_CPR 996.8f
 
 /* USER CODE END PD */
 
@@ -61,16 +61,20 @@ uint8_t rx_buffer[RX_BUFFER_SIZE];
 
 uint16_t encoder1;
 uint16_t encoder2;
-float rpm;
+
+MotorControl_t Left_Motor;
+MotorControl_t Right_Motor;
+//float rpm;
 
 uint32_t curr_time_ms;
 
 volatile uint32_t command_timeout_counter = 0;
-float ticks = 0;
+//float ticks = 0;
 
-uint16_t prev_cnt;
-uint16_t curr_cnt;
-const float dt_sec = 1.0f / 100;
+//uint16_t prev_cnt;
+//uint16_t curr_cnt;
+//const uint16_t pid_loop_frequency = 100;
+//const float period = 1.0f / pid_loop_frequency;
 
 
 /* USER CODE END PV */
@@ -362,9 +366,9 @@ int main(void)
 
   //Motor Driver
   MD1_motor_init();
-  MD1_setSpeed(&htim1, TIM_CHANNEL_4, 50);
+  //MD1_setSpeed(&htim1, TIM_CHANNEL_4, -50);
   MD2_motor_init();
-  MD2_setSpeed(&htim8, TIM_CHANNEL_1, 50);
+  //MD2_setSpeed(&htim8, TIM_CHANNEL_1, 50);
 
   //Motor Encoders
   HAL_TIM_Encoder_Start((&htim4), TIM_CHANNEL_ALL);
@@ -372,6 +376,14 @@ int main(void)
 
   //PID loop
   HAL_TIM_Base_Start_IT(&htim6);
+  MotorControl_Init(&Left_Motor, &htim1, TIM_CHANNEL_4, &htim4,
+		  1000, //Kp
+		  100,	//Ki
+		  1);	//Kd
+  MotorControl_Init(&Right_Motor, &htim8, TIM_CHANNEL_1, &htim3,
+		  1000, //Kp
+		  100,	//Ki
+		  1);	//Kd
 
   /* random tests, commented out */
   //LED_Test();
@@ -409,12 +421,16 @@ int main(void)
 	piSend(quaternion, encoder1, encoder2);
 	piReceive(rx_buffer);
 
+	//Motor speed
+	MotorControl_SetTargetSpeed(&Left_Motor, 100);
+	MotorControl_SetTargetSpeed(&Right_Motor, 100);
+
 	//debug printouts
 	//printDebug(quaternion, encoder1, encoder2);
-	printf("timer 6 interrupt, rpm at %f\r\n", rpm);
-	printf("prev_cnt: %d\r\n", prev_cnt);
-	printf("curr_cnt: %d\r\n", curr_cnt);
-	printf("dt_sec: %f\r\n", dt_sec);
+	//printf("timer 6 interrupt, rpm at %f\r\n", rpm);
+	//printf("prev_cnt: %d\r\n", prev_cnt);
+	//printf("curr_cnt: %d\r\n", curr_cnt);
+	//printf("dt_sec: %f\r\n", period);
 
   }
   /* USER CODE END 3 */
@@ -472,21 +488,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 
   if (htim->Instance == TIM6)
   {
-
-	 curr_cnt = (uint16_t)__HAL_TIM_GET_COUNTER(&htim4);
-
-	 // signed delta with wrap handling for 16-bit counter
-	 int32_t ticks = (int32_t)(curr_cnt - prev_cnt);
-
-
-
-	 // dt is fixed if you're in a fixed-rate timer callback:
-
-
-	 // RPM = ticks/dt * 60 / CPR
-	 rpm = (float)ticks * (60.0f / (MOTOR_CPRx\ * dt_sec));
-	 prev_cnt = curr_cnt;
-	 // equivalently: ticks * (60 * SAMPLE_HZ / MOTOR_CPR)
+	  MotorControl_RunPID(&Left_Motor);
+	  MotorControl_RunPID(&Right_Motor);
   }
 }
 /* USER CODE END 4 */

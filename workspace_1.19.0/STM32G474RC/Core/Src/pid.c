@@ -5,27 +5,81 @@
  *      Author: caseyear
  */
 #include "pid.h"
+#include <stdlib.h>
 
-uint16_t getEncoderRpm(TIM_HandleTypeDef *timer) {
-    static uint16_t prev_cnt = 0;
+void MotorControl_Init(MotorControl_t* motor,
+                       TIM_HandleTypeDef* pwm_timer, uint32_t pwm_channel,
+                       TIM_HandleTypeDef* encoder_timer,
+                       float Kp, float Ki, float Kd)
+{
+    motor->pwm_timer = pwm_timer;
+    motor->pwm_channel = pwm_channel;
+    motor->encoder_timer = encoder_timer;
 
-    uint16_t curr_cnt = (uint16_t)__HAL_TIM_GET_COUNTER(timer) * 2;
+    motor->Kp = Kp;
+    motor->Ki = Ki;
+    motor->Kd = Kd;
 
-    // signed delta with wrap handling for 16-bit counter
-    int32_t ticks = (int32_t)(int16_t)(curr_cnt - prev_cnt);
-    prev_cnt = curr_cnt;
-    printf("prev_cnt: %d\r\n", prev_cnt);
-    printf("curr_cnt: %d\r\n", curr_cnt);
+    motor->target_speed_rpm = 0;
+    motor->last_encoder_count = 0;
+    motor->current_encoder_count = 0;
+    motor->current_speed_rpm = 0.0f;
+    motor->error_integral = 0.0f;
+    motor->last_error = 0.0f;
+    motor->output_pwm_duty = 0;
 
-    // dt is fixed if you're in a fixed-rate timer callback:
-    const float dt_sec = 1.0f / 100;
-    printf("dt_sec: %f\r\n", dt_sec);
 
-    // RPM = ticks/dt * 60 / CPR
-    return (float)ticks * (60.0f / (MOTOR_CPR * dt_sec));
-    // equivalently: ticks * (60 * SAMPLE_HZ / MOTOR_CPR)
 }
 
-//uint8_t calcPid(){
-//
-//}
+
+void MotorControl_SetTargetSpeed(MotorControl_t* motor, int32_t target_rpm)
+{
+    motor->target_speed_rpm = target_rpm;
+}
+
+void MotorControl_RunPID(MotorControl_t* motor)
+{
+
+    // Read current encoder count
+    motor->current_encoder_count = (uint16_t)__HAL_TIM_GET_COUNTER(motor->encoder_timer);
+
+    // Calculate ticks moved
+    int16_t ticks_moved = motor->current_encoder_count - motor->last_encoder_count;
+    motor->last_encoder_count = motor->current_encoder_count;
+
+    // Calculate speed in rpm
+    motor->current_speed_rpm = (float)ticks_moved * (60.0f / (MOTOR_CPR * period));
+
+    // Calculate error
+    float error = (float)motor->target_speed_rpm - motor->current_speed_rpm;
+
+    // PID terms
+
+    //P TERM
+    float p_term = motor->Kp * error;
+
+    //I TERM
+    motor->error_integral += error * period;
+    float i_term = motor->Ki * motor->error_integral;
+
+    //D TERM
+    float d_term = motor->Kd * (error - motor->last_error) / period;
+    motor->last_error = error;
+
+    // Calculate output
+    float pid_output = p_term + i_term + d_term;
+
+    //Convert rpm to duty cycle
+    motor->output_pwm_duty = ((int32_t)pid_output / MAX_RPM)*100;
+
+    //Case for duty cycle is higher then 100%
+    if (motor->output_pwm_duty > 1) motor->output_pwm_duty = 100;
+    if (motor->output_pwm_duty < -1) motor->output_pwm_duty = -100;
+
+    // Apply to hardware
+	if (motor->pwm_channel == TIM_CHANNEL_1) {
+		MD2_setSpeed(&htim8, TIM_CHANNEL_1, motor->output_pwm_duty);
+	} else if (motor->pwm_channel == TIM_CHANNEL_4) {
+		MD1_setSpeed(&htim1, TIM_CHANNEL_4, motor->output_pwm_duty);
+	}
+}

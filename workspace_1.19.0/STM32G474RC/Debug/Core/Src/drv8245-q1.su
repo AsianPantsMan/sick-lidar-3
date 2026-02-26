@@ -4,4 +4,4 @@
 ../Core/Src/drv8245-q1.c:34:19:MD1_motor_init	16	static
 ../Core/Src/drv8245-q1.c:76:19:MD2_motor_init	16	static
 ../Core/Src/drv8245-q1.c:118:9:MD1_setSpeed	40	static
-../Core/Src/drv8245-q1.c:145:9:MD2_setSpeed	40	static
+../Core/Src/drv8245-q1.c:150:9:MD2_setSpeed	40	static

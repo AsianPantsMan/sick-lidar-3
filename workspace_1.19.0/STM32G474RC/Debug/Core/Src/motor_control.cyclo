@@ -1,5 +1,0 @@
-../Core/Src/motor_control.c:4:6:MotorControl_Init	6
-../Core/Src/motor_control.c:37:6:MotorControl_SetTargetSpeed	3
-../Core/Src/motor_control.c:47:6:MotorControl_RunPID	11
-../Core/Src/motor_control.c:109:6:MotorControl_Stop	3
-../Core/Src/motor_control.c:123:7:MotorControl_GetCurrentSpeed	1
