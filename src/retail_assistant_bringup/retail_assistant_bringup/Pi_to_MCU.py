@@ -1,10 +1,12 @@
 import serial
 import time
 import rclpy
+from geometry_msgs.msg import Twist
 from rclpy.node import Node
 from rclpy.timer import Timer
 import struct 
 import math as mt
+import numpy as np
 class PiToMCUNode(Node):
     def __init__(self):
         super().__init__('pi_to_mcu_node')
@@ -21,14 +23,16 @@ class PiToMCUNode(Node):
         vl=linear_x-((angular_z*self.dist_between)/2)
         vr=linear_x+((angular_z*self.dist_between)/2)
         meters_per_revolution=2*mt.pi*self.sprocket_radius
+        rpm_r=vr/meters_per_revolution*60
+        rpm_l=vl/meters_per_revolution*60
         ppr=1993.6
         gear_ratio=(1+(46/17)) * (1+(46/17)) * (1+(46/11))
-        ticks_r=(vr/(meters_per_revolution)*ppr*4*gear_ratio)
-        ticks_l=(vl/(meters_per_revolution)*ppr*4*gear_ratio)
-        ticks=struct.pack('<BiiB',0xAA,int(ticks_l),int(ticks_r),0x55)
-        self.ser.write(ticks)
+        ticks_r=np.int32((vr/(meters_per_revolution)*ppr*4*gear_ratio))
+        ticks_l=np.int32((vl/(meters_per_revolution)*ppr*4*gear_ratio))
+        rpm_msg=struct.pack('<BiiB',0xAA,int(rpm_l),int(rpm_r),0x55)
+        self.ser.write(rpm_msg)
         print(f"Received cmd_vel: linear_x={linear_x}, angular_z={angular_z}")
-        print(f"Ticks: Left={ticks_l}, Right={ticks_r}")
+        print(f"Ticks: Left={rpm_l}, Right={rpm_r}")
 def main():
     rclpy.init()
     node= PiToMCUNode()

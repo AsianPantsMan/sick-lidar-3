@@ -1,0 +1,83 @@
+[4.831s] Invoking command in '/home/kendell/retail_assistant_ws/build/retail_assistant_bringup': PYTHONPATH=/home/kendell/retail_assistant_ws/build/retail_assistant_bringup/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --uninstall --editable --build-directory /home/kendell/retail_assistant_ws/build/retail_assistant_bringup/build
+[5.148s] running develop
+[5.301s] Removing /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/python3.10/site-packages/retail-assistant-bringup.egg-link (link to .)
+[5.317s] Invoked command in '/home/kendell/retail_assistant_ws/build/retail_assistant_bringup' returned '0': PYTHONPATH=/home/kendell/retail_assistant_ws/build/retail_assistant_bringup/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --uninstall --editable --build-directory /home/kendell/retail_assistant_ws/build/retail_assistant_bringup/build
+[5.319s] Invoking command in '/home/kendell/retail_assistant_ws/src/retail_assistant_bringup': PYTHONPATH=/home/kendell/retail_assistant_ws/build/retail_assistant_bringup/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/retail_assistant_bringup build --build-base /home/kendell/retail_assistant_ws/build/retail_assistant_bringup/build install --record /home/kendell/retail_assistant_ws/build/retail_assistant_bringup/install.log --single-version-externally-managed install_data --force
+[5.438s] running egg_info
+[5.438s] writing ../../build/retail_assistant_bringup/retail_assistant_bringup.egg-info/PKG-INFO
+[5.451s] writing dependency_links to ../../build/retail_assistant_bringup/retail_assistant_bringup.egg-info/dependency_links.txt
+[5.451s] writing entry points to ../../build/retail_assistant_bringup/retail_assistant_bringup.egg-info/entry_points.txt
+[5.451s] writing requirements to ../../build/retail_assistant_bringup/retail_assistant_bringup.egg-info/requires.txt
+[5.452s] writing top-level names to ../../build/retail_assistant_bringup/retail_assistant_bringup.egg-info/top_level.txt
+[5.452s] reading manifest file '../../build/retail_assistant_bringup/retail_assistant_bringup.egg-info/SOURCES.txt'
+[5.488s] writing manifest file '../../build/retail_assistant_bringup/retail_assistant_bringup.egg-info/SOURCES.txt'
+[5.497s] running build
+[5.497s] running build_py
+[5.498s] creating /home/kendell/retail_assistant_ws/build/retail_assistant_bringup/build
+[5.498s] creating /home/kendell/retail_assistant_ws/build/retail_assistant_bringup/build/lib
+[5.498s] creating /home/kendell/retail_assistant_ws/build/retail_assistant_bringup/build/lib/retail_assistant_bringup
+[5.498s] copying retail_assistant_bringup/auto_drive.py -> /home/kendell/retail_assistant_ws/build/retail_assistant_bringup/build/lib/retail_assistant_bringup
+[5.520s] copying retail_assistant_bringup/ultrasonic.py -> /home/kendell/retail_assistant_ws/build/retail_assistant_bringup/build/lib/retail_assistant_bringup
+[5.530s] copying retail_assistant_bringup/MCU_to_Pi.py -> /home/kendell/retail_assistant_ws/build/retail_assistant_bringup/build/lib/retail_assistant_bringup
+[5.565s] copying retail_assistant_bringup/navigation.py -> /home/kendell/retail_assistant_ws/build/retail_assistant_bringup/build/lib/retail_assistant_bringup
+[5.589s] copying retail_assistant_bringup/__init__.py -> /home/kendell/retail_assistant_ws/build/retail_assistant_bringup/build/lib/retail_assistant_bringup
+[5.589s] copying retail_assistant_bringup/test2.py -> /home/kendell/retail_assistant_ws/build/retail_assistant_bringup/build/lib/retail_assistant_bringup
+[5.620s] copying retail_assistant_bringup/Pi_to_MCU.py -> /home/kendell/retail_assistant_ws/build/retail_assistant_bringup/build/lib/retail_assistant_bringup
+[5.662s] copying retail_assistant_bringup/test.py -> /home/kendell/retail_assistant_ws/build/retail_assistant_bringup/build/lib/retail_assistant_bringup
+[5.739s] running install
+[5.740s] running install_lib
+[5.741s] creating /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup
+[5.741s] copying /home/kendell/retail_assistant_ws/build/retail_assistant_bringup/build/lib/retail_assistant_bringup/auto_drive.py -> /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup
+[5.742s] copying /home/kendell/retail_assistant_ws/build/retail_assistant_bringup/build/lib/retail_assistant_bringup/ultrasonic.py -> /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup
+[5.742s] copying /home/kendell/retail_assistant_ws/build/retail_assistant_bringup/build/lib/retail_assistant_bringup/MCU_to_Pi.py -> /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup
+[5.742s] copying /home/kendell/retail_assistant_ws/build/retail_assistant_bringup/build/lib/retail_assistant_bringup/navigation.py -> /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup
+[5.742s] copying /home/kendell/retail_assistant_ws/build/retail_assistant_bringup/build/lib/retail_assistant_bringup/__init__.py -> /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup
+[5.742s] copying /home/kendell/retail_assistant_ws/build/retail_assistant_bringup/build/lib/retail_assistant_bringup/test2.py -> /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup
+[5.742s] copying /home/kendell/retail_assistant_ws/build/retail_assistant_bringup/build/lib/retail_assistant_bringup/Pi_to_MCU.py -> /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup
+[5.743s] copying /home/kendell/retail_assistant_ws/build/retail_assistant_bringup/build/lib/retail_assistant_bringup/test.py -> /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup
+[5.743s] byte-compiling /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup/auto_drive.py to auto_drive.cpython-310.pyc
+[5.745s] byte-compiling /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup/ultrasonic.py to ultrasonic.cpython-310.pyc
+[5.745s] byte-compiling /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup/MCU_to_Pi.py to MCU_to_Pi.cpython-310.pyc
+[5.747s] byte-compiling /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup/navigation.py to navigation.cpython-310.pyc
+[5.750s] byte-compiling /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup/__init__.py to __init__.cpython-310.pyc
+[5.750s] byte-compiling /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup/test2.py to test2.cpython-310.pyc
+[5.750s] byte-compiling /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup/Pi_to_MCU.py to Pi_to_MCU.cpython-310.pyc
+[5.750s] byte-compiling /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup/test.py to test.cpython-310.pyc
+[5.751s] running install_data
+[5.751s] copying resource/retail_assistant_bringup -> /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/share/ament_index/resource_index/packages
+[5.832s] copying package.xml -> /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/share/retail_assistant_bringup
+[5.844s] copying launch/gazebo_sim_slam.launch.py -> /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/share/retail_assistant_bringup/launch
+[5.920s] copying launch/slam_world.launch.py -> /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/share/retail_assistant_bringup/launch
+[5.961s] copying launch/rsp.py -> /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/share/retail_assistant_bringup/launch
+[6.006s] copying launch/gazebo_sim_local.launch.py -> /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/share/retail_assistant_bringup/launch
+[6.038s] copying launch/gazebo_sim_auto_mapping.launch.py -> /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/share/retail_assistant_bringup/launch
+[6.080s] copying launch/gazebo_sim.launch.py -> /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/share/retail_assistant_bringup/launch
+[6.139s] copying description/proximity.xacro -> /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/share/retail_assistant_bringup/description
+[6.167s] copying description/example.xacro -> /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/share/retail_assistant_bringup/description
+[6.207s] copying description/notes -> /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/share/retail_assistant_bringup/description
+[6.240s] copying description/fake_person_robot.xacro -> /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/share/retail_assistant_bringup/description
+[6.286s] copying description/inertial_macros.xacro -> /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/share/retail_assistant_bringup/description
+[6.343s] copying description/lidar.xacro -> /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/share/retail_assistant_bringup/description
+[6.393s] copying description/robot_core.xacro -> /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/share/retail_assistant_bringup/description
+[6.453s] copying description/robot_core_treads.xacro -> /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/share/retail_assistant_bringup/description
+[6.482s] copying description/gazebo_control.xacro -> /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/share/retail_assistant_bringup/description
+[6.522s] copying description/imu.xacro -> /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/share/retail_assistant_bringup/description
+[6.573s] copying description/gazebo_control_tracked.xacro -> /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/share/retail_assistant_bringup/description
+[6.627s] copying description/robot.urdf.xacro -> /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/share/retail_assistant_bringup/description
+[6.703s] copying worlds/fake_store_layout.world -> /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/share/retail_assistant_bringup/worlds
+[6.864s] copying worlds/demo_store.world -> /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/share/retail_assistant_bringup/worlds
+[6.934s] copying config/test_slam.rviz -> /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/share/retail_assistant_bringup/config
+[7.017s] copying config/mapper_params_online_async.yaml -> /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/share/retail_assistant_bringup/config
+[7.073s] copying config/nav2_params_slam.yaml -> /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/share/retail_assistant_bringup/config
+[7.116s] copying config/ekf.yaml -> /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/share/retail_assistant_bringup/config
+[7.203s] copying config/mapper_params_online_async_local.yaml -> /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/share/retail_assistant_bringup/config
+[7.236s] copying config/nav2_params.yaml -> /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/share/retail_assistant_bringup/config
+[7.286s] running install_egg_info
+[7.292s] Copying ../../build/retail_assistant_bringup/retail_assistant_bringup.egg-info to /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup-0.0.0-py3.10.egg-info
+[7.328s] running install_scripts
+[7.342s] Installing auto_drive script to /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/retail_assistant_bringup
+[7.348s] Installing mcu_to_pi script to /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/retail_assistant_bringup
+[7.348s] Installing navigation script to /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/retail_assistant_bringup
+[7.348s] Installing ultrasonic script to /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/retail_assistant_bringup
+[7.349s] writing list of installed files to '/home/kendell/retail_assistant_ws/build/retail_assistant_bringup/install.log'
+[7.365s] Invoked command in '/home/kendell/retail_assistant_ws/src/retail_assistant_bringup' returned '0': PYTHONPATH=/home/kendell/retail_assistant_ws/build/retail_assistant_bringup/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/retail_assistant_bringup build --build-base /home/kendell/retail_assistant_ws/build/retail_assistant_bringup/build install --record /home/kendell/retail_assistant_ws/build/retail_assistant_bringup/install.log --single-version-externally-managed install_data --force
