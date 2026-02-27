@@ -6,7 +6,7 @@
 ../Core/Src/main.c:221:6:printDebug	96	static
 ../Core/Src/main.c:242:9:piSend	88	static
 ../Core/Src/main.c:269:9:piReceive	24	static
-../Core/Src/main.c:303:5:main	56	static
-../Core/Src/main.c:440:6:SystemClock_Config	88	static
-../Core/Src/main.c:483:6:HAL_TIM_PeriodElapsedCallback	16	static
-../Core/Src/main.c:497:6:Error_Handler	4	static,ignoring_inline_asm
+../Core/Src/main.c:303:5:main	48	static
+../Core/Src/main.c:441:6:SystemClock_Config	88	static
+../Core/Src/main.c:484:6:HAL_TIM_PeriodElapsedCallback	16	static
+../Core/Src/main.c:498:6:Error_Handler	4	static,ignoring_inline_asm

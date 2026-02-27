@@ -1,3 +1,5 @@
+//Motor spec https://www.gobilda.com/5303-series-saturn-planetary-gear-motor-71-2-1-ratio-24mm-length-8mm-rex-shaft-260-rpm-3-3-5v-encoder/
+//motor driver spec https://www.ti.com/product/DRV8245-Q1
 /*
 * drv8245-q1.c
 *

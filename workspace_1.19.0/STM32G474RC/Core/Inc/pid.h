@@ -9,17 +9,21 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "drv8245-q1.h"
+#include "butterworth_filter.h"
 
 #ifndef INC_PID_H_
 #define INC_PID_H_
 
-#define MOTOR_PPR 1996.3
-#define MOTOR_CPR 996.8
+#define MOTOR_PPR 					1996.3f
+#define MOTOR_CPR 					996.8f
 
-#define MAX_RPM 260.0
+#define MAX_RPM 					260.0f
+#define MAX_SPEED_TICKS_PER_SEC		(MOTOR_PPR*(MAX_RPM/60))
 
-#define pid_loop_frequency	100
-#define period				(1.0f / pid_loop_frequency)
+#define pid_loop_frequency			100.0f
+#define period						(1.0f / pid_loop_frequency)
+
+#define integral_limit 				(MAX_RPM/0.4)
 
 typedef struct {
     // Hardware handles
@@ -34,6 +38,7 @@ typedef struct {
 
     // Target setpoint from Raspberry Pi (rpm)
     volatile int32_t target_speed_rpm;
+    volatile int32_t previous_speed_rpm;
 
     // Encoder state
     volatile int16_t last_encoder_count;
@@ -47,6 +52,9 @@ typedef struct {
     // PID internal state
     float error_integral;
     float last_error;
+
+    //Filter
+    Butterworth_Filter_t rpm_filter;
 
     // Output
     int8_t output_pwm_duty;

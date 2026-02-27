@@ -341,7 +341,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
   DWT_Init(); //used to calculate microsecond pulses in drv8245-q1.c
-
+  //Low pass filter initialize
   HAL_Delay(1000);
 
   //Display MCU Function LED
@@ -351,6 +351,7 @@ int main(void)
   bno055_assign(&hi2c2);
   bno055_init();
   bno055_setOperationModeNDOF();
+
 
 
   //Motor Driver
@@ -388,13 +389,13 @@ int main(void)
 
   /* USER CODE END 2 */
 
-  uint32_t start_time = HAL_GetTick();
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 
   while (1)
   {
     /* USER CODE END WHILE */
+
     /* USER CODE BEGIN 3 */
 
     //IMU
@@ -423,7 +424,7 @@ int main(void)
     //Motor speed
 	float left_motor_rpm = MotorControl_getRpm(&left_motor);
 	int32_t left_target_rpm = MotorControl_getTargetRpm(&left_motor);
-	printf("Left motor target RPM is: %d, it is currently at %f\r\n", left_target_rpm, left_motor_rpm);
+	printf("Left motor target RPM is: %ld, it is currently at %f\r\n", left_target_rpm, left_motor_rpm);
 
     //debug printouts
     //printDebug(quaternion, encoder1, encoder2);
