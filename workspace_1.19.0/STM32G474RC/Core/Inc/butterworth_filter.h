@@ -10,7 +10,7 @@ typedef struct {
     float z[BUTTERWORTH_ORDER];
 
     // Numerator coefficients (b0, b1, ..., b4)
-    float b[BUTTERWORTH_ORDER+1];
+    float b[BUTTERWORTH_ORDER];
 
     // Denominator coefficients (a1, a2, ..., a4)
     float a[BUTTERWORTH_ORDER+1];

@@ -23,7 +23,7 @@
 #define pid_loop_frequency			100.0f
 #define period						(1.0f / pid_loop_frequency)
 
-#define integral_limit 				(MAX_RPM/0.4)
+#define integral_limit 				5000
 
 typedef struct {
     // Hardware handles
@@ -52,6 +52,12 @@ typedef struct {
     // PID internal state
     float error_integral;
     float last_error;
+    float pid_output;
+    float error;
+    float p_term;
+    float i_term;
+    float d_term;
+    float raw_speed_rpm;
 
     //Filter
     Butterworth_Filter_t rpm_filter;
@@ -74,6 +80,22 @@ int32_t MotorControl_getTargetRpm(MotorControl_t* motor);
 float MotorControl_getRpm(MotorControl_t* motor);
 
 void MotorControl_RunPID(MotorControl_t* motor);
+
+float MotorControl_getIntegral(MotorControl_t* motor);
+
+float MotorControl_duty(MotorControl_t* motor);
+
+float MotorControl_pidOutput(MotorControl_t* motor);
+
+float MotorControl_getP(MotorControl_t* motor);
+
+float MotorControl_getI(MotorControl_t* motor);
+
+float MotorControl_getD(MotorControl_t* motor);
+
+float MotorControl_getError(MotorControl_t* motor);
+
+float MotorControl_getRawspeed(MotorControl_t* motor);
 
 #endif /* INC_PID_H_ */
 

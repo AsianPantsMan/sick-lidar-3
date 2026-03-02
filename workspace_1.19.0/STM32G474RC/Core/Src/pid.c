@@ -23,6 +23,9 @@ void MotorControl_Init(MotorControl_t* motor,
     motor->Kp = Kp;
     motor->Ki = Ki;
     motor->Kd = Kd;
+    motor->p_term = 0;
+    motor->i_term = 0;
+    motor->d_term = 0;
 
     motor->target_speed_rpm = 0;
     motor->last_encoder_count = 0;
@@ -33,6 +36,10 @@ void MotorControl_Init(MotorControl_t* motor,
     motor->error_integral = 0.0f;
     motor->last_error = 0.0f;
     motor->output_pwm_duty = 0;
+    motor->pid_output = 0;
+    motor->error = 0;
+    motor->raw_speed_rpm = 0;
+
 
     Butterworth_Init(&motor->rpm_filter);
 
@@ -51,6 +58,39 @@ int32_t MotorControl_getTargetRpm(MotorControl_t* motor){
 float MotorControl_getRpm(MotorControl_t* motor){
 	return motor->current_speed_rpm;
 }
+
+float MotorControl_getIntegral(MotorControl_t* motor){
+	return motor->error_integral;
+}
+
+float MotorControl_duty(MotorControl_t* motor){
+	return motor->output_pwm_duty;
+}
+
+float MotorControl_pidOutput(MotorControl_t* motor){
+	return motor->pid_output;
+}
+
+float MotorControl_getP(MotorControl_t* motor){
+	return motor->p_term;
+}
+
+float MotorControl_getI(MotorControl_t* motor){
+	return motor->i_term;
+}
+
+float MotorControl_getD(MotorControl_t* motor){
+	return motor->d_term;
+}
+
+float MotorControl_getError(MotorControl_t* motor){
+	return motor->error;
+}
+
+float MotorControl_getRawspeed(MotorControl_t* motor){
+	return motor->raw_speed_rpm;
+}
+
 
 void MotorControl_RunPID(MotorControl_t* motor)
 {
@@ -76,10 +116,10 @@ void MotorControl_RunPID(MotorControl_t* motor)
 //    float error = scaled_filtered_error * MAX_SPEED_TICKS_PER_SEC; // Un-scale it
 
     // Calculate speed in rpm
-    float raw_speed_rpm = (float)ticks_moved * (60.0f / (MOTOR_PPR * period));
+    motor->raw_speed_rpm = (float)ticks_moved * (60.0f / (MOTOR_PPR * period));
 
     //Butterworth 4th order lowpass
-     motor-> current_speed_rpm = Butterworth_Apply(&motor->rpm_filter, raw_speed_rpm);
+     motor-> current_speed_rpm = Butterworth_Apply(&motor->rpm_filter, motor->raw_speed_rpm);
 
     // Low-pass filter (EMA): rpm_filt += alpha*(rpm_raw - rpm_filt)
 //    float dt = period;                       // if period is fixed and accurate
@@ -91,18 +131,18 @@ void MotorControl_RunPID(MotorControl_t* motor)
 //    currentFilterEstimate = (a * previousFilterEstimate) + (1-a) * errorChange;
 //    previousFilterEstimate = currentFilterEstimate;
 
-    float error = (float)motor->target_speed_rpm - motor->current_speed_rpm;
+    motor->error = (float)motor->target_speed_rpm - motor->current_speed_rpm;
 
-    float p_term = motor->Kp * error;
+    motor->p_term = motor->Kp * motor->error;
 
     // reset the integral if the speed is changed allow drivetrain
     //to change direction faster than waiting for integral sum to change
-    if (motor -> target_speed_rpm != motor -> previous_speed_rpm) {
-        motor -> error_integral = 0;
-    }
+//    if (motor -> target_speed_rpm != motor -> previous_speed_rpm) {
+//        motor -> error_integral = 0;
+//    }
     motor -> previous_speed_rpm = motor -> target_speed_rpm;
 
-    motor->error_integral += error * period;
+    motor->error_integral += motor->error * period;
 
     //Anti wind up
     if (motor -> error_integral > integral_limit){
@@ -112,20 +152,20 @@ void MotorControl_RunPID(MotorControl_t* motor)
     	motor -> error_integral = -integral_limit;
     }
 
-    float i_term = motor->Ki * motor->error_integral;
+    motor->i_term = motor->Ki * motor->error_integral;
 
-    float d_term = motor->Kd * (error - motor->last_error) / period;
-    motor->last_error = error;
+    motor->d_term = motor->Kd * ((motor->error - motor->last_error) / period);
+    motor->last_error = motor->error;
 
     //Calculate output
-    float pid_output = p_term + i_term + d_term;
+    motor->pid_output = motor->p_term + motor->i_term + motor->d_term;
 
     //Convert rpm to duty cycle
-    motor->output_pwm_duty = ((int32_t)pid_output / MAX_RPM)*100;
+    motor->output_pwm_duty = ((int32_t)motor->pid_output / MAX_RPM)*100;
 
     //Case for duty cycle is higher then 100%
-    if (motor->output_pwm_duty > 100) motor->output_pwm_duty = 100;
-    if (motor->output_pwm_duty < -100) motor->output_pwm_duty = -100;
+    if (motor->output_pwm_duty >= 100) motor->output_pwm_duty = 100;
+    if (motor->output_pwm_duty <= -100) motor->output_pwm_duty = -100;
 
     // Apply to hardware
 	if (motor->pwm_channel == TIM_CHANNEL_1) {

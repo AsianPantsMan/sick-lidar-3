@@ -65,6 +65,16 @@ uint16_t encoder2;
 MotorControl_t left_motor;
 MotorControl_t right_motor;
 
+float right_motor_rpm ;
+int32_t right_target_rpm;
+float error_integral;
+float pid_output;
+float duty;
+float error;
+float p_term;
+float i_term;
+float d_term;
+float raw_speed_rpm;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -366,16 +376,16 @@ int main(void)
 
   //PID loop
   MotorControl_Init(&left_motor, &htim1, TIM_CHANNEL_4, &htim4,
-		  4.0f, //Kp
-		  0.0f,	//Ki
-		  0.0f);	//Kd
-
-  MotorControl_Init(&right_motor, &htim8, TIM_CHANNEL_1, &htim3,
 		  1.0f, //Kp
 		  0.0f,	//Ki
 		  0.0f);	//Kd
 
-  MotorControl_SetTargetSpeed(&left_motor, 200);
+  MotorControl_Init(&right_motor, &htim8, TIM_CHANNEL_1, &htim3,
+		  0.9f, //Kp
+		  0.5f,	//Ki
+		  0.0f);	//Kd
+
+  //MotorControl_SetTargetSpeed(&left_motor, 200);
   MotorControl_SetTargetSpeed(&right_motor, 200);
 
   HAL_TIM_Base_Start_IT(&htim6);
@@ -422,9 +432,17 @@ int main(void)
     piReceive(rx_buffer);
 
     //Motor speed
-	float left_motor_rpm = MotorControl_getRpm(&left_motor);
-	int32_t left_target_rpm = MotorControl_getTargetRpm(&left_motor);
-	printf("Left motor target RPM is: %ld, it is currently at %f\r\n", left_target_rpm, left_motor_rpm);
+	right_motor_rpm = MotorControl_getRpm(&right_motor);
+	right_target_rpm = MotorControl_getTargetRpm(&right_motor);
+	error_integral = MotorControl_getIntegral(&right_motor);
+	pid_output = MotorControl_pidOutput(&right_motor);
+	duty = MotorControl_duty(&right_motor);
+	error = MotorControl_getError(&right_motor);
+	p_term = MotorControl_getP(&right_motor);
+	i_term = MotorControl_getI(&right_motor);
+	d_term = MotorControl_getD(&right_motor);
+	raw_speed_rpm = MotorControl_getRawspeed(&right_motor);
+	printf("Right motor target RPM is: %ld, it is currently at %f\r\n", right_target_rpm, right_motor_rpm);
 
     //debug printouts
     //printDebug(quaternion, encoder1, encoder2);
@@ -485,8 +503,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
   if(htim->Instance == TIM6)
   {
-	  MotorControl_RunPID(&left_motor);
-	  //MotorControl_RunPID(&right_motor);
+	  //MotorControl_RunPID(&left_motor);
+	  MotorControl_RunPID(&right_motor);
   }
 }
 /* USER CODE END 4 */

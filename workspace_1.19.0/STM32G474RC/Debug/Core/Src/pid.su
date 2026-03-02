@@ -1,5 +1,13 @@
 ../Core/Src/pid.c:14:6:MotorControl_Init	40	static
-../Core/Src/pid.c:42:6:MotorControl_SetTargetSpeed	16	static
-../Core/Src/pid.c:47:9:MotorControl_getTargetRpm	16	static
-../Core/Src/pid.c:51:7:MotorControl_getRpm	16	static
-../Core/Src/pid.c:55:6:MotorControl_RunPID	48	static
+../Core/Src/pid.c:49:6:MotorControl_SetTargetSpeed	16	static
+../Core/Src/pid.c:54:9:MotorControl_getTargetRpm	16	static
+../Core/Src/pid.c:58:7:MotorControl_getRpm	16	static
+../Core/Src/pid.c:62:7:MotorControl_getIntegral	16	static
+../Core/Src/pid.c:66:7:MotorControl_duty	16	static
+../Core/Src/pid.c:70:7:MotorControl_pidOutput	16	static
+../Core/Src/pid.c:74:7:MotorControl_getP	16	static
+../Core/Src/pid.c:78:7:MotorControl_getI	16	static
+../Core/Src/pid.c:82:7:MotorControl_getD	16	static
+../Core/Src/pid.c:86:7:MotorControl_getError	16	static
+../Core/Src/pid.c:90:7:MotorControl_getRawspeed	16	static
+../Core/Src/pid.c:95:6:MotorControl_RunPID	24	static
