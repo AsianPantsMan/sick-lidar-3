@@ -1,0 +1,15 @@
+/*
+ * roboclaw.c
+ *
+ *  Created on: Mar 2, 2026
+ *      Author: caseyear
+ */
+
+
+void setM1Speed(uint8_t addr, uint8_t speed){
+
+}
+
+void setM2Speed(uint8_t addr, uint8_t speed){
+
+}

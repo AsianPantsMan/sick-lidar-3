@@ -15868,3 +15868,1294 @@ Finished building: default.size.stdout
  
 Finished building: STM32G474RC.list
  
+12:08:13 **** Build of configuration Debug for project ECEN403CapstoneMain ****
+make -j11 all 
+arm-none-eabi-gcc "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal.d" -MT"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal.o"
+arm-none-eabi-gcc "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_cortex.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_cortex.d" -MT"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_cortex.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_cortex.o"
+arm-none-eabi-gcc "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_dac.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_dac.d" -MT"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_dac.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_dac.o"
+arm-none-eabi-gcc "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_dac_ex.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_dac_ex.d" -MT"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_dac_ex.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_dac_ex.o"
+arm-none-eabi-gcc "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_dma.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_dma.d" -MT"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_dma.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_dma.o"
+arm-none-eabi-gcc "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_exti.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_exti.d" -MT"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_exti.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_exti.o"
+arm-none-eabi-gcc "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_flash.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_flash.d" -MT"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_flash.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_flash.o"
+arm-none-eabi-gcc "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_flash_ex.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_flash_ex.d" -MT"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_flash_ex.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_flash_ex.o"
+arm-none-eabi-gcc "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_gpio.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_gpio.d" -MT"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_gpio.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_gpio.o"
+arm-none-eabi-gcc "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_i2c.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_i2c.d" -MT"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_i2c.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_i2c.o"
+arm-none-eabi-gcc "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_i2c_ex.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_i2c_ex.d" -MT"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_i2c_ex.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_i2c_ex.o"
+arm-none-eabi-gcc "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_pcd.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_pcd.d" -MT"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_pcd.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_pcd.o"
+arm-none-eabi-gcc "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_pcd_ex.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_pcd_ex.d" -MT"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_pcd_ex.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_pcd_ex.o"
+arm-none-eabi-gcc "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_pwr.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_pwr.d" -MT"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_pwr.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_pwr.o"
+arm-none-eabi-gcc "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_pwr_ex.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_pwr_ex.d" -MT"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_pwr_ex.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_pwr_ex.o"
+arm-none-eabi-gcc "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_rcc.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_rcc.d" -MT"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_rcc.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_rcc.o"
+arm-none-eabi-gcc "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_rcc_ex.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_rcc_ex.d" -MT"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_rcc_ex.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_rcc_ex.o"
+arm-none-eabi-gcc "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_tim.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_tim.d" -MT"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_tim.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_tim.o"
+arm-none-eabi-gcc "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_tim_ex.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_tim_ex.d" -MT"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_tim_ex.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_tim_ex.o"
+arm-none-eabi-gcc "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart.d" -MT"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart.o"
+arm-none-eabi-gcc "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart_ex.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart_ex.d" -MT"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart_ex.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart_ex.o"
+arm-none-eabi-gcc "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_ll_usb.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_ll_usb.d" -MT"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_ll_usb.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_ll_usb.o"
+arm-none-eabi-gcc "../Core/Src/bno055.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/bno055.d" -MT"Core/Src/bno055.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/bno055.o"
+arm-none-eabi-gcc "../Core/Src/dac.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/dac.d" -MT"Core/Src/dac.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/dac.o"
+arm-none-eabi-gcc "../Core/Src/gpio.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/gpio.d" -MT"Core/Src/gpio.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/gpio.o"
+arm-none-eabi-gcc "../Core/Src/i2c.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/i2c.d" -MT"Core/Src/i2c.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/i2c.o"
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/pid.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/pid.d" -MT"Core/Src/pid.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/pid.o"
+arm-none-eabi-gcc "../Core/Src/roboclaw.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/roboclaw.d" -MT"Core/Src/roboclaw.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/roboclaw.o"
+arm-none-eabi-gcc "../Core/Src/stm32f3xx_hal_msp.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/stm32f3xx_hal_msp.d" -MT"Core/Src/stm32f3xx_hal_msp.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/stm32f3xx_hal_msp.o"
+arm-none-eabi-gcc "../Core/Src/stm32f3xx_it.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/stm32f3xx_it.d" -MT"Core/Src/stm32f3xx_it.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/stm32f3xx_it.o"
+../Core/Src/roboclaw.c:9:17: error: unknown type name 'uint8_t'
+    9 | void setM1Speed(uint8_t addr, uint32_t speed){
+      |                 ^~~~~~~
+../Core/Src/roboclaw.c:1:1: note: 'uint8_t' is defined in header '<stdint.h>'; did you forget to '#include <stdint.h>'?
+  +++ |+#include <stdint.h>
+    1 | /*
+../Core/Src/roboclaw.c:9:31: error: unknown type name 'uint32_t'
+    9 | void setM1Speed(uint8_t addr, uint32_t speed){
+      |                               ^~~~~~~~
+../Core/Src/roboclaw.c:9:31: note: 'uint32_t' is defined in header '<stdint.h>'; did you forget to '#include <stdint.h>'?
+../Core/Src/roboclaw.c:45:17: error: unknown type name 'uint8_t'
+   45 | void setM2Speed(uint8_t addr, uint8_t speed){
+      |                 ^~~~~~~
+../Core/Src/roboclaw.c:45:17: note: 'uint8_t' is defined in header '<stdint.h>'; did you forget to '#include <stdint.h>'?
+../Core/Src/roboclaw.c:45:31: error: unknown type name 'uint8_t'
+   45 | void setM2Speed(uint8_t addr, uint8_t speed){
+      |                               ^~~~~~~
+../Core/Src/roboclaw.c:45:31: note: 'uint8_t' is defined in header '<stdint.h>'; did you forget to '#include <stdint.h>'?
+make: *** [Core/Src/subdir.mk:61: Core/Src/roboclaw.o] Error 1
+make: *** Waiting for unfinished jobs....
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:128:9: warning: implicit declaration of function 'setM1Speed' [-Wimplicit-function-declaration]
+  128 |         setM1Speed(128, 100);
+      |         ^~~~~~~~~~
+"make -j11 all" terminated with exit code 2. Build might be incomplete.
+12:08:54 **** Clean-only build of configuration Debug for project ECEN403CapstoneMain ****
+make -j11 clean 
+rm -rf ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal.cyclo ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal.d ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal.o ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal.su ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_cortex.cyclo ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_cortex.d ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_cortex.o ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_cortex.su ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_dac.cyclo ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_dac.d ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_dac.o ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_dac.su ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_dac_ex.cyclo ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_dac_ex.d ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_dac_ex.o ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_dac_ex.su ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_dma.cyclo ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_dma.d ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_dma.o ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_dma.su ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_exti.cyclo ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_exti.d ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_exti.o ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_exti.su ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_flash.cyclo ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_flash.d ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_flash.o ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_flash.su ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_flash_ex.cyclo ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_flash_ex.d ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_flash_ex.o ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_flash_ex.su ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_gpio.cyclo ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_gpio.d ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_gpio.o ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_gpio.su ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_i2c.cyclo ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_i2c.d ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_i2c.o ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_i2c.su ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_i2c_ex.cyclo ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_i2c_ex.d ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_i2c_ex.o ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_i2c_ex.su ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_pcd.cyclo ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_pcd.d ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_pcd.o ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_pcd.su ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_pcd_ex.cyclo ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_pcd_ex.d ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_pcd_ex.o ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_pcd_ex.su ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_pwr.cyclo ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_pwr.d ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_pwr.o ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_pwr.su ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_pwr_ex.cyclo ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_pwr_ex.d ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_pwr_ex.o ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_pwr_ex.su ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_rcc.cyclo ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_rcc.d ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_rcc.o ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_rcc.su ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_rcc_ex.cyclo ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_rcc_ex.d ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_rcc_ex.o ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_rcc_ex.su ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_tim.cyclo ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_tim.d ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_tim.o ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_tim.su ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_tim_ex.cyclo ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_tim_ex.d ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_tim_ex.o ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_tim_ex.su ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart.cyclo ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart.d ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart.o ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart.su ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart_ex.cyclo ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart_ex.d ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart_ex.o ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart_ex.su ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_ll_usb.cyclo ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_ll_usb.d ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_ll_usb.o ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_ll_usb.su
+rm -rf ./Core/Startup/startup_stm32f302r8tx.d ./Core/Startup/startup_stm32f302r8tx.o
+rm -rf ./Core/Src/bno055.cyclo ./Core/Src/bno055.d ./Core/Src/bno055.o ./Core/Src/bno055.su ./Core/Src/dac.cyclo ./Core/Src/dac.d ./Core/Src/dac.o ./Core/Src/dac.su ./Core/Src/gpio.cyclo ./Core/Src/gpio.d ./Core/Src/gpio.o ./Core/Src/gpio.su ./Core/Src/i2c.cyclo ./Core/Src/i2c.d ./Core/Src/i2c.o ./Core/Src/i2c.su ./Core/Src/main.cyclo ./Core/Src/main.d ./Core/Src/main.o ./Core/Src/main.su ./Core/Src/pid.cyclo ./Core/Src/pid.d ./Core/Src/pid.o ./Core/Src/pid.su ./Core/Src/roboclaw.cyclo ./Core/Src/roboclaw.d ./Core/Src/roboclaw.o ./Core/Src/roboclaw.su ./Core/Src/stm32f3xx_hal_msp.cyclo ./Core/Src/stm32f3xx_hal_msp.d ./Core/Src/stm32f3xx_hal_msp.o ./Core/Src/stm32f3xx_hal_msp.su ./Core/Src/stm32f3xx_it.cyclo ./Core/Src/stm32f3xx_it.d ./Core/Src/stm32f3xx_it.o ./Core/Src/stm32f3xx_it.su ./Core/Src/syscalls.cyclo ./Core/Src/syscalls.d ./Core/Src/syscalls.o ./Core/Src/syscalls.su ./Core/Src/sysmem.cyclo ./Core/Src/sysmem.d ./Core/Src/sysmem.o ./Core/Src/sysmem.su ./Core/Src/system_stm32f3xx.cyclo ./Core/Src/system_stm32f3xx.d ./Core/Src/system_stm32f3xx.o ./Core/Src/system_stm32f3xx.su ./Core/Src/tim.cyclo ./Core/Src/tim.d ./Core/Src/tim.o ./Core/Src/tim.su ./Core/Src/usart.cyclo ./Core/Src/usart.d ./Core/Src/usart.o ./Core/Src/usart.su ./Core/Src/usb.cyclo ./Core/Src/usb.d ./Core/Src/usb.o ./Core/Src/usb.su
+rm -rf ECEN403CapstoneMain.elf ECEN403CapstoneMain.list ECEN403CapstoneMain.map default.size.stdout
+ 
+12:08:54 **** Incremental Build of configuration Debug for project ECEN403CapstoneMain ****
+make -j11 all 
+arm-none-eabi-gcc "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal.d" -MT"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal.o"
+arm-none-eabi-gcc "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_cortex.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_cortex.d" -MT"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_cortex.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_cortex.o"
+arm-none-eabi-gcc "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_dac.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_dac.d" -MT"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_dac.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_dac.o"
+arm-none-eabi-gcc "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_dac_ex.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_dac_ex.d" -MT"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_dac_ex.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_dac_ex.o"
+arm-none-eabi-gcc "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_dma.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_dma.d" -MT"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_dma.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_dma.o"
+arm-none-eabi-gcc "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_exti.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_exti.d" -MT"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_exti.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_exti.o"
+arm-none-eabi-gcc "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_flash.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_flash.d" -MT"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_flash.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_flash.o"
+arm-none-eabi-gcc "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_flash_ex.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_flash_ex.d" -MT"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_flash_ex.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_flash_ex.o"
+arm-none-eabi-gcc "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_gpio.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_gpio.d" -MT"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_gpio.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_gpio.o"
+arm-none-eabi-gcc "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_i2c.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_i2c.d" -MT"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_i2c.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_i2c.o"
+arm-none-eabi-gcc "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_i2c_ex.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_i2c_ex.d" -MT"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_i2c_ex.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_i2c_ex.o"
+arm-none-eabi-gcc "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_pcd.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_pcd.d" -MT"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_pcd.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_pcd.o"
+arm-none-eabi-gcc "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_pcd_ex.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_pcd_ex.d" -MT"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_pcd_ex.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_pcd_ex.o"
+arm-none-eabi-gcc "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_pwr.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_pwr.d" -MT"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_pwr.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_pwr.o"
+arm-none-eabi-gcc "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_pwr_ex.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_pwr_ex.d" -MT"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_pwr_ex.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_pwr_ex.o"
+arm-none-eabi-gcc "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_rcc.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_rcc.d" -MT"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_rcc.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_rcc.o"
+arm-none-eabi-gcc "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_rcc_ex.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_rcc_ex.d" -MT"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_rcc_ex.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_rcc_ex.o"
+arm-none-eabi-gcc "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_tim.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_tim.d" -MT"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_tim.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_tim.o"
+arm-none-eabi-gcc "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_tim_ex.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_tim_ex.d" -MT"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_tim_ex.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_tim_ex.o"
+arm-none-eabi-gcc "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart.d" -MT"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart.o"
+arm-none-eabi-gcc "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart_ex.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart_ex.d" -MT"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart_ex.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart_ex.o"
+arm-none-eabi-gcc "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_ll_usb.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_ll_usb.d" -MT"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_ll_usb.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_ll_usb.o"
+arm-none-eabi-gcc -mcpu=cortex-m4 -g3 -DDEBUG -c -x assembler-with-cpp -MMD -MP -MF"Core/Startup/startup_stm32f302r8tx.d" -MT"Core/Startup/startup_stm32f302r8tx.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Startup/startup_stm32f302r8tx.o" "../Core/Startup/startup_stm32f302r8tx.s"
+arm-none-eabi-gcc "../Core/Src/bno055.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/bno055.d" -MT"Core/Src/bno055.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/bno055.o"
+arm-none-eabi-gcc "../Core/Src/dac.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/dac.d" -MT"Core/Src/dac.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/dac.o"
+arm-none-eabi-gcc "../Core/Src/gpio.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/gpio.d" -MT"Core/Src/gpio.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/gpio.o"
+arm-none-eabi-gcc "../Core/Src/i2c.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/i2c.d" -MT"Core/Src/i2c.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/i2c.o"
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/pid.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/pid.d" -MT"Core/Src/pid.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/pid.o"
+arm-none-eabi-gcc "../Core/Src/roboclaw.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/roboclaw.d" -MT"Core/Src/roboclaw.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/roboclaw.o"
+arm-none-eabi-gcc "../Core/Src/stm32f3xx_hal_msp.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/stm32f3xx_hal_msp.d" -MT"Core/Src/stm32f3xx_hal_msp.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/stm32f3xx_hal_msp.o"
+arm-none-eabi-gcc "../Core/Src/stm32f3xx_it.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/stm32f3xx_it.d" -MT"Core/Src/stm32f3xx_it.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/stm32f3xx_it.o"
+../Core/Src/roboclaw.c:9:17: error: unknown type name 'uint8_t'
+    9 | void setM1Speed(uint8_t addr, uint32_t speed){
+      |                 ^~~~~~~
+../Core/Src/roboclaw.c:1:1: note: 'uint8_t' is defined in header '<stdint.h>'; did you forget to '#include <stdint.h>'?
+  +++ |+#include <stdint.h>
+    1 | /*
+../Core/Src/roboclaw.c:9:31: error: unknown type name 'uint32_t'
+    9 | void setM1Speed(uint8_t addr, uint32_t speed){
+      |                               ^~~~~~~~
+../Core/Src/roboclaw.c:9:31: note: 'uint32_t' is defined in header '<stdint.h>'; did you forget to '#include <stdint.h>'?
+../Core/Src/roboclaw.c:45:17: error: unknown type name 'uint8_t'
+   45 | void setM2Speed(uint8_t addr, uint8_t speed){
+      |                 ^~~~~~~
+../Core/Src/roboclaw.c:45:17: note: 'uint8_t' is defined in header '<stdint.h>'; did you forget to '#include <stdint.h>'?
+../Core/Src/roboclaw.c:45:31: error: unknown type name 'uint8_t'
+   45 | void setM2Speed(uint8_t addr, uint8_t speed){
+      |                               ^~~~~~~
+../Core/Src/roboclaw.c:45:31: note: 'uint8_t' is defined in header '<stdint.h>'; did you forget to '#include <stdint.h>'?
+make: *** [Core/Src/subdir.mk:61: Core/Src/roboclaw.o] Error 1
+make: *** Waiting for unfinished jobs....
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:128:9: warning: implicit declaration of function 'setM1Speed' [-Wimplicit-function-declaration]
+  128 |         setM1Speed(128, 100);
+      |         ^~~~~~~~~~
+"make -j11 all" terminated with exit code 2. Build might be incomplete.
+12:09:11 **** Incremental Build of configuration Debug for project ECEN403CapstoneMain ****
+make -j11 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/roboclaw.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/roboclaw.d" -MT"Core/Src/roboclaw.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/roboclaw.o"
+arm-none-eabi-gcc "../Core/Src/syscalls.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/syscalls.d" -MT"Core/Src/syscalls.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/syscalls.o"
+arm-none-eabi-gcc "../Core/Src/sysmem.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/sysmem.d" -MT"Core/Src/sysmem.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/sysmem.o"
+arm-none-eabi-gcc "../Core/Src/system_stm32f3xx.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/system_stm32f3xx.d" -MT"Core/Src/system_stm32f3xx.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/system_stm32f3xx.o"
+arm-none-eabi-gcc "../Core/Src/tim.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/tim.d" -MT"Core/Src/tim.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/tim.o"
+arm-none-eabi-gcc "../Core/Src/usart.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/usart.d" -MT"Core/Src/usart.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/usart.o"
+arm-none-eabi-gcc "../Core/Src/usb.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/usb.d" -MT"Core/Src/usb.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/usb.o"
+../Core/Src/roboclaw.c:9:17: error: unknown type name 'uint8_t'
+    9 | void setM1Speed(uint8_t addr, uint32_t speed){
+      |                 ^~~~~~~
+../Core/Src/roboclaw.c:1:1: note: 'uint8_t' is defined in header '<stdint.h>'; did you forget to '#include <stdint.h>'?
+  +++ |+#include <stdint.h>
+    1 | /*
+../Core/Src/roboclaw.c:9:31: error: unknown type name 'uint32_t'
+    9 | void setM1Speed(uint8_t addr, uint32_t speed){
+      |                               ^~~~~~~~
+../Core/Src/roboclaw.c:9:31: note: 'uint32_t' is defined in header '<stdint.h>'; did you forget to '#include <stdint.h>'?
+../Core/Src/roboclaw.c:45:17: error: unknown type name 'uint8_t'
+   45 | void setM2Speed(uint8_t addr, uint8_t speed){
+      |                 ^~~~~~~
+../Core/Src/roboclaw.c:45:17: note: 'uint8_t' is defined in header '<stdint.h>'; did you forget to '#include <stdint.h>'?
+../Core/Src/roboclaw.c:45:31: error: unknown type name 'uint8_t'
+   45 | void setM2Speed(uint8_t addr, uint8_t speed){
+      |                               ^~~~~~~
+../Core/Src/roboclaw.c:45:31: note: 'uint8_t' is defined in header '<stdint.h>'; did you forget to '#include <stdint.h>'?
+make: *** [Core/Src/subdir.mk:61: Core/Src/roboclaw.o] Error 1
+make: *** Waiting for unfinished jobs....
+In file included from ../Core/Src/main.c:34:
+../Core/Inc/roboclaw.h:18: warning: "GET_M1_ENCODER_COUNT" redefined
+   18 | #define GET_M1_ENCODER_COUNT 23
+      | 
+../Core/Inc/roboclaw.h:17: note: this is the location of the previous definition
+   17 | #define GET_M1_ENCODER_COUNT 22
+      | 
+../Core/Src/main.c: In function 'crc16':
+../Core/Src/main.c:83:5: warning: 'main' is normally a non-static function [-Wmain]
+   83 | int main(void)
+      |     ^~~~
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:133:25: warning: unsigned conversion from 'int' to 'uint8_t' {aka 'unsigned char'} changes value from '1000' to '232' [-Woverflow]
+  133 |         setM1Speed(128, 1000);
+      |                         ^~~~
+../Core/Src/main.c: In function 'crc16':
+../Core/Src/main.c:144:6: error: static declaration of 'SystemClock_Config' follows non-static declaration
+  144 | void SystemClock_Config(void)
+      |      ^~~~~~~~~~~~~~~~~~
+../Core/Src/main.c:60:6: note: previous declaration of 'SystemClock_Config' with type 'void(void)'
+   60 | void SystemClock_Config(void);
+      |      ^~~~~~~~~~~~~~~~~~
+../Core/Src/main.c:213:1: error: expected declaration or statement at end of input
+  213 | }
+      | ^
+../Core/Src/main.c:232: warning: control reaches end of non-void function [-Wreturn-type]
+../Core/Src/main.c: At top level:
+../Core/Src/main.c:201:6: warning: 'Error_Handler' defined but not used [-Wunused-function]
+  201 | void Error_Handler(void)
+      |      ^~~~~~~~~~~~~
+../Core/Src/main.c:192:6: warning: 'HAL_UART_RxCpltCallback' defined but not used [-Wunused-function]
+  192 | void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
+      |      ^~~~~~~~~~~~~~~~~~~~~~~
+../Core/Src/main.c:144:6: warning: 'SystemClock_Config' defined but not used [-Wunused-function]
+  144 | void SystemClock_Config(void)
+      |      ^~~~~~~~~~~~~~~~~~
+../Core/Src/main.c:83:5: warning: 'main' defined but not used [-Wunused-function]
+   83 | int main(void)
+      |     ^~~~
+../Core/Src/main.c:69:5: warning: '_write' defined but not used [-Wunused-function]
+   69 | int _write(int file, char *ptr, int len) {
+      |     ^~~~~~
+make: *** [Core/Src/subdir.mk:61: Core/Src/main.o] Error 1
+"make -j11 all" terminated with exit code 2. Build might be incomplete.
+12:09:30 **** Incremental Build of configuration Debug for project ECEN403CapstoneMain ****
+make -j11 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/roboclaw.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/roboclaw.d" -MT"Core/Src/roboclaw.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/roboclaw.o"
+In file included from ../Core/Src/roboclaw.c:8:
+../Core/Inc/roboclaw.h:18: warning: "GET_M1_ENCODER_COUNT" redefined
+   18 | #define GET_M1_ENCODER_COUNT 23
+      | 
+../Core/Inc/roboclaw.h:17: note: this is the location of the previous definition
+   17 | #define GET_M1_ENCODER_COUNT 22
+      | 
+../Core/Src/roboclaw.c: In function 'crc16':
+../Core/Src/roboclaw.c:10:6: error: conflicting types for 'setM1Speed'; have 'void(uint8_t,  uint32_t)' {aka 'void(unsigned char,  long unsigned int)'}
+   10 | void setM1Speed(uint8_t addr, uint32_t speed){
+      |      ^~~~~~~~~~
+../Core/Inc/roboclaw.h:36:6: note: previous declaration of 'setM1Speed' with type 'void(uint8_t,  uint8_t)' {aka 'void(unsigned char,  unsigned char)'}
+   36 | void setM1Speed(uint8_t addr, uint8_t speed);
+      |      ^~~~~~~~~~
+../Core/Src/roboclaw.c: In function 'setM1Speed':
+../Core/Src/roboclaw.c:16:25: error: 'address' undeclared (first use in this function); did you mean 'addr'?
+   16 |             packet[0] = address;                    // Address
+      |                         ^~~~~~~
+      |                         addr
+../Core/Src/roboclaw.c:16:25: note: each undeclared identifier is reported only once for each function it appears in
+../Core/Src/roboclaw.c:29:17: warning: implicit declaration of function 'HAL_UART_Transmit' [-Wimplicit-function-declaration]
+   29 |             if (HAL_UART_Transmit(&huart2, packet, 8, 2) != HAL_OK) {
+      |                 ^~~~~~~~~~~~~~~~~
+../Core/Src/roboclaw.c:29:36: error: 'huart2' undeclared (first use in this function)
+   29 |             if (HAL_UART_Transmit(&huart2, packet, 8, 2) != HAL_OK) {
+      |                                    ^~~~~~
+../Core/Src/roboclaw.c:29:61: error: 'HAL_OK' undeclared (first use in this function)
+   29 |             if (HAL_UART_Transmit(&huart2, packet, 8, 2) != HAL_OK) {
+      |                                                             ^~~~~~
+../Core/Src/roboclaw.c:30:24: warning: 'return' with a value, in function returning void [-Wreturn-type]
+   30 |                 return 0;  // Transmit failed
+      |                        ^
+../Core/Src/roboclaw.c:10:6: note: declared here
+   10 | void setM1Speed(uint8_t addr, uint32_t speed){
+      |      ^~~~~~~~~~
+../Core/Src/roboclaw.c:34:17: warning: implicit declaration of function 'HAL_UART_Receive' [-Wimplicit-function-declaration]
+   34 |             if (HAL_UART_Receive(&huart2, &response, 1, 2) != HAL_OK) {
+      |                 ^~~~~~~~~~~~~~~~
+../Core/Src/roboclaw.c:35:24: warning: 'return' with a value, in function returning void [-Wreturn-type]
+   35 |                 return 0;  // Receive timeout or error
+      |                        ^
+../Core/Src/roboclaw.c:10:6: note: declared here
+   10 | void setM1Speed(uint8_t addr, uint32_t speed){
+      |      ^~~~~~~~~~
+../Core/Src/roboclaw.c:40:24: warning: 'return' with a value, in function returning void [-Wreturn-type]
+   40 |                 return 1;  // Success
+      |                        ^
+../Core/Src/roboclaw.c:10:6: note: declared here
+   10 | void setM1Speed(uint8_t addr, uint32_t speed){
+      |      ^~~~~~~~~~
+../Core/Src/roboclaw.c:43:20: warning: 'return' with a value, in function returning void [-Wreturn-type]
+   43 |             return 0;  // Invalid response
+      |                    ^
+../Core/Src/roboclaw.c:10:6: note: declared here
+   10 | void setM1Speed(uint8_t addr, uint32_t speed){
+      |      ^~~~~~~~~~
+../Core/Src/roboclaw.c: In function 'crc16':
+../Core/Src/roboclaw.c:46:6: error: static declaration of 'setM2Speed' follows non-static declaration
+   46 | void setM2Speed(uint8_t addr, uint8_t speed){
+      |      ^~~~~~~~~~
+../Core/Inc/roboclaw.h:37:6: note: previous declaration of 'setM2Speed' with type 'void(uint8_t,  uint8_t)' {aka 'void(unsigned char,  unsigned char)'}
+   37 | void setM2Speed(uint8_t addr, uint8_t speed);
+      |      ^~~~~~~~~~
+../Core/Src/roboclaw.c:48:1: error: expected declaration or statement at end of input
+   48 | }
+      | ^
+../Core/Src/roboclaw.c:49: warning: control reaches end of non-void function [-Wreturn-type]
+../Core/Src/roboclaw.c: At top level:
+../Core/Src/roboclaw.c:46:6: warning: 'setM2Speed' defined but not used [-Wunused-function]
+   46 | void setM2Speed(uint8_t addr, uint8_t speed){
+      |      ^~~~~~~~~~
+../Core/Src/roboclaw.c:10:6: warning: 'setM1Speed' defined but not used [-Wunused-function]
+   10 | void setM1Speed(uint8_t addr, uint32_t speed){
+      |      ^~~~~~~~~~
+make: *** [Core/Src/subdir.mk:61: Core/Src/roboclaw.o] Error 1
+make: *** Waiting for unfinished jobs....
+In file included from ../Core/Src/main.c:34:
+../Core/Inc/roboclaw.h:18: warning: "GET_M1_ENCODER_COUNT" redefined
+   18 | #define GET_M1_ENCODER_COUNT 23
+      | 
+../Core/Inc/roboclaw.h:17: note: this is the location of the previous definition
+   17 | #define GET_M1_ENCODER_COUNT 22
+      | 
+../Core/Src/main.c: In function 'crc16':
+../Core/Src/main.c:83:5: warning: 'main' is normally a non-static function [-Wmain]
+   83 | int main(void)
+      |     ^~~~
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:133:25: warning: unsigned conversion from 'int' to 'uint8_t' {aka 'unsigned char'} changes value from '1000' to '232' [-Woverflow]
+  133 |         setM1Speed(128, 1000);
+      |                         ^~~~
+../Core/Src/main.c: In function 'crc16':
+../Core/Src/main.c:144:6: error: static declaration of 'SystemClock_Config' follows non-static declaration
+  144 | void SystemClock_Config(void)
+      |      ^~~~~~~~~~~~~~~~~~
+../Core/Src/main.c:60:6: note: previous declaration of 'SystemClock_Config' with type 'void(void)'
+   60 | void SystemClock_Config(void);
+      |      ^~~~~~~~~~~~~~~~~~
+../Core/Src/main.c:213:1: error: expected declaration or statement at end of input
+  213 | }
+      | ^
+../Core/Src/main.c:232: warning: control reaches end of non-void function [-Wreturn-type]
+../Core/Src/main.c: At top level:
+../Core/Src/main.c:201:6: warning: 'Error_Handler' defined but not used [-Wunused-function]
+  201 | void Error_Handler(void)
+      |      ^~~~~~~~~~~~~
+../Core/Src/main.c:192:6: warning: 'HAL_UART_RxCpltCallback' defined but not used [-Wunused-function]
+  192 | void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
+      |      ^~~~~~~~~~~~~~~~~~~~~~~
+../Core/Src/main.c:144:6: warning: 'SystemClock_Config' defined but not used [-Wunused-function]
+  144 | void SystemClock_Config(void)
+      |      ^~~~~~~~~~~~~~~~~~
+../Core/Src/main.c:83:5: warning: 'main' defined but not used [-Wunused-function]
+   83 | int main(void)
+      |     ^~~~
+../Core/Src/main.c:69:5: warning: '_write' defined but not used [-Wunused-function]
+   69 | int _write(int file, char *ptr, int len) {
+      |     ^~~~~~
+make: *** [Core/Src/subdir.mk:61: Core/Src/main.o] Error 1
+"make -j11 all" terminated with exit code 2. Build might be incomplete.
+12:10:46 **** Incremental Build of configuration Debug for project ECEN403CapstoneMain ****
+make -j11 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/roboclaw.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/roboclaw.d" -MT"Core/Src/roboclaw.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/roboclaw.o"
+In file included from ../Core/Src/roboclaw.c:8:
+../Core/Inc/roboclaw.h:18: warning: "GET_M1_ENCODER_COUNT" redefined
+   18 | #define GET_M1_ENCODER_COUNT 23
+      | 
+../Core/Inc/roboclaw.h:17: note: this is the location of the previous definition
+   17 | #define GET_M1_ENCODER_COUNT 22
+      | 
+In file included from ../Drivers/CMSIS/Include/cmsis_compiler.h:48,
+                 from ../Drivers/CMSIS/Include/core_cm4.h:162,
+                 from ../Drivers/CMSIS/Device/ST/STM32F3xx/Include/stm32f302x8.h:134,
+                 from ../Drivers/CMSIS/Device/ST/STM32F3xx/Include/stm32f3xx.h:127,
+                 from ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_def.h:29,
+                 from ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_rcc.h:27,
+                 from ../Core/Inc/stm32f3xx_hal_conf.h:200,
+                 from ../Core/Src/roboclaw.c:9:
+../Drivers/CMSIS/Include/cmsis_gcc.h: In function 'crc16':
+../Drivers/CMSIS/Include/cmsis_gcc.h:129:27: error: invalid storage class for function '__enable_irq'
+  129 | __STATIC_FORCEINLINE void __enable_irq(void)
+      |                           ^~~~~~~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:140:27: error: invalid storage class for function '__disable_irq'
+  140 | __STATIC_FORCEINLINE void __disable_irq(void)
+      |                           ^~~~~~~~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:151:31: error: invalid storage class for function '__get_CONTROL'
+  151 | __STATIC_FORCEINLINE uint32_t __get_CONTROL(void)
+      |                               ^~~~~~~~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:181:27: error: invalid storage class for function '__set_CONTROL'
+  181 | __STATIC_FORCEINLINE void __set_CONTROL(uint32_t control)
+      |                           ^~~~~~~~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:205:31: error: invalid storage class for function '__get_IPSR'
+  205 | __STATIC_FORCEINLINE uint32_t __get_IPSR(void)
+      |                               ^~~~~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:219:31: error: invalid storage class for function '__get_APSR'
+  219 | __STATIC_FORCEINLINE uint32_t __get_APSR(void)
+      |                               ^~~~~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:233:31: error: invalid storage class for function '__get_xPSR'
+  233 | __STATIC_FORCEINLINE uint32_t __get_xPSR(void)
+      |                               ^~~~~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:247:31: error: invalid storage class for function '__get_PSP'
+  247 | __STATIC_FORCEINLINE uint32_t __get_PSP(void)
+      |                               ^~~~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:277:27: error: invalid storage class for function '__set_PSP'
+  277 | __STATIC_FORCEINLINE void __set_PSP(uint32_t topOfProcStack)
+      |                           ^~~~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:301:31: error: invalid storage class for function '__get_MSP'
+  301 | __STATIC_FORCEINLINE uint32_t __get_MSP(void)
+      |                               ^~~~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:331:27: error: invalid storage class for function '__set_MSP'
+  331 | __STATIC_FORCEINLINE void __set_MSP(uint32_t topOfMainStack)
+      |                           ^~~~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:382:31: error: invalid storage class for function '__get_PRIMASK'
+  382 | __STATIC_FORCEINLINE uint32_t __get_PRIMASK(void)
+      |                               ^~~~~~~~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:412:27: error: invalid storage class for function '__set_PRIMASK'
+  412 | __STATIC_FORCEINLINE void __set_PRIMASK(uint32_t priMask)
+      |                           ^~~~~~~~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:439:27: error: invalid storage class for function '__enable_fault_irq'
+  439 | __STATIC_FORCEINLINE void __enable_fault_irq(void)
+      |                           ^~~~~~~~~~~~~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:450:27: error: invalid storage class for function '__disable_fault_irq'
+  450 | __STATIC_FORCEINLINE void __disable_fault_irq(void)
+      |                           ^~~~~~~~~~~~~~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:461:31: error: invalid storage class for function '__get_BASEPRI'
+  461 | __STATIC_FORCEINLINE uint32_t __get_BASEPRI(void)
+      |                               ^~~~~~~~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:491:27: error: invalid storage class for function '__set_BASEPRI'
+  491 | __STATIC_FORCEINLINE void __set_BASEPRI(uint32_t basePri)
+      |                           ^~~~~~~~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:516:27: error: invalid storage class for function '__set_BASEPRI_MAX'
+  516 | __STATIC_FORCEINLINE void __set_BASEPRI_MAX(uint32_t basePri)
+      |                           ^~~~~~~~~~~~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:527:31: error: invalid storage class for function '__get_FAULTMASK'
+  527 | __STATIC_FORCEINLINE uint32_t __get_FAULTMASK(void)
+      |                               ^~~~~~~~~~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:557:27: error: invalid storage class for function '__set_FAULTMASK'
+  557 | __STATIC_FORCEINLINE void __set_FAULTMASK(uint32_t faultMask)
+      |                           ^~~~~~~~~~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:766:31: error: invalid storage class for function '__get_FPSCR'
+  766 | __STATIC_FORCEINLINE uint32_t __get_FPSCR(void)
+      |                               ^~~~~~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:792:27: error: invalid storage class for function '__set_FPSCR'
+  792 | __STATIC_FORCEINLINE void __set_FPSCR(uint32_t fpscr)
+      |                           ^~~~~~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:866:27: error: invalid storage class for function '__ISB'
+  866 | __STATIC_FORCEINLINE void __ISB(void)
+      |                           ^~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:877:27: error: invalid storage class for function '__DSB'
+  877 | __STATIC_FORCEINLINE void __DSB(void)
+      |                           ^~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:888:27: error: invalid storage class for function '__DMB'
+  888 | __STATIC_FORCEINLINE void __DMB(void)
+      |                           ^~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:900:31: error: invalid storage class for function '__REV'
+  900 | __STATIC_FORCEINLINE uint32_t __REV(uint32_t value)
+      |                               ^~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:919:31: error: invalid storage class for function '__REV16'
+  919 | __STATIC_FORCEINLINE uint32_t __REV16(uint32_t value)
+      |                               ^~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:934:30: error: invalid storage class for function '__REVSH'
+  934 | __STATIC_FORCEINLINE int16_t __REVSH(int16_t value)
+      |                              ^~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:954:31: error: invalid storage class for function '__ROR'
+  954 | __STATIC_FORCEINLINE uint32_t __ROR(uint32_t op1, uint32_t op2)
+      |                               ^~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:981:31: error: invalid storage class for function '__RBIT'
+  981 | __STATIC_FORCEINLINE uint32_t __RBIT(uint32_t value)
+      |                               ^~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1024:30: error: invalid storage class for function '__LDREXB'
+ 1024 | __STATIC_FORCEINLINE uint8_t __LDREXB(volatile uint8_t *addr)
+      |                              ^~~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1046:31: error: invalid storage class for function '__LDREXH'
+ 1046 | __STATIC_FORCEINLINE uint16_t __LDREXH(volatile uint16_t *addr)
+      |                               ^~~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1068:31: error: invalid storage class for function '__LDREXW'
+ 1068 | __STATIC_FORCEINLINE uint32_t __LDREXW(volatile uint32_t *addr)
+      |                               ^~~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1085:31: error: invalid storage class for function '__STREXB'
+ 1085 | __STATIC_FORCEINLINE uint32_t __STREXB(uint8_t value, volatile uint8_t *addr)
+      |                               ^~~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1102:31: error: invalid storage class for function '__STREXH'
+ 1102 | __STATIC_FORCEINLINE uint32_t __STREXH(uint16_t value, volatile uint16_t *addr)
+      |                               ^~~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1119:31: error: invalid storage class for function '__STREXW'
+ 1119 | __STATIC_FORCEINLINE uint32_t __STREXW(uint32_t value, volatile uint32_t *addr)
+      |                               ^~~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1132:27: error: invalid storage class for function '__CLREX'
+ 1132 | __STATIC_FORCEINLINE void __CLREX(void)
+      |                           ^~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1185:31: error: invalid storage class for function '__RRX'
+ 1185 | __STATIC_FORCEINLINE uint32_t __RRX(uint32_t value)
+      |                               ^~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1200:30: error: invalid storage class for function '__LDRBT'
+ 1200 | __STATIC_FORCEINLINE uint8_t __LDRBT(volatile uint8_t *ptr)
+      |                              ^~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1222:31: error: invalid storage class for function '__LDRHT'
+ 1222 | __STATIC_FORCEINLINE uint16_t __LDRHT(volatile uint16_t *ptr)
+      |                               ^~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1244:31: error: invalid storage class for function '__LDRT'
+ 1244 | __STATIC_FORCEINLINE uint32_t __LDRT(volatile uint32_t *ptr)
+      |                               ^~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1259:27: error: invalid storage class for function '__STRBT'
+ 1259 | __STATIC_FORCEINLINE void __STRBT(uint8_t value, volatile uint8_t *ptr)
+      |                           ^~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1271:27: error: invalid storage class for function '__STRHT'
+ 1271 | __STATIC_FORCEINLINE void __STRHT(uint16_t value, volatile uint16_t *ptr)
+      |                           ^~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1283:27: error: invalid storage class for function '__STRT'
+ 1283 | __STATIC_FORCEINLINE void __STRT(uint32_t value, volatile uint32_t *ptr)
+      |                           ^~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1538:31: error: invalid storage class for function '__SADD8'
+ 1538 | __STATIC_FORCEINLINE uint32_t __SADD8(uint32_t op1, uint32_t op2)
+      |                               ^~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1546:31: error: invalid storage class for function '__QADD8'
+ 1546 | __STATIC_FORCEINLINE uint32_t __QADD8(uint32_t op1, uint32_t op2)
+      |                               ^~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1554:31: error: invalid storage class for function '__SHADD8'
+ 1554 | __STATIC_FORCEINLINE uint32_t __SHADD8(uint32_t op1, uint32_t op2)
+      |                               ^~~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1562:31: error: invalid storage class for function '__UADD8'
+ 1562 | __STATIC_FORCEINLINE uint32_t __UADD8(uint32_t op1, uint32_t op2)
+      |                               ^~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1570:31: error: invalid storage class for function '__UQADD8'
+ 1570 | __STATIC_FORCEINLINE uint32_t __UQADD8(uint32_t op1, uint32_t op2)
+      |                               ^~~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1578:31: error: invalid storage class for function '__UHADD8'
+ 1578 | __STATIC_FORCEINLINE uint32_t __UHADD8(uint32_t op1, uint32_t op2)
+      |                               ^~~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1587:31: error: invalid storage class for function '__SSUB8'
+ 1587 | __STATIC_FORCEINLINE uint32_t __SSUB8(uint32_t op1, uint32_t op2)
+      |                               ^~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1595:31: error: invalid storage class for function '__QSUB8'
+ 1595 | __STATIC_FORCEINLINE uint32_t __QSUB8(uint32_t op1, uint32_t op2)
+      |                               ^~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1603:31: error: invalid storage class for function '__SHSUB8'
+ 1603 | __STATIC_FORCEINLINE uint32_t __SHSUB8(uint32_t op1, uint32_t op2)
+      |                               ^~~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1611:31: error: invalid storage class for function '__USUB8'
+ 1611 | __STATIC_FORCEINLINE uint32_t __USUB8(uint32_t op1, uint32_t op2)
+      |                               ^~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1619:31: error: invalid storage class for function '__UQSUB8'
+ 1619 | __STATIC_FORCEINLINE uint32_t __UQSUB8(uint32_t op1, uint32_t op2)
+      |                               ^~~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1627:31: error: invalid storage class for function '__UHSUB8'
+ 1627 | __STATIC_FORCEINLINE uint32_t __UHSUB8(uint32_t op1, uint32_t op2)
+      |                               ^~~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1636:31: error: invalid storage class for function '__SADD16'
+ 1636 | __STATIC_FORCEINLINE uint32_t __SADD16(uint32_t op1, uint32_t op2)
+      |                               ^~~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1644:31: error: invalid storage class for function '__QADD16'
+ 1644 | __STATIC_FORCEINLINE uint32_t __QADD16(uint32_t op1, uint32_t op2)
+      |                               ^~~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1652:31: error: invalid storage class for function '__SHADD16'
+ 1652 | __STATIC_FORCEINLINE uint32_t __SHADD16(uint32_t op1, uint32_t op2)
+      |                               ^~~~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1660:31: error: invalid storage class for function '__UADD16'
+ 1660 | __STATIC_FORCEINLINE uint32_t __UADD16(uint32_t op1, uint32_t op2)
+      |                               ^~~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1668:31: error: invalid storage class for function '__UQADD16'
+ 1668 | __STATIC_FORCEINLINE uint32_t __UQADD16(uint32_t op1, uint32_t op2)
+      |                               ^~~~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1676:31: error: invalid storage class for function '__UHADD16'
+ 1676 | __STATIC_FORCEINLINE uint32_t __UHADD16(uint32_t op1, uint32_t op2)
+      |                               ^~~~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1684:31: error: invalid storage class for function '__SSUB16'
+ 1684 | __STATIC_FORCEINLINE uint32_t __SSUB16(uint32_t op1, uint32_t op2)
+      |                               ^~~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1692:31: error: invalid storage class for function '__QSUB16'
+ 1692 | __STATIC_FORCEINLINE uint32_t __QSUB16(uint32_t op1, uint32_t op2)
+      |                               ^~~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1700:31: error: invalid storage class for function '__SHSUB16'
+ 1700 | __STATIC_FORCEINLINE uint32_t __SHSUB16(uint32_t op1, uint32_t op2)
+      |                               ^~~~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1708:31: error: invalid storage class for function '__USUB16'
+ 1708 | __STATIC_FORCEINLINE uint32_t __USUB16(uint32_t op1, uint32_t op2)
+      |                               ^~~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1716:31: error: invalid storage class for function '__UQSUB16'
+ 1716 | __STATIC_FORCEINLINE uint32_t __UQSUB16(uint32_t op1, uint32_t op2)
+      |                               ^~~~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1724:31: error: invalid storage class for function '__UHSUB16'
+ 1724 | __STATIC_FORCEINLINE uint32_t __UHSUB16(uint32_t op1, uint32_t op2)
+      |                               ^~~~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1732:31: error: invalid storage class for function '__SASX'
+ 1732 | __STATIC_FORCEINLINE uint32_t __SASX(uint32_t op1, uint32_t op2)
+      |                               ^~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1740:31: error: invalid storage class for function '__QASX'
+ 1740 | __STATIC_FORCEINLINE uint32_t __QASX(uint32_t op1, uint32_t op2)
+      |                               ^~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1748:31: error: invalid storage class for function '__SHASX'
+ 1748 | __STATIC_FORCEINLINE uint32_t __SHASX(uint32_t op1, uint32_t op2)
+      |                               ^~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1756:31: error: invalid storage class for function '__UASX'
+ 1756 | __STATIC_FORCEINLINE uint32_t __UASX(uint32_t op1, uint32_t op2)
+      |                               ^~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1764:31: error: invalid storage class for function '__UQASX'
+ 1764 | __STATIC_FORCEINLINE uint32_t __UQASX(uint32_t op1, uint32_t op2)
+      |                               ^~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1772:31: error: invalid storage class for function '__UHASX'
+ 1772 | __STATIC_FORCEINLINE uint32_t __UHASX(uint32_t op1, uint32_t op2)
+      |                               ^~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1780:31: error: invalid storage class for function '__SSAX'
+ 1780 | __STATIC_FORCEINLINE uint32_t __SSAX(uint32_t op1, uint32_t op2)
+      |                               ^~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1788:31: error: invalid storage class for function '__QSAX'
+ 1788 | __STATIC_FORCEINLINE uint32_t __QSAX(uint32_t op1, uint32_t op2)
+      |                               ^~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1796:31: error: invalid storage class for function '__SHSAX'
+ 1796 | __STATIC_FORCEINLINE uint32_t __SHSAX(uint32_t op1, uint32_t op2)
+      |                               ^~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1804:31: error: invalid storage class for function '__USAX'
+ 1804 | __STATIC_FORCEINLINE uint32_t __USAX(uint32_t op1, uint32_t op2)
+      |                               ^~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1812:31: error: invalid storage class for function '__UQSAX'
+ 1812 | __STATIC_FORCEINLINE uint32_t __UQSAX(uint32_t op1, uint32_t op2)
+      |                               ^~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1820:31: error: invalid storage class for function '__UHSAX'
+ 1820 | __STATIC_FORCEINLINE uint32_t __UHSAX(uint32_t op1, uint32_t op2)
+      |                               ^~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1828:31: error: invalid storage class for function '__USAD8'
+ 1828 | __STATIC_FORCEINLINE uint32_t __USAD8(uint32_t op1, uint32_t op2)
+      |                               ^~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1836:31: error: invalid storage class for function '__USADA8'
+ 1836 | __STATIC_FORCEINLINE uint32_t __USADA8(uint32_t op1, uint32_t op2, uint32_t op3)
+      |                               ^~~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1858:31: error: invalid storage class for function '__UXTB16'
+ 1858 | __STATIC_FORCEINLINE uint32_t __UXTB16(uint32_t op1)
+      |                               ^~~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1866:31: error: invalid storage class for function '__UXTAB16'
+ 1866 | __STATIC_FORCEINLINE uint32_t __UXTAB16(uint32_t op1, uint32_t op2)
+      |                               ^~~~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1874:31: error: invalid storage class for function '__SXTB16'
+ 1874 | __STATIC_FORCEINLINE uint32_t __SXTB16(uint32_t op1)
+      |                               ^~~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1882:31: error: invalid storage class for function '__SXTAB16'
+ 1882 | __STATIC_FORCEINLINE uint32_t __SXTAB16(uint32_t op1, uint32_t op2)
+      |                               ^~~~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1890:31: error: invalid storage class for function '__SMUAD'
+ 1890 | __STATIC_FORCEINLINE uint32_t __SMUAD  (uint32_t op1, uint32_t op2)
+      |                               ^~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1898:31: error: invalid storage class for function '__SMUADX'
+ 1898 | __STATIC_FORCEINLINE uint32_t __SMUADX (uint32_t op1, uint32_t op2)
+      |                               ^~~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1906:31: error: invalid storage class for function '__SMLAD'
+ 1906 | __STATIC_FORCEINLINE uint32_t __SMLAD (uint32_t op1, uint32_t op2, uint32_t op3)
+      |                               ^~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1914:31: error: invalid storage class for function '__SMLADX'
+ 1914 | __STATIC_FORCEINLINE uint32_t __SMLADX (uint32_t op1, uint32_t op2, uint32_t op3)
+      |                               ^~~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1922:31: error: invalid storage class for function '__SMLALD'
+ 1922 | __STATIC_FORCEINLINE uint64_t __SMLALD (uint32_t op1, uint32_t op2, uint64_t acc)
+      |                               ^~~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1939:31: error: invalid storage class for function '__SMLALDX'
+ 1939 | __STATIC_FORCEINLINE uint64_t __SMLALDX (uint32_t op1, uint32_t op2, uint64_t acc)
+      |                               ^~~~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1956:31: error: invalid storage class for function '__SMUSD'
+ 1956 | __STATIC_FORCEINLINE uint32_t __SMUSD  (uint32_t op1, uint32_t op2)
+      |                               ^~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1964:31: error: invalid storage class for function '__SMUSDX'
+ 1964 | __STATIC_FORCEINLINE uint32_t __SMUSDX (uint32_t op1, uint32_t op2)
+      |                               ^~~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1972:31: error: invalid storage class for function '__SMLSD'
+ 1972 | __STATIC_FORCEINLINE uint32_t __SMLSD (uint32_t op1, uint32_t op2, uint32_t op3)
+      |                               ^~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1980:31: error: invalid storage class for function '__SMLSDX'
+ 1980 | __STATIC_FORCEINLINE uint32_t __SMLSDX (uint32_t op1, uint32_t op2, uint32_t op3)
+      |                               ^~~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:1988:31: error: invalid storage class for function '__SMLSLD'
+ 1988 | __STATIC_FORCEINLINE uint64_t __SMLSLD (uint32_t op1, uint32_t op2, uint64_t acc)
+      |                               ^~~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:2005:31: error: invalid storage class for function '__SMLSLDX'
+ 2005 | __STATIC_FORCEINLINE uint64_t __SMLSLDX (uint32_t op1, uint32_t op2, uint64_t acc)
+      |                               ^~~~~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:2022:31: error: invalid storage class for function '__SEL'
+ 2022 | __STATIC_FORCEINLINE uint32_t __SEL  (uint32_t op1, uint32_t op2)
+      |                               ^~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:2030:31: error: invalid storage class for function '__QADD'
+ 2030 | __STATIC_FORCEINLINE  int32_t __QADD( int32_t op1,  int32_t op2)
+      |                               ^~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:2038:31: error: invalid storage class for function '__QSUB'
+ 2038 | __STATIC_FORCEINLINE  int32_t __QSUB( int32_t op1,  int32_t op2)
+      |                               ^~~~~~
+../Drivers/CMSIS/Include/cmsis_gcc.h:2071:30: error: invalid storage class for function '__SMMLA'
+ 2071 | __STATIC_FORCEINLINE int32_t __SMMLA (int32_t op1, int32_t op2, int32_t op3)
+      |                              ^~~~~~~
+../Drivers/CMSIS/Include/core_cm4.h:1657:22: error: invalid storage class for function '__NVIC_SetPriorityGrouping'
+ 1657 | __STATIC_INLINE void __NVIC_SetPriorityGrouping(uint32_t PriorityGroup)
+      |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+../Drivers/CMSIS/Include/core_cm4.h:1676:26: error: invalid storage class for function '__NVIC_GetPriorityGrouping'
+ 1676 | __STATIC_INLINE uint32_t __NVIC_GetPriorityGrouping(void)
+      |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~
+../Drivers/CMSIS/Include/core_cm4.h:1688:22: error: invalid storage class for function '__NVIC_EnableIRQ'
+ 1688 | __STATIC_INLINE void __NVIC_EnableIRQ(IRQn_Type IRQn)
+      |                      ^~~~~~~~~~~~~~~~
+../Drivers/CMSIS/Include/core_cm4.h:1705:26: error: invalid storage class for function '__NVIC_GetEnableIRQ'
+ 1705 | __STATIC_INLINE uint32_t __NVIC_GetEnableIRQ(IRQn_Type IRQn)
+      |                          ^~~~~~~~~~~~~~~~~~~
+../Drivers/CMSIS/Include/core_cm4.h:1724:22: error: invalid storage class for function '__NVIC_DisableIRQ'
+ 1724 | __STATIC_INLINE void __NVIC_DisableIRQ(IRQn_Type IRQn)
+      |                      ^~~~~~~~~~~~~~~~~
+../Drivers/CMSIS/Include/core_cm4.h:1743:26: error: invalid storage class for function '__NVIC_GetPendingIRQ'
+ 1743 | __STATIC_INLINE uint32_t __NVIC_GetPendingIRQ(IRQn_Type IRQn)
+      |                          ^~~~~~~~~~~~~~~~~~~~
+../Drivers/CMSIS/Include/core_cm4.h:1762:22: error: invalid storage class for function '__NVIC_SetPendingIRQ'
+ 1762 | __STATIC_INLINE void __NVIC_SetPendingIRQ(IRQn_Type IRQn)
+      |                      ^~~~~~~~~~~~~~~~~~~~
+../Drivers/CMSIS/Include/core_cm4.h:1777:22: error: invalid storage class for function '__NVIC_ClearPendingIRQ'
+ 1777 | __STATIC_INLINE void __NVIC_ClearPendingIRQ(IRQn_Type IRQn)
+      |                      ^~~~~~~~~~~~~~~~~~~~~~
+../Drivers/CMSIS/Include/core_cm4.h:1794:26: error: invalid storage class for function '__NVIC_GetActive'
+ 1794 | __STATIC_INLINE uint32_t __NVIC_GetActive(IRQn_Type IRQn)
+      |                          ^~~~~~~~~~~~~~~~
+../Drivers/CMSIS/Include/core_cm4.h:1816:22: error: invalid storage class for function '__NVIC_SetPriority'
+ 1816 | __STATIC_INLINE void __NVIC_SetPriority(IRQn_Type IRQn, uint32_t priority)
+      |                      ^~~~~~~~~~~~~~~~~~
+../Drivers/CMSIS/Include/core_cm4.h:1838:26: error: invalid storage class for function '__NVIC_GetPriority'
+ 1838 | __STATIC_INLINE uint32_t __NVIC_GetPriority(IRQn_Type IRQn)
+      |                          ^~~~~~~~~~~~~~~~~~
+../Drivers/CMSIS/Include/core_cm4.h:1863:26: error: invalid storage class for function 'NVIC_EncodePriority'
+ 1863 | __STATIC_INLINE uint32_t NVIC_EncodePriority (uint32_t PriorityGroup, uint32_t PreemptPriority, uint32_t SubPriority)
+      |                          ^~~~~~~~~~~~~~~~~~~
+../Drivers/CMSIS/Include/core_cm4.h:1890:22: error: invalid storage class for function 'NVIC_DecodePriority'
+ 1890 | __STATIC_INLINE void NVIC_DecodePriority (uint32_t Priority, uint32_t PriorityGroup, uint32_t* const pPreemptPriority, uint32_t* const pSubPriority)
+      |                      ^~~~~~~~~~~~~~~~~~~
+../Drivers/CMSIS/Include/core_cm4.h:1913:22: error: invalid storage class for function '__NVIC_SetVector'
+ 1913 | __STATIC_INLINE void __NVIC_SetVector(IRQn_Type IRQn, uint32_t vector)
+      |                      ^~~~~~~~~~~~~~~~
+../Drivers/CMSIS/Include/core_cm4.h:1928:26: error: invalid storage class for function '__NVIC_GetVector'
+ 1928 | __STATIC_INLINE uint32_t __NVIC_GetVector(IRQn_Type IRQn)
+      |                          ^~~~~~~~~~~~~~~~
+../Drivers/CMSIS/Include/core_cm4.h:1939:34: error: invalid storage class for function '__NVIC_SystemReset'
+ 1939 | __NO_RETURN __STATIC_INLINE void __NVIC_SystemReset(void)
+      |                                  ^~~~~~~~~~~~~~~~~~
+../Drivers/CMSIS/Include/core_cm4.h:1981:26: error: invalid storage class for function 'SCB_GetFPUType'
+ 1981 | __STATIC_INLINE uint32_t SCB_GetFPUType(void)
+      |                          ^~~~~~~~~~~~~~
+In file included from ../Core/Src/main.c:34:
+../Core/Inc/roboclaw.h:18: warning: "GET_M1_ENCODER_COUNT" redefined
+   18 | #define GET_M1_ENCODER_COUNT 23
+      | 
+../Core/Inc/roboclaw.h:17: note: this is the location of the previous definition
+   17 | #define GET_M1_ENCODER_COUNT 22
+      | 
+../Drivers/CMSIS/Include/core_cm4.h:2022:26: error: invalid storage class for function 'SysTick_Config'
+ 2022 | __STATIC_INLINE uint32_t SysTick_Config(uint32_t ticks)
+      |                          ^~~~~~~~~~~~~~
+../Core/Src/main.c: In function 'crc16':
+../Core/Src/main.c:83:5: warning: 'main' is normally a non-static function [-Wmain]
+   83 | int main(void)
+      |     ^~~~
+../Drivers/CMSIS/Include/core_cm4.h:2064:26: error: invalid storage class for function 'ITM_SendChar'
+ 2064 | __STATIC_INLINE uint32_t ITM_SendChar (uint32_t ch)
+      |                          ^~~~~~~~~~~~
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:133:25: warning: unsigned conversion from 'int' to 'uint8_t' {aka 'unsigned char'} changes value from '1000' to '232' [-Woverflow]
+  133 |         setM1Speed(128, 1000);
+      |                         ^~~~
+../Core/Src/main.c: In function 'crc16':
+../Core/Src/main.c:144:6: error: static declaration of 'SystemClock_Config' follows non-static declaration
+  144 | void SystemClock_Config(void)
+      |      ^~~~~~~~~~~~~~~~~~
+../Core/Src/main.c:60:6: note: previous declaration of 'SystemClock_Config' with type 'void(void)'
+   60 | void SystemClock_Config(void);
+      |      ^~~~~~~~~~~~~~~~~~
+../Drivers/CMSIS/Include/core_cm4.h:2085:25: error: invalid storage class for function 'ITM_ReceiveChar'
+ 2085 | __STATIC_INLINE int32_t ITM_ReceiveChar (void)
+      |                         ^~~~~~~~~~~~~~~
+../Core/Src/main.c:213:1: error: expected declaration or statement at end of input
+  213 | }
+      | ^
+../Drivers/CMSIS/Include/core_cm4.h:2105:25: error: invalid storage class for function 'ITM_CheckChar'
+ 2105 | __STATIC_INLINE int32_t ITM_CheckChar (void)
+      |                         ^~~~~~~~~~~~~
+../Core/Src/main.c:232: warning: control reaches end of non-void function [-Wreturn-type]
+../Core/Src/main.c: At top level:
+../Core/Src/main.c:201:6: warning: 'Error_Handler' defined but not used [-Wunused-function]
+  201 | void Error_Handler(void)
+      |      ^~~~~~~~~~~~~
+../Core/Src/main.c:192:6: warning: 'HAL_UART_RxCpltCallback' defined but not used [-Wunused-function]
+  192 | void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
+      |      ^~~~~~~~~~~~~~~~~~~~~~~
+../Core/Src/main.c:144:6: warning: 'SystemClock_Config' defined but not used [-Wunused-function]
+  144 | void SystemClock_Config(void)
+      |      ^~~~~~~~~~~~~~~~~~
+../Core/Src/main.c:83:5: warning: 'main' defined but not used [-Wunused-function]
+   83 | int main(void)
+      |     ^~~~
+../Core/Src/main.c:69:5: warning: '_write' defined but not used [-Wunused-function]
+   69 | int _write(int file, char *ptr, int len) {
+      |     ^~~~~~
+make: *** [Core/Src/subdir.mk:61: Core/Src/main.o] Error 1
+make: *** Waiting for unfinished jobs....
+In file included from ../Drivers/CMSIS/Device/ST/STM32F3xx/Include/stm32f3xx.h:266:
+../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal.h:877:1: error: unknown type name 'HAL_StatusTypeDef'
+  877 | HAL_StatusTypeDef HAL_Init(void);
+      | ^~~~~~~~~~~~~~~~~
+../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal.h:878:1: error: unknown type name 'HAL_StatusTypeDef'
+  878 | HAL_StatusTypeDef HAL_DeInit(void);
+      | ^~~~~~~~~~~~~~~~~
+../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal.h:881:1: error: unknown type name 'HAL_StatusTypeDef'
+  881 | HAL_StatusTypeDef HAL_InitTick (uint32_t TickPriority);
+      | ^~~~~~~~~~~~~~~~~
+../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal.h:908:1: error: unknown type name 'HAL_StatusTypeDef'
+  908 | HAL_StatusTypeDef HAL_SetTickFreq(HAL_TickFreqTypeDef Freq);
+      | ^~~~~~~~~~~~~~~~~
+../Core/Src/roboclaw.c:11:6: error: conflicting types for 'setM1Speed'; have 'void(uint8_t,  uint32_t)' {aka 'void(unsigned char,  long unsigned int)'}
+   11 | void setM1Speed(uint8_t address, uint32_t speed){
+      |      ^~~~~~~~~~
+../Core/Inc/roboclaw.h:36:6: note: previous declaration of 'setM1Speed' with type 'void(uint8_t,  uint8_t)' {aka 'void(unsigned char,  unsigned char)'}
+   36 | void setM1Speed(uint8_t address, uint8_t speed);
+      |      ^~~~~~~~~~
+../Core/Src/roboclaw.c: In function 'setM1Speed':
+../Core/Src/roboclaw.c:30:36: error: 'huart2' undeclared (first use in this function)
+   30 |             if (HAL_UART_Transmit(&huart2, packet, 8, 2) != HAL_OK) {
+      |                                    ^~~~~~
+../Core/Src/roboclaw.c:30:36: note: each undeclared identifier is reported only once for each function it appears in
+../Core/Src/roboclaw.c:31:24: warning: 'return' with a value, in function returning void [-Wreturn-type]
+   31 |                 return 0;  // Transmit failed
+      |                        ^
+../Core/Src/roboclaw.c:11:6: note: declared here
+   11 | void setM1Speed(uint8_t address, uint32_t speed){
+      |      ^~~~~~~~~~
+../Core/Src/roboclaw.c:36:24: warning: 'return' with a value, in function returning void [-Wreturn-type]
+   36 |                 return 0;  // Receive timeout or error
+      |                        ^
+../Core/Src/roboclaw.c:11:6: note: declared here
+   11 | void setM1Speed(uint8_t address, uint32_t speed){
+      |      ^~~~~~~~~~
+../Core/Src/roboclaw.c:41:24: warning: 'return' with a value, in function returning void [-Wreturn-type]
+   41 |                 return 1;  // Success
+      |                        ^
+../Core/Src/roboclaw.c:11:6: note: declared here
+   11 | void setM1Speed(uint8_t address, uint32_t speed){
+      |      ^~~~~~~~~~
+../Core/Src/roboclaw.c:44:20: warning: 'return' with a value, in function returning void [-Wreturn-type]
+   44 |             return 0;  // Invalid response
+      |                    ^
+../Core/Src/roboclaw.c:11:6: note: declared here
+   11 | void setM1Speed(uint8_t address, uint32_t speed){
+      |      ^~~~~~~~~~
+../Core/Src/roboclaw.c: In function 'crc16':
+../Core/Src/roboclaw.c:47:6: error: static declaration of 'setM2Speed' follows non-static declaration
+   47 | void setM2Speed(uint8_t address, uint8_t speed){
+      |      ^~~~~~~~~~
+../Core/Inc/roboclaw.h:37:6: note: previous declaration of 'setM2Speed' with type 'void(uint8_t,  uint8_t)' {aka 'void(unsigned char,  unsigned char)'}
+   37 | void setM2Speed(uint8_t address, uint8_t speed);
+      |      ^~~~~~~~~~
+../Core/Src/roboclaw.c:49:1: error: expected declaration or statement at end of input
+   49 | }
+      | ^
+../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal.h:892:28: warning: unused variable 'uwTickFreq' [-Wunused-variable]
+  892 | extern HAL_TickFreqTypeDef uwTickFreq;
+      |                            ^~~~~~~~~~
+../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal.h:891:17: warning: unused variable 'uwTickPrio' [-Wunused-variable]
+  891 | extern uint32_t uwTickPrio;
+      |                 ^~~~~~~~~~
+../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal.h:890:22: warning: unused variable 'uwTick' [-Wunused-variable]
+  890 | extern __IO uint32_t uwTick;
+      |                      ^~~~~~
+In file included from ../Drivers/CMSIS/Device/ST/STM32F3xx/Include/stm32f302x8.h:135:
+../Drivers/CMSIS/Device/ST/STM32F3xx/Include/system_stm32f3xx.h:59:22: warning: unused variable 'APBPrescTable' [-Wunused-variable]
+   59 | extern const uint8_t APBPrescTable[8];    /*!< APB prescalers table values */
+      |                      ^~~~~~~~~~~~~
+../Drivers/CMSIS/Device/ST/STM32F3xx/Include/system_stm32f3xx.h:58:22: warning: unused variable 'AHBPrescTable' [-Wunused-variable]
+   58 | extern const uint8_t AHBPrescTable[16];   /*!< AHB prescalers table values */
+      |                      ^~~~~~~~~~~~~
+../Drivers/CMSIS/Device/ST/STM32F3xx/Include/system_stm32f3xx.h:57:17: warning: unused variable 'SystemCoreClock' [-Wunused-variable]
+   57 | extern uint32_t SystemCoreClock;          /*!< System Clock Frequency (Core Clock) */
+      |                 ^~~~~~~~~~~~~~~
+../Core/Src/roboclaw.c:50: warning: control reaches end of non-void function [-Wreturn-type]
+../Core/Src/roboclaw.c: At top level:
+../Core/Src/roboclaw.c:47:6: warning: 'setM2Speed' defined but not used [-Wunused-function]
+   47 | void setM2Speed(uint8_t address, uint8_t speed){
+      |      ^~~~~~~~~~
+../Core/Src/roboclaw.c:11:6: warning: 'setM1Speed' defined but not used [-Wunused-function]
+   11 | void setM1Speed(uint8_t address, uint32_t speed){
+      |      ^~~~~~~~~~
+make: *** [Core/Src/subdir.mk:61: Core/Src/roboclaw.o] Error 1
+"make -j11 all" terminated with exit code 2. Build might be incomplete.
+12:11:01 **** Incremental Build of configuration Debug for project ECEN403CapstoneMain ****
+make -j11 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/roboclaw.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/roboclaw.d" -MT"Core/Src/roboclaw.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/roboclaw.o"
+In file included from ../Core/Src/roboclaw.c:8:
+../Core/Inc/roboclaw.h:18: warning: "GET_M1_ENCODER_COUNT" redefined
+   18 | #define GET_M1_ENCODER_COUNT 23
+      | 
+../Core/Inc/roboclaw.h:17: note: this is the location of the previous definition
+   17 | #define GET_M1_ENCODER_COUNT 22
+      | 
+../Core/Src/roboclaw.c: In function 'crc16':
+../Core/Src/roboclaw.c:11:6: error: conflicting types for 'setM1Speed'; have 'void(uint8_t,  uint32_t)' {aka 'void(unsigned char,  long unsigned int)'}
+   11 | void setM1Speed(uint8_t address, uint32_t speed){
+      |      ^~~~~~~~~~
+../Core/Inc/roboclaw.h:36:6: note: previous declaration of 'setM1Speed' with type 'void(uint8_t,  uint8_t)' {aka 'void(unsigned char,  unsigned char)'}
+   36 | void setM1Speed(uint8_t address, uint8_t speed);
+      |      ^~~~~~~~~~
+../Core/Src/roboclaw.c: In function 'setM1Speed':
+../Core/Src/roboclaw.c:30:17: warning: implicit declaration of function 'HAL_UART_Transmit' [-Wimplicit-function-declaration]
+   30 |             if (HAL_UART_Transmit(&huart2, packet, 8, 2) != HAL_OK) {
+      |                 ^~~~~~~~~~~~~~~~~
+../Core/Src/roboclaw.c:30:36: error: 'huart2' undeclared (first use in this function)
+   30 |             if (HAL_UART_Transmit(&huart2, packet, 8, 2) != HAL_OK) {
+      |                                    ^~~~~~
+../Core/Src/roboclaw.c:30:36: note: each undeclared identifier is reported only once for each function it appears in
+../Core/Src/roboclaw.c:30:61: error: 'HAL_OK' undeclared (first use in this function)
+   30 |             if (HAL_UART_Transmit(&huart2, packet, 8, 2) != HAL_OK) {
+      |                                                             ^~~~~~
+../Core/Src/roboclaw.c:31:24: warning: 'return' with a value, in function returning void [-Wreturn-type]
+   31 |                 return 0;  // Transmit failed
+      |                        ^
+../Core/Src/roboclaw.c:11:6: note: declared here
+   11 | void setM1Speed(uint8_t address, uint32_t speed){
+      |      ^~~~~~~~~~
+../Core/Src/roboclaw.c:35:17: warning: implicit declaration of function 'HAL_UART_Receive' [-Wimplicit-function-declaration]
+   35 |             if (HAL_UART_Receive(&huart2, &response, 1, 2) != HAL_OK) {
+      |                 ^~~~~~~~~~~~~~~~
+../Core/Src/roboclaw.c:36:24: warning: 'return' with a value, in function returning void [-Wreturn-type]
+   36 |                 return 0;  // Receive timeout or error
+      |                        ^
+../Core/Src/roboclaw.c:11:6: note: declared here
+   11 | void setM1Speed(uint8_t address, uint32_t speed){
+      |      ^~~~~~~~~~
+../Core/Src/roboclaw.c:41:24: warning: 'return' with a value, in function returning void [-Wreturn-type]
+   41 |                 return 1;  // Success
+      |                        ^
+../Core/Src/roboclaw.c:11:6: note: declared here
+   11 | void setM1Speed(uint8_t address, uint32_t speed){
+      |      ^~~~~~~~~~
+../Core/Src/roboclaw.c:44:20: warning: 'return' with a value, in function returning void [-Wreturn-type]
+   44 |             return 0;  // Invalid response
+      |                    ^
+../Core/Src/roboclaw.c:11:6: note: declared here
+   11 | void setM1Speed(uint8_t address, uint32_t speed){
+      |      ^~~~~~~~~~
+../Core/Src/roboclaw.c: In function 'crc16':
+../Core/Src/roboclaw.c:47:6: error: static declaration of 'setM2Speed' follows non-static declaration
+   47 | void setM2Speed(uint8_t address, uint8_t speed){
+      |      ^~~~~~~~~~
+../Core/Inc/roboclaw.h:37:6: note: previous declaration of 'setM2Speed' with type 'void(uint8_t,  uint8_t)' {aka 'void(unsigned char,  unsigned char)'}
+   37 | void setM2Speed(uint8_t address, uint8_t speed);
+      |      ^~~~~~~~~~
+../Core/Src/roboclaw.c:49:1: error: expected declaration or statement at end of input
+   49 | }
+      | ^
+../Core/Src/roboclaw.c:50: warning: control reaches end of non-void function [-Wreturn-type]
+../Core/Src/roboclaw.c: At top level:
+../Core/Src/roboclaw.c:47:6: warning: 'setM2Speed' defined but not used [-Wunused-function]
+   47 | void setM2Speed(uint8_t address, uint8_t speed){
+      |      ^~~~~~~~~~
+../Core/Src/roboclaw.c:11:6: warning: 'setM1Speed' defined but not used [-Wunused-function]
+   11 | void setM1Speed(uint8_t address, uint32_t speed){
+      |      ^~~~~~~~~~
+make: *** [Core/Src/subdir.mk:61: Core/Src/roboclaw.o] Error 1
+make: *** Waiting for unfinished jobs....
+In file included from ../Core/Src/main.c:34:
+../Core/Inc/roboclaw.h:18: warning: "GET_M1_ENCODER_COUNT" redefined
+   18 | #define GET_M1_ENCODER_COUNT 23
+      | 
+../Core/Inc/roboclaw.h:17: note: this is the location of the previous definition
+   17 | #define GET_M1_ENCODER_COUNT 22
+      | 
+../Core/Src/main.c: In function 'crc16':
+../Core/Src/main.c:83:5: warning: 'main' is normally a non-static function [-Wmain]
+   83 | int main(void)
+      |     ^~~~
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:133:25: warning: unsigned conversion from 'int' to 'uint8_t' {aka 'unsigned char'} changes value from '1000' to '232' [-Woverflow]
+  133 |         setM1Speed(128, 1000);
+      |                         ^~~~
+../Core/Src/main.c: In function 'crc16':
+../Core/Src/main.c:144:6: error: static declaration of 'SystemClock_Config' follows non-static declaration
+  144 | void SystemClock_Config(void)
+      |      ^~~~~~~~~~~~~~~~~~
+../Core/Src/main.c:60:6: note: previous declaration of 'SystemClock_Config' with type 'void(void)'
+   60 | void SystemClock_Config(void);
+      |      ^~~~~~~~~~~~~~~~~~
+../Core/Src/main.c:213:1: error: expected declaration or statement at end of input
+  213 | }
+      | ^
+../Core/Src/main.c:232: warning: control reaches end of non-void function [-Wreturn-type]
+../Core/Src/main.c: At top level:
+../Core/Src/main.c:201:6: warning: 'Error_Handler' defined but not used [-Wunused-function]
+  201 | void Error_Handler(void)
+      |      ^~~~~~~~~~~~~
+../Core/Src/main.c:192:6: warning: 'HAL_UART_RxCpltCallback' defined but not used [-Wunused-function]
+  192 | void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
+      |      ^~~~~~~~~~~~~~~~~~~~~~~
+../Core/Src/main.c:144:6: warning: 'SystemClock_Config' defined but not used [-Wunused-function]
+  144 | void SystemClock_Config(void)
+      |      ^~~~~~~~~~~~~~~~~~
+../Core/Src/main.c:83:5: warning: 'main' defined but not used [-Wunused-function]
+   83 | int main(void)
+      |     ^~~~
+../Core/Src/main.c:69:5: warning: '_write' defined but not used [-Wunused-function]
+   69 | int _write(int file, char *ptr, int len) {
+      |     ^~~~~~
+make: *** [Core/Src/subdir.mk:61: Core/Src/main.o] Error 1
+"make -j11 all" terminated with exit code 2. Build might be incomplete.
+12:11:30 **** Incremental Build of configuration Debug for project ECEN403CapstoneMain ****
+make -j11 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/roboclaw.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/roboclaw.d" -MT"Core/Src/roboclaw.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/roboclaw.o"
+../Core/Src/roboclaw.c: In function 'crc16':
+../Core/Src/roboclaw.c:11:6: error: static declaration of 'setM1Speed' follows non-static declaration
+   11 | void setM1Speed(uint8_t address, uint32_t speed){
+      |      ^~~~~~~~~~
+In file included from ../Core/Src/roboclaw.c:8:
+../Core/Inc/roboclaw.h:36:6: note: previous declaration of 'setM1Speed' with type 'void(uint8_t,  uint32_t)' {aka 'void(unsigned char,  long unsigned int)'}
+   36 | void setM1Speed(uint8_t address, uint32_t speed);
+      |      ^~~~~~~~~~
+../Core/Src/roboclaw.c: In function 'setM1Speed':
+../Core/Src/roboclaw.c:30:17: warning: implicit declaration of function 'HAL_UART_Transmit' [-Wimplicit-function-declaration]
+   30 |             if (HAL_UART_Transmit(&huart2, packet, 8, 2) != HAL_OK) {
+      |                 ^~~~~~~~~~~~~~~~~
+../Core/Src/roboclaw.c:30:36: error: 'huart2' undeclared (first use in this function)
+   30 |             if (HAL_UART_Transmit(&huart2, packet, 8, 2) != HAL_OK) {
+      |                                    ^~~~~~
+../Core/Src/roboclaw.c:30:36: note: each undeclared identifier is reported only once for each function it appears in
+../Core/Src/roboclaw.c:30:61: error: 'HAL_OK' undeclared (first use in this function)
+   30 |             if (HAL_UART_Transmit(&huart2, packet, 8, 2) != HAL_OK) {
+      |                                                             ^~~~~~
+../Core/Src/roboclaw.c:31:24: warning: 'return' with a value, in function returning void [-Wreturn-type]
+   31 |                 return 0;  // Transmit failed
+      |                        ^
+../Core/Src/roboclaw.c:11:6: note: declared here
+   11 | void setM1Speed(uint8_t address, uint32_t speed){
+      |      ^~~~~~~~~~
+../Core/Src/roboclaw.c:35:17: warning: implicit declaration of function 'HAL_UART_Receive' [-Wimplicit-function-declaration]
+   35 |             if (HAL_UART_Receive(&huart2, &response, 1, 2) != HAL_OK) {
+      |                 ^~~~~~~~~~~~~~~~
+../Core/Src/roboclaw.c:36:24: warning: 'return' with a value, in function returning void [-Wreturn-type]
+   36 |                 return 0;  // Receive timeout or error
+      |                        ^
+../Core/Src/roboclaw.c:11:6: note: declared here
+   11 | void setM1Speed(uint8_t address, uint32_t speed){
+      |      ^~~~~~~~~~
+../Core/Src/roboclaw.c:41:24: warning: 'return' with a value, in function returning void [-Wreturn-type]
+   41 |                 return 1;  // Success
+      |                        ^
+../Core/Src/roboclaw.c:11:6: note: declared here
+   11 | void setM1Speed(uint8_t address, uint32_t speed){
+      |      ^~~~~~~~~~
+../Core/Src/roboclaw.c:44:20: warning: 'return' with a value, in function returning void [-Wreturn-type]
+   44 |             return 0;  // Invalid response
+      |                    ^
+../Core/Src/roboclaw.c:11:6: note: declared here
+   11 | void setM1Speed(uint8_t address, uint32_t speed){
+      |      ^~~~~~~~~~
+../Core/Src/roboclaw.c: In function 'crc16':
+../Core/Src/roboclaw.c:47:6: error: conflicting types for 'setM2Speed'; have 'void(uint8_t,  uint8_t)' {aka 'void(unsigned char,  unsigned char)'}
+   47 | void setM2Speed(uint8_t address, uint8_t speed){
+      |      ^~~~~~~~~~
+../Core/Inc/roboclaw.h:37:6: note: previous declaration of 'setM2Speed' with type 'void(uint8_t,  uint32_t)' {aka 'void(unsigned char,  long unsigned int)'}
+   37 | void setM2Speed(uint8_t address, uint32_t speed);
+      |      ^~~~~~~~~~
+../Core/Src/roboclaw.c:49:1: error: expected declaration or statement at end of input
+   49 | }
+      | ^
+../Core/Src/roboclaw.c:50: warning: control reaches end of non-void function [-Wreturn-type]
+../Core/Src/roboclaw.c: At top level:
+../Core/Src/roboclaw.c:47:6: warning: 'setM2Speed' defined but not used [-Wunused-function]
+   47 | void setM2Speed(uint8_t address, uint8_t speed){
+      |      ^~~~~~~~~~
+../Core/Src/roboclaw.c:11:6: warning: 'setM1Speed' defined but not used [-Wunused-function]
+   11 | void setM1Speed(uint8_t address, uint32_t speed){
+      |      ^~~~~~~~~~
+make: *** [Core/Src/subdir.mk:61: Core/Src/roboclaw.o] Error 1
+make: *** Waiting for unfinished jobs....
+../Core/Src/main.c: In function 'crc16':
+../Core/Src/main.c:83:5: warning: 'main' is normally a non-static function [-Wmain]
+   83 | int main(void)
+      |     ^~~~
+../Core/Src/main.c:144:6: error: static declaration of 'SystemClock_Config' follows non-static declaration
+  144 | void SystemClock_Config(void)
+      |      ^~~~~~~~~~~~~~~~~~
+../Core/Src/main.c:60:6: note: previous declaration of 'SystemClock_Config' with type 'void(void)'
+   60 | void SystemClock_Config(void);
+      |      ^~~~~~~~~~~~~~~~~~
+../Core/Src/main.c:213:1: error: expected declaration or statement at end of input
+  213 | }
+      | ^
+../Core/Src/main.c:232: warning: control reaches end of non-void function [-Wreturn-type]
+../Core/Src/main.c: At top level:
+../Core/Src/main.c:201:6: warning: 'Error_Handler' defined but not used [-Wunused-function]
+  201 | void Error_Handler(void)
+      |      ^~~~~~~~~~~~~
+../Core/Src/main.c:192:6: warning: 'HAL_UART_RxCpltCallback' defined but not used [-Wunused-function]
+  192 | void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
+      |      ^~~~~~~~~~~~~~~~~~~~~~~
+../Core/Src/main.c:144:6: warning: 'SystemClock_Config' defined but not used [-Wunused-function]
+  144 | void SystemClock_Config(void)
+      |      ^~~~~~~~~~~~~~~~~~
+../Core/Src/main.c:83:5: warning: 'main' defined but not used [-Wunused-function]
+   83 | int main(void)
+      |     ^~~~
+../Core/Src/main.c:69:5: warning: '_write' defined but not used [-Wunused-function]
+   69 | int _write(int file, char *ptr, int len) {
+      |     ^~~~~~
+make: *** [Core/Src/subdir.mk:61: Core/Src/main.o] Error 1
+"make -j11 all" terminated with exit code 2. Build might be incomplete.
+12:11:57 **** Incremental Build of configuration Debug for project ECEN403CapstoneMain ****
+make -j11 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/roboclaw.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/roboclaw.d" -MT"Core/Src/roboclaw.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/roboclaw.o"
+../Core/Src/roboclaw.c: In function 'crc16':
+../Core/Src/roboclaw.c:11:5: error: static declaration of 'setM1Speed' follows non-static declaration
+   11 | int setM1Speed(uint8_t address, uint32_t speed){
+      |     ^~~~~~~~~~
+In file included from ../Core/Src/roboclaw.c:8:
+../Core/Inc/roboclaw.h:36:5: note: previous declaration of 'setM1Speed' with type 'int(uint8_t,  uint32_t)' {aka 'int(unsigned char,  long unsigned int)'}
+   36 | int setM1Speed(uint8_t address, uint32_t speed);
+      |     ^~~~~~~~~~
+../Core/Src/roboclaw.c: In function 'setM1Speed':
+../Core/Src/roboclaw.c:30:17: warning: implicit declaration of function 'HAL_UART_Transmit' [-Wimplicit-function-declaration]
+   30 |             if (HAL_UART_Transmit(&huart2, packet, 8, 2) != HAL_OK) {
+      |                 ^~~~~~~~~~~~~~~~~
+../Core/Src/roboclaw.c:30:36: error: 'huart2' undeclared (first use in this function)
+   30 |             if (HAL_UART_Transmit(&huart2, packet, 8, 2) != HAL_OK) {
+      |                                    ^~~~~~
+../Core/Src/roboclaw.c:30:36: note: each undeclared identifier is reported only once for each function it appears in
+../Core/Src/roboclaw.c:30:61: error: 'HAL_OK' undeclared (first use in this function)
+   30 |             if (HAL_UART_Transmit(&huart2, packet, 8, 2) != HAL_OK) {
+      |                                                             ^~~~~~
+../Core/Src/roboclaw.c:35:17: warning: implicit declaration of function 'HAL_UART_Receive' [-Wimplicit-function-declaration]
+   35 |             if (HAL_UART_Receive(&huart2, &response, 1, 2) != HAL_OK) {
+      |                 ^~~~~~~~~~~~~~~~
+../Core/Src/roboclaw.c: In function 'crc16':
+../Core/Src/roboclaw.c:47:5: error: conflicting types for 'setM2Speed'; have 'int(uint8_t,  uint8_t)' {aka 'int(unsigned char,  unsigned char)'}
+   47 | int setM2Speed(uint8_t address, uint8_t speed){
+      |     ^~~~~~~~~~
+../Core/Inc/roboclaw.h:37:5: note: previous declaration of 'setM2Speed' with type 'int(uint8_t,  uint32_t)' {aka 'int(unsigned char,  long unsigned int)'}
+   37 | int setM2Speed(uint8_t address, uint32_t speed);
+      |     ^~~~~~~~~~
+../Core/Src/roboclaw.c: In function 'setM2Speed':
+../Core/Src/roboclaw.c:49:1: warning: no return statement in function returning non-void [-Wreturn-type]
+   49 | }
+      | ^
+../Core/Src/roboclaw.c: In function 'crc16':
+../Core/Src/roboclaw.c:49:1: error: expected declaration or statement at end of input
+../Core/Src/roboclaw.c:50: warning: control reaches end of non-void function [-Wreturn-type]
+../Core/Src/roboclaw.c: At top level:
+../Core/Src/roboclaw.c:47:5: warning: 'setM2Speed' defined but not used [-Wunused-function]
+   47 | int setM2Speed(uint8_t address, uint8_t speed){
+      |     ^~~~~~~~~~
+../Core/Src/roboclaw.c:11:5: warning: 'setM1Speed' defined but not used [-Wunused-function]
+   11 | int setM1Speed(uint8_t address, uint32_t speed){
+      |     ^~~~~~~~~~
+make: *** [Core/Src/subdir.mk:61: Core/Src/roboclaw.o] Error 1
+make: *** Waiting for unfinished jobs....
+../Core/Src/main.c: In function 'crc16':
+../Core/Src/main.c:83:5: warning: 'main' is normally a non-static function [-Wmain]
+   83 | int main(void)
+      |     ^~~~
+../Core/Src/main.c:144:6: error: static declaration of 'SystemClock_Config' follows non-static declaration
+  144 | void SystemClock_Config(void)
+      |      ^~~~~~~~~~~~~~~~~~
+../Core/Src/main.c:60:6: note: previous declaration of 'SystemClock_Config' with type 'void(void)'
+   60 | void SystemClock_Config(void);
+      |      ^~~~~~~~~~~~~~~~~~
+../Core/Src/main.c:213:1: error: expected declaration or statement at end of input
+  213 | }
+      | ^
+../Core/Src/main.c:232: warning: control reaches end of non-void function [-Wreturn-type]
+../Core/Src/main.c: At top level:
+../Core/Src/main.c:201:6: warning: 'Error_Handler' defined but not used [-Wunused-function]
+  201 | void Error_Handler(void)
+      |      ^~~~~~~~~~~~~
+../Core/Src/main.c:192:6: warning: 'HAL_UART_RxCpltCallback' defined but not used [-Wunused-function]
+  192 | void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
+      |      ^~~~~~~~~~~~~~~~~~~~~~~
+../Core/Src/main.c:144:6: warning: 'SystemClock_Config' defined but not used [-Wunused-function]
+  144 | void SystemClock_Config(void)
+      |      ^~~~~~~~~~~~~~~~~~
+../Core/Src/main.c:83:5: warning: 'main' defined but not used [-Wunused-function]
+   83 | int main(void)
+      |     ^~~~
+../Core/Src/main.c:69:5: warning: '_write' defined but not used [-Wunused-function]
+   69 | int _write(int file, char *ptr, int len) {
+      |     ^~~~~~
+make: *** [Core/Src/subdir.mk:61: Core/Src/main.o] Error 1
+"make -j11 all" terminated with exit code 2. Build might be incomplete.
+12:14:23 **** Incremental Build of configuration Debug for project ECEN403CapstoneMain ****
+make -j11 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/roboclaw.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/roboclaw.d" -MT"Core/Src/roboclaw.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/roboclaw.o"
+../Core/Src/roboclaw.c:11:8: error: unknown type name 'UART_HandleTypeDef'
+   11 | extern UART_HandleTypeDef huart2;
+      |        ^~~~~~~~~~~~~~~~~~
+../Core/Src/roboclaw.c: In function 'setM1Speed':
+../Core/Src/roboclaw.c:47:17: warning: implicit declaration of function 'HAL_UART_Transmit' [-Wimplicit-function-declaration]
+   47 |             if (HAL_UART_Transmit(&huart2, packet, 8, 2) != HAL_OK) {
+      |                 ^~~~~~~~~~~~~~~~~
+../Core/Src/roboclaw.c:47:61: error: 'HAL_OK' undeclared (first use in this function)
+   47 |             if (HAL_UART_Transmit(&huart2, packet, 8, 2) != HAL_OK) {
+      |                                                             ^~~~~~
+../Core/Src/roboclaw.c:47:61: note: each undeclared identifier is reported only once for each function it appears in
+../Core/Src/roboclaw.c:52:17: warning: implicit declaration of function 'HAL_UART_Receive' [-Wimplicit-function-declaration]
+   52 |             if (HAL_UART_Receive(&huart2, &response, 1, 2) != HAL_OK) {
+      |                 ^~~~~~~~~~~~~~~~
+../Core/Src/roboclaw.c: In function 'setM2Speed':
+../Core/Src/roboclaw.c:83:57: error: 'HAL_OK' undeclared (first use in this function)
+   83 |         if (HAL_UART_Transmit(&huart2, packet, 8, 2) != HAL_OK) {
+      |                                                         ^~~~~~
+../Core/Src/roboclaw.c: In function 'crc16':
+../Core/Src/roboclaw.c:98:1: error: expected declaration or statement at end of input
+   98 | }
+      | ^
+../Core/Src/roboclaw.c:99: warning: control reaches end of non-void function [-Wreturn-type]
+../Core/Src/roboclaw.c: At top level:
+../Core/Src/roboclaw.c:64:5: warning: 'setM2Speed' defined but not used [-Wunused-function]
+   64 | int setM2Speed(uint8_t address, int32_t speed){
+      |     ^~~~~~~~~~
+../Core/Src/roboclaw.c:28:5: warning: 'setM1Speed' defined but not used [-Wunused-function]
+   28 | int setM1Speed(uint8_t address, int32_t speed){
+      |     ^~~~~~~~~~
+make: *** [Core/Src/subdir.mk:61: Core/Src/roboclaw.o] Error 1
+make: *** Waiting for unfinished jobs....
+"make -j11 all" terminated with exit code 2. Build might be incomplete.
+12:14:47 **** Incremental Build of configuration Debug for project ECEN403CapstoneMain ****
+make -j11 all 
+arm-none-eabi-gcc "../Core/Src/roboclaw.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/roboclaw.d" -MT"Core/Src/roboclaw.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/roboclaw.o"
+../Core/Src/roboclaw.c: In function 'crc16':
+../Core/Src/roboclaw.c:98:1: error: expected declaration or statement at end of input
+   98 | }
+      | ^
+../Core/Src/roboclaw.c:99: warning: control reaches end of non-void function [-Wreturn-type]
+../Core/Src/roboclaw.c: At top level:
+../Core/Src/roboclaw.c:64:5: warning: 'setM2Speed' defined but not used [-Wunused-function]
+   64 | int setM2Speed(uint8_t address, int32_t speed){
+      |     ^~~~~~~~~~
+../Core/Src/roboclaw.c:28:5: warning: 'setM1Speed' defined but not used [-Wunused-function]
+   28 | int setM1Speed(uint8_t address, int32_t speed){
+      |     ^~~~~~~~~~
+make: *** [Core/Src/subdir.mk:61: Core/Src/roboclaw.o] Error 1
+"make -j11 all" terminated with exit code 2. Build might be incomplete.
+12:15:43 **** Incremental Build of configuration Debug for project ECEN403CapstoneMain ****
+make -j11 all 
+arm-none-eabi-gcc "../Core/Src/roboclaw.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/roboclaw.d" -MT"Core/Src/roboclaw.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/roboclaw.o"
+../Core/Src/roboclaw.c: In function 'crc16':
+../Core/Src/roboclaw.c:98:1: error: expected declaration or statement at end of input
+   98 | }
+      | ^
+../Core/Src/roboclaw.c:99: warning: control reaches end of non-void function [-Wreturn-type]
+../Core/Src/roboclaw.c: At top level:
+../Core/Src/roboclaw.c:64:5: warning: 'setM2Speed' defined but not used [-Wunused-function]
+   64 | int setM2Speed(uint8_t address, int32_t speed) {  // Changed to int32_t
+      |     ^~~~~~~~~~
+../Core/Src/roboclaw.c:28:5: warning: 'setM1Speed' defined but not used [-Wunused-function]
+   28 | int setM1Speed(uint8_t address, int32_t speed){
+      |     ^~~~~~~~~~
+make: *** [Core/Src/subdir.mk:61: Core/Src/roboclaw.o] Error 1
+"make -j11 all" terminated with exit code 2. Build might be incomplete.
+12:16:24 **** Incremental Build of configuration Debug for project ECEN403CapstoneMain ****
+make -j11 all 
+arm-none-eabi-gcc "../Core/Src/roboclaw.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/roboclaw.d" -MT"Core/Src/roboclaw.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/roboclaw.o"
+../Core/Src/roboclaw.c: In function 'crc16':
+../Core/Src/roboclaw.c:27:1: warning: control reaches end of non-void function [-Wreturn-type]
+   27 | }
+      | ^
+arm-none-eabi-gcc -o "ECEN403CapstoneMain.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/STM32F302R8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ECEN403CapstoneMain.map" -Wl,--gc-sections -static -u _printf_float --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: ECEN403CapstoneMain.elf
+ 
+arm-none-eabi-size  ECEN403CapstoneMain.elf 
+arm-none-eabi-objdump -h -S ECEN403CapstoneMain.elf  > "ECEN403CapstoneMain.list"
+   text	   data	    bss	    dec	    hex	filename
+  38372	    468	   3164	  42004	   a414	ECEN403CapstoneMain.elf
+Finished building: default.size.stdout
+ 
+Finished building: ECEN403CapstoneMain.list
+ 
+12:24:48 **** Incremental Build of configuration Debug for project ECEN403CapstoneMain ****
+make -j11 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/roboclaw.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/roboclaw.d" -MT"Core/Src/roboclaw.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/roboclaw.o"
+../Core/Src/roboclaw.c: In function 'setM1Speed':
+../Core/Src/roboclaw.c:60:72: warning: format '%X' expects argument of type 'unsigned int', but argument 3 has type 'HAL_UART_StateTypeDef' {aka 'long unsigned int'} [-Wformat=]
+   60 |                 printf("[M1] TX FAILED: HAL status=%d, UART state=0x%02X, error=0x%02lX\r\n",
+      |                                                                     ~~~^
+      |                                                                        |
+      |                                                                        unsigned int
+      |                                                                     %02lX
+   61 |                                 tx_status, huart2.gState, huart2.ErrorCode);
+      |                                            ~~~~~~~~~~~~~                
+      |                                                  |
+      |                                                  HAL_UART_StateTypeDef {aka long unsigned int}
+../Core/Src/roboclaw.c:68:72: warning: format '%X' expects argument of type 'unsigned int', but argument 3 has type 'HAL_UART_StateTypeDef' {aka 'long unsigned int'} [-Wformat=]
+   68 |                 printf("[M1] RX FAILED: HAL status=%d, UART state=0x%02X, error=0x%02lX\r\n",
+      |                                                                     ~~~^
+      |                                                                        |
+      |                                                                        unsigned int
+      |                                                                     %02lX
+   69 |                                 rx_status, huart2.RxState, huart2.ErrorCode);
+      |                                            ~~~~~~~~~~~~~~               
+      |                                                  |
+      |                                                  HAL_UART_StateTypeDef {aka long unsigned int}
+arm-none-eabi-gcc -o "ECEN403CapstoneMain.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/STM32F302R8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ECEN403CapstoneMain.map" -Wl,--gc-sections -static -u _printf_float --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: ECEN403CapstoneMain.elf
+ 
+arm-none-eabi-size  ECEN403CapstoneMain.elf 
+arm-none-eabi-objdump -h -S ECEN403CapstoneMain.elf  > "ECEN403CapstoneMain.list"
+   text	   data	    bss	    dec	    hex	filename
+  39020	    468	   3164	  42652	   a69c	ECEN403CapstoneMain.elf
+Finished building: default.size.stdout
+ 
+Finished building: ECEN403CapstoneMain.list
+ 
+12:25:22 **** Incremental Build of configuration Debug for project ECEN403CapstoneMain ****
+make -j11 all 
+arm-none-eabi-size  ECEN403CapstoneMain.elf 
+   text	   data	    bss	    dec	    hex	filename
+  39020	    468	   3164	  42652	   a69c	ECEN403CapstoneMain.elf
+Finished building: default.size.stdout
+ 
+12:26:34 **** Incremental Build of configuration Debug for project ECEN403CapstoneMain ****
+make -j11 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "ECEN403CapstoneMain.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/STM32F302R8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ECEN403CapstoneMain.map" -Wl,--gc-sections -static -u _printf_float --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: ECEN403CapstoneMain.elf
+ 
+arm-none-eabi-size  ECEN403CapstoneMain.elf 
+arm-none-eabi-objdump -h -S ECEN403CapstoneMain.elf  > "ECEN403CapstoneMain.list"
+   text	   data	    bss	    dec	    hex	filename
+  39036	    468	   3164	  42668	   a6ac	ECEN403CapstoneMain.elf
+Finished building: default.size.stdout
+ 
+Finished building: ECEN403CapstoneMain.list
+ 

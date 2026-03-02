@@ -1,6 +1,5 @@
-../Core/Src/main.c:116:5:_write	1
-../Core/Src/main.c:122:19:UART_LoopbackTest	3
-../Core/Src/main.c:154:5:main	2
-../Core/Src/main.c:371:6:SystemClock_Config	4
-../Core/Src/main.c:418:6:HAL_UART_RxCpltCallback	5
-../Core/Src/main.c:450:6:Error_Handler	1
+../Core/Src/main.c:72:5:_write	1
+../Core/Src/main.c:85:5:main	3
+../Core/Src/main.c:153:6:SystemClock_Config	4
+../Core/Src/main.c:201:6:HAL_UART_RxCpltCallback	1
+../Core/Src/main.c:210:6:Error_Handler	1

@@ -1,0 +1,21 @@
+/*
+ * roboclaw.h
+ *
+ *  Created on: Mar 2, 2026
+ *      Author: caseyear
+ */
+
+#ifndef INC_ROBOCLAW_H_
+#define INC_ROBOCLAW_H_
+
+#define GET_M1_ENCODER 16
+#define GET_M2_ENCODER 17
+#define GET_M1_SPEED 18
+#define GET_M2_SPEED 19
+#define GET_M1_ENCODER_COUNT 22
+#define GET_M1_ENCODER_COUNT 23
+
+#define SET_M1_SPEED 35
+#define SET_M2_SPEED 36
+
+#endif /* INC_ROBOCLAW_H_ */

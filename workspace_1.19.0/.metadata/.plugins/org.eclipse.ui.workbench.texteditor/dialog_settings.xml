@@ -3,6 +3,11 @@
 	<item key="hasShownOverlayPopupBefore" value="true"/>
 	<item key="replaceBarOpen" value="false"/>
 	<list key="searchhistory">
+		<item value="command_time"/>
+		<item value="curr_time"/>
+		<item value="currtime"/>
+		<item value="status"/>
+		<item value="uart"/>
 		<item value="timeout"/>
 		<item value="error"/>
 		<item value="on motor driver 1"/>
@@ -13,10 +18,5 @@
 		<item value="spi"/>
 		<item value="write"/>
 		<item value="usb"/>
-		<item value="setpage"/>
-		<item value="temp"/>
-		<item value="state"/>
-		<item value="calib"/>
-		<item value="init"/>
 	</list>
 </section>

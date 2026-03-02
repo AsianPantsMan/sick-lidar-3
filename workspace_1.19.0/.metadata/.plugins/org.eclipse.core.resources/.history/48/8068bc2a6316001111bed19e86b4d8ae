@@ -1,0 +1,49 @@
+/*
+ * roboclaw.c
+ *
+ *  Created on: Mar 2, 2026
+ *      Author: caseyear
+ */
+
+#include "roboclaw.h"
+#include <stm32f3xx_hal_conf.h>
+
+void setM1Speed(uint8_t address, uint32_t speed){
+	uint8_t packet[8];
+	    uint8_t response;
+	    uint16_t crc = 0;
+
+	    // Build packet
+	    packet[0] = address;                    // Address
+	    packet[1] = 35;                         // Command 35
+	    packet[2] = (speed >> 24) & 0xFF;       // Speed byte 3 (MSB)
+	    packet[3] = (speed >> 16) & 0xFF;       // Speed byte 2
+	    packet[4] = (speed >> 8) & 0xFF;        // Speed byte 1
+	    packet[5] = speed & 0xFF;               // Speed byte 0 (LSB)
+
+	    crc = crc16(packet, 6);
+
+	    packet[6] = crc & 0xFF;                 // CRC low byte
+	    packet[7] = (crc >> 8) & 0xFF;          // CRC high byte
+
+	    // Send packet (2ms timeout)
+	    if (HAL_UART_Transmit(&huart2, packet, 8, 2) != HAL_OK) {
+	        return 0;  // Transmit failed
+	    }
+
+	    // Wait for 0xFF response (2ms timeout)
+	    if (HAL_UART_Receive(&huart2, &response, 1, 2) != HAL_OK) {
+	        return 0;  // Receive timeout or error
+	    }
+
+	    // Check for success response
+	    if (response == 0xFF) {
+	        return 1;  // Success
+	    }
+
+	    return 0;  // Invalid response
+}
+
+void setM2Speed(uint8_t address, uint8_t speed){
+
+}

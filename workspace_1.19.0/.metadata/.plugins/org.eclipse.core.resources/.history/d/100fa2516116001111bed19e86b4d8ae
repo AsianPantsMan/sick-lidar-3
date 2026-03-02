@@ -1,0 +1,15 @@
+/*
+ * roboclaw.c
+ *
+ *  Created on: Mar 2, 2026
+ *      Author: caseyear
+ */
+
+
+void setM1Speed(){
+
+}
+
+void setM2Speed(){
+
+}

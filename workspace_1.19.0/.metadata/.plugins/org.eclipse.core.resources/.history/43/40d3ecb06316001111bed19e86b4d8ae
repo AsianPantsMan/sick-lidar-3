@@ -1,0 +1,98 @@
+/*
+ * roboclaw.c
+ *
+ *  Created on: Mar 2, 2026
+ *      Author: caseyear
+ */
+
+#include "roboclaw.h"
+#include "stm32f3xx_it.h"
+
+extern UART_HandleTypeDef huart2;
+
+//Calculates CRC16 of nBytes of data in byte array message
+unsigned int crc16(unsigned char *packet, int nBytes) {
+ unsigned int crc = 0; // Initialize CRC to 0
+
+ for (int byte = 0; byte < nBytes; byte++){
+	 crc = crc ^ ((unsigned int)packet[byte] << 8);
+	 for (unsigned char bit = 0; bit < 8; bit++){
+		 if (crc & 0x8000){
+			 crc = (crc << 1) ^ 0x1021;
+		 }else{
+		 crc = crc << 1;
+		 }
+	 }
+ }
+
+int setM1Speed(uint8_t address, int32_t speed){
+	uint8_t packet[8];
+	    uint8_t response;
+	    uint16_t crc = 0;
+
+	    // Build packet
+	    packet[0] = address;                    // Address
+	    packet[1] = 35;                         // Command 35
+	    packet[2] = (speed >> 24) & 0xFF;       // Speed byte 3 (MSB)
+	    packet[3] = (speed >> 16) & 0xFF;       // Speed byte 2
+	    packet[4] = (speed >> 8) & 0xFF;        // Speed byte 1
+	    packet[5] = speed & 0xFF;               // Speed byte 0 (LSB)
+
+	    crc = crc16(packet, 6);
+
+	    packet[6] = crc & 0xFF;                 // CRC low byte
+	    packet[7] = (crc >> 8) & 0xFF;          // CRC high byte
+
+	    // Send packet (2ms timeout)
+	    if (HAL_UART_Transmit(&huart2, packet, 8, 2) != HAL_OK) {
+	        return 0;  // Transmit failed
+	    }
+
+	    // Wait for 0xFF response (2ms timeout)
+	    if (HAL_UART_Receive(&huart2, &response, 1, 2) != HAL_OK) {
+	        return 0;  // Receive timeout or error
+	    }
+
+	    // Check for success response
+	    if (response == 0xFF) {
+	        return 1;  // Success
+	    }
+
+	    return 0;  // Invalid response
+}
+
+int setM2Speed(uint8_t address, int32_t speed){
+	uint8_t packet[8];
+	uint8_t response;
+	uint16_t crc_result;
+
+	// Build packet
+	packet[0] = address;                    // Address
+	packet[1] = 36;                         // Command 36 for M2
+	packet[2] = (speed >> 24) & 0xFF;       // Speed byte 3 (MSB)
+	packet[3] = (speed >> 16) & 0xFF;       // Speed byte 2
+	packet[4] = (speed >> 8) & 0xFF;        // Speed byte 1
+	packet[5] = speed & 0xFF;               // Speed byte 0 (LSB)
+
+	crc_result = crc16(packet, 6);
+
+	packet[6] = crc_result & 0xFF;          // CRC low byte
+	packet[7] = (crc_result >> 8) & 0xFF;   // CRC high byte
+
+	// Send packet (2ms timeout)
+	if (HAL_UART_Transmit(&huart2, packet, 8, 2) != HAL_OK) {
+		return 0;  // Transmit failed
+	}
+
+	// Wait for 0xFF response (2ms timeout)
+	if (HAL_UART_Receive(&huart2, &response, 1, 2) != HAL_OK) {
+		return 0;  // Receive timeout or error
+	}
+
+	// Check for success response
+	if (response == 0xFF) {
+		return 1;  // Success
+	}
+
+	return 0;  // Invalid response
+}
