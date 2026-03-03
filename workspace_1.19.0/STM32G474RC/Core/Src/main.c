@@ -287,7 +287,7 @@ uint8_t piReceive(uint8_t* rx_buffer){
 
     if (receiveStatus != HAL_OK) {
         if (receiveStatus == HAL_TIMEOUT) {
-            //printf("RX Timeout\r\n");
+            printf("RX Timeout\r\n");
         } else {
             printf("RX error: %d\r\n", receiveStatus);
         }
