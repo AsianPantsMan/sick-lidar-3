@@ -1,27 +1,17 @@
-17:23:40 **** Incremental Build of configuration Debug for project STM32G474RC ****
+15:08:47 **** Incremental Build of configuration Debug for project STM32G474RC ****
 make -j11 all 
 arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G474xx -c -I../USB_Device/App -I../USB_Device/Target -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
-../Core/Src/main.c: In function 'main':
-../Core/Src/main.c:426:44: warning: format '%d' expects argument of type 'int', but argument 2 has type 'int32_t' {aka 'long int'} [-Wformat=]
 arm-none-eabi-gcc -o "STM32G474RC.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/caseyear/STM32CubeIDE/workspace_1.19.0/STM32G474RC/STM32G474RCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="STM32G474RC.map" -Wl,--gc-sections -static -u_printf_float --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
-  426 |         printf("Left motor target RPM is: %d, it is currently at %f\r\n", left_target_rpm, left_motor_rpm);
-      |                                           ~^                              ~~~~~~~~~~~~~~~
-      |                                            |                              |
-      |                                            int                            int32_t {aka long int}
-      |                                           %ld
-../Core/Src/main.c:391:12: warning: unused variable 'start_time' [-Wunused-variable]
-  391 |   uint32_t start_time = HAL_GetTick();
-      |            ^~~~~~~~~~
 Finished building target: STM32G474RC.elf
  
 arm-none-eabi-size  STM32G474RC.elf 
 arm-none-eabi-objdump -h -S STM32G474RC.elf  > "STM32G474RC.list"
    text	   data	    bss	    dec	    hex	filename
-  73764	    856	   9800	  84420	  149c4	STM32G474RC.elf
+  71952	    856	   9728	  82536	  14268	STM32G474RC.elf
 Finished building: default.size.stdout
  
 Finished building: STM32G474RC.list
  
 
-17:23:41 Build Finished. 0 errors, 2 warnings. (took 1s.94ms)
+15:08:48 Build Finished. 0 errors, 0 warnings. (took 914ms)
 
