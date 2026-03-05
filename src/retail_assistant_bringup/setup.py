@@ -36,6 +36,8 @@ setup(
                             'navigation = retail_assistant_bringup.navigation:main',
                             'ultrasonic = retail_assistant_bringup.ultrasonic:main',
                             'mcu_to_pi = retail_assistant_bringup.MCU_to_Pi:main',
+                            'roboclaw = retail_assistant_bringup.roboclaw:main',
+                            'stm32= retail_assistant_bringup.stm32_communication:main',
         ],
     },
 )

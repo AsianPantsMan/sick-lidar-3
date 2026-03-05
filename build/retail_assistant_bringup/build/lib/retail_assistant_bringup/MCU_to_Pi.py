@@ -50,14 +50,14 @@ class MCUToPiNode(Node):
 
         self.radians_per_tick=(2.0*mt.pi)/float(self.ticks_per_rev)# Radians per tick for wheel rotation
         self.get_logger().info("Wheel odom node has been started")
-        self.test_timer=self.create_timer(10, self.test_odom) # For testing odometry updates
-        self.test_imu_timer=self.create_timer(5,self.imu_update) # For testing IMU updates
+        #self.test_timer=self.create_timer(10, self.test_odom) # For testing odometry updates
+        #self.test_imu_timer=self.create_timer(5,self.imu_update) # For testing IMU updates
         self.test_left_ticks = 0
         self.test_right_ticks = 0
         self.test_step = 0
         self.test_mode = "straight"
         self.imu_read=self.create_subscription(Imu,'/stm32_imu',self.imu_update,10) # Subscribing to imu topic from stm32
-        self.encoder_read=self.create_subscription(Int64MultiArray,'/stm32_encoder',self.Odom_update,10)
+        self.encoder_read=self.create_subscription(Int64MultiArray,'/roboclaw_encoder',self.Odom_update,10)
     def yaw_to_quaternion(self,yaw):  
         q=Quaternion()
         q.x=0.0
@@ -80,8 +80,8 @@ class MCUToPiNode(Node):
         dt=(now-self.last_time).nanoseconds*1e-9# time difference in nanoseconds
         if dt<=0.0:
             return #prevent division by zero or negative time
-        delta_left_ticks=((left_ticks -self.last_left_ticks+32678)%65536)-32768# Change in left and right decoder ticks
-        delta_right_ticks=((right_ticks -self.last_right_ticks+32678)%65536)-32768
+        delta_left_ticks=((left_ticks -self.last_left_ticks+32768)%65536)-32768# Change in left and right decoder ticks
+        delta_right_ticks=((right_ticks -self.last_right_ticks+32768)%65536)-32768
         delta_left_angle=self.radians_per_tick * float(delta_left_ticks)# Change in left and right wheel angles
         delta_right_angle=self.radians_per_tick * float(delta_right_ticks)
         #################Angular velocity of wheels##################

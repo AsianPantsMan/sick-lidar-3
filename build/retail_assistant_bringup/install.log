@@ -6,6 +6,7 @@
 /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup/__init__.py
 /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup/Pi_to_MCU.py
 /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup/test.py
+/home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup/roboclaw.py
 /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup/__pycache__/auto_drive.cpython-310.pyc
 /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup/__pycache__/ultrasonic.cpython-310.pyc
 /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup/__pycache__/MCU_to_Pi.cpython-310.pyc
@@ -14,6 +15,7 @@
 /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup/__pycache__/__init__.cpython-310.pyc
 /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup/__pycache__/Pi_to_MCU.cpython-310.pyc
 /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup/__pycache__/test.cpython-310.pyc
+/home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup/__pycache__/roboclaw.cpython-310.pyc
 /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/share/ament_index/resource_index/packages/retail_assistant_bringup
 /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/share/retail_assistant_bringup/package.xml
 /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/share/retail_assistant_bringup/launch/gazebo_sim_slam.launch.py
@@ -53,4 +55,6 @@
 /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/retail_assistant_bringup/auto_drive
 /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/retail_assistant_bringup/mcu_to_pi
 /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/retail_assistant_bringup/navigation
+/home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/retail_assistant_bringup/roboclaw
+/home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/retail_assistant_bringup/stm32
 /home/kendell/retail_assistant_ws/install/retail_assistant_bringup/lib/retail_assistant_bringup/ultrasonic

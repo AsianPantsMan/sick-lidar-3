@@ -38,6 +38,7 @@ retail_assistant_bringup/Pi_to_MCU.py
 retail_assistant_bringup/__init__.py
 retail_assistant_bringup/auto_drive.py
 retail_assistant_bringup/navigation.py
+retail_assistant_bringup/roboclaw.py
 retail_assistant_bringup/stm32_communication.py
 retail_assistant_bringup/test.py
 retail_assistant_bringup/ultrasonic.py

@@ -49,7 +49,7 @@ export default function MapAnnotator() {
 
   const [lastClick, setLastClick] = useState(null);
 
-  // ✅ Wizard state lives here
+  // Wizard state lives here
   const [aisleId, setAisleId] = useState("A1");
   const [pointType, setPointType] = useState("start"); // start -> center -> end
   const [completedTypes, setCompletedTypes] = useState(() => new Set());
@@ -155,14 +155,14 @@ export default function MapAnnotator() {
 
     await refreshSaved();
 
-    // ✅ remove this item from dropdown for current aisle
+    //  remove this item from dropdown for current aisle
     setCompletedTypes((prev) => {
       const next = new Set(prev);
       next.add(pointType);
       return next;
     });
 
-    // ✅ auto-advance the wizard
+    // auto-advance the wizard
     if (pointType === "end") {
       // finished the aisle → next aisle, reset types
       setAisleId((prev) => incrementAisleId(prev));
@@ -183,7 +183,7 @@ export default function MapAnnotator() {
     await fetch("http://localhost:5050/api/aisles", { method: "DELETE" });
     await refreshSaved();
 
-    // ✅ reset everything
+    // reset everything
     setAisleId("A1");
     setPointType("start");
     setCompletedTypes(new Set());

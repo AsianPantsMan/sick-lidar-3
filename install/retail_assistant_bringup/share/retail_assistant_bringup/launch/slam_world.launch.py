@@ -44,10 +44,23 @@ def generate_launch_description():
                                           launch_arguments={'params_file': os.path.join(get_package_share_directory(package_name),'config','mapper_params_online_async.yaml')}.items())
                                           
     # Launch them all!
-
+    stm32 =Node(
+    package="retail_assistant_bringup",
+    executable="stm32",   # if installed as a program
+    name="stm32_node",
+    output="screen",
+    )
+    roboclaw= Node(
+    package="retail_assistant_bringup",
+    executable="roboclaw",   # if installed as a program
+    name="roboclaw_node",
+    output="screen",
+    )
     return LaunchDescription([
         rsp,
         sllidar,        
         mcu_to_pi,
         slam,
+        stm32,
+        roboclaw,
     ])
