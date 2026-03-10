@@ -25,7 +25,7 @@ class MCUToPiNode(Node):
         self.radius_m=float(self.get_parameter('radius_m').value) #use drive sporket pitch radius or calibrate with meters_per_tick
         
         # distance between left and right track center lines
-        self.declare_parameter('track_width_m',0.267)# Default track width in meters
+        self.declare_parameter('track_width_m',0.267)# Default track width in meters MAYBE CHANGE HERE TO CALIBRATE WITH REAL WORLD MEASUREMENTS
         self.track_width_m=float(self.get_parameter('track_width_m').value)
 
         # Frame names
@@ -57,7 +57,7 @@ class MCUToPiNode(Node):
         self.test_step = 0
         self.test_mode = "straight"
         self.imu_read=self.create_subscription(Imu,'/stm32_imu',self.imu_update,10) # Subscribing to imu topic from stm32
-        self.encoder_read=self.create_subscription(Int64MultiArray,'/roboclaw_encoder',self.Odom_update,10)
+        self.encoder_read=self.create_subscription(Int64MultiArray,'/stm32_encoder',self.Odom_update,10)
     def yaw_to_quaternion(self,yaw):  
         q=Quaternion()
         q.x=0.0
@@ -80,10 +80,10 @@ class MCUToPiNode(Node):
         dt=(now-self.last_time).nanoseconds*1e-9# time difference in nanoseconds
         if dt<=0.0:
             return #prevent division by zero or negative time
-        #delta_left_ticks=((left_ticks -self.last_left_ticks+32768)%65536)-32768# Change in left and right decoder ticks
-        #delta_right_ticks=((right_ticks -self.last_right_ticks+32768)%65536)-32768
-        delta_left_ticks=left_ticks - self.last_left_ticks
-        delta_right_ticks=right_ticks - self.last_right_ticks
+        delta_left_ticks=((left_ticks -self.last_left_ticks+32768)%65536)-32768# Change in left and right decoder ticks
+        delta_right_ticks=((right_ticks -self.last_right_ticks+32768)%65536)-32768
+        #delta_left_ticks=left_ticks - self.last_left_ticks roboclaew
+        #delta_right_ticks=right_ticks - self.last_right_ticks roboclaw
         delta_left_angle=self.radians_per_tick * float(delta_left_ticks)# Change in left and right wheel angles
         delta_right_angle=self.radians_per_tick * float(delta_right_ticks)
         #################Angular velocity of wheels##################
