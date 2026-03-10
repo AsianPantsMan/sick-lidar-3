@@ -205,7 +205,7 @@ class MCUToPiNode(Node):
         # angular velocity xyz
         # linear acceleration xyz
         # get imu from port 
-        self.test_imu_timer.cancel()  # Cancel the timer after first call
+        #self.test_imu_timer.cancel()  # Cancel the timer after first call
         orientation_x=msg.orientation.x 
         orientation_y=msg.orientation.y
         orientation_z=msg.orientation.z

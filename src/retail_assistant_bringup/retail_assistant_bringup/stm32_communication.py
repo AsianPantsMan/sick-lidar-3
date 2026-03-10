@@ -127,15 +127,15 @@ def main():
 
             data = receiver.receive_data()
             if data and data['valid']:
-                print(f"IMU Quaternion:")
-                print(f"  w: {data['imu']['w']:+.6f}")
-                print(f"  x: {data['imu']['x']:+.6f}")
-                print(f"  y: {data['imu']['y']:+.6f}")
-                print(f"  z: {data['imu']['z']:+.6f}")
-                print(f"Encoder 1: {data['encoder1']}")
-                print(f"Encoder 2: {data['encoder2']}")
-                print("-" * 70)
-
+                #print(f"IMU Quaternion:")
+                #print(f"  w: {data['imu']['w']:+.6f}")
+                #print(f"  x: {data['imu']['x']:+.6f}")
+                #print(f"  y: {data['imu']['y']:+.6f}")
+                #print(f"  z: {data['imu']['z']:+.6f}")
+                #print(f"Encoder 1: {data['encoder1']}")
+                #print(f"Encoder 2: {data['encoder2']}")
+                #print("-" * 70)
+                donothing=1
             time.sleep(0.01)
 
     except KeyboardInterrupt:
