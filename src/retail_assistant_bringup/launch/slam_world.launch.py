@@ -41,7 +41,7 @@ def generate_launch_description():
     slam = IncludeLaunchDescription(
             PythonLaunchDescriptionSource([os.path.join
                                            (get_package_share_directory('slam_toolbox'),'launch','online_async_launch.py')]),# fix _local later
-                                          launch_arguments={'params_file': os.path.join(get_package_share_directory(package_name),'config','mapper_params_online_async.yaml')}.items())
+                                          launch_arguments={'params_file': os.path.join(get_package_share_directory(package_name),'config','mapper_params_online_async.yaml'),'use_sim_time': 'false'}.items())
                                           
     # Launch them all!
     stm32 =Node(

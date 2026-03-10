@@ -17,9 +17,9 @@ class MCUToPiNode(Node):
     def __init__(self):
         super().__init__('MCU_to_PI_node')
         ##### Parameters
-        self.declare_parameter('ticks_per_rev',1425.1)#Default 2048 ticks per revolution
+        self.declare_parameter('ticks_per_rev',1993.6)#Default 2048 ticks per revolution
                                                     #Must declare parameters in ros if want to overide with yaml files
-        self.ticks_per_rev=int(self.get_parameter('ticks_per_rev').value)# get parameter value for to be int
+        self.ticks_per_rev=float(self.get_parameter('ticks_per_rev').value)# get parameter value for to be int
 
         self.declare_parameter('radius_m',0.06) # Default radius in meters| effecitve radius of rotating part encoder measure
         self.radius_m=float(self.get_parameter('radius_m').value) #use drive sporket pitch radius or calibrate with meters_per_tick
@@ -41,8 +41,8 @@ class MCUToPiNode(Node):
         self.theta=0.0 # Robot orientation (starting at 0 radians)
         ### TO DO ADD SUBSCRIBER FOR STM32 comminication
         # Last encoder readings
-        self.last_left_ticks=0 #initialize last ticks to none to detect first time
-        self.last_right_ticks=0
+        self.last_left_ticks=None#initialize last ticks to none to detect first time
+        self.last_right_ticks=None
         self.last_time=self.get_clock().now() # Time of last update
         self.odom_pub=self.create_publisher(Odometry,'/odom',10)# Publisher for odometry
         self.Imu_pub=self.create_publisher(Imu,'/imu/data',10)# Publisher for IMU
@@ -80,8 +80,10 @@ class MCUToPiNode(Node):
         dt=(now-self.last_time).nanoseconds*1e-9# time difference in nanoseconds
         if dt<=0.0:
             return #prevent division by zero or negative time
-        delta_left_ticks=((left_ticks -self.last_left_ticks+32768)%65536)-32768# Change in left and right decoder ticks
-        delta_right_ticks=((right_ticks -self.last_right_ticks+32768)%65536)-32768
+        #delta_left_ticks=((left_ticks -self.last_left_ticks+32768)%65536)-32768# Change in left and right decoder ticks
+        #delta_right_ticks=((right_ticks -self.last_right_ticks+32768)%65536)-32768
+        delta_left_ticks=left_ticks - self.last_left_ticks
+        delta_right_ticks=right_ticks - self.last_right_ticks
         delta_left_angle=self.radians_per_tick * float(delta_left_ticks)# Change in left and right wheel angles
         delta_right_angle=self.radians_per_tick * float(delta_right_ticks)
         #################Angular velocity of wheels##################
