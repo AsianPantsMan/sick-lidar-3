@@ -25,7 +25,7 @@ class MCUToPiNode(Node):
         self.radius_m=float(self.get_parameter('radius_m').value) #use drive sporket pitch radius or calibrate with meters_per_tick
         
         # distance between left and right track center lines
-        self.declare_parameter('track_width_m',0.267)# Default track width in meters MAYBE CHANGE HERE TO CALIBRATE WITH REAL WORLD MEASUREMENTS
+        self.declare_parameter('track_width_m',0.275)# Default track width in meters MAYBE CHANGE HERE TO CALIBRATE WITH REAL WORLD MEASUREMENTS
         self.track_width_m=float(self.get_parameter('track_width_m').value)
 
         # Frame names
@@ -98,8 +98,8 @@ class MCUToPiNode(Node):
         ds =velocity * dt # Distance traveled in this time step
         dtheta=angular_velocity * dt # Change in orientation
 
-        self.x+= ds*mt.cos(self.theta)# distance travled in x direction
-        self.y+= ds*mt.sin(self.theta)# distance traveled in y direction
+        self.x+= ds*mt.cos(self.theta+dtheta/2)# distance travled in x direction
+        self.y+= ds*mt.sin(self.theta+dtheta/2)# distance traveled in y direction
         self.theta += dtheta
 
         self.theta=mt.atan2(mt.sin(self.theta), mt.cos(self.theta)) # Normalize theta to [-pi, pi]
