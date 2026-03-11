@@ -90,14 +90,14 @@ class STM32_UART_Receiver(Node):   # inherit node
 
             imu_msg.orientation_covariance[0] = -1.0
             imu_msg.angular_velocity_covariance=[
-                0.02, 0, 0,
-                0, 0.02, 0,
-                0, 0, 0.02
+                0.02, 0.0, 0.0,
+                0.0, 0.02, 0.0,
+                0.0, 0.0, 0.02
             ]
             imu_msg.linear_acceleration_covariance = [
-                0.1, 0, 0,
-                0, 0.1, 0,
-                0, 0, 0.1
+                0.1, 0.0, 0.0,
+                0.0, 0.1, 0.0,
+                0.0, 0.0, 0.1
                 ]
 
             self.Imu_pub.publish(imu_msg)
