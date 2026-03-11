@@ -42,7 +42,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define TX_BUFFER_SIZE 38 //currently set for imu (4 doubles), 2 encoders (2 uint16_t) => (8 * 4) + (2 * 2) + 2 (framing) = 38 bytes
+#define TX_BUFFER_SIZE 102 //currently set for imu (3 * 4 doubles), 2 encoders (2 uint16_t) => (8 * 3 * 4) + (2 * 2) + 2 (framing) = 102 bytes
 #define RX_BUFFER_SIZE 8 //currently set for 6 floats, (3 linear velocity, 3 angular velocity)
 //#define MOTOR_CPR 996.8f
 
@@ -228,13 +228,13 @@ void UARTLoopbackTest(char* testString)
         printf("FAILED\r\n");
     }
 }
-void printDebug(bno055_data_vector imu_position, uint16_t encoder1, uint16_t encoder2){
+void printDebug(bno055_data_vector imu_quat, bno055_data_vector imu_linear, bno055_data_vector imu_angular, uint16_t encoder1, uint16_t encoder2){
 	//clear screen
 	printf("\033[2J");
 	printf("\033[H");
 
 	printf("IMU:\r\n");
-	printf("W: %.2f | X: %.2f | Y: %.2f | Z: %.2f\r\n", imu_position.w, imu_position.x, imu_position.y, imu_position.z);
+	printf("W: %.2f | X: %.2f | Y: %.2f | Z: %.2f\r\n", imu_quat.w, imu_quat.x, imu_quat.y, imu_quat.z);
 	printf("Encoder 1:%d\r\n", encoder1);
 	printf("Encoder 2:%d\r\n", encoder2);
 
@@ -253,16 +253,24 @@ void printDebug(bno055_data_vector imu_position, uint16_t encoder1, uint16_t enc
 
 /*-------------------------------------------------------- STM32 <-> Raspberry Pi Communication --------------------------------------------------------*/
 
-uint8_t piSend(bno055_data_vector imu_position, uint16_t encoder1, uint16_t encoder2){
+uint8_t piSend(bno055_data_vector imu_quat, bno055_data_vector imu_linear, bno055_data_vector imu_angular, uint16_t encoder1, uint16_t encoder2){
 
 	tx_buffer[0] = 0xAA;
-	memcpy(&tx_buffer[1], &imu_position.w, 8);
-	memcpy(&tx_buffer[9], &imu_position.x, 8);
-	memcpy(&tx_buffer[17], &imu_position.y, 8);
-	memcpy(&tx_buffer[25], &imu_position.z, 8);
-	memcpy(&tx_buffer[33], &encoder1, 2);
-	memcpy(&tx_buffer[35], &encoder2, 2);
-	tx_buffer[37] = 0x55; //use index sizeof(tx_buffer) - 1
+	memcpy(&tx_buffer[1], &imu_quat.w, 8);
+	memcpy(&tx_buffer[9], &imu_quat.x, 8);
+	memcpy(&tx_buffer[17], &imu_quat.y, 8);
+	memcpy(&tx_buffer[25], &imu_quat.z, 8);
+	memcpy(&tx_buffer[33], &imu_linear.w, 8);
+	memcpy(&tx_buffer[41], &imu_linear.x, 8);
+	memcpy(&tx_buffer[49], &imu_linear.y, 8);
+	memcpy(&tx_buffer[57], &imu_linear.z, 8);
+	memcpy(&tx_buffer[65], &imu_angular.w, 8);
+	memcpy(&tx_buffer[73], &imu_angular.x, 8);
+	memcpy(&tx_buffer[81], &imu_angular.y, 8);
+	memcpy(&tx_buffer[89], &imu_angular.z, 8);
+	memcpy(&tx_buffer[97], &encoder1, 2);
+	memcpy(&tx_buffer[99], &encoder2, 2);
+	tx_buffer[101] = 0x55; //use index sizeof(tx_buffer) - 1
 
 	HAL_StatusTypeDef sendStatus = HAL_UART_Transmit(&huart2, tx_buffer, TX_BUFFER_SIZE, 100);
 	if (sendStatus != HAL_OK){
@@ -401,16 +409,18 @@ int main(void)
 
     //IMU
     bno055_data_vector quaternion = bno055_getVectorQuaternion();
+    bno055_data_vector linear = bno055_getVectorLinearAccel();
+    bno055_data_vector angular = bno055_getVectorGyroscope();
 
     //Motor Encoders
     encoder1 = (uint16_t)__HAL_TIM_GET_COUNTER(&htim4);
     encoder2 = (uint16_t)__HAL_TIM_GET_COUNTER(&htim3);
 
     //Raspberry Pi Communication
-    piSend(quaternion, encoder1, encoder2);
+    piSend(quaternion, linear, angular, encoder1, encoder2);
     piReceive(rx_buffer);
 
-    printDebug(quaternion, encoder1, encoder2);
+    printDebug(quaternion, linear, angular, encoder1, encoder2);
 
     // Only set speed for the first 20 seconds after startup
 //    if (HAL_GetTick() - start_time < 10000) {
