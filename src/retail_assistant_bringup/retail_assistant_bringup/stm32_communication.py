@@ -88,7 +88,7 @@ class STM32_UART_Receiver(Node):   # inherit node
             imu_msg.linear_acceleration.y = imu_linear_y
             imu_msg.linear_acceleration.z = imu_linear_z
 
-            imu_msg.orientation_covariance[0] = [-1]
+            imu_msg.orientation_covariance[0] = -1.0
             imu_msg.angular_velocity_covariance=[
                 0.02, 0, 0,
                 0, 0.02, 0,

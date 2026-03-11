@@ -25,7 +25,7 @@ class MCUToPiNode(Node):
         self.radius_m=float(self.get_parameter('radius_m').value) #use drive sporket pitch radius or calibrate with meters_per_tick
         
         # distance between left and right track center lines
-        self.declare_parameter('track_width_m',0.275)# Default track width in meters MAYBE CHANGE HERE TO CALIBRATE WITH REAL WORLD MEASUREMENTS
+        self.declare_parameter('track_width_m',0.33)# Default track width in meters MAYBE CHANGE HERE TO CALIBRATE WITH REAL WORLD MEASUREMENTS
         self.track_width_m=float(self.get_parameter('track_width_m').value)
 
         # Frame names
