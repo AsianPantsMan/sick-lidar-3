@@ -43,12 +43,12 @@ class STM32_UART_Receiver(Node):   # inherit node
             print("Timeout waiting for start marker")
             return None
 
-        data = self.ser.read(37)
-        if len(data) != 37:
+        data = self.ser.read(101)
+        if len(data) != 101:
             print(f"Incomplete frame received: {len(data)} bytes")
             return None
 
-        if data[36] != 0x55:
+        if data[100] != 0x55:
             print(f"Invalid end marker: 0x{data[36]:02X} (expected 0x55)")
             return None
 
@@ -57,9 +57,16 @@ class STM32_UART_Receiver(Node):   # inherit node
             imu_x = struct.unpack('<d', data[8:16])[0]
             imu_y = struct.unpack('<d', data[16:24])[0]
             imu_z = struct.unpack('<d', data[24:32])[0]
-
-            encoder1 = struct.unpack('<H', data[32:34])[0]
-            encoder2 = struct.unpack('<H', data[34:36])[0]
+            imu_linear_w = struct.unpack('<d', data[32:40])[0]  
+            imu_linear_x = struct.unpack('<d', data[40:48])[0]  
+            imu_linear_y = struct.unpack('<d', data[48:56])[0]  
+            imu_linear_z = struct.unpack('<d', data[56:64])[0]
+            imu_angular_w = struct.unpack('<d', data[64:72])[0]
+            imu_angular_x = struct.unpack('<d', data[72:80])[0]
+            imu_angular_y = struct.unpack('<d', data[80:88])[0]
+            imu_angular_z = struct.unpack('<d', data[88:96])[0]
+            encoder1 = struct.unpack('<H', data[96:98])[0]
+            encoder2 = struct.unpack('<H', data[98:100])[0]
 
             encoder_msg = Int64MultiArray()
             encoder_msg.data = [encoder1, encoder2]
@@ -74,20 +81,24 @@ class STM32_UART_Receiver(Node):   # inherit node
             imu_msg.orientation.z = imu_z
             imu_msg.orientation.w = imu_w  # (left as-is since you said don't change code)
 
-            imu_msg.angular_velocity.x = 0.0
-            imu_msg.angular_velocity.y = 0.0
-            imu_msg.angular_velocity.z = 0.0
-            imu_msg.linear_acceleration.x = 0.0
-            imu_msg.linear_acceleration.y = 0.0
-            imu_msg.linear_acceleration.z = 0.0
+            imu_msg.angular_velocity.x = imu_angular_x
+            imu_msg.angular_velocity.y = imu_angular_y
+            imu_msg.angular_velocity.z = imu_angular_z
+            imu_msg.linear_acceleration.x = imu_linear_x
+            imu_msg.linear_acceleration.y = imu_linear_y
+            imu_msg.linear_acceleration.z = imu_linear_z
 
-            imu_msg.orientation_covariance = [
-                0.01, 0.0, 0.0,
-                0.0, 0.01, 0.0,
-                0.0, 0.0, 0.01
+            imu_msg.orientation_covariance[0] = [-1]
+            imu_msg.angular_velocity_covariance=[
+                0.02, 0, 0,
+                0, 0.02, 0,
+                0, 0, 0.02
             ]
-            imu_msg.angular_velocity_covariance[0] = -1.0
-            imu_msg.linear_acceleration_covariance[0] = -1.0
+            imu_msg.linear_acceleration_covariance = [
+                0.1, 0, 0,
+                0, 0.1, 0,
+                0, 0, 0.1
+                ]
 
             self.Imu_pub.publish(imu_msg)
 
