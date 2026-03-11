@@ -138,10 +138,10 @@ class MCUToPiNode(Node):
                                     ] # Placeholder covariance values
         odom.twist.covariance = [
     0.05, 0.0,  0.0,  0.0,  0.0,  0.0,
-    0.0, 100000,  0.0,  0.0,  0.0,  0.0,
-    0.0, 0.0,  100000,  0.0,  0.0,  0.0,
-    0.0, 0.0,  0.0,  100000,  0.0,  0.0,
-    0.0, 0.0,  0.0,  0.0,  100000,  0.0,
+    0.0, 100000.0,  0.0,  0.0,  0.0,  0.0,
+    0.0, 0.0,  100000.0,  0.0,  0.0,  0.0,
+    0.0, 0.0,  0.0,  100000.0,  0.0,  0.0,
+    0.0, 0.0,  0.0,  0.0,  100000.0,  0.0,
     0.0, 0.0,  0.0,  0.0,  0.0,  0.05
                                 ]  # Placeholder covariance values
         self.odom_pub.publish(odom)
@@ -210,12 +210,12 @@ class MCUToPiNode(Node):
         orientation_y=msg.orientation.y
         orientation_z=msg.orientation.z
         orientation_w=msg.orientation.w
-        angular_velocity_x=float(0)# Dummy values for now 
-        angular_velocity_y=float(0)
-        angular_velocity_z=float(0)
-        linear_acceleration_x=float(0)
-        linear_acceleration_y=float(0)
-        linear_acceleration_z=float(0)
+        angular_velocity_x=msg.angular_velocity.x# Dummy values for now 
+        angular_velocity_y=msg.angular_velocity.y
+        angular_velocity_z=msg.angular_velocity.z
+        linear_acceleration_x=msg.linear_acceleration.x
+        linear_acceleration_y=msg.linear_acceleration.y
+        linear_acceleration_z=msg.linear_acceleration.z
         imu_msg = Imu()# IMU message object for topic
         imu_msg.header.stamp=self.get_clock().now().to_msg()
         imu_msg.header.frame_id=self.base_frame
