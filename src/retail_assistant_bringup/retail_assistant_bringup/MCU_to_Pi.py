@@ -33,7 +33,7 @@ class MCUToPiNode(Node):
         self.declare_parameter('base_frame','base_link')# Relative to itself 
         self.odom_frame=str(self.get_parameter('odom_frame').value)
         self.base_frame=str(self.get_parameter('base_frame').value) 
-        self.declare_parameter('publish_tf',True)
+        self.declare_parameter('publish_tf',False)
         self.publish_tf=bool(self.get_parameter('publish_tf').value)
 
         self.x=0.0 # Robot position in x(starting at 0)
