@@ -56,11 +56,19 @@ def generate_launch_description():
     name="roboclaw_node",
     output="screen",
     )
+    ekf=Node(
+        package='robot_localization',
+        executable='ekf_node',
+        name='ekf_filter_node',
+        output='screen',
+        parameters=[os.path.join(get_package_share_directory(package_name),'config','ekf.yaml')]
+    )
     return LaunchDescription([
         rsp,
         sllidar,        
         mcu_to_pi,
         slam,
         stm32,
+        ekf,
         roboclaw,
     ])
