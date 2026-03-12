@@ -218,7 +218,7 @@ class MCUToPiNode(Node):
         linear_acceleration_z=msg.linear_acceleration.z
         imu_msg = Imu()# IMU message object for topic
         imu_msg.header.stamp=self.get_clock().now().to_msg()
-        imu_msg.header.frame_id=self.base_frame
+        imu_msg.header.frame_id="imu_frame"
         imu_msg.orientation.x=orientation_x
         imu_msg.orientation.y=orientation_y
         imu_msg.orientation.z=orientation_z
