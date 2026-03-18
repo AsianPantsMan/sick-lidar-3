@@ -1,0 +1,6 @@
+body.staff-theme {
+  background-image: url("../assets/store-background.jpg");
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}

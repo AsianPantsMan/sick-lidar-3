@@ -1,0 +1,13 @@
+#root {
+  width: 100%;
+  min-height: 100vh;
+}
+
+.app-shell {
+  width: 100%;
+  min-height: 100vh;
+}
+
+.app-main {
+  width: 100%;
+}
