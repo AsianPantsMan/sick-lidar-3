@@ -1,6 +1,11 @@
-../Core/Src/main.c:116:5:_write	1
-../Core/Src/main.c:122:19:UART_LoopbackTest	3
-../Core/Src/main.c:154:5:main	2
-../Core/Src/main.c:371:6:SystemClock_Config	4
-../Core/Src/main.c:418:6:HAL_UART_RxCpltCallback	5
-../Core/Src/main.c:450:6:Error_Handler	1
+../Core/Src/main.c:124:5:_write	1
+../Core/Src/main.c:129:19:UART_LoopbackTest	3
+../Core/Src/main.c:153:6:bmi270_write_reg	1
+../Core/Src/main.c:161:9:bmi270_read_reg	1
+../Core/Src/main.c:171:6:bmi270_init	1
+../Core/Src/main.c:197:6:bmi270_read_gyro	1
+../Core/Src/main.c:213:6:bmi270_read_accel	1
+../Core/Src/main.c:232:5:main	4
+../Core/Src/main.c:372:6:SystemClock_Config	4
+../Core/Src/main.c:414:6:HAL_UART_RxCpltCallback	5
+../Core/Src/main.c:438:6:Error_Handler	1

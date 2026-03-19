@@ -3,6 +3,7 @@
 	<item key="hasShownOverlayPopupBefore" value="true"/>
 	<item key="replaceBarOpen" value="false"/>
 	<list key="searchhistory">
+		<item value="else if"/>
 		<item value="timeout"/>
 		<item value="error"/>
 		<item value="on motor driver 1"/>
@@ -17,6 +18,5 @@
 		<item value="temp"/>
 		<item value="state"/>
 		<item value="calib"/>
-		<item value="init"/>
 	</list>
 </section>

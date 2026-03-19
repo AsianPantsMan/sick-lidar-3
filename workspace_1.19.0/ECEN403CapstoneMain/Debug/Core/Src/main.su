@@ -1,6 +1,11 @@
-../Core/Src/main.c:116:5:_write	24	static
-../Core/Src/main.c:122:19:UART_LoopbackTest	24	static
-../Core/Src/main.c:154:5:main	8	static
-../Core/Src/main.c:371:6:SystemClock_Config	120	static
-../Core/Src/main.c:418:6:HAL_UART_RxCpltCallback	16	static
-../Core/Src/main.c:450:6:Error_Handler	8	static,ignoring_inline_asm
+../Core/Src/main.c:124:5:_write	24	static
+../Core/Src/main.c:129:19:UART_LoopbackTest	24	static
+../Core/Src/main.c:153:6:bmi270_write_reg	32	static
+../Core/Src/main.c:161:9:bmi270_read_reg	40	static
+../Core/Src/main.c:171:6:bmi270_init	8	static
+../Core/Src/main.c:197:6:bmi270_read_gyro	32	static
+../Core/Src/main.c:213:6:bmi270_read_accel	32	static
+../Core/Src/main.c:232:5:main	48	static
+../Core/Src/main.c:372:6:SystemClock_Config	120	static
+../Core/Src/main.c:414:6:HAL_UART_RxCpltCallback	16	static
+../Core/Src/main.c:438:6:Error_Handler	8	static,ignoring_inline_asm

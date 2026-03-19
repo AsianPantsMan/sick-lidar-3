@@ -1,21 +1,12 @@
 /* USER CODE BEGIN Header */
 /**
- ******************************************************************************
- * @file           : main.c
- * @brief          : Main program body
- ******************************************************************************
- * @attention
- *
- * Copyright (c) 2025 STMicroelectronics.
- * All rights reserved.
- *
- * This software is licensed under terms that can be found in the LICENSE file
- * in the root directory of this software component.
- * If no LICENSE file comes with this software, it is provided AS-IS.
- *
- ******************************************************************************
- */
+******************************************************************************
+* @file           : main.c
+* @brief          : Main program body
+******************************************************************************
+*/
 /* USER CODE END Header */
+
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "dac.h"
@@ -50,13 +41,25 @@
 #define RC_VOLT_STOP 1.0f
 #define RC_VOLT_MAX 2.0f
 
-// 1.0V / 3.3V * 4095 = ~1241
 #define DAC_VAL_STOP (uint32_t)((RC_VOLT_STOP / MCU_VOLTAGE) * DAC_MAX_VAL)
-// 2.0V / 3.3V * 4095 = ~2482
 #define DAC_VAL_MAX (uint32_t)((RC_VOLT_MAX / MCU_VOLTAGE) * DAC_MAX_VAL)
 #define DAC_VAL_MIN 0
 
 #define VARYING_LIMIT 1241
+
+// BMI270 I2C Address
+#define BMI270_ADDR (0x68 << 1)
+
+// BMI270 Registers
+#define BMI2_CHIP_ID        0x00
+#define BMI2_ACC_X_LSB      0x0C
+#define BMI2_GYR_X_LSB      0x12
+#define BMI2_ACC_CONF       0x40
+#define BMI2_GYR_CONF       0x42
+#define BMI2_PWR_CONF       0x7C
+#define BMI2_PWR_CTRL       0x7D
+#define BMI2_CMD            0x7E
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -75,20 +78,11 @@ float target_speed = 1000.0f;
 
 // DAC switching variables
 static uint32_t last_switch_time = 0;
-static uint8_t current_state = 0; // 0 = 1000 RPM CW, 1 = 2000 RPM CCW
-#define SWITCH_INTERVAL_MS 10000  // 10 seconds
+static uint8_t current_state = 0;
+#define SWITCH_INTERVAL_MS 10000
 
-// DAC values for specific RPM targets
-// For RoboClaw: 1.0V (DAC_VAL_STOP = 1241) is 0 RPM
-// Below 1.0V is clockwise (negative RPM), above 1.0V is counter-clockwise
-// (positive RPM) Calibrated based on observed motor behavior:
-// - CW was 2x expected, so reduced offset by half
-// - CCW was 600 instead of 1000, so increased offset proportionally
-#define DAC_1000_RPM_CW                                                        \
-  (DAC_VAL_STOP - 158) // ~1172 for -1000 RPM (clockwise) - adjusted from -138
-#define DAC_2000_RPM_CCW                                                       \
-  (DAC_VAL_STOP +                                                              \
-   101) // ~2161 for +2000 RPM (counter-clockwise) - adjusted from +276
+#define DAC_1000_RPM_CW (DAC_VAL_STOP - 158)
+#define DAC_2000_RPM_CCW (DAC_VAL_STOP + 101)
 
 char *direction = "N/A";
 
@@ -101,20 +95,33 @@ char message_to_repeat[UART_RX_BUFFER_SIZE] = "No message received yet.\r\n";
 
 uint8_t rx_byte;
 uint16_t rx_index = 0;
+
+// BMI270 sensor data
+int16_t gyro_raw[3];
+int16_t accel_raw[3];
+float gyro_deg[3];   // deg/s
+float accel_ms2[3];  // m/s²
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
 
+// BMI270 functions
+void bmi270_write_reg(uint8_t reg, uint8_t value);
+uint8_t bmi270_read_reg(uint8_t reg);
+void bmi270_init(void);
+void bmi270_read_gyro(void);
+void bmi270_read_accel(void);
+
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
-// makes printf redirect to UART output
+// Printf redirect to UART
 int _write(int file, char *ptr, int len) {
-  // Use a short timeout for robust non-blocking debug
   HAL_UART_Transmit(&huart2, (uint8_t *)ptr, len, 100);
   return len;
 }
@@ -124,25 +131,96 @@ HAL_StatusTypeDef UART_LoopbackTest(UART_HandleTypeDef *huart)
     uint8_t txByte = 'A';
     uint8_t rxByte = 0;
 
-    // Send one byte
     HAL_UART_Transmit(huart, &txByte, 1, 100);
-
-    // Wait a bit
     HAL_Delay(10);
 
-    // Receive one byte
     if (HAL_UART_Receive(huart, &rxByte, 1, 100) != HAL_OK)
     {
-        return HAL_ERROR;  // Timeout - nothing received
+        return HAL_ERROR;
     }
 
-    // Check if received matches sent
     if (rxByte == txByte)
     {
-        return HAL_OK;  // Test passed
+        return HAL_OK;
     }
 
-    return HAL_ERROR;  // Test failed
+    return HAL_ERROR;
+}
+
+/**
+  * @brief  Write single byte to BMI270 register
+  */
+void bmi270_write_reg(uint8_t reg, uint8_t value)
+{
+  HAL_I2C_Mem_Write(&hi2c1, BMI270_ADDR, reg, I2C_MEMADD_SIZE_8BIT, &value, 1, 1000);
+}
+
+/**
+  * @brief  Read single byte from BMI270 register
+  */
+uint8_t bmi270_read_reg(uint8_t reg)
+{
+  uint8_t data;
+  HAL_I2C_Mem_Read(&hi2c1, BMI270_ADDR, reg, I2C_MEMADD_SIZE_8BIT, &data, 1, 1000);
+  return data;
+}
+
+/**
+  * @brief  Initialize BMI270 sensor
+  */
+void bmi270_init(void)
+{
+  // Soft reset
+  bmi270_write_reg(BMI2_CMD, 0xB6);
+  HAL_Delay(200);
+
+  // Disable advanced power save mode
+  bmi270_write_reg(BMI2_PWR_CONF, 0x00);
+  HAL_Delay(1);
+
+  // Enable accelerometer and gyroscope
+  bmi270_write_reg(BMI2_PWR_CTRL, 0x0E);
+  HAL_Delay(50);
+
+  // Configure accelerometer: ODR=100Hz, Normal mode
+  bmi270_write_reg(BMI2_ACC_CONF, 0xA8);
+
+  // Configure gyroscope: ODR=200Hz, Normal mode
+  bmi270_write_reg(BMI2_GYR_CONF, 0xA9);
+
+  HAL_Delay(10);
+}
+
+/**
+  * @brief  Read gyroscope data
+  */
+void bmi270_read_gyro(void)
+{
+  uint8_t data[6];
+
+  // Read 6 bytes starting from gyro X LSB register
+  HAL_I2C_Mem_Read(&hi2c1, BMI270_ADDR, BMI2_GYR_X_LSB, I2C_MEMADD_SIZE_8BIT, data, 6, 1000);
+
+  // Combine bytes (little-endian)
+  gyro_raw[0] = (int16_t)(data[0] | (data[1] << 8));  // X
+  gyro_raw[1] = (int16_t)(data[2] | (data[3] << 8));  // Y
+  gyro_raw[2] = (int16_t)(data[4] | (data[5] << 8));  // Z
+}
+
+/**
+  * @brief  Read accelerometer data
+  */
+void bmi270_read_accel(void)
+{
+  uint8_t data[6];
+
+  // Read 6 bytes starting from accel X LSB register
+  HAL_I2C_Mem_Read(&hi2c1, BMI270_ADDR, BMI2_ACC_X_LSB, I2C_MEMADD_SIZE_8BIT, data, 6, 1000);
+
+  // Combine bytes (little-endian)
+  accel_raw[0] = (int16_t)(data[0] | (data[1] << 8));  // X
+  accel_raw[1] = (int16_t)(data[2] | (data[3] << 8));  // Y
+  accel_raw[2] = (int16_t)(data[4] | (data[5] << 8));  // Z
 }
 
 /* USER CODE END 0 */
@@ -159,8 +237,6 @@ int main(void)
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
-
-  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
 
   /* USER CODE BEGIN Init */
@@ -182,41 +258,39 @@ int main(void)
   MX_USART2_UART_Init();
   MX_TIM2_Init();
   MX_USART1_UART_Init();
+
   /* USER CODE BEGIN 2 */
 
-  // IMU enable
-  bno055_assign(&hi2c1);
-  bno055_init();
-  bno055_setOperationModeNDOF();
-  HAL_Delay(1000);
+  HAL_Delay(100);  // Wait for sensor power-up
 
+  // Check BMI270 chip ID
+  uint8_t chip_id = bmi270_read_reg(BMI2_CHIP_ID);
 
+  if(chip_id == 0x24)
+  {
+    // BMI270 detected
+    printf("BMI270 detected (Chip ID: 0x%02X)\r\n", chip_id);
+    bmi270_init();
+    HAL_Delay(100);
+    printf("BMI270 initialized successfully\r\n");
+  }
+  else
+  {
+    // Sensor not found
+    printf("ERROR: BMI270 not found! Chip ID: 0x%02X (expected 0x24)\r\n", chip_id);
+    Error_Handler();
+  }
 
-//  // Motor DAC initialization
-//  HAL_DAC_Start(&hdac, DAC_CHANNEL_1);
-//  HAL_DAC_SetValue(&hdac, DAC_CHANNEL_1, DAC_ALIGN_12B_R, DAC_VAL_STOP);
-//
-//  // Motor encoder setup
-//  HAL_TIM_Encoder_Start(&htim1, TIM_CHANNEL_ALL);
-//
-//  // PID Initialization
-//  pid_config.Kp = 1.0f;
-//  pid_config.Ki = 0.1f;
-//  pid_config.Kd = 0.0f;
-//  pid_config.OutputMax = 1.0f;
-//  pid_config.OutputMin = -1.0f;
-//  pid_config.IntegralLimit = 1.0f;
-//  PID_Init(&pid_state);
-//
-//  last_encoder_count = __HAL_TIM_GET_COUNTER(&htim1);
-//  last_time = HAL_GetTick();
-//  last_switch_time = HAL_GetTick(); // Initialize switch timer
+  // Motor DAC initialization (currently commented out)
+  // HAL_DAC_Start(&hdac, DAC_CHANNEL_1);
+  // HAL_DAC_SetValue(&hdac, DAC_CHANNEL_1, DAC_ALIGN_12B_R, DAC_VAL_STOP);
 
-  // Raspberry Pi Message Listener
-  //HAL_UART_Receive_IT(&huart1, &rx_byte, 1);
+  // Motor encoder setup (currently commented out)
+  // HAL_TIM_Encoder_Start(&htim1, TIM_CHANNEL_ALL);
 
-  // PWM Generator Test
-  //  HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
+  // PID Initialization (currently commented out)
+  // ... your PID code ...
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -227,142 +301,69 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 
+    // UART Loopback Test
+    if (UART_LoopbackTest(&huart1) == HAL_OK)
+    {
+      // SUCCESS - toggle green LED
+      HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);
+    }
+    else
+    {
+      // FAILED - blink error LED
+      while(1)
+      {
+        printf("UART Loopback Error\r\n");
+        HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+        HAL_Delay(50);
+      }
+    }
 
-	  if (UART_LoopbackTest(&huart1) == HAL_OK)
-	  {
-		  // SUCCESS - toggle green LED
-		  HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);
-	  }
-	  else
-	  {
-		  // FAILED - blink error LED
-		  while(1)
-		  {
-			  printf("error \r\n");
-			  HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
-			  HAL_Delay(50);
-		  }
-	  }
-//	HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
-//	uint8_t imu = HAL_GPIO_ReadPin(read_reset_GPIO_Port, read_reset_Pin);
-//
-//	printf("imu reset state: %d\r\n", imu);
-//    uint32_t current_time = HAL_GetTick();
-//    float dt = (current_time - last_time) / 1000.0f;
-//
-//    target_speed = 1000.0f;
-//
-//    if (dt > 0.0f) {
-//      uint16_t current_encoder_raw = __HAL_TIM_GET_COUNTER(&htim1);
-//      // Handle overflow if needed, but for simple speed diff:
-//      int16_t diff =
-//          (int16_t)(current_encoder_raw - (uint16_t)last_encoder_count);
-//      float current_speed = (float)diff / dt;
-//
-//      // Switch between two DAC values every 10 seconds
-//      uint32_t dac_value;
-//      float target_speed_rpm;
-//
-//      if (current_time - last_switch_time >= SWITCH_INTERVAL_MS) {
-//        // Toggle state
-//        current_state = !current_state;
-//        last_switch_time = current_time;
-//      }
-//
-//      if (current_state == 0) {
-//        // 1000 RPM Clockwise
-//        dac_value = DAC_1000_RPM_CW;
-//        target_speed_rpm = 1000.0f;
-//        target_speed = 1000.0f;
-//
-//        // PID gains for 1000 RPM CW
-//        pid_config.Kp = 0.15f;
-//        pid_config.Ki = 0.02f;
-//        pid_config.Kd = 0.05f;
-//      } else {
-//        // 2000 RPM Counter-Clockwise
-//        dac_value = DAC_2000_RPM_CCW;
-//        target_speed_rpm = 2000.0f;
-//        target_speed = 2000.0f;
-//
-//        // PID gains for 2000 RPM CCW
-//        pid_config.Kp = 0.08f;
-//        pid_config.Ki = 0.01f;
-//        pid_config.Kd = 0.01f;
-//      }
-//
-//      float pid_sum = PID_Calculate(&pid_config, &pid_state, target_speed,
-//                                    current_speed, dt);
-//
-//      // Safety bounds
-//      if (dac_value > (DAC_VAL_MAX)) {
-//        dac_value = DAC_VAL_MAX;
-//      }
-//      if (dac_value < (DAC_VAL_MIN)) {
-//        dac_value = DAC_VAL_MIN;
-//      }
-//
-//      HAL_DAC_SetValue(&hdac, DAC_CHANNEL_1, DAC_ALIGN_12B_R, dac_value);
-//
-//      // IMU
-//      bno055_data_vector v = bno055_getVectorQuaternion();
-//      printf("IMU:\r\n");
-//      printf("W: %.2f | X: %.2f | Y: %.2f | Z: %.2f\r\n", v.w, v.x, v.y, v.z);
+    // Read BMI270 sensors
+    bmi270_read_gyro();
+    bmi270_read_accel();
 
-//      // Motor PID inputs/DAC
-//      printf("Motor Targets:\r\n");
-//      printf("Target Speed: %.0f RPM | State: %s | Time to Switch: %lu ms | "
-//             "DAC: %u\r\n",
-//             target_speed_rpm,
-//             (current_state == 0) ? "1000 RPM CW" : "2000 RPM CCW",
-//             SWITCH_INTERVAL_MS - (current_time - last_switch_time), dac_value);
-//      printf("PID Gains: Kp: %.2f | Ki: %.2f | Kd: %.2f\r\n", pid_config.Kp,
-//             pid_config.Ki, pid_config.Kd);
-//
-//      if (current_speed == 0) {
-//        direction = "N/A";
-//      } else if (current_speed < 0) {
-//        direction = "Clockwise";
-//      } else {
-//        direction = "Counter-Clockwise";
-//      }
-//
-//      // Encoder data
-//      printf("Motor Encoder Data:\r\n");
-//      printf("Motor Speed: %.4f | Direction: %s | Relative Position: %d\r\n",
-//             current_speed, direction, current_encoder_raw);
-//
-//      last_encoder_count = current_encoder_raw;
-//      last_time = current_time;
-//    }
-//
-//    if (message_received) {
-//
-//      // 1. Copy the newly received message to the permanent storage
-//      //    (This ensures subsequent prints use the latest data)
-//      strncpy(message_to_repeat, received_message, UART_RX_BUFFER_SIZE);
-//      message_to_repeat[UART_RX_BUFFER_SIZE - 1] =
-//          '\0'; // Ensure null termination
-//
-//      // 2. Clear the flag immediately after saving the message
-//      message_received = 0;
-//    }
-//
-//    // CONSTANTLY REPEAT THE LAST SAVED MESSAGE
-//    printf("=== LAST RECEIVED MESSAGE ===\r\n");
-//    // Print the message saved in the message_to_repeat buffer
-//    // Note: We use HAL_UART_Transmit directly here to ensure the message is
-//    // sent in its original form, including any newlines, if printf isn't
-//    // redirecting exactly as expected. Using printf is cleaner if it works.
-//    printf("Repeated: %s\r\n", message_to_repeat);
-//    printf("=============================\r\n");
-//
-//    printf("\r\n");
+    // Convert gyro to deg/s (±2000 deg/s range, 16.4 LSB/deg/s)
+    gyro_deg[0] = gyro_raw[0] / 16.4f;
+    gyro_deg[1] = gyro_raw[1] / 16.4f;
+    gyro_deg[2] = gyro_raw[2] / 16.4f;
 
-    HAL_Delay(1000);
+    // Convert accel to m/s² (±4g range, 8192 LSB/g)
+    accel_ms2[0] = (accel_raw[0] / 8192.0f) * 9.81f;
+    accel_ms2[1] = (accel_raw[1] / 8192.0f) * 9.81f;
+    accel_ms2[2] = (accel_raw[2] / 8192.0f) * 9.81f;
+
+    // Print BMI270 data
+    printf("=== BMI270 Data ===\r\n");
+    printf("Gyro (deg/s): X:%.2f Y:%.2f Z:%.2f\r\n",
+           gyro_deg[0], gyro_deg[1], gyro_deg[2]);
+    printf("Accel (m/s²): X:%.2f Y:%.2f Z:%.2f\r\n",
+           accel_ms2[0], accel_ms2[1], accel_ms2[2]);
+    printf("Raw Gyro: X:%d Y:%d Z:%d\r\n",
+           gyro_raw[0], gyro_raw[1], gyro_raw[2]);
+    printf("Raw Accel: X:%d Y:%d Z:%d\r\n",
+           accel_raw[0], accel_raw[1], accel_raw[2]);
+    printf("\r\n");
+
+    // Your existing motor/PID code (commented out)
+    // ... motor control code here ...
+
+    // Raspberry Pi message handling
+    if (message_received) {
+      strncpy(message_to_repeat, received_message, UART_RX_BUFFER_SIZE);
+      message_to_repeat[UART_RX_BUFFER_SIZE - 1] = '\0';
+      message_received = 0;
+    }
+
+    // printf("=== LAST RECEIVED MESSAGE ===\r\n");
+    // printf("Repeated: %s\r\n", message_to_repeat);
+    // printf("=============================\r\n");
+
+    HAL_Delay(1000);  // 1 Hz update rate
   }
   /* USER CODE END 3 */
 }
+
+/* ... Rest of your existing code (SystemClock_Config, HAL_UART_RxCpltCallback, Error_Handler, etc.) ... */
 
 /**
   * @brief System Clock Configuration
@@ -374,9 +375,6 @@ void SystemClock_Config(void)
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
   RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
 
-  /** Initializes the RCC Oscillators according to the specified parameters
-  * in the RCC_OscInitTypeDef structure.
-  */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI|RCC_OSCILLATORTYPE_HSE;
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
   RCC_OscInitStruct.HSEPredivValue = RCC_HSE_PREDIV_DIV2;
@@ -390,8 +388,6 @@ void SystemClock_Config(void)
     Error_Handler();
   }
 
-  /** Initializes the CPU, AHB and APB buses clocks
-  */
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
@@ -416,28 +412,20 @@ void SystemClock_Config(void)
 
 /* USER CODE BEGIN 4 */
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
-  // Check if the interrupt came from USART1 (The Pi connection)
   if (huart->Instance == USART1) {
-    // Check for overflow
     if (rx_index >= UART_RX_BUFFER_SIZE - 1) {
-      rx_index = 0; // Reset if buffer full without newline
+      rx_index = 0;
     }
 
-    // Check for Newline (End of message)
     if (rx_byte == '\n' || rx_byte == '\r') {
-      uart_rx_buffer[rx_index] = '\0'; // Null terminate string
-
-      // Copy to the processing buffer so main loop can see it
+      uart_rx_buffer[rx_index] = '\0';
       strcpy(received_message, (char *)uart_rx_buffer);
-      message_received = 1; // Flag main loop to process
-
-      rx_index = 0; // Reset index for next message
+      message_received = 1;
+      rx_index = 0;
     } else {
-      // Add byte to buffer
       uart_rx_buffer[rx_index++] = rx_byte;
     }
 
-    // Relaunch the interrupt for the next byte
     HAL_UART_Receive_IT(&huart1, &rx_byte, 1);
   }
 }
@@ -450,30 +438,19 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
 void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
-  /* User can add his own implementation to report the HAL error return state */
-  printf("!!! HAL Error Occurred !!!\r\n"); // Print a message
+  printf("!!! HAL Error Occurred !!!\r\n");
   __disable_irq();
   while (1) {
-    // Make the green user LED (LD2) blink very fast
     HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
     HAL_Delay(100);
   }
   /* USER CODE END Error_Handler_Debug */
 }
+
 #ifdef USE_FULL_ASSERT
-/**
-  * @brief  Reports the name of the source file and the source line number
-  *         where the assert_param error has occurred.
-  * @param  file: pointer to the source file name
-  * @param  line: assert_param error line source number
-  * @retval None
-  */
 void assert_failed(uint8_t *file, uint32_t line)
 {
   /* USER CODE BEGIN 6 */
-  /* User can add his own implementation to report the file name and line
-     number, ex: printf("Wrong parameters value: file %s on line %d\r\n", file,
-     line) */
   /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */

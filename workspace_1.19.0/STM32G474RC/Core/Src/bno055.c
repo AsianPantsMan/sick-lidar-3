@@ -7,6 +7,7 @@
 
 #include <bno055.h>
 #include <string.h>
+#include <math.h>
 
 I2C_HandleTypeDef *_bno055_i2c_port;
 
@@ -16,6 +17,8 @@ uint16_t angularRateScale = 16;
 uint16_t eulerScale = 16;
 uint16_t magScale = 16;
 uint16_t quaScale = (1<<14);
+
+float gyro_threshold = 0.26;
 
 void bno055_assign(I2C_HandleTypeDef *hi2c_device){
 	_bno055_i2c_port = hi2c_device;
@@ -207,6 +210,12 @@ bno055_data_vector bno055_getVector(uint8_t vec){
 		xyz.y = (int16_t)((buffer[3] << 8) | buffer[2]) / scale;
 		xyz.z = (int16_t)((buffer[5] << 8) | buffer[4]) / scale;
 	}
+
+	if (vec == BNO055_VECTOR_GYROSCOPE) {
+	        xyz.x = (fabs(xyz.x) < gyro_threshold) ? 0.0f : xyz.x;
+	        xyz.y = (fabs(xyz.y) < gyro_threshold) ? 0.0f : xyz.y;
+	        xyz.z = (fabs(xyz.z) < gyro_threshold) ? 0.0f : xyz.z;
+	    }
 
 	return xyz;
 }

@@ -1,23 +1,10 @@
-19:27:50 **** Incremental Build of configuration Debug for project ECEN403CapstoneMain ****
+20:29:53 **** Incremental Build of configuration Debug for project ECEN403CapstoneMain ****
 make -j11 all 
-arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
-../Core/Src/main.c:78:16: warning: 'current_state' defined but not used [-Wunused-variable]
-   78 | static uint8_t current_state = 0; // 0 = 1000 RPM CW, 1 = 2000 RPM CCW
-      |                ^~~~~~~~~~~~~
-../Core/Src/main.c:77:17: warning: 'last_switch_time' defined but not used [-Wunused-variable]
-   77 | static uint32_t last_switch_time = 0;
-      |                 ^~~~~~~~~~~~~~~~
-arm-none-eabi-gcc -o "ECEN403CapstoneMain.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/caseyear/STM32CubeIDE/workspace_1.19.0/ECEN403CapstoneMain/STM32F302R8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ECEN403CapstoneMain.map" -Wl,--gc-sections -static -u _printf_float --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
-Finished building target: ECEN403CapstoneMain.elf
- 
 arm-none-eabi-size  ECEN403CapstoneMain.elf 
-arm-none-eabi-objdump -h -S ECEN403CapstoneMain.elf  > "ECEN403CapstoneMain.list"
    text	   data	    bss	    dec	    hex	filename
-  38884	    468	   2436	  41788	   a33c	ECEN403CapstoneMain.elf
+  39616	    568	   2576	  42760	   a708	ECEN403CapstoneMain.elf
 Finished building: default.size.stdout
  
-Finished building: ECEN403CapstoneMain.list
- 
 
-19:27:50 Build Finished. 0 errors, 2 warnings. (took 738ms)
+20:29:54 Build Finished. 0 errors, 0 warnings. (took 194ms)
 

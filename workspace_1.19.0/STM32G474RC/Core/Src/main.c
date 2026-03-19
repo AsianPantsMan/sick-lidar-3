@@ -364,9 +364,9 @@ int main(void)
   bno055_setOperationModeNDOF();
 
   //Motor Driver
-  MD1_motor_init();
+//  MD1_motor_init();
 //  MD1_setSpeed(&htim1, TIM_CHANNEL_4, 10);
-  MD2_motor_init();
+//  MD2_motor_init();
 //  MD2_setSpeed(&htim8, TIM_CHANNEL_1, 10);
 
   //Motor Encoders
