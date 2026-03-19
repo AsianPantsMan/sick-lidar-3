@@ -38,7 +38,7 @@ class AutoNav(Node):
         self.changing_aisle=False# is the robot switching aisles
         self.closest_distance_to_goal=99999 # the closest the robot has come to its target goal
         self.stuck=False 
-        self.aisle_skip_off=False# prevent aisle skip logic
+        self.aisle_skip_off=True# prevent aisle skip logic
         self.progression_counter=0 # counter keeping track how many times the robot has not come any closer to the goal 
         self.progression_timer = self.create_timer(30, self.check_progression)# timer that periodically checks the robots progression
         self.is_startup=True
@@ -48,7 +48,7 @@ class AutoNav(Node):
         self.cycle()# loop function
 
     def waypoint_create(self):
-        test=False
+        test=True
         if test:
             self.goals=([(4.43,-14.9),(-2.77,-14.3),(-10.2,-14.2)],
                     [(3.82,-9.78),(-2.17,-9.8),(-10.5,-9.44)],
