@@ -44,7 +44,7 @@
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 #define TX_BUFFER_SIZE 102 //currently set for imu (3 * 4 doubles), 2 encoders (2 uint16_t) => (8 * 3 * 4) + (2 * 2) + 2 (framing) = 102 bytes
-#define RX_BUFFER_SIZE 8 //currently set for 6 floats, (3 linear velocity, 3 angular velocity)
+#define RX_BUFFER_SIZE 10//currently set for 6 floats, (3 linear velocity, 3 angular velocity)
 //#define MOTOR_CPR 996.8f
 
 /* USER CODE END PD */
@@ -59,6 +59,10 @@
 /* USER CODE BEGIN PV */
 uint8_t tx_buffer[TX_BUFFER_SIZE];
 uint8_t rx_buffer[RX_BUFFER_SIZE];
+int32_t left_tics = 0;
+int32_t right_tics = 0;
+uint8_t rx_byte;                      // Temp buffer for the HAL_UART_Receive_IT call
+volatile uint8_t new_cmd_flag = 0;    // Flag set by ISR, cleared by main loop. MUST BE VOLATILE.
 
 uint16_t encoder1;
 uint16_t encoder2;
@@ -274,7 +278,7 @@ uint8_t piSend(bno055_data_vector imu_quat, bno055_data_vector imu_linear, bno05
 	memcpy(&tx_buffer[99], &encoder2, 2);
 	tx_buffer[101] = 0x55; //use index sizeof(tx_buffer) - 1
 
-	HAL_StatusTypeDef sendStatus = HAL_UART_Transmit(&huart2, tx_buffer, TX_BUFFER_SIZE, 100);
+	HAL_StatusTypeDef sendStatus = HAL_UART_Transmit(&huart2, tx_buffer, TX_BUFFER_SIZE, 20);
 	if (sendStatus != HAL_OK){
 		printf("transmission error\r\n");
 		return 2;
@@ -293,17 +297,24 @@ uint8_t piReceive(uint8_t* rx_buffer){
     }
     memset(rx_buffer, 0, RX_BUFFER_SIZE);
 
-    HAL_StatusTypeDef receiveStatus = HAL_UART_Receive(&huart2, rx_buffer, RX_BUFFER_SIZE, 100);
-
+    HAL_StatusTypeDef receiveStatus = HAL_UART_Receive(&huart2, rx_buffer, RX_BUFFER_SIZE, 20);// check &huart2				//rx buffersize =10
     if (receiveStatus != HAL_OK) {
         if (receiveStatus == HAL_TIMEOUT) {
-            printf("RX Timeout\r\n");
+            //printf("RX Timeout\r\n");
         } else {
-            printf("RX error: %d\r\n", receiveStatus);
+            //printf("RX error: %d\r\n", receiveStatus);
         }
         return 1;
     }
 
+    if (rx_buffer[0] != 0xAA || rx_buffer[RX_BUFFER_SIZE - 1] != 0x55) {
+        //printf("Invalid packet markers!\r\n");
+        return 1; // Indicate failure
+    }
+
+    memcpy(&left_tics,&rx_buffer[1],4);//left_ticks
+    memcpy(&right_tics,&rx_buffer[5],4);//right_tics
+    printf("RX error: %d\r\n", receiveStatus);
     return 0;
 }
 
@@ -449,14 +460,14 @@ int main(void)
     bno055_data_vector angular = bno055_getVectorGyroscope();
 
     //Motor Encoders
-    //encoder1 = (uint16_t)__HAL_TIM_GET_COUNTER(&htim4);
-    //encoder2 = (uint16_t)__HAL_TIM_GET_COUNTER(&htim3);
+    encoder1 = (uint16_t)__HAL_TIM_GET_COUNTER(&htim4);
+    encoder2 = (uint16_t)__HAL_TIM_GET_COUNTER(&htim3);
 
     //Raspberry Pi Communication
     piSend(quaternion, linear, angular, encoder1, encoder2);
     piReceive(rx_buffer);
+    //printDebug(quaternion, linear, angular, encoder1, encoder2);
 
-    printDebug(quaternion, linear, angular, encoder1, encoder2);
 
     /* Motor speed change test
     // Get current time
@@ -476,11 +487,11 @@ int main(void)
     }
 	*/
 
-//    MotorControl_SetTargetSpeed_RPM(&right_motor, 0);
-//    MotorControl_SetTargetSpeed_RPM(&left_motor, 0);
+    MotorControl_SetTargetSpeed_RPM(&right_motor, 0);
+    MotorControl_SetTargetSpeed_RPM(&left_motor, 0);
 
-    MotorControl_SetTargetSpeed(&right_motor, 0);
-    MotorControl_SetTargetSpeed(&left_motor, 0);
+//    MotorControl_SetTargetSpeed(&right_motor, right_tics);
+//    MotorControl_SetTargetSpeed(&left_motor, left_tics);
 
     //Motor speed
 
@@ -507,17 +518,10 @@ int main(void)
 
     if (HAL_GetTick() - last_print_time >= print_interval) {
         last_print_time = HAL_GetTick();
-        printf("%.2f, %.2f, %.1f, %.5f, %.5f, %.5f\r\n",
+        printf("%.2f, %.2f, %.1f, %.2f, %.2f, %.1f\r\n",
         		//encoder1, current_encoder, 40.0f, p_term, i_term, error);
-        		right_motor_tics, right_pid_output, left_motor_tics, left_pid_output, i_term, 50.0);
+        		right_motor_tics, right_pid_output, right_tics, left_motor_tics, left_pid_output, left_tics);
     }
-    //debug printouts
-    //printDebug(quaternion, encoder1, encoder2);
-    //printf("timer 6 interrupt, rpm at %f\r\n", rpm);
-
-    //debug printouts
-    //printDebug(quaternion, encoder1, encoder2);
-    //printf("timer 6 interrupt, rpm at %f\r\n", rpm);
 
   }
   /* USER CODE END 3 */
