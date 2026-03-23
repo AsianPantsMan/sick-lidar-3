@@ -11,35 +11,13 @@
 #include "main.h"
 #include "stm32g4xx_hal.h"
 #include <stdbool.h>
+#include "tim.h"
+#include "motor.h"
 
-typedef struct {
-    GPIO_TypeDef *nSLEEP_Port;
-    uint16_t nSLEEP_Pin;
-
-    GPIO_TypeDef *nFAULT_Port;
-    uint16_t nFAULT_Pin;
-
-    GPIO_TypeDef *PHASE_Port;
-    uint16_t PHASE_Pin;
-
-    GPIO_TypeDef *LED_Port;
-    uint16_t LED_Pin;
-
-    TIM_HandleTypeDef *PWM_Timer;
-    uint32_t PWM_Channel;
-
-    //state variables
-    uint16_t current_speed;
-
-} MotorDriver_t;
 
 void delay_us(uint32_t microseconds);
-void md_reset_pulse();
-
-HAL_StatusTypeDef MD1_motor_init();
-HAL_StatusTypeDef MD2_motor_init();
-uint8_t MD1_setSpeed(TIM_HandleTypeDef *htim, uint32_t channel, int8_t duty);
-uint8_t MD2_setSpeed(TIM_HandleTypeDef *htim, uint32_t channel, int8_t duty);
+HAL_StatusTypeDef motor_driver_init(Motor *motor);
+void motor_driver_setSpeed(Motor *motor, float duty);
 
 
-#endif /* INC_DRV8245_Q1_H_ */
+#endif

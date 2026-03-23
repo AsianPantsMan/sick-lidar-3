@@ -32,6 +32,7 @@
 #include <bno055.h>
 #include "drv8245-q1.h"
 #include "pid.h"
+#include "motor.h"
 
 /* USER CODE END Includes */
 
@@ -62,19 +63,19 @@ uint8_t rx_buffer[RX_BUFFER_SIZE];
 uint16_t encoder1;
 uint16_t encoder2;
 
-MotorControl_t left_motor;
-MotorControl_t right_motor;
+Motor left_motor;
+Motor right_motor;
 
-float right_motor_rpm ;
-int32_t right_target_rpm;
+float right_motor_tics;
+float left_motor_tics;
 float error_integral;
-float pid_output;
-float duty;
+float right_pid_output;
+float left_pid_output;
 float error;
 float p_term;
 float i_term;
 float d_term;
-float raw_speed_rpm;
+uint16_t current_encoder;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -228,6 +229,7 @@ void UARTLoopbackTest(char* testString)
         printf("FAILED\r\n");
     }
 }
+
 void printDebug(bno055_data_vector imu_quat, bno055_data_vector imu_linear, bno055_data_vector imu_angular, uint16_t encoder1, uint16_t encoder2){
 	//clear screen
 	printf("\033[2J");
@@ -363,29 +365,41 @@ int main(void)
   bno055_init();
   bno055_setOperationModeNDOF();
 
-  //Motor Driver
-//  MD1_motor_init();
-//  MD1_setSpeed(&htim1, TIM_CHANNEL_4, 10);
-//  MD2_motor_init();
-//  MD2_setSpeed(&htim8, TIM_CHANNEL_1, 10);
+  //Motor setup
+  //Motor Initialize
+  Motor_Init(&left_motor, 1,
+		  MD1_nSLEEP_GPIO_Port, MD1_nSLEEP_Pin,
+		  MD1_nFAULT_GPIO_Port, MD1_nFAULT_Pin,
+		  MD1_PH_IN2_GPIO_Port, MD1_PH_IN2_Pin,
+		  MD1_LED_GPIO_Port, MD1_LED_Pin,
+		  &htim1, TIM_CHANNEL_4,
+		  &htim4
+		  );
 
-  //Motor Encoders
-  HAL_TIM_Encoder_Start((&htim4), TIM_CHANNEL_ALL); //encoder1
-  HAL_TIM_Encoder_Start((&htim3), TIM_CHANNEL_ALL); //encoder2
+  Motor_Init(&right_motor, 1,
+		  MD2_nSLEEP_GPIO_Port, MD2_nSLEEP_Pin,
+		  MD2_nFAULT_GPIO_Port, MD2_nFAULT_Pin,
+		  MD2_PH_IN2_GPIO_Port, MD2_PH_IN2_Pin,
+		  MD2_LED_GPIO_Port, MD2_LED_Pin,
+		  &htim8, TIM_CHANNEL_1,
+		  &htim3
+		  );
 
-  //PID loop
-//  MotorControl_Init(&left_motor, &htim1, TIM_CHANNEL_4, &htim4,
-//		  1.0f, //Kp
-//		  0.0f,	//Ki
-//		  0.0f);	//Kd
-//
-//  MotorControl_Init(&right_motor, &htim8, TIM_CHANNEL_1, &htim3,
-//		  0.9f, //Kp
-//		  0.5f,	//Ki
-//		  0.0f);	//Kd
-//
-//  //MotorControl_SetTargetSpeed(&left_motor, 200);
-//  MotorControl_SetTargetSpeed(&right_motor, 200);
+  //Motor Driver Initialize
+  motor_driver_init(&right_motor);
+  motor_driver_init(&left_motor);
+
+  //PID loop initialize
+  MotorControl_Init(&left_motor,
+		  0.828f, //Kp
+		  5.85f,	//Ki
+		  0.0f);	//Kd
+
+  MotorControl_Init(&right_motor,
+		  0.842f, //Kp
+		  5.94f,	//Ki
+		  0.0f);	//Kd
+
 
   HAL_TIM_Base_Start_IT(&htim6);
   /* random tests, commented out */
@@ -395,6 +409,28 @@ int main(void)
 
   //char test[] = "Hello world";
   //UARTLoopbackTest(test);
+
+  uint32_t last_print_time = 0;
+  const uint32_t print_interval = 1;
+
+  //MOTOR SPEED SHIFTING TEST SET UP
+  /*const int32_t speed_setpoints[] = {
+      100,   // Forward, medium speed
+      -100,  // Reverse, medium speed
+      200,   // Forward, high speed
+      0,      // Stop
+      -50   // Reverse, low speed
+  };
+  const int num_steps = sizeof(speed_setpoints) / sizeof(speed_setpoints[0]);
+  int test_step_index = 0;
+
+
+  uint32_t last_step_change_time = 0;
+  const uint32_t STEP_CHANGE_INTERVAL = 5000;*/
+
+  //MOTOR CONSTANT SPEED TEST
+  //motor_driver_setSpeed(&left_motor, -0.1);
+  //motor_driver_setSpeed(&right_motor, -0.1);
 
   /* USER CODE END 2 */
 
@@ -413,8 +449,8 @@ int main(void)
     bno055_data_vector angular = bno055_getVectorGyroscope();
 
     //Motor Encoders
-    encoder1 = (uint16_t)__HAL_TIM_GET_COUNTER(&htim4);
-    encoder2 = (uint16_t)__HAL_TIM_GET_COUNTER(&htim3);
+    //encoder1 = (uint16_t)__HAL_TIM_GET_COUNTER(&htim4);
+    //encoder2 = (uint16_t)__HAL_TIM_GET_COUNTER(&htim3);
 
     //Raspberry Pi Communication
     piSend(quaternion, linear, angular, encoder1, encoder2);
@@ -422,27 +458,62 @@ int main(void)
 
     printDebug(quaternion, linear, angular, encoder1, encoder2);
 
-    // Only set speed for the first 20 seconds after startup
-//    if (HAL_GetTick() - start_time < 10000) {
-//    	MD1_setSpeed(&htim1, TIM_CHANNEL_4, 10);
-//    	MD2_setSpeed(&htim8, TIM_CHANNEL_1, 10);
-//    } else {
-//    	MD1_setSpeed(&htim1, TIM_CHANNEL_4, 0);
-//		MD2_setSpeed(&htim8, TIM_CHANNEL_1, 0);
-//    }
+    /* Motor speed change test
+    // Get current time
+    uint32_t current_time = HAL_GetTick();
+    //change speed
+    if (current_time - last_step_change_time >= STEP_CHANGE_INTERVAL) {
+        last_step_change_time = current_time; // Reset the timer
+
+        // Move to the next step in the sequence, looping back to the start
+        test_step_index = (test_step_index + 1) % num_steps;
+        int32_t new_speed = speed_setpoints[test_step_index];
+
+        // Set the new target for the PID controller
+        MotorControl_SetTargetSpeed_RPM(&right_motor, new_speed);
+
+        printf("\r\n--- NEW TARGET: %ld ticks/sec ---\r\n", new_speed);
+    }
+	*/
+
+//    MotorControl_SetTargetSpeed_RPM(&right_motor, 0);
+//    MotorControl_SetTargetSpeed_RPM(&left_motor, 0);
+
+    MotorControl_SetTargetSpeed(&right_motor, 0);
+    MotorControl_SetTargetSpeed(&left_motor, 0);
 
     //Motor speed
-//	right_motor_rpm = MotorControl_getRpm(&right_motor);
-//	right_target_rpm = MotorControl_getTargetRpm(&right_motor);
+
+    //Right motor debug info
+	right_motor_tics = MotorControl_getTics(&right_motor);
+	right_pid_output = MotorControl_pidOutput(&right_motor);
 //	error_integral = MotorControl_getIntegral(&right_motor);
-//	pid_output = MotorControl_pidOutput(&right_motor);
-//	duty = MotorControl_duty(&right_motor);
 //	error = MotorControl_getError(&right_motor);
 //	p_term = MotorControl_getP(&right_motor);
 //	i_term = MotorControl_getI(&right_motor);
 //	d_term = MotorControl_getD(&right_motor);
-//	raw_speed_rpm = MotorControl_getRawspeed(&right_motor);
-//	printf("Right motor target RPM is: %ld, it is currently at %f\r\n", right_target_rpm, right_motor_rpm);
+//	current_encoder = MotorControl_getEncoder(&right_motor);
+
+    //Left motor debug info
+    	left_motor_tics = MotorControl_getTics(&left_motor);
+    	left_pid_output = MotorControl_pidOutput(&left_motor);
+//    	error_integral = MotorControl_getIntegral(&left_motor);
+//    	error = MotorControl_getError(&left_motor);
+//    	p_term = MotorControl_getP(&left_motor);
+//    	i_term = MotorControl_getI(&left_motor);
+//    	d_term = MotorControl_getD(&left_motor);
+//    	current_encoder = MotorControl_getEncoder(&left_motor);
+
+
+    if (HAL_GetTick() - last_print_time >= print_interval) {
+        last_print_time = HAL_GetTick();
+        printf("%.2f, %.2f, %.1f, %.5f, %.5f, %.5f\r\n",
+        		//encoder1, current_encoder, 40.0f, p_term, i_term, error);
+        		right_motor_tics, right_pid_output, left_motor_tics, left_pid_output, i_term, 50.0);
+    }
+    //debug printouts
+    //printDebug(quaternion, encoder1, encoder2);
+    //printf("timer 6 interrupt, rpm at %f\r\n", rpm);
 
     //debug printouts
     //printDebug(quaternion, encoder1, encoder2);
@@ -503,8 +574,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
   if(htim->Instance == TIM6)
   {
-//	  MotorControl_RunPID(&left_motor);
-//	  MotorControl_RunPID(&right_motor);
+	  MotorControl_RunPID(&left_motor);
+	  MotorControl_RunPID(&right_motor);
   }
 }
 /* USER CODE END 4 */

@@ -1,188 +1,233 @@
 /*
  * pid.c
  *
- *  Created on: Jan 22, 2026
- *      Author: caseyear
+ * PID Motor Control Implementation
+ * Uses discrete-time PID with trapezoidal integration and filtered derivative
+ *
+ * Created on: Jan 22, 2025
+ * Author: caseyear
  */
+
 #include "pid.h"
 #include <stdlib.h>
 #include <stm32g4xx_hal_tim.h>
 #include "drv8245-q1.h"
 #include "stm32g4xx_hal.h"
-#include "butterworth_filter.h"
 
-void MotorControl_Init(MotorControl_t* motor,
-                       TIM_HandleTypeDef* pwm_timer, uint32_t pwm_channel,
-                       TIM_HandleTypeDef* encoder_timer,
+/* ============================================================================
+ * INITIALIZATION
+ * ============================================================================ */
+void MotorControl_Init(Motor* motor,
                        float Kp, float Ki, float Kd)
 {
-    motor->pwm_timer = pwm_timer;
-    motor->pwm_channel = pwm_channel;
-    motor->encoder_timer = encoder_timer;
 
-    motor->Kp = Kp;
-    motor->Ki = Ki;
-    motor->Kd = Kd;
-    motor->p_term = 0;
-    motor->i_term = 0;
-    motor->d_term = 0;
+    /* Set PID gains */
+    //Kp
+    if (Kp < 0){
+    	motor->Kp = 0;
+    } else{
+    	motor->Kp = Kp;
+    }
 
-    motor->target_speed_rpm = 0;
+    //Ki
+    if (Ki < 0){
+    	motor->Ki = 0;
+    } else{
+    	motor->Ki = Ki;
+    }
+
+    //Kd
+    if (Kd < 0){
+    	motor->Kd = 0;
+    } else{
+    	motor->Kd = Kd;
+    }
+
+    /* Initialize PID terms */
+    motor->p_term = 0.0f;
+    motor->i_term = 0.0f;
+    motor->d_term = 0.0f;
+
+    /* Initialize setpoint and state variables */
+    motor->target_speed_tics = 0;
     motor->last_encoder_count = 0;
     motor->current_encoder_count = 0;
-    motor->current_speed_rpm = 0.0f;
-    motor->rpm_filt = 0.0f;
-    motor->rpm_tau  = 0.05f;
-    motor->error_integral = 0.0f;
+    motor->current_speed_tics = 0.0f;
+    motor->last_speed_tics = 0.0f;
+    motor->duty_cycle = 0.0f;
+
+    /* Initialize error tracking */
+    motor->error = 0.0f;
     motor->last_error = 0.0f;
-    motor->output_pwm_duty = 0;
-    motor->pid_output = 0;
-    motor->error = 0;
-    motor->raw_speed_rpm = 0;
+    motor->error_integral = 0.0f;  // Deprecated, but kept for compatibility
 
+    /* Initialize outputs */
+    motor->pid_output = 0.0f;
 
-    Butterworth_Init(&motor->rpm_filter);
-
+    /* Derivative filter time constant (seconds)
+     * tau = 0.02s provides good noise rejection at 100Hz update rate
+     * Cutoff frequency ≈ 1/(2*pi*tau) ≈ 8 Hz */
+    motor->tau = 0.02f;
 }
 
-
-void MotorControl_SetTargetSpeed(MotorControl_t* motor, int32_t target_rpm)
+/* ============================================================================
+ * SETPOINT CONTROL
+ * ============================================================================ */
+void MotorControl_SetTargetSpeed(Motor* motor, int32_t target_tics)
 {
-    motor->target_speed_rpm = target_rpm;
+    motor->target_speed_tics = target_tics;
+
+    /* OPTION: Reset integral on setpoint change to reduce overshoot
+     * Uncomment if quick direction changes are needed */
+    // motor->i_term = 0.0f;
 }
 
-int32_t MotorControl_getTargetRpm(MotorControl_t* motor){
-	return motor->target_speed_rpm;
-}
-
-float MotorControl_getRpm(MotorControl_t* motor){
-	return motor->current_speed_rpm;
-}
-
-float MotorControl_getIntegral(MotorControl_t* motor){
-	return motor->error_integral;
-}
-
-float MotorControl_duty(MotorControl_t* motor){
-	return motor->output_pwm_duty;
-}
-
-float MotorControl_pidOutput(MotorControl_t* motor){
-	return motor->pid_output;
-}
-
-float MotorControl_getP(MotorControl_t* motor){
-	return motor->p_term;
-}
-
-float MotorControl_getI(MotorControl_t* motor){
-	return motor->i_term;
-}
-
-float MotorControl_getD(MotorControl_t* motor){
-	return motor->d_term;
-}
-
-float MotorControl_getError(MotorControl_t* motor){
-	return motor->error;
-}
-
-float MotorControl_getRawspeed(MotorControl_t* motor){
-	return motor->raw_speed_rpm;
-}
-
-
-void MotorControl_RunPID(MotorControl_t* motor)
+void MotorControl_SetTargetSpeed_RPM(Motor* motor, int32_t target_rpm)
 {
-    // Read current encoder count
+	motor->target_speed_tics = (target_rpm * MOTOR_PPR) / 60.0f;
+}
 
-	if (motor->encoder_timer != NULL) {
-	    motor->current_encoder_count = (uint16_t)__HAL_TIM_GET_COUNTER(motor->encoder_timer);
-	}
+/* ============================================================================
+ * GETTER FUNCTIONS
+ * ============================================================================ */
+int32_t MotorControl_getTargetTics(Motor* motor) {
+    return motor->target_speed_tics;
+}
 
-    // Calculate ticks moved
+float MotorControl_getTics(Motor* motor) {
+    return motor->current_speed_tics;
+}
+
+float MotorControl_getIntegral(Motor* motor) {
+    return motor->i_term;  // Return actual integral term, not deprecated variable
+}
+
+float MotorControl_pidOutput(Motor* motor) {
+    return motor->pid_output;
+}
+
+float MotorControl_getP(Motor* motor) {
+    return motor->p_term;
+}
+
+float MotorControl_getI(Motor* motor) {
+    return motor->i_term;
+}
+
+float MotorControl_getD(Motor* motor) {
+    return motor->d_term;
+}
+
+float MotorControl_getDuty(Motor* motor) {
+    return motor->duty_cycle;
+}
+
+float MotorControl_getError(Motor* motor) {
+    return motor->error;
+}
+
+uint16_t MotorControl_getEncoder(Motor* motor) {
+    return motor->current_encoder_count;
+}
+
+//float MotorControl_getRawspeed(MotorControl_t* motor) {
+//    return motor->raw_speed_tics;
+//}
+
+/* ============================================================================
+ * PID CONTROL LOOP
+ * ============================================================================ */
+void MotorControl_RunPID(Motor* motor)
+{
+    /* ------------------------------------------------------------------------
+     * 1. READ ENCODER
+     * ------------------------------------------------------------------------ */
+    if (motor->encoder_timer != NULL) {
+        motor->current_encoder_count = (uint16_t)__HAL_TIM_GET_COUNTER(motor->encoder_timer);
+    }
+
+    /* Calculate encoder ticks moved since last sample
+     * Note: Handles 16-bit overflow automatically due to two's complement arithmetic */
     int16_t ticks_moved = (int16_t)(motor->current_encoder_count - motor->last_encoder_count);
-    motor->last_encoder_count = motor->current_encoder_count;
 
-//    //USE FMAC hardware filter calculation core to implement 5th order Chevby LP filter
-//    float scaled_error = raw_error / MAX_SPEED_TICKS_PER_SEC;
-//    if (scaled_error > 1.0f)  scaled_error = 1.0f;
-//    if (scaled_error < -1.0f) scaled_error = -1.0f;
-//    //To convert from floating point to fixed point, all coefficients must be multiplied by
-//    //32768 (0x8000) and cast to int16
-//    int16_t q15_error = (int16_t)(scaled_error * 32767.0f);
-//    int16_t q15_filtered_error = FMAC_Filter_Apply(q15_error);
-//    float scaled_filtered_error = (float)q15_filtered_error / 32767.0f;
-//    float error = scaled_filtered_error * MAX_SPEED_TICKS_PER_SEC; // Un-scale it
+    //2. CALCULATE SPEED (Process Variable)
+    //Convert ticks moved to ticks/second
+    motor->current_speed_tics = (float)ticks_moved * PID_LOOP_FREQUENCY;
 
-    // Calculate speed in rpm
-    motor->raw_speed_rpm = (float)ticks_moved * (60.0f / (MOTOR_PPR * period));
+    //3. CALCULATE ERROR
+    motor->error = (float)motor->target_speed_tics - motor->current_speed_tics;
 
-    //Butterworth 4th order lowpass
-     motor-> current_speed_rpm = Butterworth_Apply(&motor->rpm_filter, motor->raw_speed_rpm);
-
-    // Low-pass filter (EMA): rpm_filt += alpha*(rpm_raw - rpm_filt)
-//    float dt = period;                       // if period is fixed and accurate
-//    float tau = motor->rpm_tau;
-//    float alpha = dt / (tau + dt);
-//    motor->rpm_filt += alpha * (motor->current_speed_rpm - motor->rpm_filt);
-
-//    // filter out hight frequency noise to increase derivative performance
-//    currentFilterEstimate = (a * previousFilterEstimate) + (1-a) * errorChange;
-//    previousFilterEstimate = currentFilterEstimate;
-
-    motor->error = (float)motor->target_speed_rpm - motor->current_speed_rpm;
-
+    //4. PROPORTIONAL TERM
     motor->p_term = motor->Kp * motor->error;
 
-    // reset the integral if the speed is changed allow drivetrain
-    //to change direction faster than waiting for integral sum to change
-//    if (motor -> target_speed_rpm != motor -> previous_speed_rpm) {
-//        motor -> error_integral = 0;
-//    }
-    motor -> previous_speed_rpm = motor -> target_speed_rpm;
+    /*5. INTEGRAL TERM (Trapezoidal Integration)
+     * I_out += Ki * dt/2 * (error[k] + error[k-1])
+     * Trapezoidal rule reduces integration error compared to rectangular method*/
+    motor->i_term += 0.5f * motor->Ki * PID_PERIOD * (motor->error + motor->last_error);
 
-    motor->error_integral += motor->error * period;
+    //Dynamic antiwindup scheme
+    float limMinInt, limMaxInt;
 
-    //Anti wind up
-    if (motor -> error_integral > integral_limit){
-    	motor -> error_integral = integral_limit;
-    }
-    if (motor -> error_integral < -integral_limit){
-    	motor -> error_integral = -integral_limit;
+    if (MAX_SPEED_TICKS_PER_SEC > motor->p_term){
+    	limMaxInt = MAX_SPEED_TICKS_PER_SEC - motor->p_term;
+    } else{
+    	limMaxInt = 0.0f;
     }
 
-    motor->i_term = motor->Ki * motor->error_integral;
+    if (-MAX_SPEED_TICKS_PER_SEC < motor->p_term){
+    	limMinInt = -MAX_SPEED_TICKS_PER_SEC - motor->p_term;
+    } else{
+    	limMinInt = 0.0f;
+    }
+    /* Anti-windup: Clamp integral term to prevent saturation */
+    if (motor->i_term > limMaxInt) {
+        motor->i_term = limMaxInt;
+    } else if (motor->i_term < limMinInt) {
+        motor->i_term = limMinInt;
+    }
 
-    motor->d_term = motor->Kd * ((motor->error - motor->last_error) / period);
+    /* ------------------------------------------------------------------------
+     * 6. DERIVATIVE TERM (Band-Limited Differentiator)
+     *
+     * Uses derivative-on-measurement (not derivative-on-error) to avoid
+     * "derivative kick" when setpoint changes.
+     *
+     * Discrete implementation of first-order low-pass filter on derivative:
+     * d_term = (2*Kd*(measurement[k-1] - measurement[k]) + (2*tau - dt)*d_term[k-1]) / (2*tau + dt)
+     *
+     * Note: Negative sign because derivative is on measurement (opposite of error rate)
+     * ------------------------------------------------------------------------ */
+    motor->d_term = -(2.0f * motor->Kd * (motor->current_speed_tics - motor->last_speed_tics)
+                    + (2.0f * motor->tau - PID_PERIOD) * motor->d_term)
+                    / (2.0f * motor->tau + PID_PERIOD);
+
+    /* ------------------------------------------------------------------------
+     * 7. UPDATE STATE VARIABLES FOR NEXT ITERATION
+     * ------------------------------------------------------------------------ */
     motor->last_error = motor->error;
+    motor->last_speed_tics = motor->current_speed_tics;
+    motor->last_encoder_count = motor->current_encoder_count;
 
-    //Calculate output
+    /* ------------------------------------------------------------------------
+     * 8. COMBINE PID TERMS
+     * ------------------------------------------------------------------------ */
     motor->pid_output = motor->p_term + motor->i_term + motor->d_term;
 
-    //Convert rpm to duty cycle
-    motor->output_pwm_duty = ((int32_t)motor->pid_output / MAX_RPM)*100;
+    motor->duty_cycle = motor->pid_output/MAX_SPEED_TICKS_PER_SEC;
 
-    //Case for duty cycle is higher then 100%
-    if (motor->output_pwm_duty >= 100) motor->output_pwm_duty = 100;
-    if (motor->output_pwm_duty <= -100) motor->output_pwm_duty = -100;
+    //10. APPLY TO HARDWARE
+     motor_driver_setSpeed(motor, motor->duty_cycle);
 
-    // Apply to hardware
-	if (motor->pwm_channel == TIM_CHANNEL_1) {
-		MD2_setSpeed(&htim8, TIM_CHANNEL_1, motor->output_pwm_duty);
-	} else if (motor->pwm_channel == TIM_CHANNEL_4) {
-		MD1_setSpeed(&htim1, TIM_CHANNEL_4, motor->output_pwm_duty);
-	}
 }
 
-//Help
+/* ============================================================================
+ * REFERENCES
+ * ============================================================================ */
 /*
- * https://www.ctrlaltftc.com/practical-examples/ftc-motor-control
- * https://www.youtube.com/watch?v=HJ-C4Incgpw&t=237s
- * https://www.youtube.com/watch?v=NVLXCwc8HzM&t=201s
- * https://www.youtube.com/watch?v=HJ-C4Incgpw
- * https://github.com/curiores/ArduinoTutorials/blob/main/BasicFilters/Design/LowPass/ButterworthFilter.ipynb
- * https://github.com/curiores/ArduinoTutorials/blob/main/SpeedControl/SpeedControl_NoAtomic/SpeedControl_NoAtomic.ino
- * https://github.com/LemLib/LemLib/blob/master/src/lemlib/PID.cpp
- * https://github.com/putrafurqan/stm32_dsp_fir_filter/blob/main/docs/matlab/main_filter_design.m
+ * Helpful resources used in development:
+ * - https://www.ctrlaltftc.com/practical-examples/ftc-motor-control
+ * - https://www.youtube.com/watch?v=HJ-C4Incgpw&t=237s
+ * - https://www.youtube.com/watch?v=NVLXCwc8HzM&t=201s
+ * - https://github.com/curiores/ArduinoTutorials (filter design)
+ * - https://github.com/LemLib/LemLib/blob/master/src/lemlib/PID.cpp
  */

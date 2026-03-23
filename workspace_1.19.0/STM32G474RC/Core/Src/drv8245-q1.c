@@ -10,6 +10,7 @@
 #include "drv8245-q1.h"
 #include "main.h"
 #include <stdio.h>
+#include "tim.h"
 
 
 
@@ -21,34 +22,22 @@ void delay_us(uint32_t us)
     while ((DWT->CYCCNT - start) < cycles);
 }
 
-void md1_reset_pulse(){
-	HAL_GPIO_WritePin(MD1_nSLEEP_GPIO_Port, MD1_nSLEEP_Pin, GPIO_PIN_RESET);
-	delay_us(30);
-	HAL_GPIO_WritePin(MD1_nSLEEP_GPIO_Port, MD1_nSLEEP_Pin, GPIO_PIN_SET);
-}
 
-void md2_reset_pulse(){
-	HAL_GPIO_WritePin(MD2_nSLEEP_GPIO_Port, MD2_nSLEEP_Pin, GPIO_PIN_RESET);
-	delay_us(30);
-	HAL_GPIO_WritePin(MD2_nSLEEP_GPIO_Port, MD2_nSLEEP_Pin, GPIO_PIN_SET);
-}
-
-HAL_StatusTypeDef MD1_motor_init(){
-	GPIO_PinState fault_status1;
-
+HAL_StatusTypeDef motor_driver_init(Motor *motor){
+	GPIO_PinState fault_status;
 //	//debug block, check nSLEEP & nFAULT before init
 //	GPIO_PinState sleep_status1 = HAL_GPIO_ReadPin(MD1_nSLEEP_GPIO_Port, MD1_nSLEEP_Pin);
 //	printf("sleep pin is: %d\r\n", sleep_status1);
-//	fault_status = HAL_GPIO_ReadPin(MD1_nFAULT_GPIO_Port, MD1_nFAULT_Pin);
+//	fault_status1 = HAL_GPIO_ReadPin(MD1_nFAULT_GPIO_Port, MD1_nFAULT_Pin);
 //	printf("fault pin is: %d\r\n", fault_status1);
 
 	//initiate wakeup sequence
-	printf("nSLEEP asserted high on motor driver 1\r\n");
-	HAL_GPIO_WritePin(MD1_nSLEEP_GPIO_Port, MD1_nSLEEP_Pin, GPIO_PIN_SET);
+	printf("nSLEEP asserted high on motor driver\r\n");
+	HAL_GPIO_WritePin(motor->nsleep_port, motor->nsleep_pin, GPIO_PIN_SET);
 	HAL_Delay(1);
 
-	fault_status1 = HAL_GPIO_ReadPin(MD1_nFAULT_GPIO_Port, MD1_nFAULT_Pin);
-	if (fault_status1 == GPIO_PIN_RESET) {
+	fault_status = HAL_GPIO_ReadPin(motor->nfault_port, motor->nfault_pin);
+	if (fault_status == GPIO_PIN_RESET) {
 		printf("nFAULT pin asserted low\r\n");
 	}else{
 		printf("error: nFAULT pin stuck high");
@@ -57,49 +46,11 @@ HAL_StatusTypeDef MD1_motor_init(){
 
 	//pulse nSLEEP to acknowledge device wake up
 	printf("send reset pulse on nSLEEP\r\n");
-	md1_reset_pulse();
 
-	fault_status1 = HAL_GPIO_ReadPin(MD1_nFAULT_GPIO_Port, MD1_nFAULT_Pin);
-	if (fault_status1 == GPIO_PIN_SET) {
-		printf("nFAULT pin de-asserted high, in standby\r\n");
-	}else{
-		printf("initialization incomplete\r\n");
-
-		return HAL_ERROR;
-	}
-	//turn on md1 led
-	HAL_GPIO_WritePin(MD1_LED_GPIO_Port, MD1_LED_Pin, GPIO_PIN_SET);
-	printf("now in standby. motor driver 1 ready!\r\n");
-
-	return HAL_OK;
-
-}
-
-HAL_StatusTypeDef MD2_motor_init(){
-	GPIO_PinState fault_status2;
-
-//	//debug block, check nSLEEP & nFAULT before init
-//	GPIO_PinState sleep_status2 = HAL_GPIO_ReadPin(MD2_nSLEEP_GPIO_Port, MD2_nSLEEP_Pin);
-//	printf("sleep pin is: %d\r\n", sleep_status2);
-//	fault_status2 = HAL_GPIO_ReadPin(MD2_nFAULT_GPIO_Port, MD2_nFAULT_Pin);
-//	printf("fault pin is: %d\r\n", fault_status2);
-
-	//initiate wakeup sequence
-	printf("nSLEEP asserted high on motor driver 2\r\n");
-	HAL_GPIO_WritePin(MD2_nSLEEP_GPIO_Port, MD2_nSLEEP_Pin, GPIO_PIN_SET);
-	HAL_Delay(1);
-
-	fault_status2 = HAL_GPIO_ReadPin(MD2_nFAULT_GPIO_Port, MD2_nFAULT_Pin);
-	if (fault_status2 == GPIO_PIN_RESET) {
-		printf("nFAULT pin asserted low\r\n");
-	}else{
-		printf("error: nFAULT pin stuck high");
-		return HAL_ERROR;
-	}
-
-	//pulse nSLEEP to acknowledge device wake up
-	printf("send reset pulse on nSLEEP\r\n");
-	md2_reset_pulse();
+	//RESET Pulse
+	HAL_GPIO_WritePin(motor->nsleep_port, motor->nsleep_pin, GPIO_PIN_RESET);
+	delay_us(30);
+	HAL_GPIO_WritePin(motor->nsleep_port, motor->nsleep_pin, GPIO_PIN_SET);
 
 //  //BYPASSING FAULT CHECK BECAUSE NFAULT PIN ON STM32 IS LIKELY BURNT OUT FROM A PRIOR 5V SIGNAL SENT, UNCOMMENT FOR FUTURE CHECK, THE MD STILL WORKS
 //	fault_status2 = HAL_GPIO_ReadPin(MD2_nFAULT_GPIO_Port, MD2_nFAULT_Pin);
@@ -110,78 +61,69 @@ HAL_StatusTypeDef MD2_motor_init(){
 //
 //		return HAL_ERROR;
 //	}
-	//turn on md2 led
-	HAL_GPIO_WritePin(MD2_LED_GPIO_Port, MD2_LED_Pin, GPIO_PIN_SET);
-	printf("now in standby. motor driver 2 ready!\r\n");
+	//turn on m12 led
+	HAL_GPIO_WritePin(motor->led_port, motor->led_pin, GPIO_PIN_SET);
+	printf("now in standby. motor driver12 ready!\r\n");
+
+    // Start encoder and PWM
+    HAL_TIM_Encoder_Start(motor->encoder_timer, TIM_CHANNEL_ALL);
+    HAL_TIM_PWM_Start(motor->pwm_timer, motor->pwm_channel);
+
+    HAL_GPIO_WritePin(motor->direction_port, motor->direction_pin, GPIO_PIN_SET);
+    __HAL_TIM_SET_COMPARE(motor->pwm_timer, motor->pwm_channel, 0);
 
 	return HAL_OK;
+}
+
+void motor_driver_setSpeed(Motor *motor, float duty) {
+
+    /* Clamp duty cycle to valid range */
+    if (duty > 1) {
+        duty = 1;
+    } else if (duty < -1) {
+        duty = -1;
+    }
+
+	uint32_t timer_period = __HAL_TIM_GET_AUTORELOAD(motor->pwm_timer);
+
+	if (motor->reverse) {
+	    // If reversed, "forward" means setting the direction pin LOW
+//	    forward_state = GPIO_PIN_RESET;
+//	    reverse_state = GPIO_PIN_SET;
+		//Set direction +duty is forward, -duty is backward
+	    if (duty >= 0) {
+	    	HAL_GPIO_WritePin(motor->direction_port, motor->direction_pin, GPIO_PIN_RESET);
+	    	uint32_t pwm_output = (uint32_t)(timer_period * duty);  // Round instead of truncate
+	    	__HAL_TIM_SET_COMPARE(motor->pwm_timer, motor->pwm_channel, pwm_output);
+	    	//HAL_TIM_PWM_Start(motor->pwm_timer, motor->pwm_channel);
+	    //Reverse
+	    } else {
+	    	HAL_GPIO_WritePin(motor->direction_port, motor->direction_pin, GPIO_PIN_SET);
+	    	uint32_t pwm_output = (uint32_t)(timer_period * (-duty));  // Round instead of truncate
+	        __HAL_TIM_SET_COMPARE(motor->pwm_timer, motor->pwm_channel, pwm_output);
+	    	//HAL_TIM_PWM_Start(motor->pwm_timer, motor->pwm_channel);
+	    }
+	} else {
+	    // Normal operation, "forward" means setting the direction pin HIGH
+//	    forward_state = GPIO_PIN_SET;
+//	    reverse_state = GPIO_PIN_RESET;
+
+		//Set direction +duty is forward, -duty is backward
+	    if (duty >= 0) {
+	    	HAL_GPIO_WritePin(motor->direction_port, motor->direction_pin, GPIO_PIN_SET);
+	    	uint32_t pwm_output = (uint32_t)(timer_period * duty);  // Round instead of truncate
+	    	__HAL_TIM_SET_COMPARE(motor->pwm_timer, motor->pwm_channel, pwm_output);
+	    	//HAL_TIM_PWM_Start(motor->pwm_timer, motor->pwm_channel);
+	    //Reverse
+	    } else {
+	    	HAL_GPIO_WritePin(motor->direction_port, motor->direction_pin, GPIO_PIN_RESET);
+	    	uint32_t pwm_output = (uint32_t)(timer_period * (-duty));  // Round instead of truncate
+	        __HAL_TIM_SET_COMPARE(motor->pwm_timer, motor->pwm_channel, pwm_output);
+	    	//HAL_TIM_PWM_Start(motor->pwm_timer, motor->pwm_channel);
+	    }
+	}
+
+
+
 }
 
-uint8_t MD1_setSpeed(TIM_HandleTypeDef *htim, uint32_t channel, int8_t duty) {
-
-//	GPIO_PinState fault_status = HAL_GPIO_ReadPin(MD1_nFAULT_GPIO_Port,MD1_nFAULT_Pin);
-//	GPIO_PinState sleep_status = HAL_GPIO_ReadPin(MD1_nSLEEP_GPIO_Port,MD1_nSLEEP_Pin);
-//	if (fault_status == 1 && sleep_status == 1){
-//		HAL_GPIO_TogglePin(PI_LED_GPIO_Port, PI_LED_Pin);
-//	}
-//	printf("fault status: %d, sleep status: %d\r\n", fault_status, sleep_status);
-	//Set direction +duty is forward, -duty is backward
-	if (duty<0){
-		HAL_GPIO_WritePin(MD1_PH_IN2_GPIO_Port, MD1_PH_IN2_Pin, GPIO_PIN_SET);
-		duty = -duty;
-	}
-	else{
-		HAL_GPIO_WritePin(MD1_PH_IN2_GPIO_Port, MD1_PH_IN2_Pin, GPIO_PIN_RESET);
-	}
-
-	uint32_t timer_period = __HAL_TIM_GET_AUTORELOAD(htim);
-
-	//calculate compare value based on timer period
-	uint32_t compare_value = (timer_period * duty) / 100;
-//	printf("[DEBUG] Calculated compare value: %lu\r\n", compare_value);
-
-	__HAL_TIM_SET_COMPARE(htim, channel, compare_value);
-
-	//start PWM output
-	HAL_StatusTypeDef pwm_result = HAL_TIM_PWM_Start(htim, channel);
-//	printf("HAL_TIM_PWM_Start result: %d\r\n", pwm_result);
-	if (pwm_result != HAL_OK) {
-//		printf("ERROR: Failed to start PWM\r\n");
-		return 0;
-	}
-
-//	printf("Motor speed set to %d%% (Compare: %lu/%lu)\r\n", duty, compare_value, timer_period);
-
-	return duty;
-}
-
-uint8_t MD2_setSpeed(TIM_HandleTypeDef *htim, uint32_t channel, int8_t duty) {
-
-	//Set direction +duty is forward, -duty is backward
-	if (duty<0){
-		HAL_GPIO_WritePin(MD2_PH_IN2_GPIO_Port, MD2_PH_IN2_Pin, GPIO_PIN_SET);
-		duty = -duty;
-	}
-	else{
-		HAL_GPIO_WritePin(MD2_PH_IN2_GPIO_Port, MD2_PH_IN2_Pin, GPIO_PIN_RESET);
-	}
-
-	uint32_t timer_period = __HAL_TIM_GET_AUTORELOAD(htim);
-
-	//calculate compare value based on timer period
-	uint32_t compare_value = (timer_period * duty) / 100;
-
-	__HAL_TIM_SET_COMPARE(htim, channel, compare_value);
-
-	//start PWM output
-	HAL_StatusTypeDef pwm_result = HAL_TIM_PWM_Start(htim, channel);
-	if (pwm_result != HAL_OK) {
-//		printf("ERROR: Failed to start PWM\r\n");
-		return 0;
-	}
-
-//	printf("Motor speed set to %d%% (Compare: %lu/%lu)\r\n", duty, compare_value, timer_period);
-
-
-	return duty;
-}
