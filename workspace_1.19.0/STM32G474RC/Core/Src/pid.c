@@ -213,7 +213,7 @@ void MotorControl_RunPID(Motor* motor)
      * ------------------------------------------------------------------------ */
     motor->pid_output = motor->p_term + motor->i_term + motor->d_term;
 
-    motor->duty_cycle = motor->pid_output/MAX_SPEED_TICKS_PER_SEC;
+    motor->duty_cycle = motor->pid_output/(MOTOR_PPR * (motor->rpm / 60.0f));
 
     //10. APPLY TO HARDWARE
      motor_driver_setSpeed(motor, motor->duty_cycle);

@@ -41,6 +41,8 @@ typedef struct {
 
     TIM_HandleTypeDef* encoder_timer;
 
+    int16_t rpm;
+
     bool reverse;
 
     /* ------------------------------------------------------------------------
@@ -94,6 +96,6 @@ void Motor_Init(Motor* motor, bool reverse,
 		GPIO_TypeDef *direction_port, uint16_t direction_pin,
 		GPIO_TypeDef *led_port, uint16_t led_pin,
 		TIM_HandleTypeDef *pwm_timer, uint32_t pwm_channel,
-		TIM_HandleTypeDef *encoder_timer);
+		TIM_HandleTypeDef *encoder_timer, int16_t rpm);
 
 #endif /* INC_MOTOR_H_ */

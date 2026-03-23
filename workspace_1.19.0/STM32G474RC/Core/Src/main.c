@@ -59,8 +59,8 @@
 /* USER CODE BEGIN PV */
 uint8_t tx_buffer[TX_BUFFER_SIZE];
 uint8_t rx_buffer[RX_BUFFER_SIZE];
-int32_t left_tics = 0;
-int32_t right_tics = 0;
+int32_t received_left_tics = 0;
+int32_t received_right_tics = 0;
 uint8_t rx_byte;                      // Temp buffer for the HAL_UART_Receive_IT call
 volatile uint8_t new_cmd_flag = 0;    // Flag set by ISR, cleared by main loop. MUST BE VOLATILE.
 
@@ -289,34 +289,34 @@ uint8_t piSend(bno055_data_vector imu_quat, bno055_data_vector imu_linear, bno05
 	return 0;
 }
 
-uint8_t piReceive(uint8_t* rx_buffer){
-
-    if (rx_buffer == NULL) {
-        printf("Error: receiveData pointer is NULL\r\n");
-        return 3;
-    }
-    memset(rx_buffer, 0, RX_BUFFER_SIZE);
-
-    HAL_StatusTypeDef receiveStatus = HAL_UART_Receive(&huart2, rx_buffer, RX_BUFFER_SIZE, 20);// check &huart2				//rx buffersize =10
-    if (receiveStatus != HAL_OK) {
-        if (receiveStatus == HAL_TIMEOUT) {
-            //printf("RX Timeout\r\n");
-        } else {
-            //printf("RX error: %d\r\n", receiveStatus);
-        }
-        return 1;
-    }
-
-    if (rx_buffer[0] != 0xAA || rx_buffer[RX_BUFFER_SIZE - 1] != 0x55) {
-        //printf("Invalid packet markers!\r\n");
-        return 1; // Indicate failure
-    }
-
-    memcpy(&left_tics,&rx_buffer[1],4);//left_ticks
-    memcpy(&right_tics,&rx_buffer[5],4);//right_tics
-    printf("RX error: %d\r\n", receiveStatus);
-    return 0;
-}
+//uint8_t piReceive(uint8_t* rx_buffer){
+//
+//    if (rx_buffer == NULL) {
+//        printf("Error: receiveData pointer is NULL\r\n");
+//        return 3;
+//    }
+//    memset(rx_buffer, 0, RX_BUFFER_SIZE);
+//
+//    HAL_StatusTypeDef receiveStatus = HAL_UART_Receive(&huart2, rx_buffer, RX_BUFFER_SIZE, 20);// check &huart2				//rx buffersize =10
+//    if (receiveStatus != HAL_OK) {
+//        if (receiveStatus == HAL_TIMEOUT) {
+//            //printf("RX Timeout\r\n");
+//        } else {
+//            //printf("RX error: %d\r\n", receiveStatus);
+//        }
+//        return 1;
+//    }
+//
+//    if (rx_buffer[0] != 0xAA || rx_buffer[RX_BUFFER_SIZE - 1] != 0x55) {
+//        //printf("Invalid packet markers!\r\n");
+//        return 1; // Indicate failure
+//    }
+//
+//    memcpy(&left_tics,&rx_buffer[1],4);//left_ticks
+//    memcpy(&right_tics,&rx_buffer[5],4);//right_tics
+//    printf("RX error: %d\r\n", receiveStatus);
+//    return 0;
+//}
 
 /* USER CODE END 0 */
 
@@ -384,7 +384,7 @@ int main(void)
 		  MD1_PH_IN2_GPIO_Port, MD1_PH_IN2_Pin,
 		  MD1_LED_GPIO_Port, MD1_LED_Pin,
 		  &htim1, TIM_CHANNEL_4,
-		  &htim4
+		  &htim4, 260
 		  );
 
   Motor_Init(&right_motor, 1,
@@ -393,7 +393,7 @@ int main(void)
 		  MD2_PH_IN2_GPIO_Port, MD2_PH_IN2_Pin,
 		  MD2_LED_GPIO_Port, MD2_LED_Pin,
 		  &htim8, TIM_CHANNEL_1,
-		  &htim3
+		  &htim3, 285
 		  );
 
   //Motor Driver Initialize
@@ -407,12 +407,14 @@ int main(void)
 		  0.0f);	//Kd
 
   MotorControl_Init(&right_motor,
-		  0.842f, //Kp
-		  5.94f,	//Ki
+		  0.855f, //Kp
+		  6.03f,	//Ki
 		  0.0f);	//Kd
 
 
   HAL_TIM_Base_Start_IT(&htim6);
+
+  HAL_UART_Receive_IT(&huart2, &rx_byte, 1);
   /* random tests, commented out */
   //LED_Test();
 
@@ -465,9 +467,34 @@ int main(void)
 
     //Raspberry Pi Communication
     piSend(quaternion, linear, angular, encoder1, encoder2);
-    piReceive(rx_buffer);
-    //printDebug(quaternion, linear, angular, encoder1, encoder2);
 
+    printDebug(quaternion, linear, angular, encoder1, encoder2);
+
+    // --- NEW: Check for and process commands from the Raspberry Pi ---
+    if (new_cmd_flag == 1)
+    {
+        // A new packet was assembled by the interrupt. Let's look at it.
+        new_cmd_flag = 0; // Reset the flag immediately
+
+        // --- NEW DIAGNOSTIC PRINT ---
+        //printf("Main Loop: Flag received! Buffer contains: ");
+        for(int i=0; i < RX_BUFFER_SIZE; i++)
+        {
+            printf("0x%02X ", rx_buffer[i]);
+        }
+        //printf("\r\n");
+
+        // Now, parse the data from the buffer
+        memcpy(&received_left_tics,  &rx_buffer[1], sizeof(int32_t));
+        memcpy(&received_right_tics, &rx_buffer[5], sizeof(int32_t));
+
+        //printf("Main Loop: Parsed values! Left: %ld, Right: %ld\r\n",
+               //received_left_tics, received_right_tics);
+
+		MotorControl_SetTargetSpeed(&right_motor, received_right_tics);
+		MotorControl_SetTargetSpeed(&left_motor, received_left_tics);
+
+    }
 
     /* Motor speed change test
     // Get current time
@@ -487,11 +514,11 @@ int main(void)
     }
 	*/
 
-    MotorControl_SetTargetSpeed_RPM(&right_motor, 0);
-    MotorControl_SetTargetSpeed_RPM(&left_motor, 0);
+//    MotorControl_SetTargetSpeed_RPM(&right_motor, 0);
+//    MotorControl_SetTargetSpeed_RPM(&left_motor, 0);
 
-//    MotorControl_SetTargetSpeed(&right_motor, right_tics);
-//    MotorControl_SetTargetSpeed(&left_motor, left_tics);
+//    MotorControl_SetTargetSpeed(&right_motor, received_right_tics);
+//    MotorControl_SetTargetSpeed(&left_motor, received_left_tics);
 
     //Motor speed
 
@@ -516,12 +543,12 @@ int main(void)
 //    	current_encoder = MotorControl_getEncoder(&left_motor);
 
 
-    if (HAL_GetTick() - last_print_time >= print_interval) {
-        last_print_time = HAL_GetTick();
-        printf("%.2f, %.2f, %.1f, %.2f, %.2f, %.1f\r\n",
-        		//encoder1, current_encoder, 40.0f, p_term, i_term, error);
-        		right_motor_tics, right_pid_output, right_tics, left_motor_tics, left_pid_output, left_tics);
-    }
+//    if (HAL_GetTick() - last_print_time >= print_interval) {
+//        last_print_time = HAL_GetTick();
+//        printf("%.2f, %.2f, %.1f, %.2f, %.2f, %.1f\r\n",
+//        		//encoder1, current_encoder, 40.0f, p_term, i_term, error);
+//        		right_motor_tics, right_pid_output, received_right_tics, left_motor_tics, left_pid_output, received_left_tics);
+//    }
 
   }
   /* USER CODE END 3 */
@@ -581,6 +608,52 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	  MotorControl_RunPID(&left_motor);
 	  MotorControl_RunPID(&right_motor);
   }
+}
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+    static uint8_t rx_index = 0;
+    static uint8_t packet_started = 0;
+    const uint8_t START_MARKER = 0xAA;
+    const uint8_t END_MARKER = 0x55;
+
+    // Make sure the interrupt is from the correct UART
+    if (huart->Instance == USART2)
+    {
+        // State 1: Waiting for a start marker
+        if (!packet_started)
+        {
+            if (rx_byte == START_MARKER)
+            {
+                packet_started = 1;
+                rx_index = 0;
+                rx_buffer[rx_index++] = rx_byte;
+            }
+        }
+        // State 2: Already receiving a packet
+        else
+        {
+            rx_buffer[rx_index++] = rx_byte;
+
+            // Check if we have received a full packet
+            if (rx_index >= RX_BUFFER_SIZE) // RX_BUFFER_SIZE should be 10
+            {
+                // Check if the packet is valid (correct end marker)
+                if (rx_buffer[RX_BUFFER_SIZE - 1] == END_MARKER)
+                {
+                    // Valid packet! Set the flag for the main loop.
+                    new_cmd_flag = 1;
+                }
+                // Reset the state machine for the next packet search
+                packet_started = 0;
+                rx_index = 0;
+            }
+        }
+
+        // CRITICAL: Re-arm the interrupt to listen for the next single byte.
+        // This line MUST be reached for communication to continue.
+        HAL_UART_Receive_IT(&huart2, &rx_byte, 1);
+    }
 }
 /* USER CODE END 4 */
 
