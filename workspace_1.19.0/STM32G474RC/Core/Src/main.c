@@ -80,6 +80,8 @@ float p_term;
 float i_term;
 float d_term;
 uint16_t current_encoder;
+
+bno055_units_t current_units;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -239,10 +241,26 @@ void printDebug(bno055_data_vector imu_quat, bno055_data_vector imu_linear, bno0
 	printf("\033[2J");
 	printf("\033[H");
 
-	printf("IMU:\r\n");
-	printf("W: %.2f | X: %.2f | Y: %.2f | Z: %.2f\r\n", imu_quat.w, imu_quat.x, imu_quat.y, imu_quat.z);
+	bno055_getOutputUnits(&current_units);
+	printf("Current IMU units:\r\n");
+	printf("  Orientation: %s\r\n", current_units.orientation_android ? "Android" : "Windows");
+	printf("  Temperature: %s\r\n", current_units.temp_fahrenheit ? "Fahrenheit" : "Celsius");
+	printf("  Euler Angles: %s\r\n", current_units.euler_radians ? "Radians" : "Degrees");
+	printf("  Gyroscope: %s\r\n", current_units.gyro_rps ? "rps" : "dps");
+	printf("  Accelerometer: %s\r\n", current_units.accel_mg ? "mg" : "m/s^2");
+    printf("\r\n");
+
+	printf("Quaternion:\r\n");
+	printf("  W: %.2f | X: %.2f | Y: %.2f | Z: %.2f\r\n", imu_quat.w, imu_quat.x, imu_quat.y, imu_quat.z);
+	printf("Linear Velocity:\r\n");
+	printf("  W: %.2f | X: %.2f | Y: %.2f | Z: %.2f\r\n", imu_linear.w, imu_linear.x, imu_linear.y, imu_linear.z);
+	printf("Angular Velocity:\r\n");
+	printf("  W: %.2f | X: %.2f | Y: %.2f | Z: %.2f\r\n", imu_angular.w, imu_angular.x, imu_angular.y, imu_angular.z);
+	printf("\r\n");
+
 	printf("Encoder 1:%d\r\n", encoder1);
 	printf("Encoder 2:%d\r\n", encoder2);
+	printf("\r\n");
 
 	printf("Transmitted: ");
 	for(int i = 0; i < TX_BUFFER_SIZE; i++) {

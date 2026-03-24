@@ -1,0 +1,309 @@
+/*
+ * bno055.h
+ *
+ *  Created on: Jan 26, 2026
+ *      Author: caseyear
+ */
+
+#ifndef INC_BNO055_H_
+#define INC_BNO055_H_
+
+#include <string.h>
+#include <stdio.h>
+#include "i2c.h"
+
+//I2C address
+#define BNO055_I2C_ADDR_HI 0x29
+#define BNO055_I2C_ADDR_LO 0x28
+#define BNO055_I2C_ADDR    BNO055_I2C_ADDR_LO
+
+//read-only chip things
+#define CHIP_ID 0x00
+#define ACC_ID 0x01
+#define MAG_ID 0x02
+#define GYR_ID 0x03
+#define SW_REV_ID_LSB 0x04
+#define SW_REV_ID_MSB 0x05
+#define BL_REV_ID 0x06
+#define PAGE_ID 0x07
+
+//---------------------------------------------------------------------- BEGIN DATA ----------------------------------------------------------------------
+
+//accelerometer
+#define ACC_DATA_X_LSB 0x08
+#define ACC_DATA_X_MSB 0x09
+#define ACC_DATA_Y_LSB 0x0A
+#define ACC_DATA_Y_MSB 0x0B
+#define ACC_DATA_Z_LSB 0x0C
+#define ACC_DATA_Z_MSB 0x0D
+
+//magnetometer
+#define MAG_DATA_X_LSB 0x0E
+#define MAG_DATA_X_MSB 0x0F
+#define MAG_DATA_Y_LSB 0x10
+#define MAG_DATA_Y_MSB 0x11
+#define MAG_DATA_Z_LSB 0x12
+#define MAG_DATA_Z_MSB 0x13
+
+//gyroscope
+#define GYR_DATA_X_LSB 0x14
+#define GYR_DATA_X_MSB 0x15
+#define GYR_DATA_Y_LSB 0x16
+#define GYR_DATA_Y_MSB 0x17
+#define GYR_DATA_Z_LSB 0x18
+#define GYR_DATA_Z_MSB 0x19
+
+//euler coordinates
+#define EUL_DATA_X_LSB 0x1A
+#define EUL_DATA_X_MSB 0x1B
+#define EUL_DATA_Y_LSB 0x1C
+#define EUL_DATA_Y_MSB 0x1D
+#define EUL_DATA_Z_LSB 0x1E
+#define EUL_DATA_Z_MSB 0x1F
+
+//quaternion coordinates
+#define QUA_DATA_W_LSB 0x20
+#define QUA_DATA_W_MSB 0x21
+#define QUA_DATA_X_LSB 0x22
+#define QUA_DATA_X_MSB 0x23
+#define QUA_DATA_Y_LSB 0x24
+#define QUA_DATA_Y_MSB 0x25
+#define QUA_DATA_Z_LSB 0x26
+#define QUA_DATA_Z_MSB 0x27
+
+//linear acceleration
+#define LIA_DATA_X_LSB 0x28
+#define LIA_DATA_X_MSB 0x29
+#define LIA_DATA_Y_LSB 0x2A
+#define LIA_DATA_Y_MSB 0x2B
+#define LIA_DATA_Z_LSB 0x2C
+#define LIA_DATA_Z_MSB 0x2D
+
+//gravity vector
+#define GRV_DATA_X_LSB 0x2E
+#define GRV_DATA_X_MSB 0x2F
+#define GRV_DATA_Y_LSB 0x30
+#define GRV_DATA_Y_MSB 0x31
+#define GRV_DATA_Z_LSB 0x32
+#define GRV_DATA_Z_MSB 0x33
+
+//temperature
+#define TEMP 0x34
+
+//---------------------------------------------------------------------- END DATA ----------------------------------------------------------------------
+
+//calibration status
+#define CALIB_STAT 0x35
+
+//self-test result
+#define ST_RESULT 0x36
+
+//statuses
+#define INT_STA 0x37
+#define SYS_CLK_STATUS 0x38
+#define SYS_STATUS 0x39
+#define SYS_ERR 0x3A
+
+//user-defined
+#define UNIT_SEL 0x3B
+#define OPR_MODE 0x3D
+#define PWR_MODE 0x3E
+#define SYS_TRIGGER 0x3F
+#define TEMP_SOURCE 0x40 //00b accelerometer 01b gyroscope
+
+//axis map
+#define AXIS_MAP_CONFIG 0x41
+#define AXIS_MAP_SIGN 0x42
+
+//---------------------------------------------------------------------- offsets ----------------------------------------------------------------------
+
+//accelerometer
+#define ACC_OFFSET_X_LSB 0x55
+#define ACC_OFFSET_X_MSB 0x56
+#define ACC_OFFSET_Y_LSB 0x57
+#define ACC_OFFSET_Y_MSB 0x58
+#define ACC_OFFSET_Z_LSB 0x59
+#define ACC_OFFSET_Z_MSB 0x5A
+
+//magnetometer
+#define MAG_OFFSET_X_LSB 0x5B
+#define MAG_OFFSET_X_MSB 0x5C //datasheet reads 0x56C, but I believe this is correct
+#define MAG_OFFSET_Y_LSB 0x5D
+#define MAG_OFFSET_Y_MSB 0x5E
+#define MAG_OFFSET_Z_LSB 0x5F
+#define MAG_OFFSET_Z_MSB 0x60
+
+//gyroscope
+#define GYR_OFFSET_X_LSB 0x61
+#define GYR_OFFSET_X_MSB 0x62
+#define GYR_OFFSET_Y_LSB 0x63
+#define GYR_OFFSET_Y_MSB 0x64
+#define GYR_OFFSET_Z_LSB 0x65
+#define GYR_OFFSET_Z_MSB 0x66
+
+//radiuses
+#define ACC_RADIUS_LSB 0x67
+#define ACC_RADIUS_MSB 0x68
+#define MAG_RADIUS_LSB 0x69
+#define MAG_RADIUS_MSB 0x6A
+
+//---------------------------------------------------------------------- register descriptions ----------------------------------------------------------------------
+
+#define PAGE_ID 0x07
+#define ACC_CONFIG 0x08
+#define MAG_CONFIG 0x09
+#define GYR_CONFIG_0 0x0A
+#define GYR_CONFIG_1 0x0B
+#define ACC_SLEEP_CONFIG 0x0C
+#define GYR_SLEEP_CONFIG 0x0D
+#define INT_MSK 0x0F
+#define INT_EN 0x10
+
+#define ACC_AM_THRES 0x11
+#define ACC_INT_SETTINGS 0x12
+#define ACC_HG_DURATION 0x13
+#define ACC_HG_THRES 0x14
+#define ACC_NM_THRES 0x15
+#define ACC_NM_SET 0x16
+
+#define GYR_INT_SETTING 0x17
+#define GYR_HR_X_SET 0x18
+#define GYR_DUR_X 0x19
+#define GYR_HR_Y_SET 0x1A
+#define GYR_DUR_Y 0x1B
+#define GYR_HR_Z_SET 0x1C
+#define GYR_DUR_Z 0x1D
+#define GYR_AM_THRES 0x1E
+#define GYR_AM_SET 0x1F
+
+//---------------------------------------------------------------------- power modes ----------------------------------------------------------------------
+
+#define BNO055_PWR_MODE_NORMAL 0x00
+#define BNO055_PWR_MODE_LOW 0x01
+#define BNO055_PWR_MODE_SUSPEND 0x02
+
+//---------------------------------------------------------------------- operating modes ----------------------------------------------------------------------
+
+#define OP_MODE_CONFIGMODE 0x00
+#define OP_MODE_ACCONLY 0x01
+#define OP_MODE_MAGONLY 0x02
+#define OP_MODE_GYROONLY 0x03
+#define OP_MODE_ACCMAG 0x04
+#define OP_MODE_ACCGYRO 0x05
+#define OP_MODE_MAGGYRO 0x06
+#define OP_MODE_AMG 0x07
+#define OP_MODE_IMU 0x08
+#define OP_MODE_COMPASS 0x09
+#define OP_MODE_M4G 0x0A
+#define OP_MODE_NDOF_FMC_OFF 0x0B
+#define OP_MODE_NDOF 0x0C
+
+//---------------------------------------------------------------------- data vectors ----------------------------------------------------------------------
+
+#define BNO055_VECTOR_ACCELEROMETER  0x08
+#define BNO055_VECTOR_MAGNETOMETER   0x0E
+#define BNO055_VECTOR_GYROSCOPE      0x14
+#define BNO055_VECTOR_EULER          0x1A
+#define BNO055_VECTOR_QUATERNION     0x20
+#define BNO055_VECTOR_LINEARACCEL    0x28
+#define BNO055_VECTOR_GRAVITY        0x2E
+
+//---------------------------------------------------------------------- unit selection ----------------------------------------------------------------------
+
+#define UNIT_ANDROID_WINDOWS    0x80  // Bit 7: 0=Windows, 1=Android
+#define UNIT_TEMP_FAHRENHEIT        0x10  // Bit 4: 0=Celsius, 1=Fahrenheit
+#define UNIT_EULER_RADIANS          0x04  // Bit 2: 0=Degrees, 1=Radians
+#define UNIT_GYRO_RPS               0x02  // Bit 1: 0=dps, 1=rps
+#define UNIT_ACCEL_MG               0x01  // Bit 0: 0=m/s², 1=mg
+
+//---------------------------------------------------------------------- structs ----------------------------------------------------------------------
+
+typedef struct {
+  uint8_t sys;
+  uint8_t gyro;
+  uint8_t mag;
+  uint8_t accel;
+} bno055_calibration_state_t;
+
+typedef struct {
+  int16_t x;
+  int16_t y;
+  int16_t z;
+} bno055_vector_xyz_int16_t;
+
+typedef struct {
+  bno055_vector_xyz_int16_t gyro;
+  bno055_vector_xyz_int16_t mag;
+  bno055_vector_xyz_int16_t accel;
+} bno055_calibration_offset_t;
+
+typedef struct {
+  uint16_t mag;
+  uint16_t accel;
+} bno055_calibration_radius_t;
+
+typedef struct {
+  bno055_calibration_offset_t offset;
+  bno055_calibration_radius_t radius;
+} bno055_calibration_data_t;
+
+typedef struct {
+  double w;
+  double x;
+  double y;
+  double z;
+} bno055_data_vector;
+
+typedef struct {
+  uint8_t x;
+  uint8_t x_sign;
+  uint8_t y;
+  uint8_t y_sign;
+  uint8_t z;
+  uint8_t z_sign;
+} bno055_axis_map_t;
+
+typedef struct {
+    uint8_t orientation_android;  // 0 = Windows, 1 = Android
+    uint8_t temp_fahrenheit;      // 0 = Celsius, 1 = Fahrenheit
+    uint8_t euler_radians;        // 0 = Degrees, 1 = Radians
+    uint8_t gyro_rps;             // 0 = dps, 1 = rps
+    uint8_t accel_mg;             // 0 = m/s², 1 = mg
+} bno055_units_t;
+
+//---------------------------------------------------------------------- function declaration ----------------------------------------------------------------------
+
+void bno055_assign(I2C_HandleTypeDef *hi2c_device);
+void bno055_init();
+
+void bno055_writeData(uint8_t reg, uint8_t data);
+void bno055_readData(uint8_t reg, uint8_t *data, uint8_t len);
+void bno055_delay(int time);
+void bno055_reset();
+
+uint8_t bno055_setPage(uint8_t page);
+
+int8_t bno055_getOperationMode();
+void bno055_setOperationMode(uint8_t mode);
+void bno055_setOperationModeConfig();
+void bno055_setOperationModeNDOF();
+
+uint8_t bno055_getOutputUnits();
+
+bno055_calibration_state_t bno055_getCalibrationState();
+bno055_calibration_data_t bno055_getCalibrationData();
+void bno055_setCalibrationData(bno055_calibration_data_t calData);
+
+int8_t bno055_getTemp();
+
+bno055_data_vector bno055_getVector(uint8_t vec);
+bno055_data_vector bno055_getVectorAccelerometer();
+bno055_data_vector bno055_getVectorMagnetometer();
+bno055_data_vector bno055_getVectorGyroscope();
+bno055_data_vector bno055_getVectorEuler();
+bno055_data_vector bno055_getVectorLinearAccel();
+bno055_data_vector bno055_getVectorGravity();
+bno055_data_vector bno055_getVectorQuaternion();
+
+
+#endif /* INC_BNO055_H_ */

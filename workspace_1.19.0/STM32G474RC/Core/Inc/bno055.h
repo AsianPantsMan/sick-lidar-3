@@ -208,6 +208,14 @@
 #define BNO055_VECTOR_LINEARACCEL    0x28
 #define BNO055_VECTOR_GRAVITY        0x2E
 
+//---------------------------------------------------------------------- unit selection ----------------------------------------------------------------------
+
+#define UNIT_ANDROID_WINDOWS    0x80  // Bit 7: 0=Windows, 1=Android
+#define UNIT_TEMP        0x10  // Bit 4: 0=Celsius, 1=Fahrenheit
+#define UNIT_EULER          0x04  // Bit 2: 0=Degrees, 1=Radians
+#define UNIT_GYRO               0x02  // Bit 1: 0=dps, 1=rps
+#define UNIT_ACCEL               0x01  // Bit 0: 0=m/s², 1=mg
+
 //---------------------------------------------------------------------- structs ----------------------------------------------------------------------
 
 typedef struct {
@@ -255,6 +263,14 @@ typedef struct {
   uint8_t z_sign;
 } bno055_axis_map_t;
 
+typedef struct {
+    uint8_t orientation_android;  // 0 = Windows, 1 = Android
+    uint8_t temp_fahrenheit;      // 0 = Celsius, 1 = Fahrenheit
+    uint8_t euler_radians;        // 0 = Degrees, 1 = Radians
+    uint8_t gyro_rps;             // 0 = dps, 1 = rps
+    uint8_t accel_mg;             // 0 = m/s², 1 = mg
+} bno055_units_t;
+
 //---------------------------------------------------------------------- function declaration ----------------------------------------------------------------------
 
 void bno055_assign(I2C_HandleTypeDef *hi2c_device);
@@ -271,6 +287,8 @@ int8_t bno055_getOperationMode();
 void bno055_setOperationMode(uint8_t mode);
 void bno055_setOperationModeConfig();
 void bno055_setOperationModeNDOF();
+
+void bno055_getOutputUnits(bno055_units_t *units);
 
 bno055_calibration_state_t bno055_getCalibrationState();
 bno055_calibration_data_t bno055_getCalibrationData();

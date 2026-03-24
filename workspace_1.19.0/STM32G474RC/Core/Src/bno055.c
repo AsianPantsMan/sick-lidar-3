@@ -18,7 +18,7 @@ uint16_t eulerScale = 16;
 uint16_t magScale = 16;
 uint16_t quaScale = (1<<14);
 
-float gyro_threshold = 0.26;
+float gyro_threshold = 0.0;
 
 void bno055_assign(I2C_HandleTypeDef *hi2c_device){
 	_bno055_i2c_port = hi2c_device;
@@ -115,6 +115,18 @@ void bno055_setOperationModeConfig(){
 
 void bno055_setOperationModeNDOF(){
 	bno055_setOperationMode(OP_MODE_NDOF);
+}
+
+void bno055_getOutputUnits(bno055_units_t *units){
+	uint8_t unit_reg_value = 0;
+
+	bno055_readData(UNIT_SEL, &unit_reg_value, 1);
+
+	units->orientation_android = (unit_reg_value & UNIT_ANDROID_WINDOWS) ? 1 : 0;
+	units->temp_fahrenheit = (unit_reg_value & UNIT_TEMP) ? 1 : 0;
+	units->euler_radians = (unit_reg_value & UNIT_EULER) ? 1 : 0;
+	units->gyro_rps = (unit_reg_value & UNIT_GYRO) ? 1 : 0;
+	units->accel_mg = (unit_reg_value & UNIT_ACCEL) ? 1 : 0;
 }
 
 
