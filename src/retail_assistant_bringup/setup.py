@@ -38,6 +38,7 @@ setup(
                             'mcu_to_pi = retail_assistant_bringup.MCU_to_Pi:main',
                             'roboclaw = retail_assistant_bringup.roboclaw:main',
                             'stm32= retail_assistant_bringup.stm32_communication:main',
+                            'stm_m= retail_assistant_bringup.Pi_to_MCU:main',
         ],
     },
 )

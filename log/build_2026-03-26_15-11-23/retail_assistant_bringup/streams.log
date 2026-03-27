@@ -1,0 +1,28 @@
+[2.929s] Invoking command in '/home/retail-assistant/SLAM/src/retail_assistant_bringup': PYTHONPATH=/home/retail-assistant/SLAM/build/retail_assistant_bringup/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/retail_assistant_bringup build --build-base /home/retail-assistant/SLAM/build/retail_assistant_bringup/build install --record /home/retail-assistant/SLAM/build/retail_assistant_bringup/install.log --single-version-externally-managed install_data
+[3.983s] running egg_info
+[3.986s] writing ../../build/retail_assistant_bringup/retail_assistant_bringup.egg-info/PKG-INFO
+[3.987s] writing dependency_links to ../../build/retail_assistant_bringup/retail_assistant_bringup.egg-info/dependency_links.txt
+[3.988s] writing entry points to ../../build/retail_assistant_bringup/retail_assistant_bringup.egg-info/entry_points.txt
+[3.989s] writing requirements to ../../build/retail_assistant_bringup/retail_assistant_bringup.egg-info/requires.txt
+[3.990s] writing top-level names to ../../build/retail_assistant_bringup/retail_assistant_bringup.egg-info/top_level.txt
+[3.999s] reading manifest file '../../build/retail_assistant_bringup/retail_assistant_bringup.egg-info/SOURCES.txt'
+[4.006s] writing manifest file '../../build/retail_assistant_bringup/retail_assistant_bringup.egg-info/SOURCES.txt'
+[4.006s] running build
+[4.007s] running build_py
+[4.011s] running install
+[4.012s] running install_lib
+[4.022s] running install_data
+[4.027s] copying config/ekf.yaml -> /home/retail-assistant/SLAM/install/retail_assistant_bringup/share/retail_assistant_bringup/config
+[4.029s] running install_egg_info
+[4.037s] removing '/home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup-0.0.0-py3.10.egg-info' (and everything under it)
+[4.039s] Copying ../../build/retail_assistant_bringup/retail_assistant_bringup.egg-info to /home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup-0.0.0-py3.10.egg-info
+[4.045s] running install_scripts
+[4.131s] Installing auto_drive script to /home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/retail_assistant_bringup
+[4.131s] Installing mcu_to_pi script to /home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/retail_assistant_bringup
+[4.132s] Installing navigation script to /home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/retail_assistant_bringup
+[4.133s] Installing roboclaw script to /home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/retail_assistant_bringup
+[4.134s] Installing stm32 script to /home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/retail_assistant_bringup
+[4.135s] Installing stm_m script to /home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/retail_assistant_bringup
+[4.136s] Installing ultrasonic script to /home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/retail_assistant_bringup
+[4.139s] writing list of installed files to '/home/retail-assistant/SLAM/build/retail_assistant_bringup/install.log'
+[4.265s] Invoked command in '/home/retail-assistant/SLAM/src/retail_assistant_bringup' returned '0': PYTHONPATH=/home/retail-assistant/SLAM/build/retail_assistant_bringup/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/retail_assistant_bringup build --build-base /home/retail-assistant/SLAM/build/retail_assistant_bringup/build install --record /home/retail-assistant/SLAM/build/retail_assistant_bringup/install.log --single-version-externally-managed install_data
