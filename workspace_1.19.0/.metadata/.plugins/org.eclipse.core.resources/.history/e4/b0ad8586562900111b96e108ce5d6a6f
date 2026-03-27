@@ -1,0 +1,724 @@
+/* USER CODE BEGIN Header */
+/**
+  ******************************************************************************
+  * @file           : main.c
+  * @brief          : Main program body
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2026 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
+  */
+/* USER CODE END Header */
+/* Includes ------------------------------------------------------------------*/
+#include "main.h"
+#include "adc.h"
+#include "i2c.h"
+#include "spi.h"
+#include "tim.h"
+#include "usart.h"
+#include "usb_device.h"
+#include "gpio.h"
+
+/* Private includes ----------------------------------------------------------*/
+/* USER CODE BEGIN Includes */
+#include "usbd_cdc_if.h"
+#include <bno055.h>
+#include "drv8245-q1.h"
+#include "pid.h"
+#include "motor.h"
+
+/* USER CODE END Includes */
+
+/* Private typedef -----------------------------------------------------------*/
+/* USER CODE BEGIN PTD */
+
+/* USER CODE END PTD */
+
+/* Private define ------------------------------------------------------------*/
+/* USER CODE BEGIN PD */
+#define TX_BUFFER_SIZE 102 //currently set for imu (3 * 4 doubles), 2 encoders (2 uint16_t) => (8 * 3 * 4) + (2 * 2) + 2 (framing) = 102 bytes
+#define RX_BUFFER_SIZE 10//currently set for 6 floats, (3 linear velocity, 3 angular velocity)
+#define IMU_READ_INTERVAL 10;
+//#define MOTOR_CPR 996.8f
+
+/* USER CODE END PD */
+
+/* Private macro -------------------------------------------------------------*/
+/* USER CODE BEGIN PM */
+
+/* USER CODE END PM */
+
+/* Private variables ---------------------------------------------------------*/
+
+/* USER CODE BEGIN PV */
+uint8_t tx_buffer[TX_BUFFER_SIZE];
+uint8_t rx_buffer[RX_BUFFER_SIZE];
+int32_t received_left_tics = 0;
+int32_t received_right_tics = 0;
+uint8_t rx_byte;                      // Temp buffer for the HAL_UART_Receive_IT call
+volatile uint8_t new_cmd_flag = 0;    // Flag set by ISR, cleared by main loop. MUST BE VOLATILE.
+
+uint16_t encoder1;
+uint16_t encoder2;
+
+Motor left_motor;
+Motor right_motor;
+
+float right_motor_tics;
+float left_motor_tics;
+float error_integral;
+float right_pid_output;
+float left_pid_output;
+float error;
+float p_term;
+float i_term;
+float d_term;
+uint16_t current_encoder;
+
+bno055_units_t current_units;
+
+uint32_t last_imu_read = 0;
+/* USER CODE END PV */
+
+/* Private function prototypes -----------------------------------------------*/
+void SystemClock_Config(void);
+/* USER CODE BEGIN PFP */
+
+/* USER CODE END PFP */
+
+/* Private user code ---------------------------------------------------------*/
+/* USER CODE BEGIN 0 */
+
+/*-------------------------------------------------------- init DWT for microsecond delays --------------------------------------------------------*/
+
+uint8_t DWT_Init(void)
+{
+    /* Check if DWT is present */
+    if (!(CoreDebug->DEMCR & CoreDebug_DEMCR_TRCENA_Msk)) {
+        /* Enable TRC (Trace) */
+        CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
+    }
+
+    /* Reset the cycle counter */
+    DWT->CYCCNT = 0;
+
+    /* Enable cycle counter */
+    DWT->CTRL |= DWT_CTRL_CYCCNTENA_Msk;
+
+    uint32_t start = DWT->CYCCNT;
+    for (volatile int i = 0; i < 100; i++);
+    uint32_t end = DWT->CYCCNT;
+
+    if (end > start) {
+        return 0;
+    } else {
+        return 1;
+    }
+}
+
+/*-------------------------------------------------------- makes printf redirect to usb --------------------------------------------------------*/
+int _write(int file, char *ptr, int len) {
+	uint8_t result = USBD_OK;
+	uint32_t start_tick = HAL_GetTick();
+	uint32_t timeout_ms = 10;
+
+	do {
+		result = CDC_Transmit_FS((uint8_t *)ptr, len);
+
+		//if timed out
+		if ((HAL_GetTick() - start_tick) > timeout_ms) {
+			return 0;
+		}
+
+	} while (result == USBD_BUSY);
+
+	if (result == USBD_OK) {
+		return len;
+	} else {
+		return 0;
+	}
+}
+
+/*-------------------------------------------------------- basic hardware tests --------------------------------------------------------*/
+
+void LED_Test(){
+	HAL_GPIO_TogglePin(IMU_LED_GPIO_Port, IMU_LED_Pin);
+	HAL_Delay(100);
+	HAL_GPIO_TogglePin(MCU_LED_GPIO_Port, MCU_LED_Pin);
+	HAL_Delay(100);
+	HAL_GPIO_TogglePin(MD2_LED_GPIO_Port, MD2_LED_Pin);
+	HAL_Delay(100);
+	HAL_GPIO_TogglePin(MD1_LED_GPIO_Port, MD1_LED_Pin);
+	HAL_Delay(100);
+	HAL_GPIO_TogglePin(PI_LED_GPIO_Port, PI_LED_Pin);
+	HAL_Delay(100);
+}
+
+void TestPinConnection(void)
+{
+    printf("Testing pin connection...\r\n");
+    HAL_UART_DeInit(&huart2);
+
+    GPIO_InitTypeDef GPIO_InitStruct = {0};
+    GPIO_InitStruct.Pin = PI_UART_TX_Pin;
+    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    HAL_GPIO_Init(PI_UART_TX_GPIO_Port, &GPIO_InitStruct);
+
+    GPIO_InitStruct.Pin = PI_UART_RX_Pin;
+    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+    GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+    HAL_GPIO_Init(PI_UART_RX_GPIO_Port, &GPIO_InitStruct);
+
+    HAL_Delay(10);
+
+    HAL_GPIO_WritePin(PI_UART_TX_GPIO_Port, PI_UART_TX_Pin, GPIO_PIN_SET);
+    HAL_Delay(1);
+    GPIO_PinState rx1 = HAL_GPIO_ReadPin(PI_UART_RX_GPIO_Port, PI_UART_RX_Pin);
+
+    HAL_GPIO_WritePin(PI_UART_TX_GPIO_Port, PI_UART_TX_Pin, GPIO_PIN_RESET);
+    HAL_Delay(1);
+    GPIO_PinState rx2 = HAL_GPIO_ReadPin(PI_UART_RX_GPIO_Port, PI_UART_RX_Pin);
+
+    printf("TX=HIGH, RX=%d (should be 1)\r\n", rx1);
+    printf("TX=LOW, RX=%d (should be 0)\r\n", rx2);
+
+    if(rx1 == 1 && rx2 == 0)
+    {
+        printf("Pin connection: OK!\r\n");
+    }
+    else
+    {
+        printf("Pin connection: FAILED!\r\n");
+    }
+
+    MX_USART2_UART_Init();
+}
+
+void UARTLoopbackTest(char* testString)
+{
+    uint8_t rxBuffer[100] = {0};
+    uint8_t length = strlen(testString);
+
+    printf("Test starting...\r\n");
+    printf("Sending: %s (length=%d)\r\n", testString, length);
+
+    for(int i = 0; i < length; i++)
+    {
+        HAL_UART_Transmit(&huart2, (uint8_t*)&testString[i], 1, 100);
+        HAL_Delay(10);
+
+        if(HAL_UART_Receive(&huart2, &rxBuffer[i], 1, 100) != HAL_OK)
+        {
+            printf("Timeout at byte %d\r\n", i);
+            return;
+        }
+    }
+
+    rxBuffer[length] = '\0';
+
+    printf("RX String: %s\r\n", (char*)rxBuffer);
+    printf("RX Hex: ");
+    for(int i = 0; i < length; i++){
+        printf("%02X ", rxBuffer[i]);
+    }
+    printf("\r\n");
+
+    if(strcmp(testString, (char*)rxBuffer) == 0){
+        HAL_GPIO_WritePin(PI_LED_GPIO_Port, PI_LED_Pin, 1);
+        printf("PASSED\r\n");
+    }else{
+        printf("FAILED\r\n");
+    }
+}
+
+void printDebug(bno055_data_vector imu_quat, bno055_data_vector imu_linear, bno055_data_vector imu_angular, uint16_t encoder1, uint16_t encoder2){
+	//clear screen
+	printf("\033[2J");
+	printf("\033[H");
+
+	bno055_getOutputUnits(&current_units);
+	printf("Current IMU units:\r\n");
+	printf("  Orientation: %s\r\n", current_units.orientation_android ? "Android" : "Windows");
+	printf("  Temperature: %s\r\n", current_units.temp_fahrenheit ? "Fahrenheit" : "Celsius");
+	printf("  Euler Angles: %s\r\n", current_units.euler_radians ? "Radians" : "Degrees");
+	printf("  Gyroscope: %s\r\n", current_units.gyro_rps ? "rps" : "dps");
+	printf("  Accelerometer: %s\r\n", current_units.accel_mg ? "mg" : "m/s^2");
+    printf("\r\n");
+
+	printf("Quaternion:\r\n");
+	printf("  W: %.2f | X: %.2f | Y: %.2f | Z: %.2f\r\n", imu_quat.w, imu_quat.x, imu_quat.y, imu_quat.z);
+	printf("Linear Velocity:\r\n");
+	printf("  W: %.2f | X: %.2f | Y: %.2f | Z: %.2f\r\n", imu_linear.w, imu_linear.x, imu_linear.y, imu_linear.z);
+	printf("Angular Velocity:\r\n");
+	printf("  W: %.2f | X: %.2f | Y: %.2f | Z: %.2f\r\n", imu_angular.w, imu_angular.x, imu_angular.y, imu_angular.z);
+	printf("\r\n");
+
+	printf("Encoder 1:%d\r\n", encoder1);
+	printf("Encoder 2:%d\r\n", encoder2);
+	printf("\r\n");
+
+	printf("Transmitted: ");
+	for(int i = 0; i < TX_BUFFER_SIZE; i++) {
+		printf("%02X ", tx_buffer[i]);
+	}
+	printf("\r\n");
+
+	printf("Received (%d bytes): ", RX_BUFFER_SIZE);
+	for(int i = 0; i < RX_BUFFER_SIZE; i++) {
+		printf("%02X ", rx_buffer[i]);
+	}
+	printf("\r\n");
+}
+
+/*-------------------------------------------------------- STM32 <-> Raspberry Pi Communication --------------------------------------------------------*/
+
+uint8_t piSend(bno055_data_vector imu_quat, bno055_data_vector imu_linear, bno055_data_vector imu_angular, uint16_t encoder1, uint16_t encoder2){
+
+	tx_buffer[0] = 0xAA;
+	memcpy(&tx_buffer[1], &imu_quat.w, 8);
+	memcpy(&tx_buffer[9], &imu_quat.x, 8);
+	memcpy(&tx_buffer[17], &imu_quat.y, 8);
+	memcpy(&tx_buffer[25], &imu_quat.z, 8);
+	memcpy(&tx_buffer[33], &imu_linear.w, 8);
+	memcpy(&tx_buffer[41], &imu_linear.x, 8);
+	memcpy(&tx_buffer[49], &imu_linear.y, 8);
+	memcpy(&tx_buffer[57], &imu_linear.z, 8);
+	memcpy(&tx_buffer[65], &imu_angular.w, 8);
+	memcpy(&tx_buffer[73], &imu_angular.x, 8);
+	memcpy(&tx_buffer[81], &imu_angular.y, 8);
+	memcpy(&tx_buffer[89], &imu_angular.z, 8);
+	memcpy(&tx_buffer[97], &encoder1, 2);
+	memcpy(&tx_buffer[99], &encoder2, 2);
+	tx_buffer[101] = 0x55; //use index sizeof(tx_buffer) - 1
+
+	HAL_StatusTypeDef sendStatus = HAL_UART_Transmit(&huart2, tx_buffer, TX_BUFFER_SIZE, 20);
+	if (sendStatus != HAL_OK){
+		printf("transmission error\r\n");
+		return 2;
+	}
+
+//	HAL_GPIO_WritePin(PI_LED_GPIO_Port, PI_LED_Pin, GPIO_PIN_SET);
+
+	return 0;
+}
+
+//uint8_t piReceive(uint8_t* rx_buffer){
+//
+//    if (rx_buffer == NULL) {
+//        printf("Error: receiveData pointer is NULL\r\n");
+//        return 3;
+//    }
+//    memset(rx_buffer, 0, RX_BUFFER_SIZE);
+//
+//    HAL_StatusTypeDef receiveStatus = HAL_UART_Receive(&huart2, rx_buffer, RX_BUFFER_SIZE, 20);// check &huart2				//rx buffersize =10
+//    if (receiveStatus != HAL_OK) {
+//        if (receiveStatus == HAL_TIMEOUT) {
+//            //printf("RX Timeout\r\n");
+//        } else {
+//            //printf("RX error: %d\r\n", receiveStatus);
+//        }
+//        return 1;
+//    }
+//
+//    if (rx_buffer[0] != 0xAA || rx_buffer[RX_BUFFER_SIZE - 1] != 0x55) {
+//        //printf("Invalid packet markers!\r\n");
+//        return 1; // Indicate failure
+//    }
+//
+//    memcpy(&left_tics,&rx_buffer[1],4);//left_ticks
+//    memcpy(&right_tics,&rx_buffer[5],4);//right_tics
+//    printf("RX error: %d\r\n", receiveStatus);
+//    return 0;
+//}
+
+/* USER CODE END 0 */
+
+/**
+  * @brief  The application entry point.
+  * @retval int
+  */
+int main(void)
+{
+
+  /* USER CODE BEGIN 1 */
+
+  /* USER CODE END 1 */
+
+  /* MCU Configuration--------------------------------------------------------*/
+
+  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
+  HAL_Init();
+
+  /* USER CODE BEGIN Init */
+
+  /* USER CODE END Init */
+
+  /* Configure the system clock */
+  SystemClock_Config();
+
+  /* USER CODE BEGIN SysInit */
+
+  /* USER CODE END SysInit */
+
+  /* Initialize all configured peripherals */
+  MX_GPIO_Init();
+  MX_ADC1_Init();
+  MX_ADC2_Init();
+  MX_TIM1_Init();
+  MX_TIM8_Init();
+  MX_USART2_UART_Init();
+  MX_I2C2_Init();
+  MX_SPI3_Init();
+  MX_USART3_UART_Init();
+  MX_USB_Device_Init();
+  MX_TIM5_Init();
+  MX_TIM3_Init();
+  MX_TIM4_Init();
+  MX_TIM6_Init();
+  /* USER CODE BEGIN 2 */
+
+  DWT_Init(); //used to calculate microsecond pulses in drv8245-q1.c
+
+  //Low pass filter initialize
+  HAL_Delay(1000);
+
+  //Display MCU Function LED
+  HAL_GPIO_WritePin(MCU_LED_GPIO_Port, MCU_LED_Pin, GPIO_PIN_SET);
+
+  //IMU
+  bno055_assign(&hi2c2);
+  bno055_init();
+  bno055_setOperationModeNDOF();
+
+  //Motor setup
+  //Motor Initialize
+  Motor_Init(&left_motor, 1,
+		  MD1_nSLEEP_GPIO_Port, MD1_nSLEEP_Pin,
+		  MD1_nFAULT_GPIO_Port, MD1_nFAULT_Pin,
+		  MD1_PH_IN2_GPIO_Port, MD1_PH_IN2_Pin,
+		  MD1_LED_GPIO_Port, MD1_LED_Pin,
+		  &htim1, TIM_CHANNEL_4,
+		  &htim4, 260
+		  );
+
+  Motor_Init(&right_motor, 1,
+		  MD2_nSLEEP_GPIO_Port, MD2_nSLEEP_Pin,
+		  MD2_nFAULT_GPIO_Port, MD2_nFAULT_Pin,
+		  MD2_PH_IN2_GPIO_Port, MD2_PH_IN2_Pin,
+		  MD2_LED_GPIO_Port, MD2_LED_Pin,
+		  &htim8, TIM_CHANNEL_1,
+		  &htim3, 285
+		  );
+
+  //Motor Driver Initialize
+  motor_driver_init(&right_motor);
+  motor_driver_init(&left_motor);
+
+  //PID loop initialize
+  MotorControl_Init(&left_motor,
+		  0.828f, //Kp
+		  5.85f,	//Ki
+		  0.0f);	//Kd
+
+  MotorControl_Init(&right_motor,
+		  0.855f, //Kp
+		  6.03f,	//Ki
+		  0.0f);	//Kd
+
+
+  HAL_TIM_Base_Start_IT(&htim6);
+
+  HAL_UART_Receive_IT(&huart2, &rx_byte, 1);
+  /* random tests, commented out */
+  //LED_Test();
+
+  //TestPinConnection();
+
+  //char test[] = "Hello world";
+  //UARTLoopbackTest(test);
+
+  uint32_t last_print_time = 0;
+  const uint32_t print_interval = 1;
+
+  //MOTOR SPEED SHIFTING TEST SET UP
+  /*const int32_t speed_setpoints[] = {
+      100,   // Forward, medium speed
+      -100,  // Reverse, medium speed
+      200,   // Forward, high speed
+      0,      // Stop
+      -50   // Reverse, low speed
+  };
+  const int num_steps = sizeof(speed_setpoints) / sizeof(speed_setpoints[0]);
+  int test_step_index = 0;
+
+
+  uint32_t last_step_change_time = 0;
+  const uint32_t STEP_CHANGE_INTERVAL = 5000;*/
+
+  //MOTOR CONSTANT SPEED TEST
+  //motor_driver_setSpeed(&left_motor, -0.1);
+  //motor_driver_setSpeed(&right_motor, -0.1);
+
+  /* USER CODE END 2 */
+
+  /* Infinite loop */
+  /* USER CODE BEGIN WHILE */
+
+  while (1)
+  {
+    /* USER CODE END WHILE */
+
+    /* USER CODE BEGIN 3 */
+
+//    //IMU
+//    bno055_data_vector quaternion = bno055_getVectorQuaternion();
+//    bno055_data_vector linear = bno055_getVectorLinearAccel();
+//    bno055_data_vector angular = bno055_getVectorGyroscope();
+//
+//    //Motor Encoders
+//    encoder1 = (uint16_t)__HAL_TIM_GET_COUNTER(&htim4);
+//    encoder2 = (uint16_t)__HAL_TIM_GET_COUNTER(&htim3);
+//
+//    //Raspberry Pi Communication
+//    piSend(quaternion, linear, angular, encoder1, encoder2);
+//
+//    printDebug(quaternion, linear, angular, encoder1, encoder2);
+
+	if ((HAL_GetTick() - last_imu_read) >= IMU_READ_INTERVAL) {
+	  last_imu_read = HAL_GetTick();
+
+	  quaternion = bno055_getVectorQuaternion();
+	  linear = bno055_getVectorLinearAccel();
+	  angular = bno055_getVectorGyroscope();
+
+	  encoder1 = (uint16_t*)__HAL_TIM_GET_COUNTER(&htim4);
+	  encoder2 = (uint16_t*)__HAL_TIM_GET_COUNTER(&htim3);
+
+	  piSend(quaternion, linear, angular, encoder1, encoder2);
+	  printDebug(quaternion, linear, angular, encoder1, encoder2);
+	}
+    // --- NEW: Check for and process commands from the Raspberry Pi ---
+    if (new_cmd_flag == 1)
+    {
+        // A new packet was assembled by the interrupt. Let's look at it.
+        new_cmd_flag = 0; // Reset the flag immediately
+
+        // --- NEW DIAGNOSTIC PRINT ---
+        //printf("Main Loop: Flag received! Buffer contains: ");
+        for(int i=0; i < RX_BUFFER_SIZE; i++)
+        {
+            printf("0x%02X ", rx_buffer[i]);
+        }
+        //printf("\r\n");
+
+        // Now, parse the data from the buffer
+        memcpy(&received_left_tics,  &rx_buffer[1], sizeof(int32_t));
+        memcpy(&received_right_tics, &rx_buffer[5], sizeof(int32_t));
+
+        //printf("Main Loop: Parsed values! Left: %ld, Right: %ld\r\n",
+               //received_left_tics, received_right_tics);
+
+		MotorControl_SetTargetSpeed(&right_motor, received_right_tics);
+		MotorControl_SetTargetSpeed(&left_motor, received_left_tics);
+
+    }
+
+    /* Motor speed change test
+    // Get current time
+    uint32_t current_time = HAL_GetTick();
+    //change speed
+    if (current_time - last_step_change_time >= STEP_CHANGE_INTERVAL) {
+        last_step_change_time = current_time; // Reset the timer
+
+        // Move to the next step in the sequence, looping back to the start
+        test_step_index = (test_step_index + 1) % num_steps;
+        int32_t new_speed = speed_setpoints[test_step_index];
+
+        // Set the new target for the PID controller
+        MotorControl_SetTargetSpeed_RPM(&right_motor, new_speed);
+
+        printf("\r\n--- NEW TARGET: %ld ticks/sec ---\r\n", new_speed);
+    }
+	*/
+
+//    MotorControl_SetTargetSpeed_RPM(&right_motor, 0);
+//    MotorControl_SetTargetSpeed_RPM(&left_motor, 0);
+
+//    MotorControl_SetTargetSpeed(&right_motor, received_right_tics);
+//    MotorControl_SetTargetSpeed(&left_motor, received_left_tics);
+
+    //Motor speed
+
+    //Right motor debug info
+	right_motor_tics = MotorControl_getTics(&right_motor);
+	right_pid_output = MotorControl_pidOutput(&right_motor);
+//	error_integral = MotorControl_getIntegral(&right_motor);
+//	error = MotorControl_getError(&right_motor);
+//	p_term = MotorControl_getP(&right_motor);
+//	i_term = MotorControl_getI(&right_motor);
+//	d_term = MotorControl_getD(&right_motor);
+//	current_encoder = MotorControl_getEncoder(&right_motor);
+
+    //Left motor debug info
+    	left_motor_tics = MotorControl_getTics(&left_motor);
+    	left_pid_output = MotorControl_pidOutput(&left_motor);
+//    	error_integral = MotorControl_getIntegral(&left_motor);
+//    	error = MotorControl_getError(&left_motor);
+//    	p_term = MotorControl_getP(&left_motor);
+//    	i_term = MotorControl_getI(&left_motor);
+//    	d_term = MotorControl_getD(&left_motor);
+//    	current_encoder = MotorControl_getEncoder(&left_motor);
+
+
+//    if (HAL_GetTick() - last_print_time >= print_interval) {
+//        last_print_time = HAL_GetTick();
+//        printf("%.2f, %.2f, %.1f, %.2f, %.2f, %.1f\r\n",
+//        		//encoder1, current_encoder, 40.0f, p_term, i_term, error);
+//        		right_motor_tics, right_pid_output, received_right_tics, left_motor_tics, left_pid_output, received_left_tics);
+//    }
+
+  }
+  /* USER CODE END 3 */
+}
+
+/**
+  * @brief System Clock Configuration
+  * @retval None
+  */
+void SystemClock_Config(void)
+{
+  RCC_OscInitTypeDef RCC_OscInitStruct = {0};
+  RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+
+  /** Configure the main internal regulator output voltage
+  */
+  HAL_PWREx_ControlVoltageScaling(PWR_REGULATOR_VOLTAGE_SCALE1);
+
+  /** Initializes the RCC Oscillators according to the specified parameters
+  * in the RCC_OscInitTypeDef structure.
+  */
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+  RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
+  RCC_OscInitStruct.PLL.PLLM = RCC_PLLM_DIV2;
+  RCC_OscInitStruct.PLL.PLLN = 12;
+  RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
+  RCC_OscInitStruct.PLL.PLLQ = RCC_PLLQ_DIV4;
+  RCC_OscInitStruct.PLL.PLLR = RCC_PLLR_DIV2;
+  if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Initializes the CPU, AHB and APB buses clocks
+  */
+  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
+                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
+  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
+  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
+  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
+  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
+
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_3) != HAL_OK)
+  {
+    Error_Handler();
+  }
+}
+
+/* USER CODE BEGIN 4 */
+// ADD THIS CALLBACK
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+  if(htim->Instance == TIM6)
+  {
+	  MotorControl_RunPID(&left_motor);
+	  MotorControl_RunPID(&right_motor);
+  }
+}
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+    static uint8_t rx_index = 0;
+    static uint8_t packet_started = 0;
+    const uint8_t START_MARKER = 0xAA;
+    const uint8_t END_MARKER = 0x55;
+
+    // Make sure the interrupt is from the correct UART
+    if (huart->Instance == USART2)
+    {
+        // State 1: Waiting for a start marker
+        if (!packet_started)
+        {
+            if (rx_byte == START_MARKER)
+            {
+                packet_started = 1;
+                rx_index = 0;
+                rx_buffer[rx_index++] = rx_byte;
+            }
+        }
+        // State 2: Already receiving a packet
+        else
+        {
+            rx_buffer[rx_index++] = rx_byte;
+
+            // Check if we have received a full packet
+            if (rx_index >= RX_BUFFER_SIZE) // RX_BUFFER_SIZE should be 10
+            {
+                // Check if the packet is valid (correct end marker)
+                if (rx_buffer[RX_BUFFER_SIZE - 1] == END_MARKER)
+                {
+                    // Valid packet! Set the flag for the main loop.
+                    new_cmd_flag = 1;
+                }
+                // Reset the state machine for the next packet search
+                packet_started = 0;
+                rx_index = 0;
+            }
+        }
+
+        // CRITICAL: Re-arm the interrupt to listen for the next single byte.
+        // This line MUST be reached for communication to continue.
+        HAL_UART_Receive_IT(&huart2, &rx_byte, 1);
+    }
+}
+/* USER CODE END 4 */
+
+/**
+  * @brief  This function is executed in case of error occurrence.
+  * @retval None
+  */
+void Error_Handler(void)
+{
+  /* USER CODE BEGIN Error_Handler_Debug */
+  /* User can add his own implementation to report the HAL error return state */
+  __disable_irq();
+  while (1)
+  {
+  }
+  /* USER CODE END Error_Handler_Debug */
+}
+#ifdef USE_FULL_ASSERT
+/**
+  * @brief  Reports the name of the source file and the source line number
+  *         where the assert_param error has occurred.
+  * @param  file: pointer to the source file name
+  * @param  line: assert_param error line source number
+  * @retval None
+  */
+void assert_failed(uint8_t *file, uint32_t line)
+{
+  /* USER CODE BEGIN 6 */
+  /* User can add his own implementation to report the file name and line number,
+     ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
+  /* USER CODE END 6 */
+}
+#endif /* USE_FULL_ASSERT */

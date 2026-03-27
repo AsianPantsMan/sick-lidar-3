@@ -82,6 +82,14 @@ float d_term;
 uint16_t current_encoder;
 
 bno055_units_t current_units;
+
+uint32_t last_imu_read = 0;
+
+bno055_data_vector euler;
+bno055_data_vector quaternion;
+bno055_data_vector linear;
+bno055_data_vector angular;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -236,43 +244,46 @@ void UARTLoopbackTest(char* testString)
     }
 }
 
-void printDebug(bno055_data_vector imu_quat, bno055_data_vector imu_linear, bno055_data_vector imu_angular, uint16_t encoder1, uint16_t encoder2){
+void printDebug(bno055_data_vector imu_euler, bno055_data_vector imu_quat, bno055_data_vector imu_linear, bno055_data_vector imu_angular, uint16_t encoder1, uint16_t encoder2){
 	//clear screen
-	printf("\033[2J");
-	printf("\033[H");
+//	printf("\033[2J");
+//	printf("\033[H");
 
-	bno055_getOutputUnits(&current_units);
-	printf("Current IMU units:\r\n");
-	printf("  Orientation: %s\r\n", current_units.orientation_android ? "Android" : "Windows");
-	printf("  Temperature: %s\r\n", current_units.temp_fahrenheit ? "Fahrenheit" : "Celsius");
-	printf("  Euler Angles: %s\r\n", current_units.euler_radians ? "Radians" : "Degrees");
-	printf("  Gyroscope: %s\r\n", current_units.gyro_rps ? "rps" : "dps");
-	printf("  Accelerometer: %s\r\n", current_units.accel_mg ? "mg" : "m/s^2");
-    printf("\r\n");
+//	bno055_getOutputUnits(&current_units);
+//	printf("Current IMU units:\r\n");
+//	printf("  Orientation: %s\r\n", current_units.orientation_android ? "Android" : "Windows");
+//	printf("  Temperature: %s\r\n", current_units.temp_fahrenheit ? "Fahrenheit" : "Celsius");
+//	printf("  Euler Angles: %s\r\n", current_units.euler_radians ? "Radians" : "Degrees");
+//	printf("  Gyroscope: %s\r\n", current_units.gyro_rps ? "rps" : "dps");
+//	printf("  Accelerometer: %s\r\n", current_units.accel_mg ? "mg" : "m/s^2");
+//    printf("\r\n");
 
-	printf("Quaternion:\r\n");
-	printf("  W: %.2f | X: %.2f | Y: %.2f | Z: %.2f\r\n", imu_quat.w, imu_quat.x, imu_quat.y, imu_quat.z);
-	printf("Linear Velocity:\r\n");
-	printf("  W: %.2f | X: %.2f | Y: %.2f | Z: %.2f\r\n", imu_linear.w, imu_linear.x, imu_linear.y, imu_linear.z);
-	printf("Angular Velocity:\r\n");
-	printf("  W: %.2f | X: %.2f | Y: %.2f | Z: %.2f\r\n", imu_angular.w, imu_angular.x, imu_angular.y, imu_angular.z);
-	printf("\r\n");
+//	printf("Quaternion:\r\n");
+//	printf("  W: %.2f | X: %.2f | Y: %.2f | Z: %.2f\r\n", imu_quat.w, imu_quat.x, imu_quat.y, imu_quat.z);
+//	printf("Linear Velocity:\r\n");
+//	printf("  X: %.2f | Y: %.2f | Z: %.2f\r\n", imu_linear.x, imu_linear.y, imu_linear.z);
+//	printf("Angular Velocity:\r\n");
+//	printf("  X: %.2f | Y: %.2f | Z: %.2f\r\n", imu_angular.x, imu_angular.y, imu_angular.z);
 
-	printf("Encoder 1:%d\r\n", encoder1);
-	printf("Encoder 2:%d\r\n", encoder2);
-	printf("\r\n");
+	//CSV format
+	printf("%.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f\r\n", imu_euler.x, imu_euler.y, imu_euler.z, imu_linear.x, imu_linear.y, imu_linear.z, imu_angular.x, imu_angular.y, imu_angular.z);
+//	printf("\r\n");
 
-	printf("Transmitted: ");
-	for(int i = 0; i < TX_BUFFER_SIZE; i++) {
-		printf("%02X ", tx_buffer[i]);
-	}
-	printf("\r\n");
+//	printf("Encoder 1:%d\r\n", encoder1);
+//	printf("Encoder 2:%d\r\n", encoder2);
+//	printf("\r\n");
 
-	printf("Received (%d bytes): ", RX_BUFFER_SIZE);
-	for(int i = 0; i < RX_BUFFER_SIZE; i++) {
-		printf("%02X ", rx_buffer[i]);
-	}
-	printf("\r\n");
+//	printf("Transmitted: ");
+//	for(int i = 0; i < TX_BUFFER_SIZE; i++) {
+//		printf("%02X ", tx_buffer[i]);
+//	}
+//	printf("\r\n");
+//
+//	printf("Received (%d bytes): ", RX_BUFFER_SIZE);
+//	for(int i = 0; i < RX_BUFFER_SIZE; i++) {
+//		printf("%02X ", rx_buffer[i]);
+//	}
+//	printf("\r\n");
 }
 
 /*-------------------------------------------------------- STM32 <-> Raspberry Pi Communication --------------------------------------------------------*/
@@ -383,6 +394,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
   DWT_Init(); //used to calculate microsecond pulses in drv8245-q1.c
+
   //Low pass filter initialize
   HAL_Delay(1000);
 
@@ -474,19 +486,35 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 
-    //IMU
-    bno055_data_vector quaternion = bno055_getVectorQuaternion();
-    bno055_data_vector linear = bno055_getVectorLinearAccel();
-    bno055_data_vector angular = bno055_getVectorGyroscope();
+//    //IMU
+//    bno055_data_vector quaternion = bno055_getVectorQuaternion();
+//    bno055_data_vector linear = bno055_getVectorLinearAccel();
+//    bno055_data_vector angular = bno055_getVectorGyroscope();
+//
+//    //Motor Encoders
+//    encoder1 = (uint16_t)__HAL_TIM_GET_COUNTER(&htim4);
+//    encoder2 = (uint16_t)__HAL_TIM_GET_COUNTER(&htim3);
+//
+//    //Raspberry Pi Communication
+//    piSend(quaternion, linear, angular, encoder1, encoder2);
+//
+//    printDebug(quaternion, linear, angular, encoder1, encoder2);
 
-    //Motor Encoders
-    encoder1 = (uint16_t)__HAL_TIM_GET_COUNTER(&htim4);
-    encoder2 = (uint16_t)__HAL_TIM_GET_COUNTER(&htim3);
+	uint8_t curr_time = HAL_GetTick() - last_imu_read;
+	if (curr_time >= 10) {
+		last_imu_read = HAL_GetTick();
 
-    //Raspberry Pi Communication
-    piSend(quaternion, linear, angular, encoder1, encoder2);
+		euler = bno055_getVectorEuler();
+		quaternion = bno055_getVectorQuaternion();
+		linear = bno055_getVectorLinearAccel();
+		angular = bno055_getVectorGyroscope();
 
-    printDebug(quaternion, linear, angular, encoder1, encoder2);
+		encoder1 = (uint16_t)__HAL_TIM_GET_COUNTER(&htim4);
+		encoder2 = (uint16_t)__HAL_TIM_GET_COUNTER(&htim3);
+
+		piSend(quaternion, linear, angular, encoder1, encoder2);
+//		printDebug(euler, quaternion, linear, angular, encoder1, encoder2);
+	}
 
     // --- NEW: Check for and process commands from the Raspberry Pi ---
     if (new_cmd_flag == 1)
@@ -496,11 +524,11 @@ int main(void)
 
         // --- NEW DIAGNOSTIC PRINT ---
         //printf("Main Loop: Flag received! Buffer contains: ");
-        for(int i=0; i < RX_BUFFER_SIZE; i++)
-        {
-            printf("0x%02X ", rx_buffer[i]);
-        }
-        //printf("\r\n");
+//        for(int i=0; i < RX_BUFFER_SIZE; i++)
+//        {
+//            printf("0x%02X ", rx_buffer[i]);
+//        }
+//        printf("\r\n");
 
         // Now, parse the data from the buffer
         memcpy(&received_left_tics,  &rx_buffer[1], sizeof(int32_t));
