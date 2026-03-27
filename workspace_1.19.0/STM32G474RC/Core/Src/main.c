@@ -509,12 +509,13 @@ int main(void)
 		linear = bno055_getVectorLinearAccel();
 		angular = bno055_getVectorGyroscope();
 
+	}
+
 		encoder1 = (uint16_t)__HAL_TIM_GET_COUNTER(&htim4);
 		encoder2 = (uint16_t)__HAL_TIM_GET_COUNTER(&htim3);
 
 		piSend(quaternion, linear, angular, encoder1, encoder2);
 //		printDebug(euler, quaternion, linear, angular, encoder1, encoder2);
-	}
 
     // --- NEW: Check for and process commands from the Raspberry Pi ---
     if (new_cmd_flag == 1)
