@@ -44,6 +44,15 @@ def generate_launch_description():
                                           launch_arguments={'params_file': os.path.join(get_package_share_directory(package_name),'config','mapper_params_online_async.yaml'),'use_sim_time': 'false'}.items())
                                           
     # Launch them all!
+    nav2=IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([os.path.join
+                                       (get_package_share_directory('nav2_bringup'),'launch','navigation_launch.py')])
+                                       ,launch_arguments={'use_sim_time': 'false',
+                                                          'params_file': os.path.join(
+                                                             get_package_share_directory(package_name),
+                                                             'config',
+                                                             'nav2_params.yaml'
+                                                                )}.items())
     stm32 =Node(
     package="retail_assistant_bringup",
     executable="stm32",   # if installed as a program
@@ -69,6 +78,7 @@ def generate_launch_description():
         sllidar,        
         mcu_to_pi,
         slam,
+        nav2,
         stm32,
         ekf,
         stm_motor,
