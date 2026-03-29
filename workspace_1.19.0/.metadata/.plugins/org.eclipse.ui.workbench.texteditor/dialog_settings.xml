@@ -3,6 +3,11 @@
 	<item key="hasShownOverlayPopupBefore" value="true"/>
 	<item key="replaceBarOpen" value="false"/>
 	<list key="searchhistory">
+		<item value="debug"/>
+		<item value="uart2"/>
+		<item value="uart_receive_it"/>
+		<item value="uart_receive"/>
+		<item value="it"/>
 		<item value="else if"/>
 		<item value="timeout"/>
 		<item value="error"/>
@@ -13,10 +18,5 @@
 		<item value="_drv8245_spi_port"/>
 		<item value="spi"/>
 		<item value="write"/>
-		<item value="usb"/>
-		<item value="setpage"/>
-		<item value="temp"/>
-		<item value="state"/>
-		<item value="calib"/>
 	</list>
 </section>

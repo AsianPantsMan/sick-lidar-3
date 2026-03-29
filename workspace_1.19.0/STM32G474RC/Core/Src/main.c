@@ -57,12 +57,15 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-uint8_t tx_buffer[TX_BUFFER_SIZE];
+uint8_t tx_buffer_a[TX_BUFFER_SIZE];
+uint8_t tx_buffer_b[TX_BUFFER_SIZE];
 uint8_t rx_buffer[RX_BUFFER_SIZE];
 int32_t received_left_tics = 0;
 int32_t received_right_tics = 0;
 uint8_t rx_byte;                      // Temp buffer for the HAL_UART_Receive_IT call
 volatile uint8_t new_cmd_flag = 0;    // Flag set by ISR, cleared by main loop. MUST BE VOLATILE.
+volatile uint8_t uart2_tx_busy = 0;
+uint8_t next_tx_buffer = 0;
 
 uint16_t encoder1;
 uint16_t encoder2;
@@ -289,6 +292,11 @@ void printDebug(bno055_data_vector imu_euler, bno055_data_vector imu_quat, bno05
 /*-------------------------------------------------------- STM32 <-> Raspberry Pi Communication --------------------------------------------------------*/
 
 uint8_t piSend(bno055_data_vector imu_quat, bno055_data_vector imu_linear, bno055_data_vector imu_angular, uint16_t encoder1, uint16_t encoder2){
+  if (uart2_tx_busy) {
+    return 1;
+  }
+
+  uint8_t* tx_buffer = (next_tx_buffer == 0) ? tx_buffer_a : tx_buffer_b;
 
 	tx_buffer[0] = 0xAA;
 	memcpy(&tx_buffer[1], &imu_quat.w, 8);
@@ -307,11 +315,14 @@ uint8_t piSend(bno055_data_vector imu_quat, bno055_data_vector imu_linear, bno05
 	memcpy(&tx_buffer[99], &encoder2, 2);
 	tx_buffer[101] = 0x55; //use index sizeof(tx_buffer) - 1
 
-	HAL_StatusTypeDef sendStatus = HAL_UART_Transmit(&huart2, tx_buffer, TX_BUFFER_SIZE, 20);
+  uart2_tx_busy = 1;
+  HAL_StatusTypeDef sendStatus = HAL_UART_Transmit_IT(&huart2, tx_buffer, TX_BUFFER_SIZE);
 	if (sendStatus != HAL_OK){
-		printf("transmission error\r\n");
+    uart2_tx_busy = 0;
 		return 2;
 	}
+
+  next_tx_buffer ^= 1;
 
 //	HAL_GPIO_WritePin(PI_LED_GPIO_Port, PI_LED_Pin, GPIO_PIN_SET);
 
@@ -654,6 +665,22 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
   {
 	  MotorControl_RunPID(&left_motor);
 	  MotorControl_RunPID(&right_motor);
+  }
+}
+
+void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
+{
+  if (huart->Instance == USART2)
+  {
+    uart2_tx_busy = 0;
+  }
+}
+
+void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
+{
+  if (huart->Instance == USART2)
+  {
+    uart2_tx_busy = 0;
   }
 }
 
