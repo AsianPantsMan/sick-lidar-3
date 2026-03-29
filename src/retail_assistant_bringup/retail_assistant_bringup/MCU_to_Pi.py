@@ -1,15 +1,12 @@
 import rclpy
 from rclpy.node import Node
-from geometry_msgs.msg import Twist
 from nav_msgs.msg import Odometry
-from rclpy.timer import Timer
 from sensor_msgs.msg import Imu
 from tf2_ros import TransformBroadcaster
-from tf2_ros import TransformStamped
-from geometry_msgs.msg import Quaternion
-from rclpy.timer import Timer
+from geometry_msgs.msg import TransformStamped, Quaternion
 import math as mt
 from std_msgs.msg import Int64MultiArray
+
 
 class MCUToPiNode(Node):
     def __init__(self):
@@ -25,7 +22,7 @@ class MCUToPiNode(Node):
         self.declare_parameter('track_width_m', 0.3)
         self.track_width_m = float(self.get_parameter('track_width_m').value)
 
-        self.refresh_rate_hz = 0
+        self.refresh_rate_hz = 0.0
 
         self.declare_parameter('odom_frame', 'odom')
         self.declare_parameter('base_frame', 'base_link')
@@ -52,16 +49,13 @@ class MCUToPiNode(Node):
         self.radians_per_tick = (2.0 * mt.pi) / float(self.ticks_per_rev)
         self.get_logger().info("Wheel odom node has been started")
 
-        # Store latest incoming messages
-        self.latest_imu_msg = None
-        self.latest_encoder_msg = None
-
-        # Subscriptions only store data now
-        self.imu_read = self.create_subscription(Imu, '/stm32_imu', self.imu_callback, 5)
-        self.encoder_read = self.create_subscription(Int64MultiArray, '/stm32_encoder', self.encoder_callback, 5)
-
-        # New fixed-rate timer: 30 Hz
-        self.update_timer = self.create_timer(1.0 / 30.0, self.update_loop)
+        # Callback-based subscriptions
+        self.imu_read = self.create_subscription(
+            Imu, '/stm32_imu', self.imu_callback, 5
+        )
+        self.encoder_read = self.create_subscription(
+            Int64MultiArray, '/stm32_encoder', self.encoder_callback, 5
+        )
 
     def yaw_to_quaternion(self, yaw):
         q = Quaternion()
@@ -76,21 +70,11 @@ class MCUToPiNode(Node):
         cosy_cosp = 1.0 - 2.0 * (q.y * q.y + q.z * q.z)
         return mt.atan2(siny_cosp, cosy_cosp)
 
-    # Just store the newest IMU message
     def imu_callback(self, msg):
-        self.latest_imu_msg = msg
+        self.imu_update(msg)
 
-    # Just store the newest encoder message
     def encoder_callback(self, msg):
-        self.latest_encoder_msg = msg
-
-    # Timer-driven update loop
-    def update_loop(self):
-        if self.latest_imu_msg is None or self.latest_encoder_msg is None:
-            return
-
-        self.imu_update(self.latest_imu_msg)
-        self.Odom_update(self.latest_encoder_msg)
+        self.Odom_update(msg)
 
     def Odom_update(self, msg):
         now = self.get_clock().now()
@@ -126,12 +110,12 @@ class MCUToPiNode(Node):
 
         ds = velocity * dt
 
+        # Use latest IMU yaw
         self.theta = self.imu_z
         self.x += ds * mt.cos(self.theta)
         self.y += ds * mt.sin(self.theta)
 
         self.theta = mt.atan2(mt.sin(self.theta), mt.cos(self.theta))
-
         q = self.yaw_to_quaternion(self.theta)
 
         if self.publish_tf:
@@ -182,35 +166,16 @@ class MCUToPiNode(Node):
         self.last_time = now
 
     def imu_update(self, msg):
-        orientation_x = msg.orientation.x
-        orientation_y = msg.orientation.y
-        orientation_z = msg.orientation.z
-        orientation_w = msg.orientation.w
-
-        angular_velocity_x = msg.angular_velocity.x
-        angular_velocity_y = msg.angular_velocity.y
-        angular_velocity_z = msg.angular_velocity.z
-
-        linear_acceleration_x = msg.linear_acceleration.x
-        linear_acceleration_y = msg.linear_acceleration.y
-        linear_acceleration_z = msg.linear_acceleration.z
-
         imu_msg = Imu()
         imu_msg.header.stamp = self.get_clock().now().to_msg()
         imu_msg.header.frame_id = "imu_frame"
-        imu_msg.orientation.x = orientation_x
-        imu_msg.orientation.y = orientation_y
-        imu_msg.orientation.z = orientation_z
-        imu_msg.orientation.w = orientation_w
-        imu_msg.angular_velocity.x = angular_velocity_x
-        imu_msg.angular_velocity.y = angular_velocity_y
-        imu_msg.angular_velocity.z = angular_velocity_z
-        imu_msg.linear_acceleration.x = linear_acceleration_x
-        imu_msg.linear_acceleration.y = linear_acceleration_y
-        imu_msg.linear_acceleration.z = linear_acceleration_z
 
-        self.last_imu_gyro_z = angular_velocity_z
-        self.imu_z = self.quaternion_to_yaw(imu_msg.orientation)
+        imu_msg.orientation = msg.orientation
+        imu_msg.angular_velocity = msg.angular_velocity
+        imu_msg.linear_acceleration = msg.linear_acceleration
+
+        self.last_imu_gyro_z = msg.angular_velocity.z
+        self.imu_z = self.quaternion_to_yaw(msg.orientation)
 
         imu_msg.orientation_covariance = [
             0.01, 0.0, 0.0,
@@ -230,14 +195,18 @@ class MCUToPiNode(Node):
 
         self.Imu_pub.publish(imu_msg)
 
+
 def main():
     rclpy.init()
     node = MCUToPiNode()
     try:
         rclpy.spin(node)
     except KeyboardInterrupt:
+        pass
+    finally:
         node.destroy_node()
         rclpy.shutdown()
+
 
 if __name__ == '__main__':
     main()

@@ -1,0 +1,75 @@
+import os
+
+from ament_index_python.packages import get_package_share_directory
+
+
+from launch import LaunchDescription
+from launch.actions import IncludeLaunchDescription
+from launch.launch_description_sources import PythonLaunchDescriptionSource
+
+from launch_ros.actions import Node
+
+
+
+def generate_launch_description():
+
+
+    package_name='retail_assistant_bringup' 
+
+    rsp = IncludeLaunchDescription(
+                PythonLaunchDescriptionSource([os.path.join(
+                    get_package_share_directory(package_name),'launch','rsp.py'
+                )]), launch_arguments={'use_sim_time': 'false'}.items()
+    )
+    mcu_to_pi = Node(
+    package="retail_assistant_bringup",
+    executable="mcu_to_pi",   # if installed as a program
+    name="mcu_to_pi_node",
+    output="screen",
+)
+    sllidar = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(
+                get_package_share_directory("sllidar_ros2"),
+                "launch",
+                "sllidar_c1_launch.py",
+            )
+        ),
+        launch_arguments={
+        }.items(),
+    )
+    slam = IncludeLaunchDescription(
+            PythonLaunchDescriptionSource([os.path.join
+                                           (get_package_share_directory('slam_toolbox'),'launch','online_async_launch.py')]),# fix _local later
+                                          launch_arguments={'params_file': os.path.join(get_package_share_directory(package_name),'config','mapper_params_online_async.yaml'),'use_sim_time': 'false'}.items())
+                                          
+    # Launch them all!
+    stm32 =Node(
+    package="retail_assistant_bringup",
+    executable="stm32",   # if installed as a program
+    name="stm32_node",
+    output="screen",
+    )
+    # need to change from roboclaw to pi_to_mcu since we switched to that node for motor control, but leaving name as roboclaw_node for now to avoid confusion in rviz and tf frames
+    stm_motor= Node(
+    package="retail_assistant_bringup",
+    executable="stm_m",   # if installed as a program
+    name="stm_m_node",
+    output="screen",
+    )
+    ekf=Node(
+        package='robot_localization',
+        executable='ekf_node',
+        name='ekf_filter_node',
+        output='screen',
+        parameters=[os.path.join(get_package_share_directory(package_name),'config','ekf.yaml')]
+    )
+    return LaunchDescription([
+        rsp,
+        sllidar,        
+        mcu_to_pi,
+        slam,
+        stm32,
+        ekf,
+        stm_motor,
+    ])

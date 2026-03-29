@@ -1,0 +1,96 @@
+[3.688s] Invoking command in '/home/retail-assistant/SLAM/src/retail_assistant_bringup': PYTHONPATH=/home/retail-assistant/SLAM/build/retail_assistant_bringup/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/retail_assistant_bringup build --build-base /home/retail-assistant/SLAM/build/retail_assistant_bringup/build install --record /home/retail-assistant/SLAM/build/retail_assistant_bringup/install.log --single-version-externally-managed install_data
+[4.937s] running egg_info
+[4.940s] creating ../../build/retail_assistant_bringup/retail_assistant_bringup.egg-info
+[4.941s] writing ../../build/retail_assistant_bringup/retail_assistant_bringup.egg-info/PKG-INFO
+[4.942s] writing dependency_links to ../../build/retail_assistant_bringup/retail_assistant_bringup.egg-info/dependency_links.txt
+[4.943s] writing entry points to ../../build/retail_assistant_bringup/retail_assistant_bringup.egg-info/entry_points.txt
+[4.943s] writing requirements to ../../build/retail_assistant_bringup/retail_assistant_bringup.egg-info/requires.txt
+[4.944s] writing top-level names to ../../build/retail_assistant_bringup/retail_assistant_bringup.egg-info/top_level.txt
+[4.945s] writing manifest file '../../build/retail_assistant_bringup/retail_assistant_bringup.egg-info/SOURCES.txt'
+[4.954s] reading manifest file '../../build/retail_assistant_bringup/retail_assistant_bringup.egg-info/SOURCES.txt'
+[4.958s] writing manifest file '../../build/retail_assistant_bringup/retail_assistant_bringup.egg-info/SOURCES.txt'
+[4.982s] running build
+[4.983s] running build_py
+[4.985s] creating /home/retail-assistant/SLAM/build/retail_assistant_bringup/build
+[4.986s] creating /home/retail-assistant/SLAM/build/retail_assistant_bringup/build/lib
+[4.987s] creating /home/retail-assistant/SLAM/build/retail_assistant_bringup/build/lib/retail_assistant_bringup
+[4.988s] copying retail_assistant_bringup/navigation.py -> /home/retail-assistant/SLAM/build/retail_assistant_bringup/build/lib/retail_assistant_bringup
+[5.015s] copying retail_assistant_bringup/MCU_to_Pi.py -> /home/retail-assistant/SLAM/build/retail_assistant_bringup/build/lib/retail_assistant_bringup
+[5.051s] copying retail_assistant_bringup/__init__.py -> /home/retail-assistant/SLAM/build/retail_assistant_bringup/build/lib/retail_assistant_bringup
+[5.052s] copying retail_assistant_bringup/ultrasonic.py -> /home/retail-assistant/SLAM/build/retail_assistant_bringup/build/lib/retail_assistant_bringup
+[5.055s] copying retail_assistant_bringup/test.py -> /home/retail-assistant/SLAM/build/retail_assistant_bringup/build/lib/retail_assistant_bringup
+[5.058s] copying retail_assistant_bringup/auto_drive.py -> /home/retail-assistant/SLAM/build/retail_assistant_bringup/build/lib/retail_assistant_bringup
+[5.059s] copying retail_assistant_bringup/roboclaw.py -> /home/retail-assistant/SLAM/build/retail_assistant_bringup/build/lib/retail_assistant_bringup
+[5.061s] copying retail_assistant_bringup/Pi_to_MCU.py -> /home/retail-assistant/SLAM/build/retail_assistant_bringup/build/lib/retail_assistant_bringup
+[5.064s] copying retail_assistant_bringup/stm32_communication.py -> /home/retail-assistant/SLAM/build/retail_assistant_bringup/build/lib/retail_assistant_bringup
+[5.067s] running install
+[5.068s] running install_lib
+[5.074s] creating /home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup
+[5.074s] copying /home/retail-assistant/SLAM/build/retail_assistant_bringup/build/lib/retail_assistant_bringup/navigation.py -> /home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup
+[5.076s] copying /home/retail-assistant/SLAM/build/retail_assistant_bringup/build/lib/retail_assistant_bringup/MCU_to_Pi.py -> /home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup
+[5.077s] copying /home/retail-assistant/SLAM/build/retail_assistant_bringup/build/lib/retail_assistant_bringup/__init__.py -> /home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup
+[5.078s] copying /home/retail-assistant/SLAM/build/retail_assistant_bringup/build/lib/retail_assistant_bringup/ultrasonic.py -> /home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup
+[5.079s] copying /home/retail-assistant/SLAM/build/retail_assistant_bringup/build/lib/retail_assistant_bringup/test.py -> /home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup
+[5.080s] copying /home/retail-assistant/SLAM/build/retail_assistant_bringup/build/lib/retail_assistant_bringup/auto_drive.py -> /home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup
+[5.081s] copying /home/retail-assistant/SLAM/build/retail_assistant_bringup/build/lib/retail_assistant_bringup/roboclaw.py -> /home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup
+[5.083s] copying /home/retail-assistant/SLAM/build/retail_assistant_bringup/build/lib/retail_assistant_bringup/Pi_to_MCU.py -> /home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup
+[5.084s] copying /home/retail-assistant/SLAM/build/retail_assistant_bringup/build/lib/retail_assistant_bringup/stm32_communication.py -> /home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup
+[5.087s] byte-compiling /home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup/navigation.py to navigation.cpython-310.pyc
+[5.097s] byte-compiling /home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup/MCU_to_Pi.py to MCU_to_Pi.cpython-310.pyc
+[5.102s] byte-compiling /home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup/__init__.py to __init__.cpython-310.pyc
+[5.104s] byte-compiling /home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup/ultrasonic.py to ultrasonic.cpython-310.pyc
+[5.107s] byte-compiling /home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup/test.py to test.cpython-310.pyc
+[5.109s] byte-compiling /home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup/auto_drive.py to auto_drive.cpython-310.pyc
+[5.115s] byte-compiling /home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup/roboclaw.py to roboclaw.cpython-310.pyc
+[5.121s] byte-compiling /home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup/Pi_to_MCU.py to Pi_to_MCU.cpython-310.pyc
+[5.123s] byte-compiling /home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup/stm32_communication.py to stm32_communication.cpython-310.pyc
+[5.128s] running install_data
+[5.129s] creating /home/retail-assistant/SLAM/install/retail_assistant_bringup/share/ament_index
+[5.129s] creating /home/retail-assistant/SLAM/install/retail_assistant_bringup/share/ament_index/resource_index
+[5.130s] creating /home/retail-assistant/SLAM/install/retail_assistant_bringup/share/ament_index/resource_index/packages
+[5.130s] copying resource/retail_assistant_bringup -> /home/retail-assistant/SLAM/install/retail_assistant_bringup/share/ament_index/resource_index/packages
+[5.131s] copying package.xml -> /home/retail-assistant/SLAM/install/retail_assistant_bringup/share/retail_assistant_bringup
+[5.131s] creating /home/retail-assistant/SLAM/install/retail_assistant_bringup/share/retail_assistant_bringup/launch
+[5.132s] copying launch/gazebo_sim.launch.py -> /home/retail-assistant/SLAM/install/retail_assistant_bringup/share/retail_assistant_bringup/launch
+[5.133s] copying launch/gazebo_sim_auto_mapping.launch.py -> /home/retail-assistant/SLAM/install/retail_assistant_bringup/share/retail_assistant_bringup/launch
+[5.134s] copying launch/gazebo_sim_local.launch.py -> /home/retail-assistant/SLAM/install/retail_assistant_bringup/share/retail_assistant_bringup/launch
+[5.136s] copying launch/slam_world.launch.py -> /home/retail-assistant/SLAM/install/retail_assistant_bringup/share/retail_assistant_bringup/launch
+[5.138s] copying launch/navigation_world.launch.py -> /home/retail-assistant/SLAM/install/retail_assistant_bringup/share/retail_assistant_bringup/launch
+[5.140s] copying launch/gazebo_sim_slam.launch.py -> /home/retail-assistant/SLAM/install/retail_assistant_bringup/share/retail_assistant_bringup/launch
+[5.141s] copying launch/rsp.py -> /home/retail-assistant/SLAM/install/retail_assistant_bringup/share/retail_assistant_bringup/launch
+[5.143s] creating /home/retail-assistant/SLAM/install/retail_assistant_bringup/share/retail_assistant_bringup/description
+[5.144s] copying description/example.xacro -> /home/retail-assistant/SLAM/install/retail_assistant_bringup/share/retail_assistant_bringup/description
+[5.145s] copying description/notes -> /home/retail-assistant/SLAM/install/retail_assistant_bringup/share/retail_assistant_bringup/description
+[5.146s] copying description/imu.xacro -> /home/retail-assistant/SLAM/install/retail_assistant_bringup/share/retail_assistant_bringup/description
+[5.148s] copying description/robot_core_treads.xacro -> /home/retail-assistant/SLAM/install/retail_assistant_bringup/share/retail_assistant_bringup/description
+[5.150s] copying description/inertial_macros.xacro -> /home/retail-assistant/SLAM/install/retail_assistant_bringup/share/retail_assistant_bringup/description
+[5.152s] copying description/gazebo_control.xacro -> /home/retail-assistant/SLAM/install/retail_assistant_bringup/share/retail_assistant_bringup/description
+[5.155s] copying description/lidar.xacro -> /home/retail-assistant/SLAM/install/retail_assistant_bringup/share/retail_assistant_bringup/description
+[5.156s] copying description/gazebo_control_tracked.xacro -> /home/retail-assistant/SLAM/install/retail_assistant_bringup/share/retail_assistant_bringup/description
+[5.158s] copying description/fake_person_robot.xacro -> /home/retail-assistant/SLAM/install/retail_assistant_bringup/share/retail_assistant_bringup/description
+[5.159s] copying description/robot.urdf.xacro -> /home/retail-assistant/SLAM/install/retail_assistant_bringup/share/retail_assistant_bringup/description
+[5.161s] copying description/proximity.xacro -> /home/retail-assistant/SLAM/install/retail_assistant_bringup/share/retail_assistant_bringup/description
+[5.162s] copying description/robot_core.xacro -> /home/retail-assistant/SLAM/install/retail_assistant_bringup/share/retail_assistant_bringup/description
+[5.164s] creating /home/retail-assistant/SLAM/install/retail_assistant_bringup/share/retail_assistant_bringup/worlds
+[5.165s] copying worlds/fake_store_layout.world -> /home/retail-assistant/SLAM/install/retail_assistant_bringup/share/retail_assistant_bringup/worlds
+[5.167s] copying worlds/demo_store.world -> /home/retail-assistant/SLAM/install/retail_assistant_bringup/share/retail_assistant_bringup/worlds
+[5.174s] creating /home/retail-assistant/SLAM/install/retail_assistant_bringup/share/retail_assistant_bringup/config
+[5.175s] copying config/ekf.yaml -> /home/retail-assistant/SLAM/install/retail_assistant_bringup/share/retail_assistant_bringup/config
+[5.177s] copying config/nav2_params.yaml -> /home/retail-assistant/SLAM/install/retail_assistant_bringup/share/retail_assistant_bringup/config
+[5.179s] copying config/test_slam.rviz -> /home/retail-assistant/SLAM/install/retail_assistant_bringup/share/retail_assistant_bringup/config
+[5.180s] copying config/nav2_params_slam.yaml -> /home/retail-assistant/SLAM/install/retail_assistant_bringup/share/retail_assistant_bringup/config
+[5.183s] copying config/mapper_params_online_async_local.yaml -> /home/retail-assistant/SLAM/install/retail_assistant_bringup/share/retail_assistant_bringup/config
+[5.184s] copying config/mapper_params_online_async.yaml -> /home/retail-assistant/SLAM/install/retail_assistant_bringup/share/retail_assistant_bringup/config
+[5.186s] creating /home/retail-assistant/SLAM/install/retail_assistant_bringup/share/retail_assistant_bringup/rviz
+[5.187s] running install_egg_info
+[5.195s] Copying ../../build/retail_assistant_bringup/retail_assistant_bringup.egg-info to /home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup-0.0.0-py3.10.egg-info
+[5.210s] running install_scripts
+[5.458s] Installing auto_drive script to /home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/retail_assistant_bringup
+[5.460s] Installing mcu_to_pi script to /home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/retail_assistant_bringup
+[5.461s] Installing navigation script to /home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/retail_assistant_bringup
+[5.461s] Installing roboclaw script to /home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/retail_assistant_bringup
+[5.462s] Installing stm32 script to /home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/retail_assistant_bringup
+[5.462s] Installing stm_m script to /home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/retail_assistant_bringup
+[5.463s] Installing ultrasonic script to /home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/retail_assistant_bringup
+[5.465s] writing list of installed files to '/home/retail-assistant/SLAM/build/retail_assistant_bringup/install.log'
+[5.688s] Invoked command in '/home/retail-assistant/SLAM/src/retail_assistant_bringup' returned '0': PYTHONPATH=/home/retail-assistant/SLAM/build/retail_assistant_bringup/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/retail_assistant_bringup build --build-base /home/retail-assistant/SLAM/build/retail_assistant_bringup/build install --record /home/retail-assistant/SLAM/build/retail_assistant_bringup/install.log --single-version-externally-managed install_data
