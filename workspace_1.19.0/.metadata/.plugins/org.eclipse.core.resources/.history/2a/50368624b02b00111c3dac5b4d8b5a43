@@ -269,7 +269,7 @@ void printDebug(bno055_data_vector imu_euler, bno055_data_vector imu_quat, bno05
 //	printf("  X: %.2f | Y: %.2f | Z: %.2f\r\n", imu_angular.x, imu_angular.y, imu_angular.z);
 
 	//CSV format
-//	printf("%.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f\r\n", imu_euler.x, imu_euler.y, imu_euler.z, imu_linear.x, imu_linear.y, imu_linear.z, imu_angular.x, imu_angular.y, imu_angular.z);
+	printf("%.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f\r\n", imu_euler.x, imu_euler.y, imu_euler.z, imu_linear.x, imu_linear.y, imu_linear.z, imu_angular.x, imu_angular.y, imu_angular.z);
 //	printf("\r\n");
 
 //	printf("Encoder 1:%d\r\n", encoder1);
@@ -513,8 +513,8 @@ int main(void)
 //
 //    printDebug(quaternion, linear, angular, encoder1, encoder2);
 
-	// uint8_t curr_time = HAL_GetTick() - last_imu_read;
-	// if (curr_time >= 10) {
+	uint8_t curr_time = HAL_GetTick() - last_imu_read;
+	if (curr_time >= 10) {
 		last_imu_read = HAL_GetTick();
 
 		euler = bno055_getVectorEuler();
@@ -522,7 +522,7 @@ int main(void)
 		linear = bno055_getVectorLinearAccel();
 		angular = bno055_getVectorGyroscope();
 
-	// }
+	}
 
     piSend(quaternion, linear, angular);
 //		printDebug(euler, quaternion, linear, angular, encoder1, encoder2);
