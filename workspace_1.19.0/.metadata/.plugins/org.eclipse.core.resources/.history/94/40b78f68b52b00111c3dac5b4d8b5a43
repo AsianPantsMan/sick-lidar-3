@@ -247,52 +247,46 @@ void UARTLoopbackTest(char* testString)
     }
 }
 
-void printDebug(bno055_data_vector imu_quat, bno055_data_vector imu_linear, bno055_data_vector imu_angular, uint16_t encoder1, uint16_t encoder2){
+void printDebug(bno055_data_vector imu_euler, bno055_data_vector imu_quat, bno055_data_vector imu_linear, bno055_data_vector imu_angular, uint16_t encoder1, uint16_t encoder2){
 	//clear screen
-	printf("\033[2J");
-	printf("\033[H");
+//	printf("\033[2J");
+//	printf("\033[H");
 
-	bno055_getOutputUnits(&current_units);
-	printf("Current IMU units:\r\n");
-	printf("  Orientation: %s\r\n", current_units.orientation_android ? "Android" : "Windows");
-	printf("  Temperature: %s\r\n", current_units.temp_fahrenheit ? "Fahrenheit" : "Celsius");
-	printf("  Euler Angles: %s\r\n", current_units.euler_radians ? "Radians" : "Degrees");
-	printf("  Gyroscope: %s\r\n", current_units.gyro_rps ? "rps" : "dps");
-	printf("  Accelerometer: %s\r\n", current_units.accel_mg ? "mg" : "m/s^2");
-    printf("\r\n");
+//	bno055_getOutputUnits(&current_units);
+//	printf("Current IMU units:\r\n");
+//	printf("  Orientation: %s\r\n", current_units.orientation_android ? "Android" : "Windows");
+//	printf("  Temperature: %s\r\n", current_units.temp_fahrenheit ? "Fahrenheit" : "Celsius");
+//	printf("  Euler Angles: %s\r\n", current_units.euler_radians ? "Radians" : "Degrees");
+//	printf("  Gyroscope: %s\r\n", current_units.gyro_rps ? "rps" : "dps");
+//	printf("  Accelerometer: %s\r\n", current_units.accel_mg ? "mg" : "m/s^2");
+//    printf("\r\n");
 
-	printf("Quaternion:\r\n");
-	printf("  W: %.2f | X: %.2f | Y: %.2f | Z: %.2f\r\n", imu_quat.w, imu_quat.x, imu_quat.y, imu_quat.z);
-	printf("Linear Velocity:\r\n");
-	printf("  X: %.2f | Y: %.2f | Z: %.2f\r\n", imu_linear.x, imu_linear.y, imu_linear.z);
-	printf("Angular Velocity:\r\n");
-	printf("  X: %.2f | Y: %.2f | Z: %.2f\r\n", imu_angular.x, imu_angular.y, imu_angular.z);
+//	printf("Quaternion:\r\n");
+//	printf("  W: %.2f | X: %.2f | Y: %.2f | Z: %.2f\r\n", imu_quat.w, imu_quat.x, imu_quat.y, imu_quat.z);
+//	printf("Linear Velocity:\r\n");
+//	printf("  X: %.2f | Y: %.2f | Z: %.2f\r\n", imu_linear.x, imu_linear.y, imu_linear.z);
+//	printf("Angular Velocity:\r\n");
+//	printf("  X: %.2f | Y: %.2f | Z: %.2f\r\n", imu_angular.x, imu_angular.y, imu_angular.z);
 
 	//CSV format
 //	printf("%.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f\r\n", imu_euler.x, imu_euler.y, imu_euler.z, imu_linear.x, imu_linear.y, imu_linear.z, imu_angular.x, imu_angular.y, imu_angular.z);
 //	printf("\r\n");
 
-	printf("Encoder 1:%d\r\n", encoder1);
-	printf("Encoder 2:%d\r\n", encoder2);
-	printf("\r\n");
+//	printf("Encoder 1:%d\r\n", encoder1);
+//	printf("Encoder 2:%d\r\n", encoder2);
+//	printf("\r\n");
 
-  printf("TX Buffer A: ");
-  for(int i = 0; i < TX_BUFFER_SIZE; i++) {
-    printf("%02X ", tx_buffer_a[i]);
-  }
-  printf("\r\n");
-
-  printf("TX Buffer B: ");
-  for(int i = 0; i < TX_BUFFER_SIZE; i++) {
-    printf("%02X ", tx_buffer_b[i]);
-  }
-  printf("\r\n");
-
-	printf("Received (%d bytes): ", RX_BUFFER_SIZE);
-	for(int i = 0; i < RX_BUFFER_SIZE; i++) {
-		printf("%02X ", rx_buffer[i]);
-	}
-	printf("\r\n");
+//	printf("Transmitted: ");
+//	for(int i = 0; i < TX_BUFFER_SIZE; i++) {
+//		printf("%02X ", tx_buffer[i]);
+//	}
+//	printf("\r\n");
+//
+//	printf("Received (%d bytes): ", RX_BUFFER_SIZE);
+//	for(int i = 0; i < RX_BUFFER_SIZE; i++) {
+//		printf("%02X ", rx_buffer[i]);
+//	}
+//	printf("\r\n");
 }
 
 /*-------------------------------------------------------- STM32 <-> Raspberry Pi Communication --------------------------------------------------------*/
@@ -415,7 +409,7 @@ int main(void)
   DWT_Init(); //used to calculate microsecond pulses in drv8245-q1.c
 
   //Low pass filter initialize
-//  HAL_Delay(1000);
+  HAL_Delay(1000);
 
   //Display MCU Function LED
   HAL_GPIO_WritePin(MCU_LED_GPIO_Port, MCU_LED_Pin, GPIO_PIN_SET);
@@ -510,14 +504,14 @@ int main(void)
 //    bno055_data_vector linear = bno055_getVectorLinearAccel();
 //    bno055_data_vector angular = bno055_getVectorGyroscope();
 //
-    //Motor Encoders
-    encoder1 = (uint16_t)__HAL_TIM_GET_COUNTER(&htim4);
-    encoder2 = (uint16_t)__HAL_TIM_GET_COUNTER(&htim3);
-
+//    //Motor Encoders
+//    encoder1 = (uint16_t)__HAL_TIM_GET_COUNTER(&htim4);
+//    encoder2 = (uint16_t)__HAL_TIM_GET_COUNTER(&htim3);
+//
 //    //Raspberry Pi Communication
 //    piSend(quaternion, linear, angular, encoder1, encoder2);
 //
-    // printDebug(quaternion, linear, angular, encoder1, encoder2);
+    printDebug(quaternion, linear, angular, encoder1, encoder2);
 
 	uint8_t curr_time = HAL_GetTick() - last_imu_read;
 	if (curr_time >= 10) {
@@ -585,8 +579,8 @@ int main(void)
     //Motor speed
 
     //Right motor debug info
-  //right_motor_tics = MotorControl_getTics(&right_motor);
-  //right_pid_output = MotorControl_pidOutput(&right_motor);
+	right_motor_tics = MotorControl_getTics(&right_motor);
+	right_pid_output = MotorControl_pidOutput(&right_motor);
 //	error_integral = MotorControl_getIntegral(&right_motor);
 //	error = MotorControl_getError(&right_motor);
 //	p_term = MotorControl_getP(&right_motor);
@@ -595,8 +589,8 @@ int main(void)
 //	current_encoder = MotorControl_getEncoder(&right_motor);
 
     //Left motor debug info
-      	//left_motor_tics = MotorControl_getTics(&left_motor);
-      	//left_pid_output = MotorControl_pidOutput(&left_motor);
+    	left_motor_tics = MotorControl_getTics(&left_motor);
+    	left_pid_output = MotorControl_pidOutput(&left_motor);
 //    	error_integral = MotorControl_getIntegral(&left_motor);
 //    	error = MotorControl_getError(&left_motor);
 //    	p_term = MotorControl_getP(&left_motor);

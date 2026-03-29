@@ -415,7 +415,7 @@ int main(void)
   DWT_Init(); //used to calculate microsecond pulses in drv8245-q1.c
 
   //Low pass filter initialize
-//  HAL_Delay(1000);
+  HAL_Delay(1000);
 
   //Display MCU Function LED
   HAL_GPIO_WritePin(MCU_LED_GPIO_Port, MCU_LED_Pin, GPIO_PIN_SET);
@@ -517,7 +517,7 @@ int main(void)
 //    //Raspberry Pi Communication
 //    piSend(quaternion, linear, angular, encoder1, encoder2);
 //
-    // printDebug(quaternion, linear, angular, encoder1, encoder2);
+    printDebug(quaternion, linear, angular, encoder1, encoder2);
 
 	uint8_t curr_time = HAL_GetTick() - last_imu_read;
 	if (curr_time >= 10) {
@@ -585,8 +585,8 @@ int main(void)
     //Motor speed
 
     //Right motor debug info
-  //right_motor_tics = MotorControl_getTics(&right_motor);
-  //right_pid_output = MotorControl_pidOutput(&right_motor);
+	right_motor_tics = MotorControl_getTics(&right_motor);
+	right_pid_output = MotorControl_pidOutput(&right_motor);
 //	error_integral = MotorControl_getIntegral(&right_motor);
 //	error = MotorControl_getError(&right_motor);
 //	p_term = MotorControl_getP(&right_motor);
@@ -595,8 +595,8 @@ int main(void)
 //	current_encoder = MotorControl_getEncoder(&right_motor);
 
     //Left motor debug info
-      	//left_motor_tics = MotorControl_getTics(&left_motor);
-      	//left_pid_output = MotorControl_pidOutput(&left_motor);
+    	left_motor_tics = MotorControl_getTics(&left_motor);
+    	left_pid_output = MotorControl_pidOutput(&left_motor);
 //    	error_integral = MotorControl_getIntegral(&left_motor);
 //    	error = MotorControl_getError(&left_motor);
 //    	p_term = MotorControl_getP(&left_motor);

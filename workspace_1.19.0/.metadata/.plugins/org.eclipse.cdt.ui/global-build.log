@@ -17038,3 +17038,220 @@ Finished building: default.size.stdout
  
 Finished building: STM32G474RC.list
  
+16:14:39 **** Incremental Build of configuration Debug for project STM32G474RC ****
+make -j11 all 
+arm-none-eabi-gcc "../Core/Src/bno055.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G474xx -c -I../USB_Device/App -I../USB_Device/Target -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/bno055.d" -MT"Core/Src/bno055.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/bno055.o"
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G474xx -c -I../USB_Device/App -I../USB_Device/Target -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:470:18: warning: unused variable 'print_interval' [-Wunused-variable]
+  470 |   const uint32_t print_interval = 1;
+      |                  ^~~~~~~~~~~~~~
+../Core/Src/main.c:469:12: warning: unused variable 'last_print_time' [-Wunused-variable]
+  469 |   uint32_t last_print_time = 0;
+      |            ^~~~~~~~~~~~~~~
+arm-none-eabi-gcc -o "STM32G474RC.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/caseyear/STM32CubeIDE/workspace_1.19.0/STM32G474RC/STM32G474RCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="STM32G474RC.map" -Wl,--gc-sections -static -u_printf_float --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: STM32G474RC.elf
+ 
+arm-none-eabi-size  STM32G474RC.elf 
+arm-none-eabi-objdump -h -S STM32G474RC.elf  > "STM32G474RC.list"
+   text	   data	    bss	    dec	    hex	filename
+  80784	    856	  10256	  91896	  166f8	STM32G474RC.elf
+Finished building: default.size.stdout
+ 
+Finished building: STM32G474RC.list
+ 
+16:22:18 **** Incremental Build of configuration Debug for project STM32G474RC ****
+make -j11 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G474xx -c -I../USB_Device/App -I../USB_Device/Target -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:514:45: error: incompatible type for argument 4 of 'printDebug'
+  514 |     printDebug(quaternion, linear, angular, encoder1, encoder2);
+      |                                             ^~~~~~~~
+      |                                             |
+      |                                             uint16_t {aka short unsigned int}
+../Core/Src/main.c:250:126: note: expected 'bno055_data_vector' but argument is of type 'uint16_t' {aka 'short unsigned int'}
+  250 | void printDebug(bno055_data_vector imu_euler, bno055_data_vector imu_quat, bno055_data_vector imu_linear, bno055_data_vector imu_angular, uint16_t encoder1, uint16_t encoder2){
+      |                                                                                                           ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~
+../Core/Src/main.c:514:5: error: too few arguments to function 'printDebug'
+  514 |     printDebug(quaternion, linear, angular, encoder1, encoder2);
+      |     ^~~~~~~~~~
+../Core/Src/main.c:250:6: note: declared here
+  250 | void printDebug(bno055_data_vector imu_euler, bno055_data_vector imu_quat, bno055_data_vector imu_linear, bno055_data_vector imu_angular, uint16_t encoder1, uint16_t encoder2){
+      |      ^~~~~~~~~~
+../Core/Src/main.c:470:18: warning: unused variable 'print_interval' [-Wunused-variable]
+  470 |   const uint32_t print_interval = 1;
+      |                  ^~~~~~~~~~~~~~
+../Core/Src/main.c:469:12: warning: unused variable 'last_print_time' [-Wunused-variable]
+  469 |   uint32_t last_print_time = 0;
+      |            ^~~~~~~~~~~~~~~
+make: *** [Core/Src/subdir.mk:72: Core/Src/main.o] Error 1
+"make -j11 all" terminated with exit code 2. Build might be incomplete.
+16:22:48 **** Incremental Build of configuration Debug for project STM32G474RC ****
+make -j11 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G474xx -c -I../USB_Device/App -I../USB_Device/Target -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'printDebug':
+../Core/Src/main.c:281:33: error: 'tx_buffer' undeclared (first use in this function); did you mean 'rx_buffer'?
+  281 |                 printf("%02X ", tx_buffer[i]);
+      |                                 ^~~~~~~~~
+      |                                 rx_buffer
+../Core/Src/main.c:281:33: note: each undeclared identifier is reported only once for each function it appears in
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:514:45: error: incompatible type for argument 4 of 'printDebug'
+  514 |     printDebug(quaternion, linear, angular, encoder1, encoder2);
+      |                                             ^~~~~~~~
+      |                                             |
+      |                                             uint16_t {aka short unsigned int}
+../Core/Src/main.c:250:126: note: expected 'bno055_data_vector' but argument is of type 'uint16_t' {aka 'short unsigned int'}
+  250 | void printDebug(bno055_data_vector imu_euler, bno055_data_vector imu_quat, bno055_data_vector imu_linear, bno055_data_vector imu_angular, uint16_t encoder1, uint16_t encoder2){
+      |                                                                                                           ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~
+../Core/Src/main.c:514:5: error: too few arguments to function 'printDebug'
+  514 |     printDebug(quaternion, linear, angular, encoder1, encoder2);
+      |     ^~~~~~~~~~
+../Core/Src/main.c:250:6: note: declared here
+  250 | void printDebug(bno055_data_vector imu_euler, bno055_data_vector imu_quat, bno055_data_vector imu_linear, bno055_data_vector imu_angular, uint16_t encoder1, uint16_t encoder2){
+      |      ^~~~~~~~~~
+../Core/Src/main.c:470:18: warning: unused variable 'print_interval' [-Wunused-variable]
+  470 |   const uint32_t print_interval = 1;
+      |                  ^~~~~~~~~~~~~~
+../Core/Src/main.c:469:12: warning: unused variable 'last_print_time' [-Wunused-variable]
+  469 |   uint32_t last_print_time = 0;
+      |            ^~~~~~~~~~~~~~~
+make: *** [Core/Src/subdir.mk:72: Core/Src/main.o] Error 1
+"make -j11 all" terminated with exit code 2. Build might be incomplete.
+16:23:09 **** Incremental Build of configuration Debug for project STM32G474RC ****
+make -j11 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G474xx -c -I../USB_Device/App -I../USB_Device/Target -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'printDebug':
+../Core/Src/main.c:281:33: error: 'tx_buffer' undeclared (first use in this function); did you mean 'rx_buffer'?
+  281 |                 printf("%02X ", tx_buffer[i]);
+      |                                 ^~~~~~~~~
+      |                                 rx_buffer
+../Core/Src/main.c:281:33: note: each undeclared identifier is reported only once for each function it appears in
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:470:18: warning: unused variable 'print_interval' [-Wunused-variable]
+  470 |   const uint32_t print_interval = 1;
+      |                  ^~~~~~~~~~~~~~
+../Core/Src/main.c:469:12: warning: unused variable 'last_print_time' [-Wunused-variable]
+  469 |   uint32_t last_print_time = 0;
+      |            ^~~~~~~~~~~~~~~
+make: *** [Core/Src/subdir.mk:72: Core/Src/main.o] Error 1
+"make -j11 all" terminated with exit code 2. Build might be incomplete.
+16:24:24 **** Incremental Build of configuration Debug for project STM32G474RC ****
+make -j11 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G474xx -c -I../USB_Device/App -I../USB_Device/Target -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:476:18: warning: unused variable 'print_interval' [-Wunused-variable]
+  476 |   const uint32_t print_interval = 1;
+      |                  ^~~~~~~~~~~~~~
+../Core/Src/main.c:475:12: warning: unused variable 'last_print_time' [-Wunused-variable]
+  475 |   uint32_t last_print_time = 0;
+      |            ^~~~~~~~~~~~~~~
+arm-none-eabi-gcc -o "STM32G474RC.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/caseyear/STM32CubeIDE/workspace_1.19.0/STM32G474RC/STM32G474RCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="STM32G474RC.map" -Wl,--gc-sections -static -u_printf_float --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: STM32G474RC.elf
+ 
+arm-none-eabi-size  STM32G474RC.elf 
+arm-none-eabi-objdump -h -S STM32G474RC.elf  > "STM32G474RC.list"
+   text	   data	    bss	    dec	    hex	filename
+  82288	    856	  10272	  93416	  16ce8	STM32G474RC.elf
+Finished building: default.size.stdout
+ 
+Finished building: STM32G474RC.list
+ 
+16:28:00 **** Incremental Build of configuration Debug for project STM32G474RC ****
+make -j11 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G474xx -c -I../USB_Device/App -I../USB_Device/Target -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:476:18: warning: unused variable 'print_interval' [-Wunused-variable]
+  476 |   const uint32_t print_interval = 1;
+      |                  ^~~~~~~~~~~~~~
+../Core/Src/main.c:475:12: warning: unused variable 'last_print_time' [-Wunused-variable]
+  475 |   uint32_t last_print_time = 0;
+      |            ^~~~~~~~~~~~~~~
+arm-none-eabi-gcc -o "STM32G474RC.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/caseyear/STM32CubeIDE/workspace_1.19.0/STM32G474RC/STM32G474RCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="STM32G474RC.map" -Wl,--gc-sections -static -u_printf_float --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: STM32G474RC.elf
+ 
+arm-none-eabi-size  STM32G474RC.elf 
+arm-none-eabi-objdump -h -S STM32G474RC.elf  > "STM32G474RC.list"
+   text	   data	    bss	    dec	    hex	filename
+  82312	    856	  10272	  93440	  16d00	STM32G474RC.elf
+Finished building: default.size.stdout
+ 
+Finished building: STM32G474RC.list
+ 
+16:38:16 **** Incremental Build of configuration Debug for project STM32G474RC ****
+make -j11 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G474xx -c -I../USB_Device/App -I../USB_Device/Target -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:476:18: warning: unused variable 'print_interval' [-Wunused-variable]
+  476 |   const uint32_t print_interval = 1;
+      |                  ^~~~~~~~~~~~~~
+../Core/Src/main.c:475:12: warning: unused variable 'last_print_time' [-Wunused-variable]
+  475 |   uint32_t last_print_time = 0;
+      |            ^~~~~~~~~~~~~~~
+arm-none-eabi-gcc -o "STM32G474RC.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/caseyear/STM32CubeIDE/workspace_1.19.0/STM32G474RC/STM32G474RCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="STM32G474RC.map" -Wl,--gc-sections -static -u_printf_float --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: STM32G474RC.elf
+ 
+arm-none-eabi-size  STM32G474RC.elf 
+arm-none-eabi-objdump -h -S STM32G474RC.elf  > "STM32G474RC.list"
+   text	   data	    bss	    dec	    hex	filename
+  82304	    856	  10272	  93432	  16cf8	STM32G474RC.elf
+Finished building: default.size.stdout
+ 
+Finished building: STM32G474RC.list
+ 
+16:43:48 **** Incremental Build of configuration Debug for project STM32G474RC ****
+make -j11 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G474xx -c -I../USB_Device/App -I../USB_Device/Target -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:476:18: warning: unused variable 'print_interval' [-Wunused-variable]
+  476 |   const uint32_t print_interval = 1;
+      |                  ^~~~~~~~~~~~~~
+../Core/Src/main.c:475:12: warning: unused variable 'last_print_time' [-Wunused-variable]
+  475 |   uint32_t last_print_time = 0;
+      |            ^~~~~~~~~~~~~~~
+arm-none-eabi-gcc -o "STM32G474RC.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/caseyear/STM32CubeIDE/workspace_1.19.0/STM32G474RC/STM32G474RCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="STM32G474RC.map" -Wl,--gc-sections -static -u_printf_float --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: STM32G474RC.elf
+ 
+arm-none-eabi-size  STM32G474RC.elf 
+arm-none-eabi-objdump -h -S STM32G474RC.elf  > "STM32G474RC.list"
+   text	   data	    bss	    dec	    hex	filename
+  82168	    856	  10256	  93280	  16c60	STM32G474RC.elf
+Finished building: default.size.stdout
+ 
+Finished building: STM32G474RC.list
+ 
+16:49:39 **** Incremental Build of configuration Debug for project STM32G474RC ****
+make -j11 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G474xx -c -I../USB_Device/App -I../USB_Device/Target -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -u _printf_float -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:476:18: warning: unused variable 'print_interval' [-Wunused-variable]
+  476 |   const uint32_t print_interval = 1;
+      |                  ^~~~~~~~~~~~~~
+../Core/Src/main.c:475:12: warning: unused variable 'last_print_time' [-Wunused-variable]
+  475 |   uint32_t last_print_time = 0;
+      |            ^~~~~~~~~~~~~~~
+arm-none-eabi-gcc -o "STM32G474RC.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/caseyear/STM32CubeIDE/workspace_1.19.0/STM32G474RC/STM32G474RCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="STM32G474RC.map" -Wl,--gc-sections -static -u_printf_float --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: STM32G474RC.elf
+ 
+arm-none-eabi-size  STM32G474RC.elf 
+arm-none-eabi-objdump -h -S STM32G474RC.elf  > "STM32G474RC.list"
+   text	   data	    bss	    dec	    hex	filename
+  80664	    856	  10248	  91768	  16678	STM32G474RC.elf
+Finished building: default.size.stdout
+ 
+Finished building: STM32G474RC.list
+ 
+16:55:11 **** Incremental Build of configuration Debug for project STM32G474RC ****
+make -j11 all 
+arm-none-eabi-gcc "../Core/Src/usart.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G474xx -c -I../USB_Device/App -I../USB_Device/Target -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/usart.d" -MT"Core/Src/usart.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/usart.o"
+arm-none-eabi-gcc -o "STM32G474RC.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/caseyear/STM32CubeIDE/workspace_1.19.0/STM32G474RC/STM32G474RCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="STM32G474RC.map" -Wl,--gc-sections -static -u_printf_float --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: STM32G474RC.elf
+ 
+arm-none-eabi-size  STM32G474RC.elf 
+arm-none-eabi-objdump -h -S STM32G474RC.elf  > "STM32G474RC.list"
+   text	   data	    bss	    dec	    hex	filename
+  80664	    856	  10248	  91768	  16678	STM32G474RC.elf
+Finished building: default.size.stdout
+ 
+Finished building: STM32G474RC.list
+ 
