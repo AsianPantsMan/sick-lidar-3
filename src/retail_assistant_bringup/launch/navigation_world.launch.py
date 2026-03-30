@@ -2,83 +2,146 @@ import os
 
 from ament_index_python.packages import get_package_share_directory
 
-
 from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription
+from launch.actions import IncludeLaunchDescription, TimerAction
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 
 from launch_ros.actions import Node
 
 
-
 def generate_launch_description():
+    package_name = 'retail_assistant_bringup'
 
-
-    package_name='retail_assistant_bringup' 
-
+    # Robot state publisher
     rsp = IncludeLaunchDescription(
-                PythonLaunchDescriptionSource([os.path.join(
-                    get_package_share_directory(package_name),'launch','rsp.py'
-                )]), launch_arguments={'use_sim_time': 'false'}.items()
+        PythonLaunchDescriptionSource(
+            os.path.join(
+                get_package_share_directory(package_name),
+                'launch',
+                'rsp.py'
+            )
+        ),
+        launch_arguments={'use_sim_time': 'false'}.items()
     )
+
+    # STM32 sensor node
+    stm32 = Node(
+        package='retail_assistant_bringup',
+        executable='stm32',
+        name='stm32_node',
+        output='screen',
+    )
+
+    # Odom / TF publisher node
     mcu_to_pi = Node(
-    package="retail_assistant_bringup",
-    executable="mcu_to_pi",   # if installed as a program
-    name="mcu_to_pi_node",
-    output="screen",
-)
+        package='retail_assistant_bringup',
+        executable='mcu_to_pi',
+        name='mcu_to_pi_node',
+        output='screen',
+    )
+
+    # Lidar
     sllidar = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(
-                get_package_share_directory("sllidar_ros2"),
-                "launch",
-                "sllidar_c1_launch.py",
+                get_package_share_directory('sllidar_ros2'),
+                'launch',
+                'sllidar_c1_launch.py',
+            )
+        )
+    )
+
+    # SLAM
+    slam = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(
+                get_package_share_directory('slam_toolbox'),
+                'launch',
+                'online_async_launch.py'
             )
         ),
         launch_arguments={
-        }.items(),
+            'slam_params_file': os.path.join(
+                get_package_share_directory(package_name),
+                'config',
+                'mapper_params_online_async_local.yaml'
+            ),
+            'use_sim_time': 'false'
+        }.items()
     )
-    slam = IncludeLaunchDescription(
-            PythonLaunchDescriptionSource([os.path.join
-                                           (get_package_share_directory('slam_toolbox'),'launch','online_async_launch.py')]),# fix _local later
-                                          launch_arguments={'params_file': os.path.join(get_package_share_directory(package_name),'config','config','mapper_params_online_async_local.yaml'),'use_sim_time': 'false'}.items())
-                                          
-    # Launch them all!
-    nav2=IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([os.path.join
-                                       (get_package_share_directory('nav2_bringup'),'launch','navigation_launch.py')])
-                                       ,launch_arguments={'use_sim_time': 'false',
-                                                          'params_file': os.path.join(
-                                                             get_package_share_directory(package_name),
-                                                             'config',
-                                                             'nav2_params.yaml'
-                                                                )}.items())
-    stm32 =Node(
-    package="retail_assistant_bringup",
-    executable="stm32",   # if installed as a program
-    name="stm32_node",
-    output="screen",
+
+    # Nav2
+    nav2 = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(
+                get_package_share_directory('nav2_bringup'),
+                'launch',
+                'navigation_launch.py'
+            )
+        ),
+        launch_arguments={
+            'use_sim_time': 'false',
+            'params_file': os.path.join(
+                get_package_share_directory(package_name),
+                'config',
+                'nav2_params.yaml'
+            )
+        }.items()
     )
-    roboclaw= Node(
-    package="retail_assistant_bringup",
-    executable="roboclaw",   # if installed as a program
-    name="roboclaw_node",
-    output="screen",
+
+    # Motor node
+    stm_motor = Node(
+        package='retail_assistant_bringup',
+        executable='stm_m',
+        name='stm_m_node',
+        output='screen',
     )
-    ekf=Node(
+
+    # Optional EKF node
+    ekf = Node(
         package='robot_localization',
         executable='ekf_node',
         name='ekf_filter_node',
         output='screen',
-        parameters=[os.path.join(get_package_share_directory(package_name),'config','ekf.yaml')]
+        parameters=[
+            os.path.join(
+                get_package_share_directory(package_name),
+                'config',
+                'ekf.yaml'
+            )
+        ]
     )
+    navigation = Node(
+        package='retail_assistant_bringup',
+        executable='navigation',
+        name='navigation_node',
+        output='screen',
+    )
+    # Delay SLAM and Nav2 so TF / odom / IMU can settle first
+    delayed_slam = TimerAction(
+        period=3.0,
+        actions=[slam]
+    )
+
+    delayed_nav2 = TimerAction(
+        period=5.0,
+        actions=[nav2]
+    )
+    delayed_navigation = TimerAction(
+        period=12.0,
+        actions=[navigation]
+    )
+
     return LaunchDescription([
         rsp,
-        sllidar,        
-        mcu_to_pi,
-        slam,
-        nav2,
         stm32,
-        ekf,
-        #roboclaw,
+        mcu_to_pi,
+        sllidar,
+        stm_motor,
+
+        # ekf,  # uncomment if you want EKF running
+
+        delayed_slam,
+        delayed_nav2,
+        #delayed_navigation
     ])
