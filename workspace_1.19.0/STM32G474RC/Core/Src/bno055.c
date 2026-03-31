@@ -42,46 +42,85 @@ void bno055_init(){
     HAL_GPIO_WritePin(IMU_LED_GPIO_Port, IMU_LED_Pin, GPIO_PIN_SET);
 }
 
+/*------------- recovery notes ------------------*/
+
+static void bno055_i2c_recovery(void) {
+    // Reset I2C peripheral if stuck
+    if (_bno055_i2c_port->State != HAL_I2C_STATE_READY) {
+        printf("I2C Recovery triggered (state=%d)\r\n", _bno055_i2c_port->State);
+
+        HAL_I2C_DeInit(_bno055_i2c_port);
+        HAL_Delay(10);
+        HAL_I2C_Init(_bno055_i2c_port);
+        HAL_Delay(10);
+    }
+}
+
+static HAL_StatusTypeDef bno055_write_with_retry(uint8_t reg, uint8_t data, uint8_t retries) {
+    HAL_StatusTypeDef status;
+    uint8_t txdata[2] = {reg, data};
+
+    for (uint8_t attempt = 0; attempt < retries; attempt++) {
+        status = HAL_I2C_Master_Transmit(_bno055_i2c_port, BNO055_I2C_ADDR << 1,
+                                        txdata, 2, 100);
+
+        if (status == HAL_OK) {
+            return HAL_OK;
+        }
+
+        printf("Write attempt %d failed: status=%d (reg=0x%02X)\r\n", attempt + 1, status, reg);
+
+        if (attempt < retries - 1) {
+            bno055_i2c_recovery();
+            HAL_Delay(10);
+        }
+    }
+
+    return status;
+}
+
+static HAL_StatusTypeDef bno055_read_with_retry(uint8_t reg, uint8_t *data, uint8_t len, uint8_t retries) {
+    HAL_StatusTypeDef status;
+
+    for (uint8_t attempt = 0; attempt < retries; attempt++) {
+        status = HAL_I2C_Mem_Read(_bno055_i2c_port, BNO055_I2C_ADDR << 1,
+                                reg, I2C_MEMADD_SIZE_8BIT,
+                                data, len, 100);
+
+        if (status == HAL_OK) {
+            return HAL_OK;
+        }
+
+        printf("Read attempt %d failed: status=%d (reg=0x%02X, len=%d)\r\n",
+               attempt + 1, status, reg, len);
+
+        if (attempt < retries - 1) {
+            bno055_i2c_recovery();
+            HAL_Delay(10);
+        }
+    }
+
+    return status;
+}
+
+/*---------------------------------------------------------------------------------*/
 
 void bno055_writeData(uint8_t reg, uint8_t data){
-	//HAL_I2C_Mem_Write(_bno055_i2c_port, BNO055_I2C_ADDR_LO<<1 , reg, I2C_MEMADD_SIZE_8BIT, &data, 1, 100);
+	HAL_StatusTypeDef status = bno055_write_with_retry(reg, data, 3);
 
-	uint8_t txdata[2] = {reg, data};
-	HAL_StatusTypeDef status;
-
-	status = HAL_I2C_Master_Transmit(_bno055_i2c_port, BNO055_I2C_ADDR << 1,
-	                                   txdata, sizeof(txdata), 100);
-
-	if (status != HAL_OK) {
-		if (status != HAL_OK) {
-		        printf("writeData FAILED: %d (reg=0x%02X, data=0x%02X, i2c_state=%d)\r\n",
-		               status, reg, data, _bno055_i2c_port->State);
-		    }
-		}
-//	    if (status == HAL_BUSY) {
-//	      printf("writeData FAILED: HAL_BUSY (reg=0x%02X)\r\n", reg);
-//	    } else if (status == HAL_TIMEOUT) {
-//	      printf("writeData FAILED: HAL_TIMEOUT (reg=0x%02X)\r\n", reg);
-//	    } else {
-//	      printf("writeData FAILED: %d (reg=0x%02X)\r\n", status, reg);
-//	    }
-//	}
+	    if (status != HAL_OK) {
+	        printf("writeData FAILED after retries: %d (reg=0x%02X, data=0x%02X, i2c_state=%d)\r\n",
+	               status, reg, data, _bno055_i2c_port->State);
+	    }
 }
 
 void bno055_readData(uint8_t reg, uint8_t *data, uint8_t len){
-    HAL_StatusTypeDef status;
-    status = HAL_I2C_Mem_Read(_bno055_i2c_port, BNO055_I2C_ADDR << 1,
-                                reg, I2C_MEMADD_SIZE_8BIT,
-                                data, len, 100);
-    if (status != HAL_OK) {
-        if (status == HAL_BUSY) {
-          printf("readData FAILED: HAL_BUSY (reg=0x%02X, len=%d)\r\n", reg, len);
-        } else if (status == HAL_TIMEOUT) {
-          printf("readData FAILED: HAL_TIMEOUT (reg=0x%02X, len=%d)\r\n", reg, len);
-        } else {
-          printf("readData FAILED: %d (reg=0x%02X, len=%d)\r\n", status, reg, len);
-        }
-    }
+	HAL_StatusTypeDef status = bno055_read_with_retry(reg, data, len, 3);
+
+	    if (status != HAL_OK) {
+	        printf("readData FAILED after retries: %d (reg=0x%02X, len=%d, i2c_state=%d)\r\n",
+	               status, reg, len, _bno055_i2c_port->State);
+	    }
 }
 
 void bno055_delay(int time){
@@ -173,7 +212,13 @@ void bno055_setCalibrationData(bno055_calibration_data_t calData){
 	bno055_setPage(0);
 	bno055_delay(20);
 
-	for(int i=0; i<22; i++){
+	memcpy(buffer, &calData.offset.accel, 6);
+	memcpy(buffer + 6, &calData.offset.mag, 6);
+	memcpy(buffer + 12, &calData.offset.gyro, 6);
+	memcpy(buffer + 18, &calData.radius.accel, 2);
+	memcpy(buffer + 20, &calData.radius.mag, 2);
+
+	for(int i = 0; i < 22; i++){
 		bno055_writeData(ACC_OFFSET_X_LSB + i, buffer[i]);
 	}
 
@@ -187,8 +232,17 @@ int8_t bno055_getTemp(){
     return (int8_t)temp;
 }
 
+static uint8_t _current_page = 0xFF;
+
+static void bno055_setPageIfNeeded(uint8_t page) {
+    if (_current_page != page) {
+        bno055_writeData(PAGE_ID, page);
+        _current_page = page;
+    }
+}
+
 bno055_data_vector bno055_getVector(uint8_t vec){
-	bno055_setPage(0);
+	bno055_setPageIfNeeded(0);
 	uint8_t buffer[8];
 
 	if (vec == BNO055_VECTOR_QUATERNION)

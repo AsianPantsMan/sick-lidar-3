@@ -3,6 +3,7 @@
 	<item key="hasShownOverlayPopupBefore" value="true"/>
 	<item key="replaceBarOpen" value="false"/>
 	<list key="searchhistory">
+		<item value="printf"/>
 		<item value="debug"/>
 		<item value="uart2"/>
 		<item value="uart_receive_it"/>
@@ -17,6 +18,5 @@
 		<item value="nss"/>
 		<item value="_drv8245_spi_port"/>
 		<item value="spi"/>
-		<item value="write"/>
 	</list>
 </section>
