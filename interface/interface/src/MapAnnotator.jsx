@@ -43,6 +43,11 @@ function incrementAisleId(id) {
 
 export default function MapAnnotator() {
   const imgRef = useRef(null);
+  const apiBaseUrl = import.meta.env.VITE_API_URL;
+
+  if (!apiBaseUrl) {
+    throw new Error("Missing VITE_API_URL.");
+  }
 
   const [mapConfig, setMapConfig] = useState(null);
   const [imgNatural, setImgNatural] = useState({ w: 0, h: 0 });
@@ -70,7 +75,7 @@ export default function MapAnnotator() {
   }, [aisleId, completedTypes]);
 
   async function refreshSaved() {
-    const resp = await fetch("http://localhost:5050/api/aisles");
+    const resp = await fetch(`${apiBaseUrl}/api/aisles`);
     const data = await resp.json();
     setSaved(data.aisles || []);
   }
@@ -142,7 +147,7 @@ export default function MapAnnotator() {
   async function savePoint() {
     if (!lastClick) return;
 
-    await fetch("http://localhost:5050/api/aisles", {
+    await fetch(`${apiBaseUrl}/api/aisles`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -180,7 +185,7 @@ export default function MapAnnotator() {
   }
 
   async function clearAll() {
-    await fetch("http://localhost:5050/api/aisles", { method: "DELETE" });
+    await fetch(`${apiBaseUrl}/api/aisles`, { method: "DELETE" });
     await refreshSaved();
 
     // reset everything
@@ -332,7 +337,7 @@ export default function MapAnnotator() {
           </div>
 
           <div className="text-xs text-gray-500 mt-3">
-            Backend: <span className="font-mono">http://localhost:5050</span>
+            Backend: <span className="font-mono">{apiBaseUrl}</span>
           </div>
         </div>
       </div>
