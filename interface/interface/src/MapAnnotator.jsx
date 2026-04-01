@@ -41,9 +41,8 @@ function incrementAisleId(id) {
   return `${prefix}${num + 1}`;
 }
 
-export default function MapAnnotator() {
+export default function MapAnnotator({ saved = [], refreshSaved, apiBaseUrl }) {
   const imgRef = useRef(null);
-  const apiBaseUrl = import.meta.env.VITE_API_URL;
 
   if (!apiBaseUrl) {
     throw new Error("Missing VITE_API_URL.");
@@ -59,9 +58,6 @@ export default function MapAnnotator() {
   const [pointType, setPointType] = useState("start"); // start -> center -> end
   const [completedTypes, setCompletedTypes] = useState(() => new Set());
 
-  // Saved points from backend
-  const [saved, setSaved] = useState([]);
-
   const availableTypes = useMemo(() => {
     return STEPS.filter((t) => !completedTypes.has(t));
   }, [completedTypes]);
@@ -73,17 +69,6 @@ export default function MapAnnotator() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [aisleId, completedTypes]);
-
-  async function refreshSaved() {
-    const resp = await fetch(`${apiBaseUrl}/api/aisles`);
-    const data = await resp.json();
-    setSaved(data.aisles || []);
-  }
-
-  // Load saved points once
-  useEffect(() => {
-    refreshSaved().catch(console.error);
-  }, []);
 
   // Load YAML map config once
   useEffect(() => {
@@ -205,8 +190,8 @@ export default function MapAnnotator() {
         {/* Map panel */}
         <div className="lg:col-span-2 bg-white rounded-xl shadow p-4">
           <div className="flex items-baseline justify-between mb-3">
-            <h2 className="text-xl font-semibold">Aisle Coordinate Picker</h2>
-            <div className="text-sm text-gray-700">
+              <h2 className="text-xl font-semibold">Aisle Coordinate Picker</h2>
+              <div className="text-sm text-gray-700">
               Aisle: <span className="font-mono font-semibold">{aisleId}</span>
             </div>
           </div>
@@ -304,12 +289,15 @@ export default function MapAnnotator() {
           <button
             onClick={savePoint}
             disabled={!lastClick}
-            className="w-full bg-black text-white rounded-md py-2 disabled:opacity-40"
+            className="w-full bg-zinc-800 text-white rounded-md py-2 disabled:opacity-40 hover:bg-zinc-700 transition-colors"
           >
             Save Selected Point
           </button>
 
-          <button onClick={clearAll} className="w-full mt-2 border rounded-md py-2">
+          <button
+            onClick={clearAll}
+            className="w-full mt-2 rounded-md py-2 bg-zinc-600 text-white hover:bg-zinc-500 transition-colors"
+          >
             Clear All
           </button>
 
@@ -323,7 +311,7 @@ export default function MapAnnotator() {
               <ul className="divide-y">
                 {saved.map((p, idx) => (
                   <li key={idx} className="p-3 text-sm">
-                    <div className="font-medium">
+                    <div className="font-medium text-slate-900">
                       {p.id} — {labelForType(p.type)}
                     </div>
                     <div className="font-mono text-gray-700">
@@ -336,9 +324,6 @@ export default function MapAnnotator() {
             )}
           </div>
 
-          <div className="text-xs text-gray-500 mt-3">
-            Backend: <span className="font-mono">{apiBaseUrl}</span>
-          </div>
         </div>
       </div>
     </div>

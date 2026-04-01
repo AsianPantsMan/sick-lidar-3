@@ -46,7 +46,7 @@ export default function CustomerPage() {
 
   return (
     <div className="customer-shell min-h-screen">
-      <div className="text-5xl font-bold p-10 text-center">
+      <div className="text-5xl font-bold p-10 text-white text-center">
         {!hasInteracted && category === "All Products" && query.trim() === ""
           ? "Select a product category or search"
           : category === "All Products" && query.trim() === ""
