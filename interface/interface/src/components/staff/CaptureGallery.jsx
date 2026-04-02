@@ -5,7 +5,8 @@ import { storage } from "../../firebase/config";
 const IMAGE_EXTENSIONS = [".png", ".jpg", ".jpeg", ".gif", ".webp", ".bmp", ".heic"];
 const STORAGE_PATH = import.meta.env.VITE_FIREBASE_STORAGE_PATH || "captures";
 const POLL_INTERVAL_MS = 15000;
-const MAX_CAPTURE_ITEMS = 10;
+const CAPTURE_LIMIT_OPTIONS = [5, 10, 25, 100];
+const DEFAULT_CAPTURE_LIMIT = 5;
 const CAPTURE_CACHE_KEY = `captureGallery:${STORAGE_PATH}`;
 
 function isImageFile(name) {
@@ -28,6 +29,7 @@ async function collectStorageImages(folderRef) {
 
 export default function CaptureGallery() {
   const [captures, setCaptures] = useState([]);
+  const [captureLimit, setCaptureLimit] = useState(DEFAULT_CAPTURE_LIMIT);
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -37,6 +39,7 @@ export default function CaptureGallery() {
   const capturesRef = useRef([]);
 
   const storageRootLabel = useMemo(() => `/${STORAGE_PATH}`, []);
+  const visibleCaptures = useMemo(() => captures.slice(0, captureLimit), [captures, captureLimit]);
 
   const loadCaptures = useCallback(async ({ background = false } = {}) => {
     setError(null);
@@ -70,12 +73,10 @@ export default function CaptureGallery() {
         return a.fullPath.localeCompare(b.fullPath);
       });
 
-      const trimmedCaptures = capturesWithUrls.slice(0, MAX_CAPTURE_ITEMS);
-
-      const nextPaths = new Set(trimmedCaptures.map((capture) => capture.fullPath));
+      const nextPaths = new Set(capturesWithUrls.map((capture) => capture.fullPath));
 
       if (hasLoadedOnceRef.current) {
-        const newlyCaptured = trimmedCaptures.filter((capture) => !previousPathsRef.current.has(capture.fullPath));
+        const newlyCaptured = capturesWithUrls.filter((capture) => !previousPathsRef.current.has(capture.fullPath));
 
         if (newlyCaptured.length > 0) {
           setNotifications((current) => [
@@ -93,9 +94,9 @@ export default function CaptureGallery() {
       }
 
       previousPathsRef.current = nextPaths;
-      setCaptures(trimmedCaptures);
-      capturesRef.current = trimmedCaptures;
-      window.sessionStorage.setItem(CAPTURE_CACHE_KEY, JSON.stringify(trimmedCaptures));
+  setCaptures(capturesWithUrls);
+  capturesRef.current = capturesWithUrls;
+  window.sessionStorage.setItem(CAPTURE_CACHE_KEY, JSON.stringify(capturesWithUrls));
     } catch (err) {
       console.error("Failed to load storage captures:", err);
       setError(String(err));
@@ -111,10 +112,9 @@ export default function CaptureGallery() {
       if (raw) {
         const cached = JSON.parse(raw);
         if (Array.isArray(cached) && cached.length > 0) {
-          const cachedTrimmed = cached.slice(0, MAX_CAPTURE_ITEMS);
-          setCaptures(cachedTrimmed);
-          capturesRef.current = cachedTrimmed;
-          previousPathsRef.current = new Set(cachedTrimmed.map((capture) => capture.fullPath));
+          setCaptures(cached);
+          capturesRef.current = cached;
+          previousPathsRef.current = new Set(cached.map((capture) => capture.fullPath));
           hasLoadedOnceRef.current = true;
           setLoading(false);
         }
@@ -178,13 +178,29 @@ export default function CaptureGallery() {
       </section>
 
       <section className="rounded-xl border bg-white p-3 shadow">
-        <div className="flex items-center justify-between gap-3 mb-2">
+        <div className="mb-2 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h3 className="text-lg font-semibold">Image Captures</h3>
-            <p className="text-xs text-gray-500">Storage path: {storageRootLabel} (latest {MAX_CAPTURE_ITEMS})</p>
+            <p className="text-xs text-gray-500">Storage path: {storageRootLabel}</p>
           </div>
-          <div className="flex items-center gap-2">
-            {refreshing && <span className="text-xs text-gray-500">Refreshing...</span>}
+          <div className="flex flex-col items-end gap-1 sm:justify-end">
+            <label className="inline-flex items-center gap-2 whitespace-nowrap text-xs text-gray-600">
+              Show
+              <select
+                value={captureLimit}
+                onChange={(e) => setCaptureLimit(Number(e.target.value))}
+                className="rounded-xl border border-gray-300 bg-white px-2 py-1 text-xs text-gray-700"
+              >
+                {CAPTURE_LIMIT_OPTIONS.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <span className="inline-flex min-h-[1rem] justify-end text-xs text-gray-500">
+              {refreshing ? "Refreshing..." : "\u00a0"}
+            </span>
             <button
               type="button"
               onClick={() => loadCaptures({ background: captures.length > 0 }).catch(console.error)}
@@ -199,13 +215,13 @@ export default function CaptureGallery() {
           <div className="text-sm text-gray-600">Loading captures...</div>
         ) : error ? (
           <div className="text-sm text-red-600">Error: {error}</div>
-        ) : captures.length === 0 ? (
+        ) : visibleCaptures.length === 0 ? (
           <div className="rounded-xl border border-dashed border-gray-300 bg-gray-50 p-3 text-sm text-gray-600">
             No image captures found.
           </div>
         ) : (
           <ul className="grid grid-cols-1 gap-3 max-h-[34rem] overflow-auto pr-1">
-            {captures.map((capture) => (
+            {visibleCaptures.map((capture) => (
               <li key={capture.fullPath} className="overflow-hidden rounded-xl border bg-gray-50 shadow-sm">
                 <a href={capture.url} target="_blank" rel="noreferrer" className="block">
                   <div className="aspect-[4/3] w-full bg-black/5">
