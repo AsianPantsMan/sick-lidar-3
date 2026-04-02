@@ -185,7 +185,7 @@ export default function MapAnnotator({ saved = [], refreshSaved, apiBaseUrl }) {
   }
 
   return (
-    <div className="min-h-screen p-6 bg-gray-50">
+    <div className="min-h-screen p-6 bg-gray-50 rounded">
       <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Map panel */}
         <div className="lg:col-span-2 bg-white rounded-xl shadow p-4">
