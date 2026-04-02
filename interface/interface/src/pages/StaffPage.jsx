@@ -17,17 +17,25 @@ export default function StaffPage() {
     setLoadingSaved(true);
     setSavedError(null);
     try {
-      const resp = await fetch(`${apiBaseUrl}/api/aisles`);
+      const resp = await fetch(`${apiBaseUrl}/api/aisles`, { cache: "no-store" });
       if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
       const data = await resp.json();
-      setSaved(data.aisles || []);
+      const nextSaved = data.aisles || [];
+      setSaved(nextSaved);
+      return nextSaved;
     } catch (err) {
       console.error("Failed to load saved aisles:", err);
       setSavedError(String(err));
+      return [];
     } finally {
       setLoadingSaved(false);
     }
   }, [apiBaseUrl]);
+
+  const clearAllSaved = useCallback(async () => {
+    await fetch(`${apiBaseUrl}/api/aisles`, { method: "DELETE", cache: "no-store" });
+    await refreshSaved();
+  }, [apiBaseUrl, refreshSaved]);
 
   useEffect(() => {
     refreshSaved();
@@ -40,28 +48,30 @@ export default function StaffPage() {
 
   return (
     <div className="App p-6 max-w-6xl mx-auto">
-      <h1 className="mb-3 text-4xl md:text-5xl font-black tracking-tight text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.85)]">
-        Staff Portal
-      </h1>
 
-      <div className="mb-4 grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="col-span-1 md:col-span-2">
-          <h2 className="mb-3 text-2xl md:text-3xl font-black tracking-tight text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.75)]">
-            Map Annotator
-          </h2>
+      <div className="mb-4 grid grid-cols-1 md:grid-cols-3 gap-4 items-stretch">
+        <div className="col-span-1 md:col-span-2 h-full">
           <MapAnnotator saved={saved} refreshSaved={refreshSaved} apiBaseUrl={apiBaseUrl} />
         </div>
 
-        <aside className="col-span-1 space-y-4">
-          <div className="bg-white border rounded p-3 shadow">
-            <div className="flex items-center justify-between mb-2">
-              <h3 className="font-semibold">Saved Points</h3>
-              <button
-                onClick={refreshSaved}
-                className="text-xs px-2 py-1 rounded bg-zinc-700 text-white hover:bg-zinc-600 transition-colors"
-              >
-                Refresh
-              </button>
+        <aside className="col-span-1 space-y-4 md:h-full md:min-h-0 md:flex md:flex-col">
+          <div className="bg-white border rounded-xl p-3 shadow md:flex-none md:max-h-[20rem] md:flex md:flex-col">
+            <div className="flex items-center justify-between mb-2 gap-2">
+              <h3 className="font-semibold text-lg">Saved Points</h3>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={clearAllSaved}
+                  className="text-xs px-2 py-1 rounded-xl bg-zinc-600 text-white hover:bg-zinc-500 transition-colors"
+                >
+                  Clear All
+                </button>
+                <button
+                  onClick={refreshSaved}
+                  className="text-xs px-2 py-1 rounded-xl bg-red-900 text-white hover:bg-red-950 transition-colors"
+                >
+                  Refresh
+                </button>
+              </div>
             </div>
 
             {loadingSaved ? (
@@ -71,9 +81,9 @@ export default function StaffPage() {
             ) : saved.length === 0 ? (
               <div className="text-sm text-gray-600">No saved points.</div>
             ) : (
-              <ul className="text-sm space-y-2 max-h-[60vh] overflow-auto">
+              <ul className="text-sm space-y-2 overflow-auto md:max-h-[14rem]">
                 {saved.map((p, i) => (
-                  <li key={i} className="border rounded p-2 bg-gray-50">
+                  <li key={i} className="border rounded-lg p-2 bg-gray-50">
                     <div className="font-medium">
                       {p.id} - {p.type}
                     </div>
@@ -87,7 +97,9 @@ export default function StaffPage() {
             )}
           </div>
 
-          <CaptureGallery />
+          <div className="md:flex-[2] md:min-h-0">
+            <CaptureGallery />
+          </div>
         </aside>
       </div>
     </div>

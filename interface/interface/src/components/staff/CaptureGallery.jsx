@@ -5,6 +5,9 @@ import { storage } from "../../firebase/config";
 const IMAGE_EXTENSIONS = [".png", ".jpg", ".jpeg", ".gif", ".webp", ".bmp", ".heic"];
 const STORAGE_PATH = import.meta.env.VITE_FIREBASE_STORAGE_PATH || "captures";
 const POLL_INTERVAL_MS = 15000;
+const CAPTURE_LIMIT_OPTIONS = [5, 10, 25, 100];
+const DEFAULT_CAPTURE_LIMIT = 5;
+const CAPTURE_CACHE_KEY = `captureGallery:${STORAGE_PATH}`;
 
 function isImageFile(name) {
   const lowerName = String(name).toLowerCase();
@@ -26,17 +29,26 @@ async function collectStorageImages(folderRef) {
 
 export default function CaptureGallery() {
   const [captures, setCaptures] = useState([]);
+  const [captureLimit, setCaptureLimit] = useState(DEFAULT_CAPTURE_LIMIT);
   const [notifications, setNotifications] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState(null);
   const previousPathsRef = useRef(new Set());
   const hasLoadedOnceRef = useRef(false);
+  const capturesRef = useRef([]);
 
   const storageRootLabel = useMemo(() => `/${STORAGE_PATH}`, []);
+  const visibleCaptures = useMemo(() => captures.slice(0, captureLimit), [captures, captureLimit]);
 
-  const loadCaptures = useCallback(async () => {
-    setLoading(true);
+  const loadCaptures = useCallback(async ({ background = false } = {}) => {
     setError(null);
+
+    if (background) {
+      setRefreshing(true);
+    } else {
+      setLoading((current) => (capturesRef.current.length === 0 ? true : current));
+    }
 
     try {
       const folderRef = ref(storage, STORAGE_PATH);
@@ -82,19 +94,38 @@ export default function CaptureGallery() {
       }
 
       previousPathsRef.current = nextPaths;
-      setCaptures(capturesWithUrls);
+  setCaptures(capturesWithUrls);
+  capturesRef.current = capturesWithUrls;
+  window.sessionStorage.setItem(CAPTURE_CACHE_KEY, JSON.stringify(capturesWithUrls));
     } catch (err) {
       console.error("Failed to load storage captures:", err);
       setError(String(err));
     } finally {
       setLoading(false);
+      setRefreshing(false);
     }
   }, []);
 
   useEffect(() => {
-    loadCaptures().catch(console.error);
+    try {
+      const raw = window.sessionStorage.getItem(CAPTURE_CACHE_KEY);
+      if (raw) {
+        const cached = JSON.parse(raw);
+        if (Array.isArray(cached) && cached.length > 0) {
+          setCaptures(cached);
+          capturesRef.current = cached;
+          previousPathsRef.current = new Set(cached.map((capture) => capture.fullPath));
+          hasLoadedOnceRef.current = true;
+          setLoading(false);
+        }
+      }
+    } catch (cacheError) {
+      console.warn("Failed to load cached captures:", cacheError);
+    }
+
+    loadCaptures({ background: capturesRef.current.length > 0 }).catch(console.error);
     const intervalId = window.setInterval(() => {
-      loadCaptures().catch(console.error);
+      loadCaptures({ background: true }).catch(console.error);
     }, POLL_INTERVAL_MS);
 
     return () => window.clearInterval(intervalId);
@@ -102,7 +133,7 @@ export default function CaptureGallery() {
 
   return (
     <div className="space-y-4">
-      <section className="rounded border bg-white p-3 shadow">
+      <section className="rounded-xl border bg-white p-3 shadow">
         <div className="flex items-center justify-between gap-3 mb-2">
           <div>
             <h3 className="text-lg font-semibold">Capture Notifications</h3>
@@ -111,20 +142,20 @@ export default function CaptureGallery() {
           <button
             type="button"
             onClick={() => setNotifications([])}
-            className="text-xs px-2 py-1 rounded bg-zinc-700 text-white hover:bg-zinc-600 transition-colors"
+            className="text-xs px-2 py-1 rounded bg-red-900 text-white hover:bg-red-950 transition-colors"
           >
             Clear
           </button>
         </div>
 
         {notifications.length === 0 ? (
-          <div className="rounded border border-dashed border-gray-300 bg-gray-50 p-3 text-sm text-gray-600">
+          <div className="rounded-xl border border-dashed border-gray-300 bg-gray-50 p-3 text-sm text-gray-600">
             No new captures yet.
           </div>
         ) : (
           <ul className="space-y-2 max-h-56 overflow-auto">
             {notifications.map((notification) => (
-              <li key={notification.id} className="rounded border border-emerald-200 bg-emerald-50 p-3">
+              <li key={notification.id} className="rounded-xl border border-emerald-200 bg-emerald-50 p-3">
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <div className="font-semibold text-emerald-950">New image captured</div>
@@ -146,33 +177,52 @@ export default function CaptureGallery() {
         )}
       </section>
 
-      <section className="rounded border bg-white p-3 shadow">
-        <div className="flex items-center justify-between gap-3 mb-2">
+      <section className="rounded-xl border bg-white p-3 shadow">
+        <div className="mb-2 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h3 className="text-lg font-semibold">Image Captures</h3>
             <p className="text-xs text-gray-500">Storage path: {storageRootLabel}</p>
           </div>
-          <button
-            type="button"
-            onClick={() => loadCaptures().catch(console.error)}
-            className="text-xs px-2 py-1 rounded bg-zinc-700 text-white hover:bg-zinc-600 transition-colors"
-          >
-            Refresh
-          </button>
+          <div className="flex flex-col items-end gap-1 sm:justify-end">
+            <label className="inline-flex items-center gap-2 whitespace-nowrap text-xs text-gray-600">
+              Show
+              <select
+                value={captureLimit}
+                onChange={(e) => setCaptureLimit(Number(e.target.value))}
+                className="rounded-xl border border-gray-300 bg-white px-2 py-1 text-xs text-gray-700"
+              >
+                {CAPTURE_LIMIT_OPTIONS.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <span className="inline-flex min-h-[1rem] justify-end text-xs text-gray-500">
+              {refreshing ? "Refreshing..." : "\u00a0"}
+            </span>
+            <button
+              type="button"
+              onClick={() => loadCaptures({ background: captures.length > 0 }).catch(console.error)}
+              className="text-xs px-2 py-1 rounded-xl bg-red-900 text-white hover:bg-red-950 transition-colors"
+            >
+              Refresh
+            </button>
+          </div>
         </div>
 
-        {loading ? (
+        {loading && captures.length === 0 ? (
           <div className="text-sm text-gray-600">Loading captures...</div>
         ) : error ? (
           <div className="text-sm text-red-600">Error: {error}</div>
-        ) : captures.length === 0 ? (
-          <div className="rounded border border-dashed border-gray-300 bg-gray-50 p-3 text-sm text-gray-600">
+        ) : visibleCaptures.length === 0 ? (
+          <div className="rounded-xl border border-dashed border-gray-300 bg-gray-50 p-3 text-sm text-gray-600">
             No image captures found.
           </div>
         ) : (
           <ul className="grid grid-cols-1 gap-3 max-h-[34rem] overflow-auto pr-1">
-            {captures.map((capture) => (
-              <li key={capture.fullPath} className="overflow-hidden rounded-lg border bg-gray-50 shadow-sm">
+            {visibleCaptures.map((capture) => (
+              <li key={capture.fullPath} className="overflow-hidden rounded-xl border bg-gray-50 shadow-sm">
                 <a href={capture.url} target="_blank" rel="noreferrer" className="block">
                   <div className="aspect-[4/3] w-full bg-black/5">
                     <img src={capture.url} alt={capture.name} className="h-full w-full object-cover" loading="lazy" />

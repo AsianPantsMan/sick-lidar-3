@@ -4,17 +4,40 @@ import fs from "fs";
 import path from "path";
 
 const app = express();
-app.use(cors());
 app.use(express.json());
 
-const PORT = 5050;
+const PORT = Number(process.env.PORT) || 5050;
+const allowedOrigins = (process.env.CORS_ORIGINS || "")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+app.use(
+  cors({
+    origin(origin, callback) {
+      if (!origin || allowedOrigins.length === 0 || allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      return callback(new Error("Not allowed by CORS"));
+    },
+  })
+);
+
 const CSV_PATH = path.join(process.cwd(), "aisles.csv");// change save path to aisles.csv possibly
 
 let aisles = [];
 
+function writeCSV(points) {
+  const rows = ["aisleId,type,x,y,createdAt"];
+  for (const point of points) {
+    rows.push(`${point.id},${point.type},${point.x},${point.y},${point.createdAt || ""}`);
+  }
+  fs.writeFileSync(CSV_PATH, `${rows.join("\n")}\n`);
+}
+
 // Ensure CSV file exists
 function resetCSV() {
-  fs.writeFileSync(CSV_PATH, "aisleId,type,x,y,createdAt\n");
+  writeCSV([]);
   console.log("CSV reset on startup.");
 }
 
@@ -34,23 +57,23 @@ app.post("/api/aisles", (req, res) => {
     type: pointType,
     x,
     y,
+    createdAt,
   };
 
   aisles.push(point);
 
   // Append to CSV
-  const row = `${aisleId},${pointType},${x},${y}\n`;
-  fs.appendFileSync(CSV_PATH, row);
+  fs.appendFileSync(CSV_PATH, `${aisleId},${pointType},${x},${y},${createdAt}\n`);
 
   res.json({ success: true });
 });
 
 app.delete("/api/aisles", (req, res) => {
   aisles = [];
-  fs.writeFileSync(CSV_PATH, "aisleId,type,x,y,createdAt\n");
+  writeCSV(aisles);
   res.json({ success: true });
 });
 
 app.listen(PORT, () => {
-  console.log(`Backend running on http://localhost:${PORT}`);
+  console.log(`Backend running on port ${PORT}`);
 });
