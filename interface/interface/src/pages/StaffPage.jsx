@@ -17,17 +17,25 @@ export default function StaffPage() {
     setLoadingSaved(true);
     setSavedError(null);
     try {
-      const resp = await fetch(`${apiBaseUrl}/api/aisles`);
+      const resp = await fetch(`${apiBaseUrl}/api/aisles`, { cache: "no-store" });
       if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
       const data = await resp.json();
-      setSaved(data.aisles || []);
+      const nextSaved = data.aisles || [];
+      setSaved(nextSaved);
+      return nextSaved;
     } catch (err) {
       console.error("Failed to load saved aisles:", err);
       setSavedError(String(err));
+      return [];
     } finally {
       setLoadingSaved(false);
     }
   }, [apiBaseUrl]);
+
+  const clearAllSaved = useCallback(async () => {
+    await fetch(`${apiBaseUrl}/api/aisles`, { method: "DELETE", cache: "no-store" });
+    await refreshSaved();
+  }, [apiBaseUrl, refreshSaved]);
 
   useEffect(() => {
     refreshSaved();
@@ -48,14 +56,22 @@ export default function StaffPage() {
 
         <aside className="col-span-1 space-y-4 md:h-full md:min-h-0 md:flex md:flex-col">
           <div className="bg-white border rounded-xl p-3 shadow md:flex-none md:max-h-[20rem] md:flex md:flex-col">
-            <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center justify-between mb-2 gap-2">
               <h3 className="font-semibold text-lg">Saved Points</h3>
-              <button
-                onClick={refreshSaved}
-                className="text-xs px-2 py-1 rounded-xl bg-red-900 text-white hover:bg-red-950 transition-colors"
-              >
-                Refresh
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={clearAllSaved}
+                  className="text-xs px-2 py-1 rounded-xl bg-zinc-600 text-white hover:bg-zinc-500 transition-colors"
+                >
+                  Clear All
+                </button>
+                <button
+                  onClick={refreshSaved}
+                  className="text-xs px-2 py-1 rounded-xl bg-red-900 text-white hover:bg-red-950 transition-colors"
+                >
+                  Refresh
+                </button>
+              </div>
             </div>
 
             {loadingSaved ? (

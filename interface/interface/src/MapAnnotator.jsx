@@ -41,7 +41,7 @@ function incrementAisleId(id) {
   return `${prefix}${num + 1}`;
 }
 
-export default function MapAnnotator({ saved = [], refreshSaved, apiBaseUrl }) {
+export default function MapAnnotator({ refreshSaved, apiBaseUrl }) {
   const imgRef = useRef(null);
 
   if (!apiBaseUrl) {
@@ -169,29 +169,25 @@ export default function MapAnnotator({ saved = [], refreshSaved, apiBaseUrl }) {
     setLastClick(null);
   }
 
-  async function clearAll() {
-    await fetch(`${apiBaseUrl}/api/aisles`, { method: "DELETE" });
-    await refreshSaved();
-
-    // reset everything
-    setAisleId("A1");
-    setPointType("start");
-    setCompletedTypes(new Set());
-    setLastClick(null);
-  }
-
   if (!mapConfig) {
     return <div className="p-6">Loading map configuration...</div>;
   }
 
   return (
-    <div className="min-h-screen p-6 bg-gray-50 rounded">
-      <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div className="min-h-screen p-6 bg-gray-50 rounded-xl">
+      <div className="max-w-6xl mx-auto space-y-6">
+        <div className="bg-white rounded-xl shadow p-4">
+          <h1 className="text-3xl md:text-4xl font-black tracking-tight text-black">
+            Retail Assistant Staff Interface
+          </h1>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Map panel */}
         <div className="lg:col-span-2 bg-white rounded-xl shadow p-4">
           <div className="flex items-baseline justify-between mb-3">
-              <h2 className="text-xl font-semibold">Aisle Coordinate Picker</h2>
-              <div className="text-sm text-gray-700">
+            <h2 className="text-xl font-semibold">Aisle Coordinate Picker</h2>
+            <div className="text-sm text-gray-700">
               Aisle: <span className="font-mono font-semibold">{aisleId}</span>
             </div>
           </div>
@@ -224,33 +220,6 @@ export default function MapAnnotator({ saved = [], refreshSaved, apiBaseUrl }) {
             )}
           </div>
 
-          <div className="mt-4 text-sm">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-              <div className="bg-gray-100 rounded p-2">
-                <div className="text-gray-600">Resolution</div>
-                <div className="font-mono">{mapConfig.resolution} m/pixel</div>
-              </div>
-              <div className="bg-gray-100 rounded p-2">
-                <div className="text-gray-600">Origin</div>
-                <div className="font-mono">
-                  [{mapConfig.origin[0]}, {mapConfig.origin[1]}, {mapConfig.origin[2]}]
-                </div>
-              </div>
-            </div>
-
-            {lastClick ? (
-              <div className="mt-3 bg-green-50 border border-green-200 rounded p-3">
-                <div className="font-medium">Selected point</div>
-                <div className="font-mono">
-                  pixel=({lastClick.px.toFixed(1)}, {lastClick.py.toFixed(1)})
-                  <br />
-                  world=({lastClick.worldX.toFixed(3)}, {lastClick.worldY.toFixed(3)}) meters
-                </div>
-              </div>
-            ) : (
-              <div className="mt-3 text-gray-600">No point selected yet.</div>
-            )}
-          </div>
         </div>
 
         {/* Controls panel */}
@@ -289,41 +258,41 @@ export default function MapAnnotator({ saved = [], refreshSaved, apiBaseUrl }) {
           <button
             onClick={savePoint}
             disabled={!lastClick}
-            className="w-full bg-zinc-800 text-white rounded-md py-2 disabled:opacity-40 hover:bg-zinc-700 transition-colors"
+            className="w-full bg-red-900 text-white rounded-xl py-2 disabled:opacity-40 hover:bg-red-950 transition-colors"
           >
             Save Selected Point
           </button>
 
-          <button
-            onClick={clearAll}
-            className="w-full mt-2 rounded-md py-2 bg-zinc-600 text-white hover:bg-zinc-500 transition-colors"
-          >
-            Clear All
-          </button>
-
           <hr className="my-4" />
 
-          <h3 className="text-lg font-semibold mb-2">Saved</h3>
-          <div className="max-h-72 overflow-auto border rounded-md">
-            {saved.length === 0 ? (
-              <div className="p-3 text-sm text-gray-600">No saved points yet.</div>
-            ) : (
-              <ul className="divide-y">
-                {saved.map((p, idx) => (
-                  <li key={idx} className="p-3 text-sm">
-                    <div className="font-medium text-slate-900">
-                      {p.id} — {labelForType(p.type)}
-                    </div>
-                    <div className="font-mono text-gray-700">
-                      ({Number(p.x).toFixed(3)}, {Number(p.y).toFixed(3)})
-                    </div>
-                    <div className="text-xs text-gray-500">{p.createdAt}</div>
-                  </li>
-                ))}
-              </ul>
-            )}
+          <div className="space-y-3 text-sm">
+            <div className="rounded-xl border border-gray-200 bg-gray-50 p-3">
+              <div className="text-gray-600">Resolution</div>
+              <div className="font-mono">{mapConfig.resolution} m/pixel</div>
+            </div>
+
+            <div className="rounded-xl border border-gray-200 bg-gray-50 p-3">
+              <div className="text-gray-600">Origin</div>
+              <div className="font-mono">
+                [{mapConfig.origin[0]}, {mapConfig.origin[1]}, {mapConfig.origin[2]}]
+              </div>
+            </div>
+
+            <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-3">
+              <div className="text-emerald-900">Currently Selected Point</div>
+              {lastClick ? (
+                <div className="mt-1 font-mono text-emerald-950">
+                  pixel=({lastClick.px.toFixed(1)}, {lastClick.py.toFixed(1)})
+                  <br />
+                  world=({lastClick.worldX.toFixed(3)}, {lastClick.worldY.toFixed(3)}) meters
+                </div>
+              ) : (
+                <div className="mt-1 text-emerald-800">No point selected yet.</div>
+              )}
+            </div>
           </div>
 
+        </div>
         </div>
       </div>
     </div>
