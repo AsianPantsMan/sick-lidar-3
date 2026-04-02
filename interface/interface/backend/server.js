@@ -4,10 +4,25 @@ import fs from "fs";
 import path from "path";
 
 const app = express();
-app.use(cors());
 app.use(express.json());
 
-const PORT = 5050;
+const PORT = Number(process.env.PORT) || 5050;
+const allowedOrigins = (process.env.CORS_ORIGINS || "")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+app.use(
+  cors({
+    origin(origin, callback) {
+      if (!origin || allowedOrigins.length === 0 || allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      return callback(new Error("Not allowed by CORS"));
+    },
+  })
+);
+
 const CSV_PATH = path.join(process.cwd(), "aisles.csv");// change save path to aisles.csv possibly
 
 let aisles = [];
@@ -52,5 +67,5 @@ app.delete("/api/aisles", (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Backend running on http://localhost:${PORT}`);
+  console.log(`Backend running on port ${PORT}`);
 });
