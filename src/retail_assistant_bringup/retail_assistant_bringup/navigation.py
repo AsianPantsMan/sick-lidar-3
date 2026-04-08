@@ -58,7 +58,7 @@ class AutoNav(Node):
            aisle=[]
            aisle_id="A1"# could change later
            goals=[]
-           with open('/home/kendell/retail_assistant_ws/Staff-interface/Staff-interface/aisles.csv', 'r') as file:
+           with open('/home/retail-assistant/SLAM/Staff-interface/Staff-interface/aisles.csv', 'r') as file:
                 for line in file:
                     if header:
                         header = False
