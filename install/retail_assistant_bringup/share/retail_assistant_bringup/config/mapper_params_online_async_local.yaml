@@ -14,7 +14,7 @@ slam_toolbox:
     map_frame: map
     base_frame: base_link
     scan_topic: /scan
-    use_map_saver: true
+    use_map_saver: false
     mode: localization #localization
     map_file_name: /home/retail-assistant/SLAM/src/retail_assistant_bringup/Slam_maps/White_board.serial
 

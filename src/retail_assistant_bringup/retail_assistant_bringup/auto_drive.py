@@ -7,6 +7,11 @@ from rclpy.action import ActionClient
 from nav2_msgs.action import NavigateToPose             
 from geometry_msgs.msg import PoseStamped
 from rclpy.timer import Timer
+from nav2_msgs.srv import SaveMap
+import firebase_admin
+from firebase_admin import credentials, storage as fb_storage, firestore
+import os
+import datetime
 #node + subsscriber initalization
 class MyMapNode(Node):
     def __init__(self):
@@ -64,9 +69,29 @@ class MyMapNode(Node):
             self.send_nav_goal(x,y)
         else:
             self.get_logger().info("No frontiers found — stopping map processing.")
-            # ADD MAP SAVING TO SPECIFIED DIRECTORY
+            self.save_map()
             raise SystemExit
+    def save_map(self):
+        self.get_logger().info("Saving map to Slam_maps folder...")
+        client = self.create_client(SaveMap, '/map_saver/save_map')
+        while not client.wait_for_service(timeout_sec=1.0):
+            self.get_logger().info('Waiting for /map_saver/save_map service...')
+        req = SaveMap.Request()
+        req.map_topic = '/map'
+        req.map_url = '/home/retail-assistant/SLAM/src/retail_assistant_bringup/Slam_maps/auto_map' # change
+        req.image_format = 'pgm'
+        req.map_mode = 'trinary'
+        req.free_thresh = 0.25
+        req.occupied_thresh = 0.65
 
+        future = client.call_async(req)
+        rclpy.spin_until_future_complete(self, future)
+
+        if future.result() is not None:
+            self.get_logger().info("Map saved successfully.")
+            self.send_to_firebase(req.map_url + '.yaml')  # Upload the YAML file to Firebase
+        else:
+            self.get_logger().error("Failed to save map.")
     def physical_location(self,i,j,map_resolution,map_origin):
         x=j*map_resolution+map_origin[0]
         y=i*map_resolution+map_origin[1]
@@ -129,7 +154,7 @@ class MyMapNode(Node):
         goal.pose.pose.orientation.w = 1.0
         print(f"Sending nav2 a goal {x},{y}")
         self.nav_client.wait_for_server()# wait until the action server is available
-        send_future=self.nav_client.send_goal_async(goal,feedback_callback=self.recovery_skip_callback)# send the goal
+        send_future=self.nav_client.send_goal_async(goal)#feedback_callback=self.recovery_skip_callback)# send the goal
         send_future.add_done_callback(self.goal_response_callback)
 
     def goal_response_callback(self,future):
@@ -161,6 +186,60 @@ class MyMapNode(Node):
         self.wait_timer.cancel()
         self.goal_in_progress=False
         self.skip_point=False
+
+    def send_to_firebase(self,file_path):
+        if not _FIREBASE_OK:
+            self.get_logger().warn("☁️ Firebase not initialised — skipping map upload.")
+        return
+
+    try:
+        now = datetime.datetime.utcnow()
+        ts_str = now.strftime("%Y%m%d_%H%M%S_") + f"{now.microsecond:06d}"
+
+        bucket = fb_storage.bucket()
+        db = firestore.client()
+
+        yaml_name = os.path.basename(yaml_path)
+        base_name = os.path.splitext(yaml_name)[0]
+        pgm_path = os.path.join(os.path.dirname(yaml_path), base_name + ".pgm")
+
+        folder = f"slam_maps/{ts_str}_{base_name}"
+
+        yaml_url = None
+        pgm_url = None
+
+        # Upload YAML
+        if os.path.exists(yaml_path):
+            yaml_blob = bucket.blob(f"{folder}/{yaml_name}")
+            yaml_blob.upload_from_filename(yaml_path, content_type="text/yaml")
+            yaml_blob.make_public()
+            yaml_url = yaml_blob.public_url
+        else:
+            self.get_logger().warn(f"YAML file not found: {yaml_path}")
+
+        # Upload PGM if it exists
+        if os.path.exists(pgm_path):
+            pgm_blob = bucket.blob(f"{folder}/{base_name}.pgm")
+            pgm_blob.upload_from_filename(pgm_path, content_type="image/x-portable-graymap")
+            pgm_blob.make_public()
+            pgm_url = pgm_blob.public_url
+        else:
+            self.get_logger().warn(f"PGM file not found: {pgm_path}")
+
+        # Save metadata in Firestore
+        db.collection("slam_maps").add({
+            "timestamp": now.isoformat() + "Z",
+            "map_name": base_name,
+            "yaml_url": yaml_url,
+            "pgm_url": pgm_url,
+            "folder": folder,
+        })
+
+        self.get_logger().info(f"☁️ SLAM map uploaded successfully → {folder}")
+
+    except Exception as e:
+        self.get_logger().error(f"SLAM map upload failed: {e}")
+        
 
 def main():
     rclpy.init()## initialize rclpy which sets up all the ros communication stuff

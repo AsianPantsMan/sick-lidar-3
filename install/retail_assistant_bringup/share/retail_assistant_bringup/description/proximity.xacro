@@ -24,7 +24,7 @@
   <joint name="ultrasonic_1_joint" type="fixed">
     <parent link="chassis"/>
     <child  link="ultrasonic_1_link"/>
-    <origin xyz="0.35 0 0.1" rpy="0 0 0"/>
+    <origin xyz="0.35 0 0.140" rpy="0 0 0"/>
   </joint>
 
   <!-- Gazebo extension: SDF sensor goes inside this block -->
@@ -101,7 +101,7 @@
   <joint name="ultrasonic_2_joint" type="fixed">
     <parent link="chassis"/>
     <child  link="ultrasonic_2_link"/>
-    <origin xyz="-0.01 0 0.1" rpy="0 0 ${pi}"/>
+    <origin xyz="-0.015 0 0.140" rpy="0 0 ${pi}"/>
   </joint>
 
   <!-- Gazebo extension: SDF sensor goes inside this block -->

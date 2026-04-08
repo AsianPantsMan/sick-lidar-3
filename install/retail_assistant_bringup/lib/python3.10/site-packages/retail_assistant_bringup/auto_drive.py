@@ -7,6 +7,7 @@ from rclpy.action import ActionClient
 from nav2_msgs.action import NavigateToPose             
 from geometry_msgs.msg import PoseStamped
 from rclpy.timer import Timer
+from nav2_msgs.srv import SaveMap
 #node + subsscriber initalization
 class MyMapNode(Node):
     def __init__(self):
@@ -64,9 +65,28 @@ class MyMapNode(Node):
             self.send_nav_goal(x,y)
         else:
             self.get_logger().info("No frontiers found — stopping map processing.")
-            # ADD MAP SAVING TO SPECIFIED DIRECTORY
+            self.save_map()
             raise SystemExit
+    def save_map(self):
+        self.get_logger().info("Saving map to Slam_maps folder...")
+        client = self.create_client(SaveMap, '/map_saver/save_map')
+        while not client.wait_for_service(timeout_sec=1.0):
+            self.get_logger().info('Waiting for /map_saver/save_map service...')
+        req = SaveMap.Request()
+        req.map_topic = '/map'
+        req.map_url = '/home/retail-assistant/SLAM/src/retail_assistant_bringup/Slam_maps/auto_map' # change
+        req.image_format = 'pgm'
+        req.map_mode = 'trinary'
+        req.free_thresh = 0.25
+        req.occupied_thresh = 0.65
 
+        future = client.call_async(req)
+        rclpy.spin_until_future_complete(self, future)
+
+        if future.result() is not None:
+            self.get_logger().info("Map saved successfully.")
+        else:
+            self.get_logger().error("Failed to save map.")
     def physical_location(self,i,j,map_resolution,map_origin):
         x=j*map_resolution+map_origin[0]
         y=i*map_resolution+map_origin[1]
@@ -129,7 +149,7 @@ class MyMapNode(Node):
         goal.pose.pose.orientation.w = 1.0
         print(f"Sending nav2 a goal {x},{y}")
         self.nav_client.wait_for_server()# wait until the action server is available
-        send_future=self.nav_client.send_goal_async(goal,feedback_callback=self.recovery_skip_callback)# send the goal
+        send_future=self.nav_client.send_goal_async(goal)#feedback_callback=self.recovery_skip_callback)# send the goal
         send_future.add_done_callback(self.goal_response_callback)
 
     def goal_response_callback(self,future):
