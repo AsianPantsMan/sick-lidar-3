@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useMemo } from "react";
+import { useEffect, useState, useCallback, useMemo, useRef } from "react";
 import MapAnnotator from "../MapAnnotator";
 import CaptureGallery from "../components/staff/CaptureGallery";
 import "../styles/staff.css";
@@ -14,6 +14,8 @@ function typeOrder(type) {
   if (type === "center") return 1;
   return 2;
 }
+
+const POINT_TYPES = ["start", "center", "end"];
 
 function aisleSortKey(aisleId) {
   const match = String(aisleId).trim().match(/^([A-Za-z]+)(\d+)$/);
@@ -33,6 +35,8 @@ export default function StaffPage() {
   const [saved, setSaved] = useState([]);
   const [loadingSaved, setLoadingSaved] = useState(false);
   const [savedError, setSavedError] = useState(null);
+  const savedListRef = useRef(null);
+  const restoreScrollTopRef = useRef(null);
   const apiBaseUrl = import.meta.env.VITE_API_URL;
 
   if (!apiBaseUrl) {
@@ -48,6 +52,15 @@ export default function StaffPage() {
       const data = await resp.json();
       const nextSaved = data.aisles || [];
       setSaved(nextSaved);
+      if (typeof restoreScrollTopRef.current === "number") {
+        const nextScrollTop = restoreScrollTopRef.current;
+        window.requestAnimationFrame(() => {
+          if (savedListRef.current) {
+            savedListRef.current.scrollTop = nextScrollTop;
+          }
+          restoreScrollTopRef.current = null;
+        });
+      }
       return nextSaved;
     } catch (err) {
       console.error("Failed to load saved aisles:", err);
@@ -64,10 +77,30 @@ export default function StaffPage() {
   }, [apiBaseUrl, refreshSaved]);
 
   const deleteSavedPoint = useCallback(async (index) => {
+    restoreScrollTopRef.current = savedListRef.current?.scrollTop ?? 0;
     await fetch(`${apiBaseUrl}/api/aisles/${index}`, {
       method: "DELETE",
       cache: "no-store",
     });
+    await refreshSaved();
+  }, [apiBaseUrl, refreshSaved]);
+
+  const deleteAislePoints = useCallback(async (entries) => {
+    if (!entries || entries.length === 0) return;
+
+    restoreScrollTopRef.current = savedListRef.current?.scrollTop ?? 0;
+
+    const indices = entries
+      .map((entry) => entry.index)
+      .sort((a, b) => b - a);
+
+    for (const index of indices) {
+      await fetch(`${apiBaseUrl}/api/aisles/${index}`, {
+        method: "DELETE",
+        cache: "no-store",
+      });
+    }
+
     await refreshSaved();
   }, [apiBaseUrl, refreshSaved]);
 
@@ -95,11 +128,7 @@ export default function StaffPage() {
 
   useEffect(() => {
     refreshSaved();
-    const intervalId = window.setInterval(() => {
-      refreshSaved().catch(console.error);
-    }, 15000);
-
-    return () => window.clearInterval(intervalId);
+    return undefined;
   }, [refreshSaved]);
 
   return (
@@ -130,44 +159,64 @@ export default function StaffPage() {
               </div>
             </div>
 
-            {loadingSaved ? (
+            {loadingSaved && saved.length === 0 ? (
               <div className="text-sm text-gray-600">Loading...</div>
             ) : savedError ? (
               <div className="text-sm text-red-600">Error: {savedError}</div>
             ) : saved.length === 0 ? (
               <div className="text-sm text-gray-600">No saved points.</div>
             ) : (
-              <div className="space-y-3 overflow-auto md:max-h-[14rem] pr-1">
+              <div ref={savedListRef} className="space-y-3 overflow-auto md:max-h-[14rem] pr-1">
                 {Array.from(groupedSavedPoints.entries()).map(([aisleId, entries]) => (
-                  <section key={aisleId} className="rounded-xl border border-gray-200 bg-gray-50 p-2">
-                    <div className="mb-2 flex items-center justify-between gap-2">
-                      <h4 className="font-semibold text-gray-800">Aisle {aisleId}</h4>
-                    
+                  <section key={aisleId} className="rounded-lg border border-gray-200 bg-gray-50 p-1.5">
+                    <div className="mb-1.5 flex items-center justify-between gap-2">
+                      <h4 className="text-sm font-semibold text-gray-800">Aisle {aisleId}</h4>
+                      <button
+                        type="button"
+                        onClick={() => deleteAislePoints(entries)}
+                        className="text-[10px] px-1.5 py-0.5 rounded-md bg-zinc-600 text-white hover:bg-zinc-500 transition-colors"
+                        aria-label={`Delete all points for aisle ${aisleId}`}
+                        title={`Delete all points for aisle ${aisleId}`}
+                      >
+                        X
+                      </button>
                     </div>
-                    <ul className="space-y-2">
-                      {entries.map(({ point, index }) => (
-                        <li key={`${point.id}-${point.type}-${point.x}-${point.y}-${index}`} className="rounded-lg border bg-white p-2">
-                          <div className="flex items-start justify-between gap-2">
-                            <div>
-                              <div className="font-medium">
-                                {labelForType(point.type)}
+                    <ul className="grid grid-cols-3 gap-1">
+                      {POINT_TYPES.map((type) => {
+                        const entry = entries.find(({ point }) => point.type === type);
+
+                        if (!entry) {
+                          return (
+                            <li key={`${aisleId}-${type}`}>
+                              <div className="w-full rounded-md border border-dashed bg-white/70 p-1 text-left">
+                                <div className="text-[11px] font-semibold text-gray-500 leading-tight">{labelForType(type)}</div>
+                                <div className="font-mono text-[10px] text-gray-400 leading-tight mt-0.5">( - , - )</div>
                               </div>
-                              <div className="font-mono text-xs">
-                                ({Number(point.x).toFixed(3)}, {Number(point.y).toFixed(3)})
-                              </div>
-                            </div>
+                            </li>
+                          );
+                        }
+
+                        const { point, index } = entry;
+
+                        return (
+                          <li key={`${point.id}-${point.type}-${point.x}-${point.y}-${index}`}>
                             <button
                               type="button"
                               onClick={() => deleteSavedPoint(index)}
-                              className="shrink-0 rounded-full border border-red-300 bg-white px-2 py-0.5 text-xs font-semibold text-red-700 hover:bg-red-50 hover:border-red-400 transition-colors"
+                              className="w-full rounded-md border bg-white p-1 text-left hover:bg-red-50 hover:border-red-200 transition-colors"
                               aria-label={`Delete ${point.id} ${point.type}`}
-                              title="Delete point"
+                              title={`Delete ${point.id} ${point.type}`}
                             >
-                              x
+                              <div className="text-[11px] font-semibold text-gray-900 leading-tight">
+                                {labelForType(point.type)}
+                              </div>
+                              <div className="font-mono text-[10px] text-gray-700 leading-tight mt-0.5">
+                                ({Number(point.x).toFixed(2)}, {Number(point.y).toFixed(2)})
+                              </div>
                             </button>
-                          </div>
-                        </li>
-                      ))}
+                          </li>
+                        );
+                      })}
                     </ul>
                   </section>
                 ))}

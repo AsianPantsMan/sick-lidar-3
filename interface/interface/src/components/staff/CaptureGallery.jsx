@@ -20,6 +20,52 @@ function formatTimestamp(value) {
   return Number.isNaN(date.getTime()) ? "Unknown time" : date.toLocaleString();
 }
 
+function getPairBaseName(name) {
+  const stem = String(name).replace(/\.[^.]+$/, "").toLowerCase();
+  return stem
+    .replace(/(?:^|[_-])(camera|lidar)$/i, "")
+    .replace(/(?:camera|lidar)$/i, "")
+    .replace(/[_-]+$/, "");
+}
+
+function getPairKey(capture) {
+  return `${capture.directoryPath || ""}::${getPairBaseName(capture.name)}`;
+}
+
+function getCaptureKind(name) {
+  const lower = String(name).toLowerCase();
+  if (lower.includes("lidar")) return "lidar";
+  if (lower.includes("camera")) return "camera";
+  return "capture";
+}
+
+function groupCapturesIntoPairs(captures) {
+  return captures.reduce((groups, capture) => {
+    const key = getPairKey(capture);
+    const group = groups.get(key) || {
+      id: key,
+      title: getPairBaseName(capture.name) || capture.name,
+      directoryPath: capture.directoryPath,
+      items: [],
+      createdAt: capture.updatedAt,
+    };
+
+    group.items.push({
+      ...capture,
+      kind: getCaptureKind(capture.name),
+    });
+
+    const currentTime = new Date(group.createdAt || 0).getTime();
+    const nextTime = new Date(capture.updatedAt || 0).getTime();
+    if (nextTime > currentTime) {
+      group.createdAt = capture.updatedAt;
+    }
+
+    groups.set(key, group);
+    return groups;
+  }, new Map());
+}
+
 async function collectStorageImages(folderRef) {
   const snapshot = await listAll(folderRef);
   const nested = await Promise.all(snapshot.prefixes.map((prefixRef) => collectStorageImages(prefixRef)));
@@ -60,6 +106,7 @@ export default function CaptureGallery() {
           return {
             fullPath: itemRef.fullPath,
             name: itemRef.name,
+            directoryPath: itemRef.fullPath.split("/").slice(0, -1).join("/"),
             url: downloadUrl,
             updatedAt: metadata.updated,
           };
@@ -79,12 +126,14 @@ export default function CaptureGallery() {
         const newlyCaptured = capturesWithUrls.filter((capture) => !previousPathsRef.current.has(capture.fullPath));
 
         if (newlyCaptured.length > 0) {
+          const groupedNewCaptures = Array.from(groupCapturesIntoPairs(newlyCaptured).values());
+
           setNotifications((current) => [
-            ...newlyCaptured.map((capture) => ({
-              id: capture.fullPath,
-              title: capture.name,
-              url: capture.url,
-              createdAt: capture.updatedAt,
+            ...groupedNewCaptures.map((group) => ({
+              id: group.id,
+              title: group.title,
+              createdAt: group.createdAt,
+              items: group.items,
             })),
             ...current,
           ].slice(0, 8));
@@ -142,7 +191,7 @@ export default function CaptureGallery() {
           <button
             type="button"
             onClick={() => setNotifications([])}
-            className="text-xs px-2 py-1 rounded bg-red-900 text-white hover:bg-red-950 transition-colors"
+            className="text-xs px-2 py-1 rounded-xl bg-zinc-600 text-white hover:bg-zinc-500 transition-colors"
           >
             Clear
           </button>
@@ -158,18 +207,23 @@ export default function CaptureGallery() {
               <li key={notification.id} className="rounded-xl border border-emerald-200 bg-emerald-50 p-3">
                 <div className="flex items-start justify-between gap-3">
                   <div>
-                    <div className="font-semibold text-emerald-950">New image captured</div>
+                    <div className="font-semibold text-emerald-950">New capture pair</div>
                     <div className="text-sm text-emerald-900">{notification.title}</div>
                     <div className="text-xs text-emerald-700">{formatTimestamp(notification.createdAt)}</div>
+                    <div className="mt-2 flex flex-wrap gap-2 text-xs font-semibold">
+                      {notification.items?.map((item) => (
+                        <a
+                          key={item.fullPath}
+                          href={item.url}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="rounded-full bg-emerald-100 px-2 py-1 text-emerald-900 hover:bg-emerald-200 transition-colors"
+                        >
+                          {item.kind}
+                        </a>
+                      ))}
+                    </div>
                   </div>
-                  <a
-                    href={notification.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="text-xs font-semibold text-emerald-900 underline"
-                  >
-                    View
-                  </a>
                 </div>
               </li>
             ))}

@@ -22,6 +22,17 @@ function pixelToWorld({ px, py, imgW, imgH, resolution, origin }) {
   return { x, y };
 }
 
+function worldToPixel({ x, y, imgW, imgH, resolution, origin }) {
+  const originX = origin[0];
+  const originY = origin[1];
+
+  const px = (x - originX) / resolution;
+  const mapPy = (y - originY) / resolution;
+  const py = (imgH - 1) - mapPy;
+
+  return { px, py, mapPy, imgW, imgH };
+}
+
 // Internal canonical types (what you store in backend)
 const STEPS = ["start", "center", "end"];
 
@@ -58,13 +69,40 @@ export default function MapAnnotator({ saved = [], refreshSaved, apiBaseUrl }) {
   const [pointType, setPointType] = useState("start"); // start -> center -> end
   const [completedTypes, setCompletedTypes] = useState(() => new Set());
 
-  const existingSavedTypes = useMemo(() => {
+  const savedTypesByAisle = useMemo(() => {
+    return saved.reduce((groups, point) => {
+      const aisleKey = String(point.id);
+      const typeSet = groups.get(aisleKey) || new Set();
+      typeSet.add(String(point.type));
+      groups.set(aisleKey, typeSet);
+      return groups;
+    }, new Map());
+  }, [saved]);
+
+  const aislesWithAllPoints = useMemo(() => {
     return new Set(
-      saved
-        .filter((point) => String(point.id) === String(aisleId))
-        .map((point) => String(point.type))
+      Array.from(savedTypesByAisle.entries())
+        .filter(([, typeSet]) => STEPS.every((step) => typeSet.has(step)))
+        .map(([aisleKey]) => aisleKey),
     );
-  }, [saved, aisleId]);
+  }, [savedTypesByAisle]);
+
+  const existingSavedTypes = savedTypesByAisle.get(String(aisleId)) || new Set();
+
+  function findFirstAvailableAisle(startAisleId) {
+    let candidate = String(startAisleId);
+
+    while (true) {
+      const savedTypes = savedTypesByAisle.get(candidate) || new Set();
+      const hasOpenSlot = STEPS.some((step) => !savedTypes.has(step));
+
+      if (hasOpenSlot) {
+        return candidate;
+      }
+
+      candidate = incrementAisleId(candidate);
+    }
+  }
 
   const availableTypes = useMemo(() => {
     return STEPS.filter((t) => !completedTypes.has(t) && !existingSavedTypes.has(t));
@@ -78,13 +116,17 @@ export default function MapAnnotator({ saved = [], refreshSaved, apiBaseUrl }) {
   }, [availableTypes, pointType]);
 
   useEffect(() => {
-    if (availableTypes.length !== 0) return;
+    const firstAvailableAisle = findFirstAvailableAisle(aisleId);
+
+    if (firstAvailableAisle === aisleId) {
+      return;
+    }
 
     setLastClick(null);
     setCompletedTypes(new Set());
     setPointType("start");
-    setAisleId((prev) => incrementAisleId(prev));
-  }, [availableTypes.length]);
+    setAisleId(firstAvailableAisle);
+  }, [aisleId, savedTypesByAisle]);
 
   // Load YAML map config once
   useEffect(() => {
@@ -108,6 +150,32 @@ export default function MapAnnotator({ saved = [], refreshSaved, apiBaseUrl }) {
     if (!img) return;
     setImgNatural({ w: img.naturalWidth, h: img.naturalHeight });
   }
+
+  const plottedSavedPoints = useMemo(() => {
+    if (!mapConfig || imgNatural.w === 0 || imgNatural.h === 0) {
+      return [];
+    }
+
+    return saved
+      .map((point) => {
+        const { px, py } = worldToPixel({
+          x: Number(point.x),
+          y: Number(point.y),
+          imgW: imgNatural.w,
+          imgH: imgNatural.h,
+          resolution: mapConfig.resolution,
+          origin: mapConfig.origin,
+        });
+
+        return {
+          ...point,
+          px,
+          py,
+        };
+      })
+      .filter((point) => Number.isFinite(point.px) && Number.isFinite(point.py))
+      .filter((point) => point.px >= 0 && point.py >= 0 && point.px <= imgNatural.w && point.py <= imgNatural.h);
+  }, [saved, mapConfig, imgNatural.h, imgNatural.w]);
 
   function handleClick(e) {
     const img = imgRef.current;
@@ -192,11 +260,9 @@ export default function MapAnnotator({ saved = [], refreshSaved, apiBaseUrl }) {
   return (
     <div className="min-h-screen p-6 bg-gray-50 rounded-xl">
       <div className="max-w-6xl mx-auto space-y-6">
-        <div className="bg-white rounded-xl shadow p-4">
           <h1 className="text-3xl md:text-4xl font-black tracking-tight text-black">
             Retail Assistant Staff Interface
           </h1>
-        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Map panel */}
@@ -224,9 +290,36 @@ export default function MapAnnotator({ saved = [], refreshSaved, apiBaseUrl }) {
               draggable={false}
             />
 
+            {plottedSavedPoints.map((point) => (
+              <div
+                key={`${point.id}-${point.type}-${point.x}-${point.y}`}
+                className="absolute -translate-x-1/2 -translate-y-1/2"
+                style={{
+                  left: `${(point.px / imgNatural.w) * 100}%`,
+                  top: `${(point.py / imgNatural.h) * 100}%`,
+                }}
+                title={`${point.id} - ${point.type}`}
+              >
+                {point.type === "center" && aislesWithAllPoints.has(String(point.id)) && (
+                  <div className="absolute left-1/2 -top-5 -translate-x-1/2 rounded-full bg-white/90 px-2 py-0.5 text-[10px] font-semibold tracking-wide text-gray-900 shadow-sm ring-1 ring-gray-200 whitespace-nowrap">
+                    {point.id}
+                  </div>
+                )}
+                <div
+                  className={`w-3 h-3 rounded-full border-2 border-white shadow-md ${
+                    point.type === "start"
+                      ? "bg-emerald-500"
+                      : point.type === "center"
+                        ? "bg-amber-500"
+                        : "bg-red-600"
+                  }`}
+                />
+              </div>
+            ))}
+
             {lastClick && (
               <div
-                className="absolute w-3 h-3 rounded-full bg-red-600 border-2 border-white -translate-x-1/2 -translate-y-1/2"
+                className="absolute w-3 h-3 rounded-full bg-black border-2 border-white -translate-x-1/2 -translate-y-1/2"
                 style={{
                   left: `${lastClick.markerLeft}px`,
                   top: `${lastClick.markerTop}px`,
@@ -294,16 +387,16 @@ export default function MapAnnotator({ saved = [], refreshSaved, apiBaseUrl }) {
               </div>
             </div>
 
-            <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-3">
-              <div className="text-emerald-900">Currently Selected Point</div>
+            <div className="rounded-xl border border-red-200 bg-red-50 p-3">
+              <div className="text-red-900">Currently Selected Point</div>
               {lastClick ? (
-                <div className="mt-1 font-mono text-emerald-950">
+                <div className="mt-1 font-mono text-red-950">
                   pixel=({lastClick.px.toFixed(1)}, {lastClick.py.toFixed(1)})
                   <br />
                   world=({lastClick.worldX.toFixed(3)}, {lastClick.worldY.toFixed(3)}) meters
                 </div>
               ) : (
-                <div className="mt-1 text-emerald-800">No point selected yet.</div>
+                <div className="mt-1 text-red-800">No point selected yet.</div>
               )}
             </div>
           </div>
