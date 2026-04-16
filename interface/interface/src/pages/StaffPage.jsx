@@ -37,6 +37,14 @@ export default function StaffPage() {
     await refreshSaved();
   }, [apiBaseUrl, refreshSaved]);
 
+  const deleteSavedPoint = useCallback(async (index) => {
+    await fetch(`${apiBaseUrl}/api/aisles/${index}`, {
+      method: "DELETE",
+      cache: "no-store",
+    });
+    await refreshSaved();
+  }, [apiBaseUrl, refreshSaved]);
+
   useEffect(() => {
     refreshSaved();
     const intervalId = window.setInterval(() => {
@@ -83,12 +91,25 @@ export default function StaffPage() {
             ) : (
               <ul className="text-sm space-y-2 overflow-auto md:max-h-[14rem]">
                 {saved.map((p, i) => (
-                  <li key={i} className="border rounded-lg p-2 bg-gray-50">
-                    <div className="font-medium">
-                      {p.id} - {p.type}
-                    </div>
-                    <div className="font-mono text-xs">
-                      ({Number(p.x).toFixed(3)}, {Number(p.y).toFixed(3)})
+                  <li key={`${p.id}-${p.type}-${p.x}-${p.y}-${i}`} className="border rounded-lg p-2 bg-gray-50">
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <div className="font-medium">
+                          {p.id} - {p.type}
+                        </div>
+                        <div className="font-mono text-xs">
+                          ({Number(p.x).toFixed(3)}, {Number(p.y).toFixed(3)})
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => deleteSavedPoint(i)}
+                        className="shrink-0 rounded-full border border-red-300 bg-white px-2 py-0.5 text-xs font-semibold text-red-700 hover:bg-red-50 hover:border-red-400 transition-colors"
+                        aria-label={`Delete ${p.id} ${p.type}`}
+                        title="Delete point"
+                      >
+                        x
+                      </button>
                     </div>
                   </li>
                 ))}

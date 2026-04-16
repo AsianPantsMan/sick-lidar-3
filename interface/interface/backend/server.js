@@ -160,6 +160,26 @@ app.delete("/api/aisles", (req, res) => {
   res.json({ success: true });
 });
 
+app.delete("/api/aisles/:index", (req, res) => {
+  const index = Number(req.params.index);
+
+  if (!Number.isInteger(index) || index < 0 || index >= aisles.length) {
+    return res.status(400).json({
+      success: false,
+      error: "Invalid point index.",
+    });
+  }
+
+  const removed = aisles.splice(index, 1)[0];
+  writeCSV(aisles);
+
+  res.json({
+    success: true,
+    removed,
+    count: aisles.length,
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`Backend running on port ${PORT}`);
 });
