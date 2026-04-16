@@ -79,6 +79,14 @@ export default function MapAnnotator({ saved = [], refreshSaved, apiBaseUrl }) {
     }, new Map());
   }, [saved]);
 
+  const aislesWithAllPoints = useMemo(() => {
+    return new Set(
+      Array.from(savedTypesByAisle.entries())
+        .filter(([, typeSet]) => STEPS.every((step) => typeSet.has(step)))
+        .map(([aisleKey]) => aisleKey),
+    );
+  }, [savedTypesByAisle]);
+
   const existingSavedTypes = savedTypesByAisle.get(String(aisleId)) || new Set();
 
   function findFirstAvailableAisle(startAisleId) {
@@ -294,6 +302,11 @@ export default function MapAnnotator({ saved = [], refreshSaved, apiBaseUrl }) {
                 }}
                 title={`${point.id} - ${point.type}`}
               >
+                {point.type === "center" && aislesWithAllPoints.has(String(point.id)) && (
+                  <div className="absolute left-1/2 -top-5 -translate-x-1/2 rounded-full bg-white/90 px-2 py-0.5 text-[10px] font-semibold tracking-wide text-gray-900 shadow-sm ring-1 ring-gray-200 whitespace-nowrap">
+                    {point.id}
+                  </div>
+                )}
                 <div
                   className={`w-3 h-3 rounded-full border-2 border-white shadow-md ${
                     point.type === "start"
@@ -308,7 +321,7 @@ export default function MapAnnotator({ saved = [], refreshSaved, apiBaseUrl }) {
 
             {lastClick && (
               <div
-                className="absolute w-3 h-3 rounded-full bg-red-600 border-2 border-white -translate-x-1/2 -translate-y-1/2"
+                className="absolute w-3 h-3 rounded-full bg-black border-2 border-white -translate-x-1/2 -translate-y-1/2"
                 style={{
                   left: `${lastClick.markerLeft}px`,
                   top: `${lastClick.markerTop}px`,
@@ -376,16 +389,16 @@ export default function MapAnnotator({ saved = [], refreshSaved, apiBaseUrl }) {
               </div>
             </div>
 
-            <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-3">
-              <div className="text-emerald-900">Currently Selected Point</div>
+            <div className="rounded-xl border border-red-200 bg-red-50 p-3">
+              <div className="text-red-900">Currently Selected Point</div>
               {lastClick ? (
-                <div className="mt-1 font-mono text-emerald-950">
+                <div className="mt-1 font-mono text-red-950">
                   pixel=({lastClick.px.toFixed(1)}, {lastClick.py.toFixed(1)})
                   <br />
                   world=({lastClick.worldX.toFixed(3)}, {lastClick.worldY.toFixed(3)}) meters
                 </div>
               ) : (
-                <div className="mt-1 text-emerald-800">No point selected yet.</div>
+                <div className="mt-1 text-red-800">No point selected yet.</div>
               )}
             </div>
           </div>
