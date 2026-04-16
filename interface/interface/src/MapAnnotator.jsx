@@ -41,7 +41,7 @@ function incrementAisleId(id) {
   return `${prefix}${num + 1}`;
 }
 
-export default function MapAnnotator({ refreshSaved, apiBaseUrl }) {
+export default function MapAnnotator({ saved = [], refreshSaved, apiBaseUrl }) {
   const imgRef = useRef(null);
 
   if (!apiBaseUrl) {
@@ -58,17 +58,33 @@ export default function MapAnnotator({ refreshSaved, apiBaseUrl }) {
   const [pointType, setPointType] = useState("start"); // start -> center -> end
   const [completedTypes, setCompletedTypes] = useState(() => new Set());
 
+  const existingSavedTypes = useMemo(() => {
+    return new Set(
+      saved
+        .filter((point) => String(point.id) === String(aisleId))
+        .map((point) => String(point.type))
+    );
+  }, [saved, aisleId]);
+
   const availableTypes = useMemo(() => {
-    return STEPS.filter((t) => !completedTypes.has(t));
-  }, [completedTypes]);
+    return STEPS.filter((t) => !completedTypes.has(t) && !existingSavedTypes.has(t));
+  }, [completedTypes, existingSavedTypes]);
 
   // Make sure dropdown selection is always valid
   useEffect(() => {
     if (!availableTypes.includes(pointType)) {
       setPointType(availableTypes[0] ?? "start");
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [aisleId, completedTypes]);
+  }, [availableTypes, pointType]);
+
+  useEffect(() => {
+    if (availableTypes.length !== 0) return;
+
+    setLastClick(null);
+    setCompletedTypes(new Set());
+    setPointType("start");
+    setAisleId((prev) => incrementAisleId(prev));
+  }, [availableTypes.length]);
 
   // Load YAML map config once
   useEffect(() => {
@@ -193,7 +209,7 @@ export default function MapAnnotator({ refreshSaved, apiBaseUrl }) {
           </div>
 
           <div className="text-sm text-gray-600 mb-3">
-            Click on the map to select the{" "}
+            Click on the map to select the {" "}
             <span className="font-medium">{labelForType(pointType)}</span> point.
           </div>
 
@@ -257,7 +273,7 @@ export default function MapAnnotator({ refreshSaved, apiBaseUrl }) {
 
           <button
             onClick={savePoint}
-            disabled={!lastClick}
+            disabled={!lastClick || availableTypes.length === 0}
             className="w-full bg-red-900 text-white rounded-xl py-2 disabled:opacity-40 hover:bg-red-950 transition-colors"
           >
             Save Selected Point
