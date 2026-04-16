@@ -1,7 +1,33 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import MapAnnotator from "../MapAnnotator";
 import CaptureGallery from "../components/staff/CaptureGallery";
 import "../styles/staff.css";
+
+function labelForType(type) {
+  if (type === "start") return "begin";
+  if (type === "center") return "center";
+  return "end";
+}
+
+function typeOrder(type) {
+  if (type === "start") return 0;
+  if (type === "center") return 1;
+  return 2;
+}
+
+function aisleSortKey(aisleId) {
+  const match = String(aisleId).trim().match(/^([A-Za-z]+)(\d+)$/);
+  if (!match) return { prefix: String(aisleId), number: Number.POSITIVE_INFINITY };
+  return { prefix: match[1].toUpperCase(), number: Number.parseInt(match[2], 10) };
+}
+
+function compareAisleIds(left, right) {
+  const a = aisleSortKey(left);
+  const b = aisleSortKey(right);
+  if (a.prefix !== b.prefix) return a.prefix.localeCompare(b.prefix);
+  if (a.number !== b.number) return a.number - b.number;
+  return String(left).localeCompare(String(right));
+}
 
 export default function StaffPage() {
   const [saved, setSaved] = useState([]);
@@ -44,6 +70,28 @@ export default function StaffPage() {
     });
     await refreshSaved();
   }, [apiBaseUrl, refreshSaved]);
+
+  const groupedSavedPoints = useMemo(() => {
+    const ordered = saved
+      .map((point, index) => ({ point, index }))
+      .sort((left, right) => {
+        const aisleComparison = compareAisleIds(left.point.id, right.point.id);
+        if (aisleComparison !== 0) return aisleComparison;
+
+        const typeComparison = typeOrder(left.point.type) - typeOrder(right.point.type);
+        if (typeComparison !== 0) return typeComparison;
+
+        return left.index - right.index;
+      });
+
+    return ordered.reduce((groups, entry) => {
+      const aisleId = String(entry.point.id);
+      const group = groups.get(aisleId) || [];
+      group.push(entry);
+      groups.set(aisleId, group);
+      return groups;
+    }, new Map());
+  }, [saved]);
 
   useEffect(() => {
     refreshSaved();
@@ -89,31 +137,41 @@ export default function StaffPage() {
             ) : saved.length === 0 ? (
               <div className="text-sm text-gray-600">No saved points.</div>
             ) : (
-              <ul className="text-sm space-y-2 overflow-auto md:max-h-[14rem]">
-                {saved.map((p, i) => (
-                  <li key={`${p.id}-${p.type}-${p.x}-${p.y}-${i}`} className="border rounded-lg p-2 bg-gray-50">
-                    <div className="flex items-start justify-between gap-2">
-                      <div>
-                        <div className="font-medium">
-                          {p.id} - {p.type}
-                        </div>
-                        <div className="font-mono text-xs">
-                          ({Number(p.x).toFixed(3)}, {Number(p.y).toFixed(3)})
-                        </div>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => deleteSavedPoint(i)}
-                        className="shrink-0 rounded-full border border-red-300 bg-white px-2 py-0.5 text-xs font-semibold text-red-700 hover:bg-red-50 hover:border-red-400 transition-colors"
-                        aria-label={`Delete ${p.id} ${p.type}`}
-                        title="Delete point"
-                      >
-                        x
-                      </button>
+              <div className="space-y-3 overflow-auto md:max-h-[14rem] pr-1">
+                {Array.from(groupedSavedPoints.entries()).map(([aisleId, entries]) => (
+                  <section key={aisleId} className="rounded-xl border border-gray-200 bg-gray-50 p-2">
+                    <div className="mb-2 flex items-center justify-between gap-2">
+                      <h4 className="font-semibold text-gray-800">Aisle {aisleId}</h4>
+                    
                     </div>
-                  </li>
+                    <ul className="space-y-2">
+                      {entries.map(({ point, index }) => (
+                        <li key={`${point.id}-${point.type}-${point.x}-${point.y}-${index}`} className="rounded-lg border bg-white p-2">
+                          <div className="flex items-start justify-between gap-2">
+                            <div>
+                              <div className="font-medium">
+                                {labelForType(point.type)}
+                              </div>
+                              <div className="font-mono text-xs">
+                                ({Number(point.x).toFixed(3)}, {Number(point.y).toFixed(3)})
+                              </div>
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() => deleteSavedPoint(index)}
+                              className="shrink-0 rounded-full border border-red-300 bg-white px-2 py-0.5 text-xs font-semibold text-red-700 hover:bg-red-50 hover:border-red-400 transition-colors"
+                              aria-label={`Delete ${point.id} ${point.type}`}
+                              title="Delete point"
+                            >
+                              x
+                            </button>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  </section>
                 ))}
-              </ul>
+              </div>
             )}
           </div>
 
