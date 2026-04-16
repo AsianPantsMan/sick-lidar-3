@@ -28,7 +28,8 @@ app.use(
 );
 
 const CSV_PATH = path.join(__dirname, "aisles.csv");
-const CSV_HEADER = "aisleId,type,x,y,createdAt";
+const CSV_HEADER = "aisleId,type,x,y";
+const LEGACY_CSV_HEADER = "aisleId,type,x,y,createdAt";
 
 let aisles = [];
 
@@ -54,7 +55,8 @@ function loadAislesFromCSV() {
   if (lines.length === 0) return [];
 
   const header = lines[0].trim();
-  if (header !== CSV_HEADER) {
+  const isLegacyHeader = header === LEGACY_CSV_HEADER;
+  if (header !== CSV_HEADER && !isLegacyHeader) {
     const backupPath = path.join(__dirname, `aisles.invalid.${Date.now()}.bak`);
     fs.writeFileSync(backupPath, `${raw}\n`);
     writeCSV([]);
@@ -66,9 +68,9 @@ function loadAislesFromCSV() {
 
   const [, ...dataLines] = lines;
 
-  return dataLines
+  const parsedAisles = dataLines
     .map((line) => {
-      const [aisleId, type, x, y, createdAt] = parseCsvLine(line);
+      const [aisleId, type, x, y] = parseCsvLine(line);
 
       if (!aisleId || !type) return null;
 
@@ -77,22 +79,28 @@ function loadAislesFromCSV() {
         type,
         x: toNumberOrNull(x),
         y: toNumberOrNull(y),
-        createdAt: createdAt || null,
       };
     })
     .filter((point) => point && point.x !== null && point.y !== null);
+
+  if (isLegacyHeader) {
+    writeCSV(parsedAisles);
+    console.log("Migrated legacy aisles CSV format to remove createdAt column.");
+  }
+
+  return parsedAisles;
 }
 
 function writeCSV(points) {
   const rows = [CSV_HEADER];
   for (const point of points) {
-    rows.push(`${point.id},${point.type},${point.x},${point.y},${point.createdAt || ""}`);
+    rows.push(`${point.id},${point.type},${point.x},${point.y}`);
   }
   fs.writeFileSync(CSV_PATH, `${rows.join("\n")}\n`);
 }
 
 function appendPointToCSV(point) {
-  const row = `${point.id},${point.type},${point.x},${point.y},${point.createdAt || ""}\n`;
+  const row = `${point.id},${point.type},${point.x},${point.y}\n`;
   fs.appendFileSync(CSV_PATH, row);
 }
 
@@ -132,14 +140,11 @@ app.post("/api/aisles", (req, res) => {
     });
   }
 
-  const createdAt = new Date().toISOString();
-
   const point = {
     id: normalizedAisleId,
     type: normalizedPointType,
     x: xNum,
     y: yNum,
-    createdAt,
   };
 
   aisles.push(point);
