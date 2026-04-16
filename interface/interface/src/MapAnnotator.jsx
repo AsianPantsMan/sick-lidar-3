@@ -22,6 +22,17 @@ function pixelToWorld({ px, py, imgW, imgH, resolution, origin }) {
   return { x, y };
 }
 
+function worldToPixel({ x, y, imgW, imgH, resolution, origin }) {
+  const originX = origin[0];
+  const originY = origin[1];
+
+  const px = (x - originX) / resolution;
+  const mapPy = (y - originY) / resolution;
+  const py = (imgH - 1) - mapPy;
+
+  return { px, py, mapPy, imgW, imgH };
+}
+
 // Internal canonical types (what you store in backend)
 const STEPS = ["start", "center", "end"];
 
@@ -58,13 +69,32 @@ export default function MapAnnotator({ saved = [], refreshSaved, apiBaseUrl }) {
   const [pointType, setPointType] = useState("start"); // start -> center -> end
   const [completedTypes, setCompletedTypes] = useState(() => new Set());
 
-  const existingSavedTypes = useMemo(() => {
-    return new Set(
-      saved
-        .filter((point) => String(point.id) === String(aisleId))
-        .map((point) => String(point.type))
-    );
-  }, [saved, aisleId]);
+  const savedTypesByAisle = useMemo(() => {
+    return saved.reduce((groups, point) => {
+      const aisleKey = String(point.id);
+      const typeSet = groups.get(aisleKey) || new Set();
+      typeSet.add(String(point.type));
+      groups.set(aisleKey, typeSet);
+      return groups;
+    }, new Map());
+  }, [saved]);
+
+  const existingSavedTypes = savedTypesByAisle.get(String(aisleId)) || new Set();
+
+  function findFirstAvailableAisle(startAisleId) {
+    let candidate = String(startAisleId);
+
+    while (true) {
+      const savedTypes = savedTypesByAisle.get(candidate) || new Set();
+      const hasOpenSlot = STEPS.some((step) => !savedTypes.has(step));
+
+      if (hasOpenSlot) {
+        return candidate;
+      }
+
+      candidate = incrementAisleId(candidate);
+    }
+  }
 
   const availableTypes = useMemo(() => {
     return STEPS.filter((t) => !completedTypes.has(t) && !existingSavedTypes.has(t));
@@ -78,13 +108,17 @@ export default function MapAnnotator({ saved = [], refreshSaved, apiBaseUrl }) {
   }, [availableTypes, pointType]);
 
   useEffect(() => {
-    if (availableTypes.length !== 0) return;
+    const firstAvailableAisle = findFirstAvailableAisle(aisleId);
+
+    if (firstAvailableAisle === aisleId) {
+      return;
+    }
 
     setLastClick(null);
     setCompletedTypes(new Set());
     setPointType("start");
-    setAisleId((prev) => incrementAisleId(prev));
-  }, [availableTypes.length]);
+    setAisleId(firstAvailableAisle);
+  }, [aisleId, savedTypesByAisle]);
 
   // Load YAML map config once
   useEffect(() => {
@@ -108,6 +142,32 @@ export default function MapAnnotator({ saved = [], refreshSaved, apiBaseUrl }) {
     if (!img) return;
     setImgNatural({ w: img.naturalWidth, h: img.naturalHeight });
   }
+
+  const plottedSavedPoints = useMemo(() => {
+    if (!mapConfig || imgNatural.w === 0 || imgNatural.h === 0) {
+      return [];
+    }
+
+    return saved
+      .map((point) => {
+        const { px, py } = worldToPixel({
+          x: Number(point.x),
+          y: Number(point.y),
+          imgW: imgNatural.w,
+          imgH: imgNatural.h,
+          resolution: mapConfig.resolution,
+          origin: mapConfig.origin,
+        });
+
+        return {
+          ...point,
+          px,
+          py,
+        };
+      })
+      .filter((point) => Number.isFinite(point.px) && Number.isFinite(point.py))
+      .filter((point) => point.px >= 0 && point.py >= 0 && point.px <= imgNatural.w && point.py <= imgNatural.h);
+  }, [saved, mapConfig, imgNatural.h, imgNatural.w]);
 
   function handleClick(e) {
     const img = imgRef.current;
@@ -223,6 +283,28 @@ export default function MapAnnotator({ saved = [], refreshSaved, apiBaseUrl }) {
               className="max-w-full border rounded-lg cursor-crosshair"
               draggable={false}
             />
+
+            {plottedSavedPoints.map((point) => (
+              <div
+                key={`${point.id}-${point.type}-${point.x}-${point.y}`}
+                className="absolute -translate-x-1/2 -translate-y-1/2"
+                style={{
+                  left: `${(point.px / imgNatural.w) * 100}%`,
+                  top: `${(point.py / imgNatural.h) * 100}%`,
+                }}
+                title={`${point.id} - ${point.type}`}
+              >
+                <div
+                  className={`w-3 h-3 rounded-full border-2 border-white shadow-md ${
+                    point.type === "start"
+                      ? "bg-emerald-500"
+                      : point.type === "center"
+                        ? "bg-amber-500"
+                        : "bg-red-600"
+                  }`}
+                />
+              </div>
+            ))}
 
             {lastClick && (
               <div

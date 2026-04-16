@@ -139,27 +139,27 @@ export default function StaffPage() {
             ) : (
               <div className="space-y-3 overflow-auto md:max-h-[14rem] pr-1">
                 {Array.from(groupedSavedPoints.entries()).map(([aisleId, entries]) => (
-                  <section key={aisleId} className="rounded-xl border border-gray-200 bg-gray-50 p-2">
-                    <div className="mb-2 flex items-center justify-between gap-2">
-                      <h4 className="font-semibold text-gray-800">Aisle {aisleId}</h4>
+                  <section key={aisleId} className="rounded-lg border border-gray-200 bg-gray-50 p-1.5">
+                    <div className="mb-1.5 flex items-center justify-between gap-2">
+                      <h4 className="text-sm font-semibold text-gray-800">Aisle {aisleId}</h4>
                     
                     </div>
-                    <ul className="space-y-2">
+                    <ul className="space-y-1.5">
                       {entries.map(({ point, index }) => (
-                        <li key={`${point.id}-${point.type}-${point.x}-${point.y}-${index}`} className="rounded-lg border bg-white p-2">
-                          <div className="flex items-start justify-between gap-2">
-                            <div>
-                              <div className="font-medium">
+                        <li key={`${point.id}-${point.type}-${point.x}-${point.y}-${index}`} className="rounded-md border bg-white p-1.5">
+                          <div className="flex items-center justify-between gap-2">
+                            <div className="min-w-0 flex items-center gap-2 text-sm leading-tight">
+                              <span className="font-medium text-gray-900 whitespace-nowrap">
                                 {labelForType(point.type)}
-                              </div>
-                              <div className="font-mono text-xs">
+                              </span>
+                              <span className="font-mono text-[11px] text-gray-700 whitespace-nowrap">
                                 ({Number(point.x).toFixed(3)}, {Number(point.y).toFixed(3)})
-                              </div>
+                              </span>
                             </div>
                             <button
                               type="button"
                               onClick={() => deleteSavedPoint(index)}
-                              className="shrink-0 rounded-full border border-red-300 bg-white px-2 py-0.5 text-xs font-semibold text-red-700 hover:bg-red-50 hover:border-red-400 transition-colors"
+                              className="shrink-0 text-xs px-2 py-1 rounded-xl bg-red-900 text-white hover:bg-red-950 transition-colors"
                               aria-label={`Delete ${point.id} ${point.type}`}
                               title="Delete point"
                             >
