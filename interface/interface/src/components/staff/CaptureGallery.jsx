@@ -191,7 +191,7 @@ export default function CaptureGallery() {
           <button
             type="button"
             onClick={() => setNotifications([])}
-            className="text-xs px-2 py-1 rounded bg-red-900 text-white hover:bg-red-950 transition-colors"
+            className="text-xs px-2 py-1 rounded-xl bg-zinc-600 text-white hover:bg-zinc-500 transition-colors"
           >
             Clear
           </button>

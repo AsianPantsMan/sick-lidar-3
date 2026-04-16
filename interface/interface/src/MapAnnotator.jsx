@@ -260,11 +260,9 @@ export default function MapAnnotator({ saved = [], refreshSaved, apiBaseUrl }) {
   return (
     <div className="min-h-screen p-6 bg-gray-50 rounded-xl">
       <div className="max-w-6xl mx-auto space-y-6">
-        <div className="bg-white rounded-xl shadow p-4">
           <h1 className="text-3xl md:text-4xl font-black tracking-tight text-black">
             Retail Assistant Staff Interface
           </h1>
-        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Map panel */}
