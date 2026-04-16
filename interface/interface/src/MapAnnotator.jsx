@@ -186,7 +186,7 @@ export default function MapAnnotator({ refreshSaved, apiBaseUrl }) {
         {/* Map panel */}
         <div className="lg:col-span-2 bg-white rounded-xl shadow p-4">
           <div className="flex items-baseline justify-between mb-3">
-            <h2 className="text-xl font-semibold">Aisle Coordinate Picker</h2>
+            <h2 className="text-xl font-semibold">Aisle Coordinate Selector</h2>
             <div className="text-sm text-gray-700">
               Aisle: <span className="font-mono font-semibold">{aisleId}</span>
             </div>

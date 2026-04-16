@@ -178,13 +178,13 @@ export default function CaptureGallery() {
       </section>
 
       <section className="rounded-xl border bg-white p-3 shadow">
-        <div className="mb-2 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-center justify-between gap-3 mb-2">
           <div>
             <h3 className="text-lg font-semibold">Image Captures</h3>
             <p className="text-xs text-gray-500">Storage path: {storageRootLabel}</p>
           </div>
-          <div className="flex flex-col items-end gap-1 sm:justify-end">
-            <label className="inline-flex items-center gap-2 whitespace-nowrap text-xs text-gray-600">
+          <div className="flex items-center gap-2">
+            <label className="flex items-center gap-2 text-xs text-gray-600">
               Show
               <select
                 value={captureLimit}
@@ -198,9 +198,7 @@ export default function CaptureGallery() {
                 ))}
               </select>
             </label>
-            <span className="inline-flex min-h-[1rem] justify-end text-xs text-gray-500">
-              {refreshing ? "Refreshing..." : "\u00a0"}
-            </span>
+            {refreshing && <span className="text-xs text-gray-500">Refreshing...</span>}
             <button
               type="button"
               onClick={() => loadCaptures({ background: captures.length > 0 }).catch(console.error)}

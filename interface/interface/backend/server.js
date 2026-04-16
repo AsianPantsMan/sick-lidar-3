@@ -2,9 +2,13 @@ import express from "express";
 import cors from "cors";
 import fs from "fs";
 import path from "path";
+import { fileURLToPath } from "url";
 
 const app = express();
 app.use(express.json());
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const PORT = Number(process.env.PORT) || 5050;
 const allowedOrigins = (process.env.CORS_ORIGINS || "")
@@ -23,49 +27,126 @@ app.use(
   })
 );
 
-const CSV_PATH = path.join(process.cwd(), "aisles.csv");// change save path to aisles.csv possibly
+const CSV_PATH = path.join(__dirname, "aisles.csv");
+const CSV_HEADER = "aisleId,type,x,y,createdAt";
 
 let aisles = [];
 
+function parseCsvLine(line) {
+  return line.split(",").map((part) => part.trim());
+}
+
+function toNumberOrNull(value) {
+  const n = Number(value);
+  return Number.isFinite(n) ? n : null;
+}
+
+function loadAislesFromCSV() {
+  if (!fs.existsSync(CSV_PATH)) {
+    writeCSV([]);
+    return [];
+  }
+
+  const raw = fs.readFileSync(CSV_PATH, "utf8").trim();
+  if (!raw) return [];
+
+  const lines = raw.split("\n").filter(Boolean);
+  if (lines.length === 0) return [];
+
+  const header = lines[0].trim();
+  if (header !== CSV_HEADER) {
+    const backupPath = path.join(__dirname, `aisles.invalid.${Date.now()}.bak`);
+    fs.writeFileSync(backupPath, `${raw}\n`);
+    writeCSV([]);
+    console.warn(
+      `Invalid CSV format detected at ${CSV_PATH}. Backed up malformed data to ${backupPath} and reset CSV.`
+    );
+    return [];
+  }
+
+  const [, ...dataLines] = lines;
+
+  return dataLines
+    .map((line) => {
+      const [aisleId, type, x, y, createdAt] = parseCsvLine(line);
+
+      if (!aisleId || !type) return null;
+
+      return {
+        id: aisleId,
+        type,
+        x: toNumberOrNull(x),
+        y: toNumberOrNull(y),
+        createdAt: createdAt || null,
+      };
+    })
+    .filter((point) => point && point.x !== null && point.y !== null);
+}
+
 function writeCSV(points) {
-  const rows = ["aisleId,type,x,y,createdAt"];
+  const rows = [CSV_HEADER];
   for (const point of points) {
     rows.push(`${point.id},${point.type},${point.x},${point.y},${point.createdAt || ""}`);
   }
   fs.writeFileSync(CSV_PATH, `${rows.join("\n")}\n`);
 }
 
-// Ensure CSV file exists
-function resetCSV() {
-  writeCSV([]);
-  console.log("CSV reset on startup.");
+function appendPointToCSV(point) {
+  const row = `${point.id},${point.type},${point.x},${point.y},${point.createdAt || ""}\n`;
+  fs.appendFileSync(CSV_PATH, row);
 }
 
-resetCSV();
+aisles = loadAislesFromCSV();
+console.log(`Loaded ${aisles.length} saved coordinate(s) from CSV.`);
 
 app.get("/api/aisles", (req, res) => {
   res.json({ aisles });
 });
 
+app.get("/api/aisles/all", (req, res) => {
+  res.json({
+    count: aisles.length,
+    coordinates: aisles,
+  });
+});
+
 app.post("/api/aisles", (req, res) => {
   const { aisleId, pointType, x, y } = req.body;
+
+  const normalizedAisleId = String(aisleId || "").trim();
+  const normalizedPointType = String(pointType || "").trim().toLowerCase();
+  const xNum = Number(x);
+  const yNum = Number(y);
+
+  if (!normalizedAisleId || !normalizedPointType) {
+    return res.status(400).json({
+      success: false,
+      error: "aisleId and pointType are required.",
+    });
+  }
+
+  if (!Number.isFinite(xNum) || !Number.isFinite(yNum)) {
+    return res.status(400).json({
+      success: false,
+      error: "x and y must be valid numbers.",
+    });
+  }
 
   const createdAt = new Date().toISOString();
 
   const point = {
-    id: aisleId,
-    type: pointType,
-    x,
-    y,
+    id: normalizedAisleId,
+    type: normalizedPointType,
+    x: xNum,
+    y: yNum,
     createdAt,
   };
 
   aisles.push(point);
 
-  // Append to CSV
-  fs.appendFileSync(CSV_PATH, `${aisleId},${pointType},${x},${y},${createdAt}\n`);
+  appendPointToCSV(point);
 
-  res.json({ success: true });
+  res.status(201).json({ success: true, point });
 });
 
 app.delete("/api/aisles", (req, res) => {
