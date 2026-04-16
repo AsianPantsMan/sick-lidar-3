@@ -28,7 +28,7 @@ class AutoNav(Node):
         self.unstuck=False# Wether the robot was freed or not
         self.goal_handle = None
         self.distance_to_goal=0# current distance to goal
-        self.aisle_index=3 # aisle index in aisle 4 at begining 
+        self.aisle_index=0 # aisle index in aisle 4 at begining 
         self.hold_index=False# wether to hold the index of last aisle when changing aisles or not
         self.previous_waypoint=None # previous goal 
         self.current_goal=None
@@ -50,18 +50,15 @@ class AutoNav(Node):
     def waypoint_create(self):
         test=True
         if test:
-            self.goals=([(4.43,-14.9),(-2.77,-14.3),(-10.2,-14.2)],
-                    [(3.82,-9.78),(-2.17,-9.8),(-10.5,-9.44)],
-                    [(4.89,-4.69),(-1.95,-4.91),(-10.3,-5.08)],
-                    [(5.22,-0.108),(-1.84,0.166),(-9.85,-0.231)],
-                    [(5.35,4.81),(-2.03,4.49),(-9.7,4.7)],
-                    [(5.92,9.41),(-0.949,9.02),(-9.42,9.41)])
+            self.goals=([(0.665 ,0.881), (1.68, 0.471), (2.23, 0.394)],  # aisle 1
+                         [(0.847, 1.62), (1.85, 1.48), (2.44, 1.46)], 
+                   )
         else: #csv file processing for waypoint collection
            header=True
            aisle=[]
            aisle_id="A1"# could change later
            goals=[]
-           with open('/home/kendell/retail_assistant_ws/Staff-interface/Staff-interface/aisles.csv', 'r') as file:
+           with open('/home/retail-assistant/SLAM/Staff-interface/Staff-interface/aisles.csv', 'r') as file:
                 for line in file:
                     if header:
                         header = False
@@ -75,8 +72,8 @@ class AutoNav(Node):
                         y=round(float(line[3]),3)
                         aisle.append((x,y))
                         aisle_id=line[0]
-        goals.append(aisle)# add last aisle
-        self.goals=goals
+                goals.append(aisle)# add last aisle
+                self.goals=goals
 
 
 

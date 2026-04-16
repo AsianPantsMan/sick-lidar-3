@@ -10,8 +10,8 @@ class ultrasonicSensor(Node):
         self.front_pub = self.create_publisher(Range, 'ultrasonic/front', 10)
         self.timer = self.create_timer(0.1, self.front_distance_callback)
 # GPIO pin numbers (BCM)
-        self.front_TRIG = 17
-        self.front_ECHO = 27
+        self.front_TRIG = 24
+        self.front_ECHO = 8
         #green/white =3
         #bluew/brown=2
 

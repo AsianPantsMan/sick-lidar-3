@@ -50,8 +50,8 @@ class AutoNav(Node):
     def waypoint_create(self):
         test=True
         if test:
-            self.goals=([(0.999, -0.421), (3.29, 0.999), (0.0994, 0.695)],  # aisle 1
-                         [(0.0994, 0.695), (0.999, -0.421), (3.29, 0.999)], 
+            self.goals=([(0.665 ,0.881), (1.68, 0.471), (2.23, 0.394)],  # aisle 1
+                         [(0.847, 1.62), (1.85, 1.48), (2.44, 1.46)], 
                    )
         else: #csv file processing for waypoint collection
            header=True

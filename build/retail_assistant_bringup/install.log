@@ -23,6 +23,7 @@
 /home/retail-assistant/SLAM/install/retail_assistant_bringup/share/ament_index/resource_index/packages/retail_assistant_bringup
 /home/retail-assistant/SLAM/install/retail_assistant_bringup/share/retail_assistant_bringup/package.xml
 /home/retail-assistant/SLAM/install/retail_assistant_bringup/share/retail_assistant_bringup/launch/gazebo_sim.launch.py
+/home/retail-assistant/SLAM/install/retail_assistant_bringup/share/retail_assistant_bringup/launch/ronit_test.py
 /home/retail-assistant/SLAM/install/retail_assistant_bringup/share/retail_assistant_bringup/launch/gazebo_sim_auto_mapping.launch.py
 /home/retail-assistant/SLAM/install/retail_assistant_bringup/share/retail_assistant_bringup/launch/gazebo_sim_local.launch.py
 /home/retail-assistant/SLAM/install/retail_assistant_bringup/share/retail_assistant_bringup/launch/slam_world.launch.py
@@ -64,4 +65,5 @@
 /home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/retail_assistant_bringup/roboclaw
 /home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/retail_assistant_bringup/stm32
 /home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/retail_assistant_bringup/stm_m
-/home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/retail_assistant_bringup/ultrasonic
+/home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/retail_assistant_bringup/ultrasonic_back
+/home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/retail_assistant_bringup/ultrasonic_front

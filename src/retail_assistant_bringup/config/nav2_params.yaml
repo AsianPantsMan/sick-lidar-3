@@ -142,9 +142,9 @@ controller_server:
       plugin: "nav2_regulated_pure_pursuit_controller::RegulatedPurePursuitController"
       #Path tracking and lookahead
       desired_linear_vel: 0.45 # s
-      lookahead_dist: 0.55 # for more reactiveness
+      lookahead_dist: 0.35 # for more reactiveness
       min_lookahead_dist: 0.25
-      max_lookahead_dist: 0.8
+      max_lookahead_dist: 0.6
       lookahead_time: 1.0
       use_velocity_scaled_lookahead_dist: true # adjust look ahead dynamically based on speed
       #rotation
@@ -168,7 +168,7 @@ controller_server:
       rotate_to_heading_min_angle: 0.785
       max_angular_accel: 3.2
       max_robot_pose_search_dist: 10.0
-      min_distance_to_obstacle: 0.5
+      min_distance_to_obstacle: 0.2
       stateful: true
 
 local_costmap:

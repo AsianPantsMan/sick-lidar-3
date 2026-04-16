@@ -59,7 +59,19 @@ def generate_launch_description():
             )
         )
     )
+    ultrasonic_front = Node(
+        package='retail_assistant_bringup',
+        executable='ultrasonic_front',
+        name='ultrasonic_front_node',
+        output='screen',
+    )
 
+    ultrasonic_back = Node(
+        package='retail_assistant_bringup',
+        executable='ultrasonic_back',
+        name='ultrasonic_back_node',
+        output='screen',
+    )
     # Motor node
     stm_motor = Node(
         package='retail_assistant_bringup',

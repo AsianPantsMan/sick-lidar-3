@@ -5,5 +5,6 @@ navigation = retail_assistant_bringup.navigation:main
 roboclaw = retail_assistant_bringup.roboclaw:main
 stm32 = retail_assistant_bringup.stm32_communication:main
 stm_m = retail_assistant_bringup.Pi_to_MCU:main
-ultrasonic = retail_assistant_bringup.ultrasonic:main
+ultrasonic_back = retail_assistant_bringup.ultrasonic_back:main
+ultrasonic_front = retail_assistant_bringup.ultrasonic_front:main
 

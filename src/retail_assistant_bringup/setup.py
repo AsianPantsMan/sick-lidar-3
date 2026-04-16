@@ -34,7 +34,8 @@ setup(
     entry_points={
         'console_scripts': ['auto_drive = retail_assistant_bringup.auto_drive:main',
                             'navigation = retail_assistant_bringup.navigation:main',
-                            'ultrasonic = retail_assistant_bringup.ultrasonic:main',
+                            'ultrasonic_back = retail_assistant_bringup.ultrasonic_back:main',
+                            'ultrasonic_front= retail_assistant_bringup.ultrasonic_front:main',
                             'mcu_to_pi = retail_assistant_bringup.MCU_to_Pi:main',
                             'roboclaw = retail_assistant_bringup.roboclaw:main',
                             'stm32= retail_assistant_bringup.stm32_communication:main',

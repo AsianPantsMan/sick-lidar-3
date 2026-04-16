@@ -32,6 +32,7 @@ launch/gazebo_sim_local.launch.py
 launch/gazebo_sim_slam.launch.py
 launch/navigation_amcl.launch.py
 launch/navigation_world.launch.py
+launch/ronit_test.py
 launch/rsp.py
 launch/slam_world.launch.py
 resource/retail_assistant_bringup
