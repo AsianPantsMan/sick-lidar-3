@@ -90,7 +90,6 @@ export default function StaffPage() {
                     <div className="font-mono text-xs">
                       ({Number(p.x).toFixed(3)}, {Number(p.y).toFixed(3)})
                     </div>
-                    {p.createdAt && <div className="text-xs text-gray-500">{p.createdAt}</div>}
                   </li>
                 ))}
               </ul>
