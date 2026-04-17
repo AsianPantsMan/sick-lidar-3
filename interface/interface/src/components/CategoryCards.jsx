@@ -24,7 +24,7 @@ export default function CategoryCards({ categories = [], onSelect }) {
             className="rounded-xl bg-[#500000] text-white shadow-xl p-6 flex flex-col items-center justify-center h-[240px] w-full touch-manipulation focus:outline-none transition-colors hover:bg-[#610000]"
             aria-label={`Open ${cat} category`}
           >
-            <div className="text-3xl font-bold mb-4">{cat}</div>
+            <div className="text-3xl font-light mb-4">{cat}</div>
             <Icon size={64} strokeWidth={1.5} />
           </button>
         );
