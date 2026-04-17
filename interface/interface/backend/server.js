@@ -27,6 +27,43 @@ app.use(
   })
 );
 
+app.post("/api/storage-proxy", async (req, res) => {
+  const { url } = req.body || {};
+  const normalizedUrl = String(url || "").trim();
+
+  if (!normalizedUrl) {
+    return res.status(400).json({
+      success: false,
+      error: "url is required.",
+    });
+  }
+
+  try {
+    const remoteResponse = await fetch(normalizedUrl);
+
+    if (!remoteResponse.ok) {
+      const errorText = await remoteResponse.text().catch(() => "");
+      return res.status(remoteResponse.status).json({
+        success: false,
+        error: errorText || `Remote fetch failed with HTTP ${remoteResponse.status}`,
+      });
+    }
+
+    const contentType = remoteResponse.headers.get("content-type") || "application/octet-stream";
+    const body = Buffer.from(await remoteResponse.arrayBuffer());
+
+    res.setHeader("Content-Type", contentType);
+    res.setHeader("Content-Length", String(body.length));
+    return res.status(200).send(body);
+  } catch (err) {
+    console.error("Storage proxy fetch failed:", err);
+    return res.status(502).json({
+      success: false,
+      error: String(err),
+    });
+  }
+});
+
 const CSV_PATH = path.join(__dirname, "aisles.csv");
 const CSV_HEADER = "aisleId,type,x,y";
 const LEGACY_CSV_HEADER = "aisleId,type,x,y,createdAt";
