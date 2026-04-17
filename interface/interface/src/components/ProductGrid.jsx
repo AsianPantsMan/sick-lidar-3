@@ -3,11 +3,21 @@ import { X } from "lucide-react";
 
 export default function ProductGrid({ products, activeMap, activeMapLoading }) {
     const [selectedProduct, setSelectedProduct] = useState(null);
+    const productCount = products.length;
+    const productStatusClassName = "mb-3 py-3 text-center text-med font-semibold uppercase tracking-[0.08em] text-white";
+    const formatPrice = (value) => {
+        const numericValue = Number(String(value ?? 0).replace(/[^0-9.-]/g, ""));
+        if (Number.isNaN(numericValue)) return "0.00";
+        return numericValue.toFixed(2);
+    };
 
-    if (!products.length) return <div>No items found</div>;
+    if (!products.length) return <div className={productStatusClassName}>No items found</div>;
 
     return (
         <>
+            <div className={productStatusClassName}>
+                Displaying {productCount} {productCount === 1 ? "product" : "products"}
+            </div>
             <div className="grid grid-cols-3 gap-2 w-full justify-items-center justify-center">
                 {products.map(p => (
                     <div 
@@ -25,7 +35,7 @@ export default function ProductGrid({ products, activeMap, activeMapLoading }) {
                                 </div>
                             </div>
                             <div className="shrink-0 bg-white text-[#500000] px-3 py-1 rounded-full text-lg font-bold shadow-sm">
-                                ${p.price}
+                                ${formatPrice(p.price)}
                             </div>
                         </div>
                         <div className="flex-1 p-3 bg-white">
