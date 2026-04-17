@@ -1,27 +1,45 @@
 import { useState } from "react";
 import { X } from "lucide-react";
-import storeMap from "../assets/store-map.png";
 
-export default function ProductGrid({ products }) {
+export default function ProductGrid({ products, activeMap, activeMapLoading }) {
     const [selectedProduct, setSelectedProduct] = useState(null);
+    const productCount = products.length;
+    const productStatusClassName = "mb-3 py-3 text-center text-med font-semibold uppercase tracking-[0.08em] text-white";
+    const formatPrice = (value) => {
+        const numericValue = Number(String(value ?? 0).replace(/[^0-9.-]/g, ""));
+        if (Number.isNaN(numericValue)) return "0.00";
+        return numericValue.toFixed(2);
+    };
 
-    if (!products.length) return <div>No items found</div>;
+    if (!products.length) return <div className={productStatusClassName}>No items found</div>;
 
     return (
         <>
-            <div className="grid grid-cols-3 gap-4 w-full justify-items-center">
+            <div className={productStatusClassName}>
+                Displaying {productCount} {productCount === 1 ? "product" : "products"}
+            </div>
+            <div className="grid grid-cols-3 gap-2 w-full justify-items-center justify-center">
                 {products.map(p => (
                     <div 
                         key={p.productName} 
-                        className="bg-white rounded-lg shadow-lg h-[280px] w-[280px] relative group overflow-hidden cursor-pointer hover:shadow-2xl transition-shadow"
+                        className="bg-white rounded-lg shadow-xl h-[250px] w-[380px] relative group overflow-hidden cursor-pointer hover:shadow-2xl transition-shadow flex flex-col"
                         onClick={() => setSelectedProduct(p)}
                     >
-                        <img src={p.image} alt={p.productName} className="absolute inset-0 w-full h-full object-cover" />
-                        <div className="relative z-10 bg-[#500000] text-white p-3">
-                            <div className="text-2xl leading-tight">{p.productName}</div>
+                        <div className="relative z-10 bg-[#500000] text-white p-3 flex items-start justify-between gap-3">
+                            <div className="min-w-0">
+                                <div className="text-[0.7rem] uppercase tracking-[0.16em] text-white/75 leading-none mb-1">
+                                    {p.productCategory}
+                                </div>
+                                <div className="text-2xl font-bold leading-tight">
+                                    {p.productName}
+                                </div>
+                            </div>
+                            <div className="shrink-0 bg-white text-[#500000] px-3 py-1 rounded-full text-lg font-bold shadow-sm">
+                                ${formatPrice(p.price)}
+                            </div>
                         </div>
-                        <div className="absolute bottom-2 right-2 z-20 bg-[#500000] text-white w-24 h-24 rounded-full flex items-center justify-center text-2xl font-mono shadow-md">
-                            ${p.price}
+                        <div className="flex-1 p-3 bg-white">
+                            <img src={p.image} alt={p.productName} className="w-full h-full object-cover rounded-md" />
                         </div>
                     </div>
                 ))}
@@ -29,11 +47,11 @@ export default function ProductGrid({ products }) {
 
             {selectedProduct && (
                 <div 
-                    className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50"
+                    className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50 p-4"
                     onClick={() => setSelectedProduct(null)}
                 >
                     <div 
-                        className="bg-[#500000] rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.5)] max-w-5xl w-full mx-4 p-8"
+                        className="bg-[#500000] rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.5)] w-[min(99vw,1680px)] h-[96vh] flex flex-col overflow-hidden p-5 md:p-8"
                         onClick={(e) => e.stopPropagation()}
                     >
                         <div className="flex justify-between items-center mb-6">
@@ -48,12 +66,22 @@ export default function ProductGrid({ products }) {
                                 <X size={32} />
                             </button>
                         </div>
-                        <div className="bg-white rounded-lg p-4">
-                            <img 
-                                src={storeMap} 
-                                alt="Store Map" 
-                                className="w-full h-auto"
-                            />
+                        <div className="bg-white rounded-lg p-2 md:p-3 flex-1 min-h-0 overflow-hidden flex items-center justify-center">
+                            {activeMapLoading && !activeMap ? (
+                                <div className="w-full h-full flex items-center justify-center text-white bg-[#500000] rounded-lg">
+                                    Loading selected map...
+                                </div>
+                            ) : activeMap ? (
+                                <img 
+                                    src={activeMap.imageUrl} 
+                                    alt={activeMap.sourcePath ? `Selected map ${activeMap.sourcePath}` : "Selected map"} 
+                                    className="block w-full h-full object-contain"
+                                />
+                            ) : (
+                                <div className="w-full h-full flex items-center justify-center text-gray-700 bg-gray-100 rounded-lg">
+                                    No selected map available.
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>

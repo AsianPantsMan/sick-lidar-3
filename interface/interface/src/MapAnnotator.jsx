@@ -30,6 +30,8 @@ function worldToPixel({ x, y, imgH, resolution, origin }) {
 
 const STEPS = ["start", "center", "end"];
 const MAP_STORAGE_PATH = "slam_maps";
+const SELECTED_MAP_STORAGE_KEY = "selectedMapFolder";
+const SELECTED_MAP_CONFIG_STORAGE_KEY = "selectedMapConfig";
 
 function labelForType(type) {
   if (type === "start") return "begin";
@@ -214,7 +216,10 @@ export default function MapAnnotator({ saved = [], refreshSaved, apiBaseUrl }) {
 
   const [mapConfig, setMapConfig] = useState(null);
   const [mapOptions, setMapOptions] = useState([]);
-  const [selectedMapFolder, setSelectedMapFolder] = useState("");
+  const [selectedMapFolder, setSelectedMapFolder] = useState(() => {
+    if (typeof window === "undefined") return "";
+    return window.localStorage.getItem(SELECTED_MAP_STORAGE_KEY) || "";
+  });
   const [mapsLoading, setMapsLoading] = useState(true);
   const [mapLoading, setMapLoading] = useState(false);
   const [mapError, setMapError] = useState(null);
@@ -288,6 +293,26 @@ export default function MapAnnotator({ saved = [], refreshSaved, apiBaseUrl }) {
     setMapLoading(false);
     setLastClick(null);
   }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    if (selectedMapFolder) {
+      window.localStorage.setItem(SELECTED_MAP_STORAGE_KEY, selectedMapFolder);
+    } else {
+      window.localStorage.removeItem(SELECTED_MAP_STORAGE_KEY);
+    }
+  }, [selectedMapFolder]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    if (mapConfig) {
+      window.localStorage.setItem(SELECTED_MAP_CONFIG_STORAGE_KEY, JSON.stringify(mapConfig));
+    } else {
+      window.localStorage.removeItem(SELECTED_MAP_CONFIG_STORAGE_KEY);
+    }
+  }, [mapConfig]);
 
   useEffect(() => {
     let active = true;
