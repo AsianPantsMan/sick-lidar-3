@@ -1,5 +1,5 @@
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import "./App.css";
 import CustomerPage from "./pages/CustomerPage";
 import StaffPage from "./pages/StaffPage";
@@ -38,6 +38,9 @@ export default function App() {
   const [showCategoryCards, setShowCategoryCards] = useState(true);
   const [hasInteracted, setHasInteracted] = useState(false);
   const [searchResults, setSearchResults] = useState(null);
+  const [sortOption, setSortOption] = useState("alphabetical");
+  const [showSortMenu, setShowSortMenu] = useState(false);
+  const sortMenuRef = useRef(null);
 
   const isCustomerRoute = location.pathname.startsWith("/customer");
 
@@ -61,12 +64,27 @@ export default function App() {
   const headerTitle = isCustomerRoute ? customerHeaderTitle : "Retail Assistant";
   const showHeaderBackButton = isCustomerRoute && !showCategoryCards;
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (sortMenuRef.current && !sortMenuRef.current.contains(event.target)) {
+        setShowSortMenu(false);
+      }
+    };
+
+    if (showSortMenu) {
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => document.removeEventListener("mousedown", handleClickOutside);
+    }
+  }, [showSortMenu]);
+
   const handleBackToCategories = () => {
     setCategory("All Products");
     setShowCategoryCards(true);
     setHasInteracted(false);
     setSearchResults(null);
     setQuery("");
+    setSortOption("alphabetical");
+    setShowSortMenu(false);
   };
 
   if (!apiBaseUrl) {
@@ -76,41 +94,87 @@ export default function App() {
   return (
     <div className="app-shell">
       <BodyThemeController pathname={location.pathname} />
-      <header className="app-header" aria-label="Retail Assistant navigation bar">
-        <div className="app-header-brand">
-          {showHeaderBackButton && (
-            <button
-              type="button"
-              onClick={handleBackToCategories}
-              className="app-header-back-button"
-              aria-label="Back to categories"
-            >
-              <ArrowLeft size={22} />
-              <span>Back</span>
-            </button>
-          )}
-          <div className="app-header-brand-content">
-            <img src={revIcon} alt="Retail Assistant logo" className="app-header-logo" />
-            <span className="app-header-title">{headerTitle}</span>
+      {isCustomerRoute && (
+        <header className="app-header" aria-label="Retail Assistant navigation bar">
+          <div className="app-header-brand">
+            {showHeaderBackButton && (
+              <button
+                type="button"
+                onClick={handleBackToCategories}
+                className="app-header-back-button"
+                aria-label="Back to categories"
+              >
+                <ArrowLeft size={22} />
+                <span>Back</span>
+              </button>
+            )}
+            <div className="app-header-brand-content">
+              <img src={revIcon} alt="Retail Assistant logo" className="app-header-logo" />
+              <span className="app-header-title">{headerTitle}</span>
+            </div>
           </div>
-        </div>
-        <div className="app-header-fill">
-          {isCustomerRoute && (
-            <>
-              <div className="app-header-search">
-                <SearchBar
-                  value={customerSearchValue}
-                  onChange={setQuery}
-                  placeholder="Search"
-                  category={category}
-                  products={products}
-                  onResults={setSearchResults}
-                />
-              </div>
-            </>
-          )}
-        </div>
-      </header>
+          <div className="app-header-fill">
+            <div className="app-header-search">
+              <SearchBar
+                value={customerSearchValue}
+                onChange={setQuery}
+                placeholder="Search"
+                category={category}
+                products={products}
+                onResults={setSearchResults}
+              />
+            </div>
+            <div className="app-header-sort" ref={sortMenuRef}>
+              <button
+                type="button"
+                className="app-header-sort-button"
+                onClick={() => setShowSortMenu((current) => !current)}
+                aria-haspopup="menu"
+                aria-expanded={showSortMenu}
+              >
+                Sort by...
+              </button>
+              {showSortMenu && (
+                <div className="app-header-sort-menu" role="menu" aria-label="Sort products">
+                  <button
+                    type="button"
+                    className="app-header-sort-menu-item"
+                    onClick={() => {
+                      setSortOption("alphabetical");
+                      setShowSortMenu(false);
+                    }}
+                    role="menuitem"
+                  >
+                    Alphabetical
+                  </button>
+                  <button
+                    type="button"
+                    className="app-header-sort-menu-item"
+                    onClick={() => {
+                      setSortOption("price-high-low");
+                      setShowSortMenu(false);
+                    }}
+                    role="menuitem"
+                  >
+                    Price High to Low
+                  </button>
+                  <button
+                    type="button"
+                    className="app-header-sort-menu-item"
+                    onClick={() => {
+                      setSortOption("price-low-high");
+                      setShowSortMenu(false);
+                    }}
+                    role="menuitem"
+                  >
+                    Price Low to High
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        </header>
+      )}
       <main className="app-main">
         <Routes>
           <Route path="/" element={<Navigate to="/customer" replace />} />
@@ -129,6 +193,7 @@ export default function App() {
                 searchResults={searchResults}
                 setSearchResults={setSearchResults}
                 products={products}
+                sortOption={sortOption}
                 activeMap={activeMap.mapConfig}
                 activeMapLoading={activeMap.mapLoading}
               />

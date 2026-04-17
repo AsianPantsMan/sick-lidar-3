@@ -12,7 +12,7 @@ export default function ProductGrid({ products, activeMap, activeMapLoading }) {
                 {products.map(p => (
                     <div 
                         key={p.productName} 
-                        className="bg-white rounded-lg shadow-lg h-[280px] w-[280px] relative group overflow-hidden cursor-pointer hover:shadow-2xl transition-shadow"
+                        className="bg-white rounded-lg shadow-xl h-[280px] w-[280px] relative group overflow-hidden cursor-pointer hover:shadow-2xl transition-shadow"
                         onClick={() => setSelectedProduct(p)}
                     >
                         <img src={p.image} alt={p.productName} className="absolute inset-0 w-full h-full object-cover" />
