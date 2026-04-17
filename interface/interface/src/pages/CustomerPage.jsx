@@ -3,6 +3,7 @@ import { ArrowLeft } from "lucide-react";
 import SearchBar from "../components/SearchBar";
 import CategoryCards from "../components/CategoryCards";
 import ProductGrid from "../components/ProductGrid";
+import useSelectedMap from "../hooks/useSelectedMap";
 import useProducts from "../hooks/useProducts";
 import "../styles/customer.css";
 
@@ -13,6 +14,13 @@ export default function CustomerPage() {
   const [hasInteracted, setHasInteracted] = useState(false);
   const [searchResults, setSearchResults] = useState(null);
   const products = useProducts();
+  const apiBaseUrl = import.meta.env.VITE_API_URL;
+
+  if (!apiBaseUrl) {
+    throw new Error("Missing VITE_API_URL.");
+  }
+
+  const activeMap = useSelectedMap(apiBaseUrl);
 
   useEffect(() => {
     if (query.trim() !== "") {
@@ -94,7 +102,7 @@ export default function CustomerPage() {
             }}
           />
         ) : (
-          <ProductGrid products={gridProducts} />
+          <ProductGrid products={gridProducts} activeMap={activeMap.mapConfig} activeMapLoading={activeMap.mapLoading} />
         )}
       </div>
     </div>

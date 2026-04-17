@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { X } from "lucide-react";
-import storeMap from "../assets/store-map.png";
 
-export default function ProductGrid({ products }) {
+export default function ProductGrid({ products, activeMap, activeMapLoading }) {
     const [selectedProduct, setSelectedProduct] = useState(null);
 
     if (!products.length) return <div>No items found</div>;
@@ -29,11 +28,11 @@ export default function ProductGrid({ products }) {
 
             {selectedProduct && (
                 <div 
-                    className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50"
+                    className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50 p-4"
                     onClick={() => setSelectedProduct(null)}
                 >
                     <div 
-                        className="bg-[#500000] rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.5)] max-w-5xl w-full mx-4 p-8"
+                        className="bg-[#500000] rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.5)] w-[min(99vw,1680px)] h-[96vh] flex flex-col overflow-hidden p-5 md:p-8"
                         onClick={(e) => e.stopPropagation()}
                     >
                         <div className="flex justify-between items-center mb-6">
@@ -48,12 +47,22 @@ export default function ProductGrid({ products }) {
                                 <X size={32} />
                             </button>
                         </div>
-                        <div className="bg-white rounded-lg p-4">
-                            <img 
-                                src={storeMap} 
-                                alt="Store Map" 
-                                className="w-full h-auto"
-                            />
+                        <div className="bg-white rounded-lg p-2 md:p-3 flex-1 min-h-0 overflow-hidden flex items-center justify-center">
+                            {activeMapLoading && !activeMap ? (
+                                <div className="w-full h-full flex items-center justify-center text-white bg-[#500000] rounded-lg">
+                                    Loading selected map...
+                                </div>
+                            ) : activeMap ? (
+                                <img 
+                                    src={activeMap.imageUrl} 
+                                    alt={activeMap.sourcePath ? `Selected map ${activeMap.sourcePath}` : "Selected map"} 
+                                    className="block w-full h-full object-contain"
+                                />
+                            ) : (
+                                <div className="w-full h-full flex items-center justify-center text-gray-700 bg-gray-100 rounded-lg">
+                                    No selected map available.
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
