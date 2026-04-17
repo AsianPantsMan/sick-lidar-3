@@ -107,7 +107,7 @@ export default function SearchBar({
         onClick={handleInputClick}
         onFocus={handleInputClick}
         placeholder={placeholder}
-        className="w-full max-w-7xl p-4 rounded-xl border border-gray-300 bg-white shadow-lg focus:outline-none focus:ring-2 focus:ring-[#500000] text-lg text-black placeholder-gray-500"
+        className="w-full max-w-none p-4 rounded-xl border border-gray-300 bg-white shadow-lg focus:outline-none focus:ring-2 focus:ring-[#500000] text-lg text-black placeholder-gray-500"
         aria-label="Search products"
       />
       {showKeyboard && (
