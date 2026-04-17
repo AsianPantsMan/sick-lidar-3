@@ -4,6 +4,7 @@ import "./App.css";
 import CustomerPage from "./pages/CustomerPage";
 import StaffPage from "./pages/StaffPage";
 import revIcon from "./assets/rev.ico";
+import { ArrowLeft } from "lucide-react";
 import SearchBar from "./components/SearchBar";
 import useProducts from "./hooks/useProducts";
 import useSelectedMap from "./hooks/useSelectedMap";
@@ -42,7 +43,7 @@ export default function App() {
 
   const customerHeaderTitle = useMemo(() => {
     if (!hasInteracted && category === "All Products" && query.trim() === "") {
-      return "Select a product category";
+      return "Select a Product Category";
     }
 
     if (category === "All Products" && query.trim() === "") {
@@ -58,6 +59,15 @@ export default function App() {
 
   const customerSearchValue = query;
   const headerTitle = isCustomerRoute ? customerHeaderTitle : "Retail Assistant";
+  const showHeaderBackButton = isCustomerRoute && !showCategoryCards;
+
+  const handleBackToCategories = () => {
+    setCategory("All Products");
+    setShowCategoryCards(true);
+    setHasInteracted(false);
+    setSearchResults(null);
+    setQuery("");
+  };
 
   if (!apiBaseUrl) {
     throw new Error("Missing VITE_API_URL.");
@@ -68,8 +78,21 @@ export default function App() {
       <BodyThemeController pathname={location.pathname} />
       <header className="app-header" aria-label="Retail Assistant navigation bar">
         <div className="app-header-brand">
-          <img src={revIcon} alt="Retail Assistant logo" className="app-header-logo" />
-          <span className="app-header-title">{headerTitle}</span>
+          {showHeaderBackButton && (
+            <button
+              type="button"
+              onClick={handleBackToCategories}
+              className="app-header-back-button"
+              aria-label="Back to categories"
+            >
+              <ArrowLeft size={22} />
+              <span>Back</span>
+            </button>
+          )}
+          <div className="app-header-brand-content">
+            <img src={revIcon} alt="Retail Assistant logo" className="app-header-logo" />
+            <span className="app-header-title">{headerTitle}</span>
+          </div>
         </div>
         <div className="app-header-fill">
           {isCustomerRoute && (
