@@ -1,0 +1,32 @@
+[3.528s] Invoking command in '/home/retail-assistant/SLAM/src/retail_assistant_bringup': PYTHONPATH=/home/retail-assistant/SLAM/build/retail_assistant_bringup/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/retail_assistant_bringup build --build-base /home/retail-assistant/SLAM/build/retail_assistant_bringup/build install --record /home/retail-assistant/SLAM/build/retail_assistant_bringup/install.log --single-version-externally-managed install_data
+[4.541s] running egg_info
+[4.544s] writing ../../build/retail_assistant_bringup/retail_assistant_bringup.egg-info/PKG-INFO
+[4.545s] writing dependency_links to ../../build/retail_assistant_bringup/retail_assistant_bringup.egg-info/dependency_links.txt
+[4.546s] writing entry points to ../../build/retail_assistant_bringup/retail_assistant_bringup.egg-info/entry_points.txt
+[4.547s] writing requirements to ../../build/retail_assistant_bringup/retail_assistant_bringup.egg-info/requires.txt
+[4.548s] writing top-level names to ../../build/retail_assistant_bringup/retail_assistant_bringup.egg-info/top_level.txt
+[4.557s] reading manifest file '../../build/retail_assistant_bringup/retail_assistant_bringup.egg-info/SOURCES.txt'
+[4.564s] writing manifest file '../../build/retail_assistant_bringup/retail_assistant_bringup.egg-info/SOURCES.txt'
+[4.565s] running build
+[4.565s] running build_py
+[4.567s] copying retail_assistant_bringup/auto_drive.py -> /home/retail-assistant/SLAM/build/retail_assistant_bringup/build/lib/retail_assistant_bringup
+[4.571s] running install
+[4.572s] running install_lib
+[4.577s] copying /home/retail-assistant/SLAM/build/retail_assistant_bringup/build/lib/retail_assistant_bringup/auto_drive.py -> /home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup
+[4.582s] byte-compiling /home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup/auto_drive.py to auto_drive.cpython-310.pyc
+[4.592s] running install_data
+[4.598s] copying config/nav2_params.yaml -> /home/retail-assistant/SLAM/install/retail_assistant_bringup/share/retail_assistant_bringup/config
+[4.599s] running install_egg_info
+[4.606s] removing '/home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup-0.0.0-py3.10.egg-info' (and everything under it)
+[4.608s] Copying ../../build/retail_assistant_bringup/retail_assistant_bringup.egg-info to /home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup-0.0.0-py3.10.egg-info
+[4.614s] running install_scripts
+[4.694s] Installing auto_drive script to /home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/retail_assistant_bringup
+[4.694s] Installing mcu_to_pi script to /home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/retail_assistant_bringup
+[4.695s] Installing navigation script to /home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/retail_assistant_bringup
+[4.696s] Installing roboclaw script to /home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/retail_assistant_bringup
+[4.697s] Installing stm32 script to /home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/retail_assistant_bringup
+[4.699s] Installing stm_m script to /home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/retail_assistant_bringup
+[4.699s] Installing ultrasonic_back script to /home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/retail_assistant_bringup
+[4.700s] Installing ultrasonic_front script to /home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/retail_assistant_bringup
+[4.703s] writing list of installed files to '/home/retail-assistant/SLAM/build/retail_assistant_bringup/install.log'
+[4.822s] Invoked command in '/home/retail-assistant/SLAM/src/retail_assistant_bringup' returned '0': PYTHONPATH=/home/retail-assistant/SLAM/build/retail_assistant_bringup/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/retail_assistant_bringup build --build-base /home/retail-assistant/SLAM/build/retail_assistant_bringup/build install --record /home/retail-assistant/SLAM/build/retail_assistant_bringup/install.log --single-version-externally-managed install_data

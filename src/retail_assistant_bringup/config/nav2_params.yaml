@@ -142,7 +142,7 @@ controller_server:
       plugin: "nav2_regulated_pure_pursuit_controller::RegulatedPurePursuitController"
       #Path tracking and lookahead
       desired_linear_vel: 0.45 # s
-      lookahead_dist: 0.35 # for more reactiveness
+      lookahead_dist: 0.3 # for more reactiveness
       min_lookahead_dist: 0.25
       max_lookahead_dist: 0.6
       lookahead_time: 1.0

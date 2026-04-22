@@ -50,32 +50,42 @@ class AutoNav(Node):
     def waypoint_create(self):
         test=True
         if test:
-            self.goals=([(0.665 ,0.881), (1.68, 0.471), (2.23, 0.394)],  # aisle 1
-                         [(0.847, 1.62), (1.85, 1.48), (2.44, 1.46)], 
+            self.goals=([(-0.564 ,0.0279), (-1.36, 0.009), (-2.44, -0.226)],  # aisle 1
+                         [(-2.35, -1.21), (-1.33, -1.36), (-0.42, -1.11)], 
                    )
         else: #csv file processing for waypoint collection
-           header=True
-           aisle=[]
-           aisle_id="A1"# could change later
-           goals=[]
-           with open('/home/retail-assistant/SLAM/Staff-interface/Staff-interface/aisles.csv', 'r') as file:
-                for line in file:
-                    if header:
-                        header = False
-                        continue
-                    else: # not header
-                        line=line.split(',')
-                        if(line[0]!=aisle_id):
-                          goals.append(aisle)
-                          aisle=[]
-                        x=round(float(line[2]),3)
-                        y=round(float(line[3]),3)
-                        aisle.append((x,y))
-                        aisle_id=line[0]
-                goals.append(aisle)# add last aisle
-                self.goals=goals
+            points=self.get_aisle_points()
+            goals=self.format_goals(points)
+            self.goals=goals
 
+    def get_aisle_points():
+        try:
+            response = requests.get(URL)
+            response.raise_for_status()  # catches bad responses
 
+            data = response.json()
+        #print("Full response:", data)  # debug
+
+            coordinates = data.get("coordinates", [])
+            return coordinates
+
+        except requests.exceptions.RequestException as e:
+            print("Error fetching aisle points:", e)
+            return []
+
+    def format_goals(points, group_size=3):
+        goals = []
+    
+        for i in range(0, len(points), group_size):
+            group = points[i:i+group_size]
+
+        # convert dicts → (x, y) tuples
+            tuple_group = [(p["x"], p["y"]) for p in group]
+
+        # only keep full groups
+            if len(tuple_group) == group_size:
+                goals.append(tuple_group)
+        return tuple(goals)
 
     def cycle(self):
         print(f"Goal_index= {self.goal_index} Aisle_index= {self.aisle_index} ")

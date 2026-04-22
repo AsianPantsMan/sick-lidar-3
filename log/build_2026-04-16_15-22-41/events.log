@@ -1,0 +1,140 @@
+[0.000000] (-) TimerEvent: {}
+[0.000942] (retail_assistant_bringup) JobQueued: {'identifier': 'retail_assistant_bringup', 'dependencies': OrderedDict()}
+[0.001317] (sllidar_ros2) JobQueued: {'identifier': 'sllidar_ros2', 'dependencies': OrderedDict()}
+[0.001494] (retail_assistant_bringup) JobStarted: {'identifier': 'retail_assistant_bringup'}
+[0.054991] (sllidar_ros2) JobStarted: {'identifier': 'sllidar_ros2'}
+[0.097423] (-) TimerEvent: {}
+[0.198065] (-) TimerEvent: {}
+[0.298824] (-) TimerEvent: {}
+[0.399593] (-) TimerEvent: {}
+[0.500411] (-) TimerEvent: {}
+[0.601031] (-) TimerEvent: {}
+[0.701659] (-) TimerEvent: {}
+[0.802289] (-) TimerEvent: {}
+[0.902964] (-) TimerEvent: {}
+[1.003625] (-) TimerEvent: {}
+[1.104438] (-) TimerEvent: {}
+[1.195589] (sllidar_ros2) JobProgress: {'identifier': 'sllidar_ros2', 'progress': 'cmake'}
+[1.201097] (sllidar_ros2) JobProgress: {'identifier': 'sllidar_ros2', 'progress': 'build'}
+[1.204009] (sllidar_ros2) Command: {'cmd': ['/usr/bin/cmake', '--build', '/home/retail-assistant/SLAM/build/sllidar_ros2', '--', '-j4', '-l4'], 'cwd': '/home/retail-assistant/SLAM/build/sllidar_ros2', 'env': OrderedDict([('LESSOPEN', '| /usr/bin/lesspipe %s'), ('USER', 'retail-assistant'), ('SSH_CLIENT', '10.244.80.245 40814 22'), ('XDG_SESSION_TYPE', 'tty'), ('SHLVL', '1'), ('LD_LIBRARY_PATH', '/home/retail-assistant/.local/lib:/home/retail-assistant/.local/lib/aarch64-linux-gnu:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/aarch64-linux-gnu:/opt/ros/humble/lib'), ('MOTD_SHOWN', 'pam'), ('HOME', '/home/retail-assistant'), ('OLDPWD', '/home/retail-assistant'), ('NVM_BIN', '/home/retail-assistant/.nvm/versions/node/v20.20.1/bin'), ('SSH_TTY', '/dev/pts/1'), ('NVM_INC', '/home/retail-assistant/.nvm/versions/node/v20.20.1/include/node'), ('ROS_PYTHON_VERSION', '3'), ('DBUS_SESSION_BUS_ADDRESS', 'unix:path=/run/user/1000/bus'), ('NVM_DIR', '/home/retail-assistant/.nvm'), ('ROS_DISTRO', 'humble'), ('LOGNAME', 'retail-assistant'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('XDG_SESSION_CLASS', 'user'), ('TERM', 'xterm-256color'), ('XDG_SESSION_ID', '4'), ('ROS_LOCALHOST_ONLY', '0'), ('PATH', '/home/retail-assistant/.local/bin:/home/retail-assistant/.nvm/versions/node/v20.20.1/bin:/home/retail-assistant/.local/bin:/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin'), ('XDG_RUNTIME_DIR', '/run/user/1000'), ('LANG', 'en_US.UTF-8'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('AMENT_PREFIX_PATH', '/opt/ros/humble'), ('SHELL', '/bin/bash'), ('LESSCLOSE', '/usr/bin/lesspipe %s %s'), ('PWD', '/home/retail-assistant/SLAM/build/sllidar_ros2'), ('LC_ALL', 'en_US.UTF-8'), ('SSH_CONNECTION', '10.244.80.245 40814 10.246.173.137 22'), ('NVM_CD_FLAGS', ''), ('XDG_DATA_DIRS', '/usr/share/gnome:/usr/local/share:/usr/share:/var/lib/snapd/desktop'), ('PYTHONPATH', '/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages'), ('COLCON', '1'), ('CMAKE_PREFIX_PATH', '/opt/ros/humble')]), 'shell': False}
+[1.208149] (-) TimerEvent: {}
+[1.309021] (-) TimerEvent: {}
+[1.409941] (-) TimerEvent: {}
+[1.510720] (-) TimerEvent: {}
+[1.611535] (-) TimerEvent: {}
+[1.712363] (-) TimerEvent: {}
+[1.813559] (-) TimerEvent: {}
+[1.896411] (sllidar_ros2) StdoutLine: {'line': b'[ 10%] Built target sllidar_client\n'}
+[1.913758] (-) TimerEvent: {}
+[1.915986] (sllidar_ros2) StdoutLine: {'line': b'[100%] Built target sllidar_node\n'}
+[1.962291] (sllidar_ros2) CommandEnded: {'returncode': 0}
+[1.967350] (sllidar_ros2) JobProgress: {'identifier': 'sllidar_ros2', 'progress': 'install'}
+[2.002782] (sllidar_ros2) Command: {'cmd': ['/usr/bin/cmake', '--install', '/home/retail-assistant/SLAM/build/sllidar_ros2'], 'cwd': '/home/retail-assistant/SLAM/build/sllidar_ros2', 'env': OrderedDict([('LESSOPEN', '| /usr/bin/lesspipe %s'), ('USER', 'retail-assistant'), ('SSH_CLIENT', '10.244.80.245 40814 22'), ('XDG_SESSION_TYPE', 'tty'), ('SHLVL', '1'), ('LD_LIBRARY_PATH', '/home/retail-assistant/.local/lib:/home/retail-assistant/.local/lib/aarch64-linux-gnu:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/aarch64-linux-gnu:/opt/ros/humble/lib'), ('MOTD_SHOWN', 'pam'), ('HOME', '/home/retail-assistant'), ('OLDPWD', '/home/retail-assistant'), ('NVM_BIN', '/home/retail-assistant/.nvm/versions/node/v20.20.1/bin'), ('SSH_TTY', '/dev/pts/1'), ('NVM_INC', '/home/retail-assistant/.nvm/versions/node/v20.20.1/include/node'), ('ROS_PYTHON_VERSION', '3'), ('DBUS_SESSION_BUS_ADDRESS', 'unix:path=/run/user/1000/bus'), ('NVM_DIR', '/home/retail-assistant/.nvm'), ('ROS_DISTRO', 'humble'), ('LOGNAME', 'retail-assistant'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('XDG_SESSION_CLASS', 'user'), ('TERM', 'xterm-256color'), ('XDG_SESSION_ID', '4'), ('ROS_LOCALHOST_ONLY', '0'), ('PATH', '/home/retail-assistant/.local/bin:/home/retail-assistant/.nvm/versions/node/v20.20.1/bin:/home/retail-assistant/.local/bin:/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin'), ('XDG_RUNTIME_DIR', '/run/user/1000'), ('LANG', 'en_US.UTF-8'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('AMENT_PREFIX_PATH', '/opt/ros/humble'), ('SHELL', '/bin/bash'), ('LESSCLOSE', '/usr/bin/lesspipe %s %s'), ('PWD', '/home/retail-assistant/SLAM/build/sllidar_ros2'), ('LC_ALL', 'en_US.UTF-8'), ('SSH_CONNECTION', '10.244.80.245 40814 10.246.173.137 22'), ('NVM_CD_FLAGS', ''), ('XDG_DATA_DIRS', '/usr/share/gnome:/usr/local/share:/usr/share:/var/lib/snapd/desktop'), ('PYTHONPATH', '/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages'), ('COLCON', '1'), ('CMAKE_PREFIX_PATH', '/opt/ros/humble')]), 'shell': False}
+[2.013934] (-) TimerEvent: {}
+[2.039668] (sllidar_ros2) StdoutLine: {'line': b'-- Install configuration: ""\n'}
+[2.043409] (sllidar_ros2) StdoutLine: {'line': b'-- Up-to-date: /home/retail-assistant/SLAM/install/sllidar_ros2/share/sllidar_ros2/launch\n'}
+[2.045329] (sllidar_ros2) StdoutLine: {'line': b'-- Up-to-date: /home/retail-assistant/SLAM/install/sllidar_ros2/share/sllidar_ros2/launch/view_sllidar_c1_launch.py\n'}
+[2.046010] (sllidar_ros2) StdoutLine: {'line': b'-- Up-to-date: /home/retail-assistant/SLAM/install/sllidar_ros2/share/sllidar_ros2/launch/sllidar_s3_launch.py\n'}
+[2.046591] (sllidar_ros2) StdoutLine: {'line': b'-- Up-to-date: /home/retail-assistant/SLAM/install/sllidar_ros2/share/sllidar_ros2/launch/sllidar_a2m8_launch.py\n'}
+[2.047133] (sllidar_ros2) StdoutLine: {'line': b'-- Up-to-date: /home/retail-assistant/SLAM/install/sllidar_ros2/share/sllidar_ros2/launch/view_sllidar_s1_tcp_launch.py\n'}
+[2.047682] (sllidar_ros2) StdoutLine: {'line': b'-- Up-to-date: /home/retail-assistant/SLAM/install/sllidar_ros2/share/sllidar_ros2/launch/sllidar_s1_tcp_launch.py\n'}
+[2.048399] (sllidar_ros2) StdoutLine: {'line': b'-- Up-to-date: /home/retail-assistant/SLAM/install/sllidar_ros2/share/sllidar_ros2/launch/sllidar_c1_launch.py\n'}
+[2.049062] (sllidar_ros2) StdoutLine: {'line': b'-- Up-to-date: /home/retail-assistant/SLAM/install/sllidar_ros2/share/sllidar_ros2/launch/sllidar_s1_launch.py\n'}
+[2.049594] (sllidar_ros2) StdoutLine: {'line': b'-- Up-to-date: /home/retail-assistant/SLAM/install/sllidar_ros2/share/sllidar_ros2/launch/sllidar_s2_launch.py\n'}
+[2.050082] (sllidar_ros2) StdoutLine: {'line': b'-- Up-to-date: /home/retail-assistant/SLAM/install/sllidar_ros2/share/sllidar_ros2/launch/view_sllidar_a2m8_launch.py\n'}
+[2.050505] (sllidar_ros2) StdoutLine: {'line': b'-- Up-to-date: /home/retail-assistant/SLAM/install/sllidar_ros2/share/sllidar_ros2/launch/view_sllidar_a3_launch.py\n'}
+[2.051172] (sllidar_ros2) StdoutLine: {'line': b'-- Up-to-date: /home/retail-assistant/SLAM/install/sllidar_ros2/share/sllidar_ros2/launch/view_sllidar_s2_launch.py\n'}
+[2.051775] (sllidar_ros2) StdoutLine: {'line': b'-- Up-to-date: /home/retail-assistant/SLAM/install/sllidar_ros2/share/sllidar_ros2/launch/view_sllidar_a2m12_launch.py\n'}
+[2.052599] (sllidar_ros2) StdoutLine: {'line': b'-- Up-to-date: /home/retail-assistant/SLAM/install/sllidar_ros2/share/sllidar_ros2/launch/view_sllidar_s1_launch.py\n'}
+[2.053015] (sllidar_ros2) StdoutLine: {'line': b'-- Up-to-date: /home/retail-assistant/SLAM/install/sllidar_ros2/share/sllidar_ros2/launch/sllidar_s2e_launch.py\n'}
+[2.053436] (sllidar_ros2) StdoutLine: {'line': b'-- Up-to-date: /home/retail-assistant/SLAM/install/sllidar_ros2/share/sllidar_ros2/launch/sllidar_a2m12_launch .py\n'}
+[2.053860] (sllidar_ros2) StdoutLine: {'line': b'-- Up-to-date: /home/retail-assistant/SLAM/install/sllidar_ros2/share/sllidar_ros2/launch/sllidar_t1_launch.py\n'}
+[2.054460] (sllidar_ros2) StdoutLine: {'line': b'-- Up-to-date: /home/retail-assistant/SLAM/install/sllidar_ros2/share/sllidar_ros2/launch/view_sllidar_a2m7_launch.py\n'}
+[2.054869] (sllidar_ros2) StdoutLine: {'line': b'-- Up-to-date: /home/retail-assistant/SLAM/install/sllidar_ros2/share/sllidar_ros2/launch/view_sllidar_t1_launch.py\n'}
+[2.055276] (sllidar_ros2) StdoutLine: {'line': b'-- Up-to-date: /home/retail-assistant/SLAM/install/sllidar_ros2/share/sllidar_ros2/launch/sllidar_a2m7_launch.py\n'}
+[2.055656] (sllidar_ros2) StdoutLine: {'line': b'-- Up-to-date: /home/retail-assistant/SLAM/install/sllidar_ros2/share/sllidar_ros2/launch/view_sllidar_s3_launch.py\n'}
+[2.056222] (sllidar_ros2) StdoutLine: {'line': b'-- Up-to-date: /home/retail-assistant/SLAM/install/sllidar_ros2/share/sllidar_ros2/launch/view_sllidar_s2e_launch.py\n'}
+[2.056629] (sllidar_ros2) StdoutLine: {'line': b'-- Up-to-date: /home/retail-assistant/SLAM/install/sllidar_ros2/share/sllidar_ros2/launch/sllidar_a3_launch.py\n'}
+[2.056978] (sllidar_ros2) StdoutLine: {'line': b'-- Up-to-date: /home/retail-assistant/SLAM/install/sllidar_ros2/share/sllidar_ros2/launch/sllidar_a1_launch.py\n'}
+[2.057396] (sllidar_ros2) StdoutLine: {'line': b'-- Up-to-date: /home/retail-assistant/SLAM/install/sllidar_ros2/share/sllidar_ros2/launch/view_sllidar_a1_launch.py\n'}
+[2.057772] (sllidar_ros2) StdoutLine: {'line': b'-- Up-to-date: /home/retail-assistant/SLAM/install/sllidar_ros2/share/sllidar_ros2/rviz\n'}
+[2.058143] (sllidar_ros2) StdoutLine: {'line': b'-- Up-to-date: /home/retail-assistant/SLAM/install/sllidar_ros2/share/sllidar_ros2/rviz/sllidar_ros2.rviz\n'}
+[2.059637] (sllidar_ros2) StdoutLine: {'line': b'-- Up-to-date: /home/retail-assistant/SLAM/install/sllidar_ros2/lib/sllidar_ros2/sllidar_node\n'}
+[2.064849] (sllidar_ros2) StdoutLine: {'line': b'-- Up-to-date: /home/retail-assistant/SLAM/install/sllidar_ros2/lib/sllidar_ros2/sllidar_client\n'}
+[2.068273] (sllidar_ros2) StdoutLine: {'line': b'-- Up-to-date: /home/retail-assistant/SLAM/install/sllidar_ros2/share/ament_index/resource_index/package_run_dependencies/sllidar_ros2\n'}
+[2.069465] (sllidar_ros2) StdoutLine: {'line': b'-- Up-to-date: /home/retail-assistant/SLAM/install/sllidar_ros2/share/ament_index/resource_index/parent_prefix_path/sllidar_ros2\n'}
+[2.070613] (sllidar_ros2) StdoutLine: {'line': b'-- Up-to-date: /home/retail-assistant/SLAM/install/sllidar_ros2/share/sllidar_ros2/environment/ament_prefix_path.sh\n'}
+[2.071289] (sllidar_ros2) StdoutLine: {'line': b'-- Up-to-date: /home/retail-assistant/SLAM/install/sllidar_ros2/share/sllidar_ros2/environment/ament_prefix_path.dsv\n'}
+[2.071907] (sllidar_ros2) StdoutLine: {'line': b'-- Up-to-date: /home/retail-assistant/SLAM/install/sllidar_ros2/share/sllidar_ros2/environment/path.sh\n'}
+[2.072577] (sllidar_ros2) StdoutLine: {'line': b'-- Up-to-date: /home/retail-assistant/SLAM/install/sllidar_ros2/share/sllidar_ros2/environment/path.dsv\n'}
+[2.073185] (sllidar_ros2) StdoutLine: {'line': b'-- Up-to-date: /home/retail-assistant/SLAM/install/sllidar_ros2/share/sllidar_ros2/local_setup.bash\n'}
+[2.073917] (sllidar_ros2) StdoutLine: {'line': b'-- Up-to-date: /home/retail-assistant/SLAM/install/sllidar_ros2/share/sllidar_ros2/local_setup.sh\n'}
+[2.074467] (sllidar_ros2) StdoutLine: {'line': b'-- Up-to-date: /home/retail-assistant/SLAM/install/sllidar_ros2/share/sllidar_ros2/local_setup.zsh\n'}
+[2.075005] (sllidar_ros2) StdoutLine: {'line': b'-- Up-to-date: /home/retail-assistant/SLAM/install/sllidar_ros2/share/sllidar_ros2/local_setup.dsv\n'}
+[2.075450] (sllidar_ros2) StdoutLine: {'line': b'-- Installing: /home/retail-assistant/SLAM/install/sllidar_ros2/share/sllidar_ros2/package.dsv\n'}
+[2.077731] (sllidar_ros2) StdoutLine: {'line': b'-- Up-to-date: /home/retail-assistant/SLAM/install/sllidar_ros2/share/ament_index/resource_index/packages/sllidar_ros2\n'}
+[2.078844] (sllidar_ros2) StdoutLine: {'line': b'-- Up-to-date: /home/retail-assistant/SLAM/install/sllidar_ros2/share/sllidar_ros2/cmake/ament_cmake_export_dependencies-extras.cmake\n'}
+[2.079502] (sllidar_ros2) StdoutLine: {'line': b'-- Up-to-date: /home/retail-assistant/SLAM/install/sllidar_ros2/share/sllidar_ros2/cmake/ament_cmake_export_include_directories-extras.cmake\n'}
+[2.080148] (sllidar_ros2) StdoutLine: {'line': b'-- Up-to-date: /home/retail-assistant/SLAM/install/sllidar_ros2/share/sllidar_ros2/cmake/sllidar_ros2Config.cmake\n'}
+[2.080867] (sllidar_ros2) StdoutLine: {'line': b'-- Up-to-date: /home/retail-assistant/SLAM/install/sllidar_ros2/share/sllidar_ros2/cmake/sllidar_ros2Config-version.cmake\n'}
+[2.081408] (sllidar_ros2) StdoutLine: {'line': b'-- Up-to-date: /home/retail-assistant/SLAM/install/sllidar_ros2/share/sllidar_ros2/package.xml\n'}
+[2.091274] (sllidar_ros2) CommandEnded: {'returncode': 0}
+[2.114097] (-) TimerEvent: {}
+[2.202851] (sllidar_ros2) JobEnded: {'identifier': 'sllidar_ros2', 'rc': 0}
+[2.214272] (-) TimerEvent: {}
+[2.314881] (-) TimerEvent: {}
+[2.415540] (-) TimerEvent: {}
+[2.516272] (-) TimerEvent: {}
+[2.617250] (-) TimerEvent: {}
+[2.717980] (-) TimerEvent: {}
+[2.818672] (-) TimerEvent: {}
+[2.919950] (-) TimerEvent: {}
+[3.021053] (-) TimerEvent: {}
+[3.121833] (-) TimerEvent: {}
+[3.222568] (-) TimerEvent: {}
+[3.323464] (-) TimerEvent: {}
+[3.424896] (-) TimerEvent: {}
+[3.485098] (retail_assistant_bringup) Command: {'cmd': ['/usr/bin/python3', '-W', 'ignore:setup.py install is deprecated', '-W', 'ignore:easy_install command is deprecated', 'setup.py', 'egg_info', '--egg-base', '../../build/retail_assistant_bringup', 'build', '--build-base', '/home/retail-assistant/SLAM/build/retail_assistant_bringup/build', 'install', '--record', '/home/retail-assistant/SLAM/build/retail_assistant_bringup/install.log', '--single-version-externally-managed', 'install_data'], 'cwd': '/home/retail-assistant/SLAM/src/retail_assistant_bringup', 'env': {'LESSOPEN': '| /usr/bin/lesspipe %s', 'USER': 'retail-assistant', 'SSH_CLIENT': '10.244.80.245 40814 22', 'XDG_SESSION_TYPE': 'tty', 'SHLVL': '1', 'LD_LIBRARY_PATH': '/home/retail-assistant/.local/lib:/home/retail-assistant/.local/lib/aarch64-linux-gnu:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/aarch64-linux-gnu:/opt/ros/humble/lib', 'MOTD_SHOWN': 'pam', 'HOME': '/home/retail-assistant', 'OLDPWD': '/home/retail-assistant', 'NVM_BIN': '/home/retail-assistant/.nvm/versions/node/v20.20.1/bin', 'SSH_TTY': '/dev/pts/1', 'NVM_INC': '/home/retail-assistant/.nvm/versions/node/v20.20.1/include/node', 'ROS_PYTHON_VERSION': '3', 'DBUS_SESSION_BUS_ADDRESS': 'unix:path=/run/user/1000/bus', 'NVM_DIR': '/home/retail-assistant/.nvm', 'ROS_DISTRO': 'humble', 'LOGNAME': 'retail-assistant', '_': '/usr/bin/colcon', 'ROS_VERSION': '2', 'XDG_SESSION_CLASS': 'user', 'TERM': 'xterm-256color', 'XDG_SESSION_ID': '4', 'ROS_LOCALHOST_ONLY': '0', 'PATH': '/home/retail-assistant/.local/bin:/home/retail-assistant/.nvm/versions/node/v20.20.1/bin:/home/retail-assistant/.local/bin:/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin', 'XDG_RUNTIME_DIR': '/run/user/1000', 'LANG': 'en_US.UTF-8', 'LS_COLORS': 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:', 'AMENT_PREFIX_PATH': '/opt/ros/humble', 'SHELL': '/bin/bash', 'LESSCLOSE': '/usr/bin/lesspipe %s %s', 'PWD': '/home/retail-assistant/SLAM/build/retail_assistant_bringup', 'LC_ALL': 'en_US.UTF-8', 'SSH_CONNECTION': '10.244.80.245 40814 10.246.173.137 22', 'NVM_CD_FLAGS': '', 'XDG_DATA_DIRS': '/usr/share/gnome:/usr/local/share:/usr/share:/var/lib/snapd/desktop', 'PYTHONPATH': '/home/retail-assistant/SLAM/build/retail_assistant_bringup/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/python3.10/site-packages:/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages', 'COLCON': '1'}, 'shell': False}
+[3.525043] (-) TimerEvent: {}
+[3.625691] (-) TimerEvent: {}
+[3.726368] (-) TimerEvent: {}
+[3.827065] (-) TimerEvent: {}
+[3.927680] (-) TimerEvent: {}
+[4.028369] (-) TimerEvent: {}
+[4.128973] (-) TimerEvent: {}
+[4.229581] (-) TimerEvent: {}
+[4.330230] (-) TimerEvent: {}
+[4.430891] (-) TimerEvent: {}
+[4.498302] (retail_assistant_bringup) StdoutLine: {'line': b'running egg_info\n'}
+[4.501282] (retail_assistant_bringup) StdoutLine: {'line': b'writing ../../build/retail_assistant_bringup/retail_assistant_bringup.egg-info/PKG-INFO\n'}
+[4.503427] (retail_assistant_bringup) StdoutLine: {'line': b'writing dependency_links to ../../build/retail_assistant_bringup/retail_assistant_bringup.egg-info/dependency_links.txt\n'}
+[4.504630] (retail_assistant_bringup) StdoutLine: {'line': b'writing entry points to ../../build/retail_assistant_bringup/retail_assistant_bringup.egg-info/entry_points.txt\n'}
+[4.505713] (retail_assistant_bringup) StdoutLine: {'line': b'writing requirements to ../../build/retail_assistant_bringup/retail_assistant_bringup.egg-info/requires.txt\n'}
+[4.506318] (retail_assistant_bringup) StdoutLine: {'line': b'writing top-level names to ../../build/retail_assistant_bringup/retail_assistant_bringup.egg-info/top_level.txt\n'}
+[4.518174] (retail_assistant_bringup) StdoutLine: {'line': b"reading manifest file '../../build/retail_assistant_bringup/retail_assistant_bringup.egg-info/SOURCES.txt'\n"}
+[4.526176] (retail_assistant_bringup) StdoutLine: {'line': b"writing manifest file '../../build/retail_assistant_bringup/retail_assistant_bringup.egg-info/SOURCES.txt'\n"}
+[4.526926] (retail_assistant_bringup) StdoutLine: {'line': b'running build\n'}
+[4.527591] (retail_assistant_bringup) StdoutLine: {'line': b'running build_py\n'}
+[4.531022] (-) TimerEvent: {}
+[4.535138] (retail_assistant_bringup) StdoutLine: {'line': b'running install\n'}
+[4.536482] (retail_assistant_bringup) StdoutLine: {'line': b'running install_lib\n'}
+[4.551037] (retail_assistant_bringup) StdoutLine: {'line': b'running install_data\n'}
+[4.562308] (retail_assistant_bringup) StdoutLine: {'line': b'running install_egg_info\n'}
+[4.572018] (retail_assistant_bringup) StdoutLine: {'line': b"removing '/home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup-0.0.0-py3.10.egg-info' (and everything under it)\n"}
+[4.573975] (retail_assistant_bringup) StdoutLine: {'line': b'Copying ../../build/retail_assistant_bringup/retail_assistant_bringup.egg-info to /home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/python3.10/site-packages/retail_assistant_bringup-0.0.0-py3.10.egg-info\n'}
+[4.580934] (retail_assistant_bringup) StdoutLine: {'line': b'running install_scripts\n'}
+[4.631217] (-) TimerEvent: {}
+[4.663212] (retail_assistant_bringup) StdoutLine: {'line': b'Installing auto_drive script to /home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/retail_assistant_bringup\n'}
+[4.664864] (retail_assistant_bringup) StdoutLine: {'line': b'Installing mcu_to_pi script to /home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/retail_assistant_bringup\n'}
+[4.665757] (retail_assistant_bringup) StdoutLine: {'line': b'Installing navigation script to /home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/retail_assistant_bringup\n'}
+[4.666633] (retail_assistant_bringup) StdoutLine: {'line': b'Installing roboclaw script to /home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/retail_assistant_bringup\n'}
+[4.667538] (retail_assistant_bringup) StdoutLine: {'line': b'Installing stm32 script to /home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/retail_assistant_bringup\n'}
+[4.668428] (retail_assistant_bringup) StdoutLine: {'line': b'Installing stm_m script to /home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/retail_assistant_bringup\n'}
+[4.669389] (retail_assistant_bringup) StdoutLine: {'line': b'Installing ultrasonic_back script to /home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/retail_assistant_bringup\n'}
+[4.670343] (retail_assistant_bringup) StdoutLine: {'line': b'Installing ultrasonic_front script to /home/retail-assistant/SLAM/install/retail_assistant_bringup/lib/retail_assistant_bringup\n'}
+[4.672952] (retail_assistant_bringup) StdoutLine: {'line': b"writing list of installed files to '/home/retail-assistant/SLAM/build/retail_assistant_bringup/install.log'\n"}
+[4.731580] (-) TimerEvent: {}
+[4.796985] (retail_assistant_bringup) CommandEnded: {'returncode': 0}
+[4.832117] (-) TimerEvent: {}
+[4.834672] (retail_assistant_bringup) JobEnded: {'identifier': 'retail_assistant_bringup', 'rc': 0}
+[4.837426] (-) EventReactorShutdown: {}

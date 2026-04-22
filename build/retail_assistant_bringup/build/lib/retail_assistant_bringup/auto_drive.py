@@ -24,8 +24,8 @@ class MapUploader:
             cred = credentials.Certificate(
                 "/home/retail-assistant/SLAM/firebase/firebase_key.json"  # 🔧 CHANGE IF NEEDED
             )
-
-            firebase_admin.initialize_app(cred, {
+            if not firebase_admin._apps:
+                firebase_admin.initialize_app(cred, {
                 'storageBucket': 'sick-lidar-3.firebasestorage.app'  # 🔧 VERIFY
             })
 
@@ -75,7 +75,7 @@ class MapUploader:
             ts = now.strftime("%Y%m%d_%H%M%S_%f")
             folder = f"slam_maps/{ts}_{base_name}"
 
-            
+            bucket = fb_storage.bucket()
             db = firestore.client()
 
             # ---- Upload YAML ----
@@ -162,9 +162,9 @@ class MyMapNode(Node):
             self.send_nav_goal(x,y)
         else:
             self.get_logger().info("No frontiers found — stopping map processing.")
-            self.save_map()
-            uploader = MapUploader()
-            uploader.upload_map("/home/retail-assistant/SLAM/src/retail_assistant_bringup/Slam_maps/auto_map")
+            if self.save_map():
+                uploader = MapUploader()
+                uploader.upload_map("/home/retail-assistant/SLAM/src/retail_assistant_bringup/Slam_maps/auto_map")
             raise SystemExit
     def save_map(self):
         self.get_logger().info("Saving map to Slam_maps folder...")
@@ -184,9 +184,11 @@ class MyMapNode(Node):
 
         if future.result() is not None:
             self.get_logger().info("Map saved successfully.")
-            self.send_to_firebase(req.map_url + '.yaml')  # Upload the YAML file to Firebase
+              # Upload the YAML file to Firebase
+            return True
         else:
             self.get_logger().error("Failed to save map.")
+            return False
     def physical_location(self,i,j,map_resolution,map_origin):
         x=j*map_resolution+map_origin[0]
         y=i*map_resolution+map_origin[1]
